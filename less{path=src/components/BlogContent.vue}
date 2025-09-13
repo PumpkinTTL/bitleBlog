@@ -1,0 +1,42 @@
+<style lang="less" scoped>
+/* 动画基础样式 - 确保这些已存在 */
+.animate-item {
+  animation: smoothIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes smoothIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  60% {
+    opacity: 0.8;
+    transform: scale(1.02) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* 调整 .blog-container 样式以匹配 ResourcePage.vue 的 .page-container 风格 */
+/* 请找到你现有的 .blog-container 定义 (可能在1259行附近) 并修改它 */
+.blog-container {
+  max-width: 1280px; /* 新增：与 ResourcePage 一致的最大宽度 */
+  margin: 0 auto;    /* 通常已存在 */
+  padding: 20px 16px; /* 修改：调整内边距，左右16px，上下20px（可根据实际观感微调） */
+                      /* ResourcePage 的 .page-container 是 padding: 0 16px，这里保留了上下padding */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; /* 保留您当前的字体定义 */
+  letter-spacing: 0.2px;
+
+  /* 移动端适配 */
+  @media screen and (max-width: 767px) { /* ResourcePage 使用 767px 作为断点 */
+    padding: 10px 12px; /* 修改：调整移动端内边距，左右12px，上下10px */
+  }
+  /* 如果您原来针对 .blog-container 的 @media screen and (max-width: 599px) 有特定设置，
+     可以考虑合并或统一断点逻辑。这里采用了 ResourcePage.vue 中常见的 767px 断点。*/
+}
+
+/* ... rest of your existing styles ... */
+</style> 

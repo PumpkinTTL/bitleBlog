@@ -1,0 +1,777 @@
+/* 自定义标签样式 - 扁平化设计 */
+.bitle-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px; /* 减少高度 */
+  padding: 0 6px; /* 减少内边距 */
+  border-radius: 3px; /* 减少圆角 */
+  font-size: 10px; /* 减少字体大小 */
+  font-weight: 500;
+  line-height: 18px;
+  margin-right: 3px; /* 减少右边距 */
+  text-align: center;
+  color: #fff;
+  white-space: nowrap;
+  box-shadow: none; /* 移除阴影 */
+  position: relative;
+  overflow: hidden;
+  transition: all 0.15s ease; /* 减少动画时间 */
+
+  /* 移除光泽效果 */
+
+  /* 简化悬停效果 */
+  &:hover {
+    transform: none; /* 移除悬浮效果 */
+    opacity: 0.8; /* 简单的透明度变化 */
+  }
+
+  /* 默认图标样式 */
+  i {
+    margin-right: 3px; /* 减少间距 */
+    font-size: 9px; /* 减少图标大小 */
+  }
+}
+
+/* ===== 文章标签样式 - 扁平化设计 ===== */
+/* 置顶标签 */
+.tag-top {
+  background: #ff9800; /* 使用纯色替代渐变 */
+  box-shadow: none; /* 移除阴影 */
+}
+
+/* 推荐标签 */
+.tag-recommend {
+  background: #1677ff; /* 使用纯色替代渐变 */
+  box-shadow: none; /* 移除阴影 */
+}
+
+/* 原创标签 */
+.tag-original {
+  background: #a259ff; /* 使用纯色替代渐变 */
+  box-shadow: none; /* 移除阴影 */
+}
+
+/* VIP文章标签（与会员等级区分） */
+.tag-article-vip {
+  background: #ff6b35; /* 使用纯色替代复杂渐变 */
+  color: #fff;
+  box-shadow: none; /* 移除阴影 */
+  font-weight: bold;
+}
+
+/* 热门标签 */
+.tag-hot {
+  background: #ff4d4f; /* 使用纯色替代渐变 */
+  box-shadow: none; /* 移除阴影 */
+}
+
+/* 精华标签 */
+.tag-featured {
+  background: #ff5e62; /* 使用纯色替代渐变 */
+  box-shadow: none; /* 移除阴影 */
+}
+
+/* 远程标签 */
+.tag-remote {
+  background: #f5365c; /* 使用纯色替代渐变 */
+  box-shadow: none; /* 移除阴影 */
+}
+
+/* 实习标签 */
+.tag-intern {
+  background: #8965e0; /* 使用纯色替代渐变 */
+  box-shadow: none; /* 移除阴影 */
+}
+
+/* VIP会员标签 - 高级红金渐变 */
+.tag-vip {
+  background: linear-gradient(135deg, #ff4949 0%, #cc0000 100%);
+  border: 1px solid #FFD700;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    0 2px 6px rgba(255, 73, 73, 0.25),
+    inset 0 1px 3px rgba(255, 255, 255, 0.2),
+    0 0 0 1px rgba(255, 215, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  padding: 0 8px;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  line-height: 20px;
+  margin-left: 6px;
+  font-size: 11px;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+        transparent 0%,
+        rgba(255, 215, 0, 0.05) 45%,
+        rgba(255, 215, 0, 0.15) 50%,
+        rgba(255, 215, 0, 0.05) 55%,
+        transparent 100%);
+    transform: rotate(45deg);
+    animation: shimmer-flow 1.2s infinite linear;
+  }
+}
+
+/* 标签组样式 - 紧凑设计 */
+.bitle-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px; /* 减少间距 */
+  margin-bottom: 4px; /* 减少底部间距 */
+}
+
+/* 文章标签组样式 - 紧凑设计 */
+.header-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px; /* 减少间距 */
+  margin-bottom: 4px; /* 减少底部间距 */
+  position: relative;
+  z-index: 2;
+}
+
+/* 会员等级标签 - 通用基础样式 */
+.tag-member-basic,
+.tag-member-bronze,
+.tag-member-silver,
+.tag-member-gold,
+.tag-member-platinum,
+.tag-member-diamond,
+.tag-member-crown {
+  border: 1px solid transparent;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  padding: 0 8px;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  line-height: 20px;
+  margin-left: 6px;
+  font-size: 11px;
+}
+
+/* 流光会员 - 最基础等级 */
+.tag-member-basic {
+  background: linear-gradient(135deg, #7f7fd5 0%, #91eae4 100%);
+  border: 1px solid #a6e3f5;
+
+  box-shadow:
+    0 2px 6px rgba(127, 127, 213, 0.25),
+    inset 0 1px 3px rgba(255, 255, 255, 0.2),
+    0 0 0 1px rgba(166, 227, 245, 0.3);
+    
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 45%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.05) 55%,
+        transparent 100%);
+    transform: rotate(45deg);
+    animation: shimmer-flow 3s infinite linear;
+  }
+}
+
+/* 青铜会员 */
+.tag-member-bronze {
+  background: linear-gradient(135deg, #cd8c52 0%, #966237 100%);
+  border: 1px solid #e0a56d;
+  box-shadow:
+    0 2px 6px rgba(205, 140, 82, 0.25),
+    inset 0 1px 3px rgba(255, 255, 255, 0.2),
+    0 0 0 1px rgba(224, 165, 109, 0.3);
+    
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 45%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.05) 55%,
+        transparent 100%);
+    transform: rotate(45deg);
+    animation: shimmer-flow 2.8s infinite linear;
+  }
+}
+
+/* 白银会员 */
+.tag-member-silver {
+  background: linear-gradient(135deg, #e0e0e0 0%, #b0b0b0 100%);
+  border: 1px solid #e8e8e8;
+  box-shadow:
+    0 2px 6px rgba(176, 176, 176, 0.25),
+    inset 0 1px 3px rgba(255, 255, 255, 0.2),
+    0 0 0 1px rgba(232, 232, 232, 0.3);
+    
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 45%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.05) 55%,
+        transparent 100%);
+    transform: rotate(45deg);
+    animation: shimmer-flow 2.5s infinite linear;
+  }
+}
+
+/* 黄金会员 */
+.tag-member-gold {
+  background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+  border: 1px solid #ffd470;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 2px 6px rgba(242, 153, 74, 0.25),
+    inset 0 1px 3px rgba(255, 255, 255, 0.2),
+    0 0 0 1px rgba(255, 212, 112, 0.3);
+    
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 45%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.05) 55%,
+        transparent 100%);
+    transform: rotate(45deg);
+    animation: shimmer-flow 2.2s infinite linear;
+  }
+}
+
+/* 铂金会员 */
+.tag-member-platinum {
+  background: linear-gradient(135deg, #868f96 0%, #596164 100%);
+  border: 1px solid #a2aab0;
+  color: #fff;
+  box-shadow:
+    0 2px 6px rgba(89, 97, 100, 0.25),
+    inset 0 1px 3px rgba(255, 255, 255, 0.2),
+    0 0 0 1px rgba(162, 170, 176, 0.3);
+    
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 45%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.05) 55%,
+        transparent 100%);
+    transform: rotate(45deg);
+    animation: shimmer-flow 2s infinite linear;
+  }
+}
+
+/* 钻石会员 */
+.tag-member-diamond {
+  background: linear-gradient(135deg, #a8edea 0%, #a2e9f8 50%, #fed6e3 100%);
+  border: 1px solid #c9f5ff;
+  color: #1a6875;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 2px 6px rgba(162, 233, 248, 0.25),
+    inset 0 1px 3px rgba(255, 255, 255, 0.2),
+    0 0 0 1px rgba(201, 245, 255, 0.3);
+    
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 45%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.05) 55%,
+        transparent 100%);
+    transform: rotate(45deg);
+    animation: shimmer-flow 1.8s infinite linear;
+  }
+}
+
+/* 皇冠会员 */
+.tag-member-crown {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #fad0c4 100%);
+  border: 1px solid #ffb6b9;
+  color: #c73e43;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 2px 6px rgba(255, 154, 158, 0.25),
+    inset 0 1px 3px rgba(255, 255, 255, 0.2),
+    0 0 0 1px rgba(255, 182, 185, 0.3);
+    
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 45%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.05) 55%,
+        transparent 100%);
+    transform: rotate(45deg);
+    animation: shimmer-flow 1.5s infinite linear;
+  }
+}
+
+/* 统一动画关键帧 */
+@keyframes shimmer-flow {
+  0% { transform: translateX(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) rotate(45deg); }
+}
+
+/* ===== 会员文字颜色定义 ===== */
+/* 所有会员文字样式与对应的标签使用相同的渐变色系，但颜色更深更鲜明 */
+
+/* 流光会员文字 - 蓝紫色到淡蓝绿色渐变，加深颜色 */
+.text-member-basic {
+  background: linear-gradient(135deg, #6060c8 0%, #4fd1c5 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 青铜会员文字 - 铜色渐变，加深颜色 */
+.text-member-bronze {
+  background: linear-gradient(135deg, #b67941 0%, #7d5024 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 白银会员文字 - 银色渐变，增加对比度 */
+.text-member-silver {
+  background: linear-gradient(135deg, #cacaca 0%, #858585 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 黄金会员文字 - 金色渐变，加深颜色 */
+.text-member-gold {
+  background: linear-gradient(135deg, #e67e22 0%, #f1c40f 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 铂金会员文字 - 深灰色渐变，增加对比度 */
+.text-member-platinum {
+  background: linear-gradient(135deg, #6c7989 0%, #424a4d 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 钻石会员文字 - 水晶蓝粉渐变，加深颜色 */
+.text-member-diamond {
+  background: linear-gradient(135deg, #6fe7dc 0%, #3bc8e7 50%, #e782a9 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 皇冠会员文字 - 粉红色渐变，加深颜色 */
+.text-member-crown {
+  background: linear-gradient(135deg, #ff5f6d 0%, #f47b6d 50%, #f18686 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-weight: 700 !important;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 管理员文字颜色 - 蓝色渐变，加深颜色 */
+.text-admin {
+  background: linear-gradient(135deg, #0c7ae0 0%, #0357a8 100%);
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+/* 超级管理员文字颜色 - 高级紫色渐变，加深颜色 */
+.text-super-admin {
+  background: linear-gradient(135deg, #8000bf, #3a0069);
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  // font-weight: 600 !important;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== 从ResourceGrid.vue集成的卡片样式 ===== */
+/* 卡片徽章样式 */
+.card-badges {
+  .badge {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    color: white;
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+    
+    i {
+      margin-right: 3px;
+      font-size: 9px;
+    }
+    
+    &.featured {
+      background: linear-gradient(45deg, #ff9a00, #ff6a00);
+    }
+    
+    &.new {
+      background: linear-gradient(45deg, #1677FF, #69b4ff);
+    }
+    
+    &.hot {
+      background: linear-gradient(45deg, #f5222d, #ff7875);
+    }
+  }
+}
+
+/* ===== 会员标签图标增强 ===== */
+/* 会员等级图标类 - 为避免冲突，使用类选择器 */
+.tag-member-basic i:before {
+  content: "\f2dc"; /* snowflake */
+}
+
+.tag-member-bronze i:before {
+  content: "\f559"; /* 奖杯 */
+}
+
+.tag-member-silver i:before {
+  content: "\f521"; /* 奖牌 */
+}
+
+.tag-member-gold i:before {
+  content: "\f3a5"; /* 奖杯星 */
+}
+
+.tag-member-platinum i:before {
+  content: "\f5a2"; /* 奖章 */
+}
+
+.tag-member-diamond i:before {
+  content: "\f3a5"; /* 钻石 */
+}
+
+.tag-member-crown i:before {
+  content: "\f521"; /* 皇冠 */
+}
+
+.tag-vip i:before {
+  content: "\f005"; /* 星标 */
+}
+
+/* 文章标签图标类 */
+.tag-top i:before {
+  content: "\f3c5"; /* map-marker icon */
+}
+
+.tag-recommend i:before {
+  content: "\f005"; /* star icon */
+}
+
+.tag-original i:before {
+  content: "\f304"; /* pen icon */
+}
+
+.tag-featured i:before {
+  content: "\f521"; /* crown icon */
+}
+
+.tag-remote i:before {
+  content: "\f233"; /* server icon */
+}
+
+.tag-intern i:before {
+  content: "\f501"; /* graduation-cap icon */
+}
+
+.tag-hot i:before {
+  content: "\f06d"; /* fire icon */
+}
+
+/* ===== 按钮标签样式 ===== */
+.btn-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  i {
+    font-size: 10px;
+    margin-right: 4px;
+  }
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  }
+  
+  &.primary {
+    background: linear-gradient(135deg, #1677FF, #4096ff);
+  }
+  
+  &.success {
+    background: linear-gradient(135deg, #52c41a, #73d13d);
+  }
+  
+  &.warning {
+    background: linear-gradient(135deg, #faad14, #ffc53d);
+  }
+  
+  &.danger {
+    background: linear-gradient(135deg, #ff4d4f, #ff7875);
+  }
+}
+
+/* 超级管理员标签 - 高级紫色渐变 - 小巧精致版 */
+/* 超级管理员标签 - 修改为与其他会员标签一致的尺寸和样式 */
+.tag-super-admin {
+  background: linear-gradient(135deg, rgba(128, 0, 191, 0.85) 0%, rgba(58, 0, 105, 0.85) 100%);
+  border: 1px solid #a259ff;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    0 2px 6px rgba(128, 0, 191, 0.25),
+    inset 0 1px 3px rgba(255, 255, 255, 0.2),
+    0 0 0 1px rgba(162, 89, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  padding: 0 8px;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  line-height: 20px;
+  margin-left: 6px;
+  font-size: 11px;
+  
+  i {
+    margin-right: 4px;
+    font-size: 10px;
+  }
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 45%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.05) 55%,
+        transparent 100%);
+    transform: rotate(45deg);
+    animation: shimmer-flow 1.5s infinite linear;
+  }
+}
+
+.tag-super-admin i:before {
+  content: "\f521"; /* 皇冠图标 */
+}
+
+.tag-premium {
+  background: linear-gradient(135deg, #ff6ec7 0%, #ff9a9e 30%, #a855f7 70%, #4f46e5 100%);
+  border: 1px solid #ffd700;
+  color: #fff;
+  font-weight: 500;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 1px 3px rgba(255, 110, 199, 0.2),
+    inset 0 1px 2px rgba(255, 255, 255, 0.15),
+    0 0 0 1px rgba(255, 215, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  border-radius: 3px;
+  padding: 1px 6px;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  line-height: 18px;
+  margin-left: 0;
+  font-size: 10px;
+
+  .fa-crown {
+    margin-right: 3px;
+    font-size: 9px;
+    color: #ffd700;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+        transparent 0%,
+        rgba(255, 215, 0, 0.03) 45%,
+        rgba(255, 215, 0, 0.1) 50%,
+        rgba(255, 215, 0, 0.03) 55%,
+        transparent 100%);
+    transform: rotate(45deg);
+    animation: shimmer-flow 2s infinite linear;
+  }
+}
+
+/* 纯粉紫渐变文字 */
+.tag-premium-text {
+  background: linear-gradient(135deg, rgba(255, 64, 255, 1) 0%, rgba(128, 0, 191, 1) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  font-size: 11px;
+}
+
+/* 普通用户文字颜色 - 深灰色，简洁优雅 */
+.tag-normal-text {
+  color: #333333;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  font-size: 11px;
+}
+
+/* 粉紫渐变文字 + 不同背景色 */
+.tag-premium-text-with-bg {
+  background: #f0f0f0; /* 浅灰色背景，可以替换 */
+  padding: 0 8px;
+  border-radius: 4px;
+  height: 20px;
+  line-height: 20px;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  
+  span {
+    background: linear-gradient(135deg, rgba(255, 64, 255, 1) 0%, rgba(128, 0, 191, 1) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    font-size: 11px;
+  }
+}
+
+/* 纯粉紫渐变文字 */
+.tag-premium-text {
+  background: linear-gradient(135deg, rgba(255, 64, 255, 1) 0%, rgba(128, 0, 191, 1) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  font-size: 11px;
+}
+
+/* 粉紫渐变文字 + 不同背景色 */
+.tag-premium-text-with-bg { 
+  background: #f0f0f0; /* 浅灰色背景，可以替换 */
+  padding: 0 8px;
+  border-radius: 4px;
+  height: 20px;
+  line-height: 20px;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  
+  span {
+    background: linear-gradient(135deg, rgba(255, 64, 255, 1) 0%, rgba(128, 0, 191, 1) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    font-size: 11px;
+  }
+}
