@@ -800,30 +800,181 @@ onMounted(() => {
     .widget-title i {
       color: var(--el-color-primary) !important;
     }
+    
+    // 暗色模式下的page-header适配
+    .page-header {
+      background: linear-gradient(135deg, 
+        rgba(28, 28, 30, 0.95) 0%,
+        rgba(44, 44, 46, 0.9) 100%
+      );
+      border-bottom-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 1px 0 rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        
+      &::before {
+        background: linear-gradient(90deg,
+          transparent 0%,
+          rgba(100, 168, 255, 0.05) 50%,
+          transparent 100%
+        );
+      }
+      
+      .breadcrumb {
+        background: linear-gradient(135deg, 
+          rgba(255, 255, 255, 0.08) 0%,
+          rgba(255, 255, 255, 0.05) 100%
+        );
+        border-color: rgba(100, 168, 255, 0.12);
+        box-shadow: 
+          0 2px 8px rgba(0, 0, 0, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        
+        &::before {
+          background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.15),
+            transparent
+          );
+        }
+        
+        &::after {
+          background: linear-gradient(135deg, 
+            rgba(100, 168, 255, 0.1) 0%,
+            rgba(64, 168, 255, 0.06) 100%
+          );
+        }
+        
+        &:hover {
+          background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.12) 0%,
+            rgba(255, 255, 255, 0.08) 100%
+          );
+          border-color: rgba(100, 168, 255, 0.2);
+          box-shadow: 
+            0 6px 20px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+        
+        span {
+          background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(100, 168, 255, 0.85) 100%
+          );
+          background-size: 200% 100%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          color: transparent;
+          filter: drop-shadow(0 1px 2px rgba(100, 168, 255, 0.2));
+        }
+        
+        a:hover {
+          background: linear-gradient(135deg, 
+            rgba(100, 168, 255, 0.15) 0%,
+            rgba(64, 168, 255, 0.12) 100%
+          );
+          box-shadow: 
+            0 2px 8px rgba(100, 168, 255, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+      }
+      
+      .back-button {
+        background: linear-gradient(135deg, 
+          rgba(100, 168, 255, 0.1) 0%,
+          rgba(64, 168, 255, 0.08) 100%
+        );
+        border-color: rgba(100, 168, 255, 0.2);
+        color: #64A8FF;
+        
+        &:hover {
+          background: linear-gradient(135deg, 
+            rgba(100, 168, 255, 0.15) 0%,
+            rgba(64, 168, 255, 0.12) 100%
+          );
+          border-color: rgba(100, 168, 255, 0.3);
+        }
+        
+        &::before {
+          background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+          );
+        }
+      }
+      
+      .search-button {
+        background: linear-gradient(135deg, 
+          rgba(255, 255, 255, 0.05) 0%,
+          rgba(255, 255, 255, 0.02) 100%
+        );
+        border-color: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.7);
+        
+        &:hover {
+          background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.05) 100%
+          );
+          border-color: rgba(255, 255, 255, 0.15);
+          color: rgba(255, 255, 255, 0.9);
+        }
+      }
+    }
   }
 
-  // 页面头部样式 - 适配暗色模式
+  // 页面头部样式 - 精美质感设计
   .page-header {
-    background-color: var(--el-bg-color);
-    padding: 16px 0;
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(248, 250, 252, 0.95) 100%
+    );
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    padding: 18px 0;
     position: sticky;
     top: 0;
-    z-index: 100;
-    border-bottom: 1px solid var(--el-border-color-light);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    background-color: var(--el-bg-color-overlay);
-    transition: all 0.3s ease;
+    z-index: 1000;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.04),
+      0 1px 0 rgba(255, 255, 255, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(22, 119, 255, 0.03) 50%,
+        transparent 100%
+      );
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    &:hover::before {
+      opacity: 1;
+    }
 
     .container {
       max-width: 1440px;
       margin: 0 auto;
-      padding: 0 16px;
+      padding: 0 20px;
       position: relative;
       z-index: 2;
 
       @media (max-width: 768px) {
-        padding: 0 12px;
+        padding: 0 16px;
       }
     }
 
@@ -831,6 +982,8 @@ onMounted(() => {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      height: 48px;
+      position: relative;
     }
 
     .nav-left {
@@ -838,35 +991,109 @@ onMounted(() => {
       align-items: center;
       min-width: 0;
       flex: 1;
+      position: relative;
 
       .breadcrumb {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
         font-size: 14px;
         color: var(--el-text-color-regular);
         font-weight: 500;
-        transform: translateX(0);
-        transition: transform 0.3s ease;
-        margin-left: 0;
         min-width: 0;
         width: 100%;
+        padding: 10px 14px;
+        background: linear-gradient(135deg, 
+          rgba(255, 255, 255, 0.7) 0%,
+          rgba(248, 250, 252, 0.6) 100%
+        );
+        backdrop-filter: blur(12px) saturate(150%);
+        border-radius: 14px;
+        border: 0.5px solid rgba(22, 119, 255, 0.08);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 
+          0 2px 8px rgba(22, 119, 255, 0.06),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.4),
+            transparent
+          );
+          transition: left 0.6s ease;
+        }
+        
+        &::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 14px;
+          background: linear-gradient(135deg, 
+            rgba(22, 119, 255, 0.08) 0%,
+            rgba(105, 177, 255, 0.04) 100%
+          );
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        
+        &:hover {
+          background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.85) 0%,
+            rgba(248, 250, 252, 0.75) 100%
+          );
+          border-color: rgba(22, 119, 255, 0.15);
+          transform: translateY(-2px) scale(1.01);
+          box-shadow: 
+            0 6px 20px rgba(22, 119, 255, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.9);
+          
+          &::before {
+            left: 100%;
+          }
+          
+          &::after {
+            opacity: 1;
+          }
+        }
 
         @media (max-width: 576px) {
-          max-width: 250px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
+          max-width: 280px;
+          padding: 6px 10px;
+          border-radius: 10px;
         }
 
         a {
           color: var(--el-text-color-regular);
           text-decoration: none;
-          transition: color 0.3s ease;
+          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           white-space: nowrap;
+          position: relative;
+          z-index: 3;
+          padding: 4px 8px;
+          border-radius: 8px;
+          font-weight: 500;
+          backdrop-filter: blur(8px);
 
           &:hover {
             color: var(--el-color-primary);
+            background: linear-gradient(135deg, 
+              rgba(22, 119, 255, 0.12) 0%,
+              rgba(105, 177, 255, 0.08) 100%
+            );
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 
+              0 2px 8px rgba(22, 119, 255, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            font-weight: 600;
           }
         }
 
@@ -874,17 +1101,32 @@ onMounted(() => {
           font-size: 12px;
           color: var(--el-text-color-placeholder);
           flex-shrink: 0;
+          position: relative;
+          z-index: 3;
+          transition: all 0.3s ease;
+          opacity: 0.6;
         }
 
         span {
-          color: var(--el-text-color-primary);
-          font-weight: 500;
+          font-weight: 600;
           max-width: 100%;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
           min-width: 0;
           flex: 1;
+          position: relative;
+          z-index: 3;
+          background: linear-gradient(135deg, 
+            var(--el-text-color-primary) 0%,
+            rgba(22, 119, 255, 0.8) 100%
+          );
+          background-size: 200% 100%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          color: transparent;
+          filter: drop-shadow(0 1px 2px rgba(22, 119, 255, 0.1));
         }
       }
     }
@@ -892,63 +1134,148 @@ onMounted(() => {
     .nav-right {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
       flex-shrink: 0;
-      margin-left: 16px;
+      margin-left: 20px;
+      position: relative;
 
       .back-button,
       .search-button {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
-        height: 36px;
-        padding: 0 12px;
+        gap: 8px;
+        height: 40px;
+        padding: 0 16px;
         border-radius: 20px;
-        background: var(--el-color-primary-light-9);
+        background: linear-gradient(135deg, 
+          rgba(22, 119, 255, 0.08) 0%,
+          rgba(105, 177, 255, 0.05) 100%
+        );
+        backdrop-filter: blur(10px) saturate(150%);
         color: var(--el-color-primary);
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(0, 129, 255, 0.1);
+        border: 0.5px solid rgba(22, 119, 255, 0.15);
+        box-shadow: 
+          0 4px 12px rgba(22, 119, 255, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        font-weight: 600;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent
+          );
+          transition: left 0.6s ease;
+        }
+        
+        &::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 20px;
+          background: linear-gradient(135deg, 
+            rgba(22, 119, 255, 0.1) 0%,
+            rgba(105, 177, 255, 0.05) 100%
+          );
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
 
         @media (hover: hover) {
           &:hover {
-            background: var(--el-color-primary-light-8);
-            transform: translateY(-1px);
+            transform: translateY(-2px) scale(1.02);
+            background: linear-gradient(135deg, 
+              rgba(22, 119, 255, 0.12) 0%,
+              rgba(105, 177, 255, 0.08) 100%
+            );
+            border-color: rgba(22, 119, 255, 0.25);
+            box-shadow: 
+              0 8px 24px rgba(22, 119, 255, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+            &::before {
+              left: 100%;
+            }
+            
+            &::after {
+              opacity: 1;
+            }
 
             i {
-              transform: translateX(-2px);
+              transform: translateX(-2px) scale(1.1);
+            }
+            
+            span {
+              transform: translateX(-1px);
             }
           }
         }
 
         &:active {
-          transform: scale(0.98);
-          background: var(--el-color-primary-light-7);
+          transform: translateY(-1px) scale(0.98);
         }
 
         i {
-          font-size: 15px;
+          font-size: 16px;
           position: relative;
-          z-index: 2;
-          transition: transform 0.3s ease;
+          z-index: 3;
+          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          filter: drop-shadow(0 1px 2px rgba(22, 119, 255, 0.2));
         }
 
         span {
           position: relative;
-          z-index: 2;
-          font-weight: 500;
+          z-index: 3;
+          font-weight: 600;
+          letter-spacing: -0.2px;
+          transition: all 0.3s ease;
         }
 
         @media (max-width: 576px) {
-          width: 36px;
-          height: 36px;
+          width: 40px;
+          height: 40px;
           padding: 0;
+          border-radius: 20px;
 
           span {
             display: none;
+          }
+          
+          i {
+            font-size: 18px;
+          }
+        }
+      }
+      
+      .search-button {
+        background: linear-gradient(135deg, 
+          rgba(156, 163, 175, 0.08) 0%,
+          rgba(209, 213, 219, 0.05) 100%
+        );
+        color: var(--el-text-color-regular);
+        border-color: rgba(156, 163, 175, 0.15);
+        
+        &:hover {
+          background: linear-gradient(135deg, 
+            rgba(156, 163, 175, 0.12) 0%,
+            rgba(209, 213, 219, 0.08) 100%
+          );
+          border-color: rgba(156, 163, 175, 0.25);
+          color: var(--el-text-color-primary);
+          
+          i {
+            transform: scale(1.1);
           }
         }
       }
