@@ -57,6 +57,19 @@
             <template v-else>
               <ArticleHeader :article="article" />
               <ArticleContent :article="article" @tag-click="handleTagClick" />
+              
+              <!-- 开发者测试开关（仅在开发环境显示） -->
+              <div class="developer-controls" v-if="isDevelopment">
+                <div class="control-item">
+                  <span class="control-label">评论功能：</span>
+                  <el-switch 
+                    v-model="isCommentsEnabled" 
+                    :active-text="'已开启'" 
+                    :inactive-text="'已关闭'"
+                    size="small"
+                  />
+                </div>
+              </div>
               <!-- 文章内嵌广告 -->
               <PromotionCard type="standard" title="前端开发者必备工具集" description="包含50+精选开发工具，提升10倍工作效率，限时优惠中！"
                 image-url="https://picsum.photos/id/243/120/120" image-alt="广告图片" :radius="true" badge-text="推广"
@@ -69,8 +82,31 @@
                 image-alt="高级教程" :radius="true" badge-text="Premium" badge-icon="fas fa-crown" button-text="解锁高级内容"
                 button-icon="fas fa-lock" :is-inline="true" animation-delay="0.2s" @click="handlePremiumClick" />
 
-              <ArticleComments :articleId="articleId" :comments="comments" @login="handleLogin"
-                @register="handleRegister" @comment-added="handleCommentAdded" @reply-added="handleReplyAdded" />
+              <!-- 评论区域 - 根据开关显示评论或占位组件 -->
+              <ArticleComments 
+                v-if="isCommentsEnabled"
+                :articleId="articleId" 
+                :comments="comments" 
+                @login="handleLogin"
+                @register="handleRegister" 
+                @comment-added="handleCommentAdded" 
+                @reply-added="handleReplyAdded" 
+              />
+              
+              <!-- 评论功能占位组件 -->
+              <PlaceholderCard 
+                v-else
+                :title="'评论功能开发中'"
+                :description="'我们正在努力完善评论系统，包括用户认证、内容审核、回复通知等功能，敬请期待！'"
+                :tip="'预计将在下个版本上线'"
+                :icon="'comment'"
+                :theme="'info'"
+                :show-action="true"
+                :action-text="'关注更新'"
+                :action-icon="'fas fa-bell'"
+                :action-type="'outline'"
+                @action="handleCommentPlaceholderAction"
+              />
             </template>
           </div>
 
@@ -207,6 +243,7 @@ import {
   ArticleComments
 } from '@/components/blog/BlogDetail';
 import PromotionCard from '@/components/blog/BlogDetail/PromotionCard.vue';
+import PlaceholderCard from '@/components/PlaceholderCard.vue';
 
 // 导入API函数和模拟数据
 import { getArticleDetailR } from '@/request/article';
@@ -318,6 +355,9 @@ const article = ref<Article>({ id: 0, title: '加载中...' });
 const comments = ref<Comment[]>([]);
 const tableOfContents = ref<TOCItem[]>([]);
 
+// 功能开关控制
+const isCommentsEnabled = ref(false); // 控制评论功能是否开启
+const isDevelopment = ref(import.meta.env.MODE === 'development'); // 开发环境检测
 
 // 移动端相关状态
 const mobileTocVisible = ref(false);
@@ -642,6 +682,17 @@ const handleReplyAdded = ({ commentId, reply }: { commentId: number; reply: any 
   }
 };
 
+// 处理评论占位组件操作按钮点击
+const handleCommentPlaceholderAction = () => {
+  // 这里可以添加关注更新的逻辑，比如：
+  // 1. 弹出订阅通知框
+  // 2. 跳转到关于页面
+  // 3. 显示开发进度
+  console.log('用户点击了关注评论功能更新');
+  // 可以使用 Element Plus 的 ElMessage 显示提示
+  // ElMessage.info('已为您记录关注，功能上线时将通知您！');
+};
+
 // 监听文章ID变化
 watch(() => route.params.id, (newId) => {
   if (newId) {
@@ -664,6 +715,34 @@ onMounted(() => {
 <style lang="less" scoped>
 .blog-detail-page {
   min-height: 100vh;
+
+  // 开发者控制面板样式
+  .developer-controls {
+    margin: 20px 0;
+    padding: 16px;
+    background: var(--el-color-warning-light-9);
+    border: 1px solid var(--el-color-warning-light-7);
+    border-radius: 8px;
+    border-left: 4px solid var(--el-color-warning);
+    
+    .control-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      
+      .control-label {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--el-color-warning-dark-2);
+      }
+    }
+    
+    // 暗色模式适配
+    html.dark & {
+      background: rgba(var(--el-color-warning-rgb), 0.1);
+      border-color: rgba(var(--el-color-warning-rgb), 0.3);
+    }
+  }
 
   // 全局暗色模式适配
   html.dark & {

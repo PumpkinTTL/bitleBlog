@@ -210,6 +210,7 @@ declare module 'vue' {
     PersonCenter: typeof import('./src/components/PersonCenter.vue')['default']
     PersonCnter: typeof import('./src/components/PersonCnter.vue')['default']
     PersonInfoCard: typeof import('./src/components/person/PersonInfoCard.vue')['default']
+    PlaceholderCard: typeof import('./src/components/PlaceholderCard.vue')['default']
     PopularArticles: typeof import('./src/components/index/PopularArticles.vue')['default']
     PopularTags: typeof import('./src/components/data/PopularTags.vue')['default']
     PrivacyPolicy: typeof import('./src/components/platform/PrivacyPolicy.vue')['default']
