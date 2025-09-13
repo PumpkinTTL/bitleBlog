@@ -71,17 +71,24 @@
         </div>
       </div>
 
-      <!-- 精美的分类导航 -->
-      <div class="category-navigation">
+      <!-- iOS风格精美分类导航 -->
+      <div class="category-navigation animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
         <!-- 桌面端分类标签 -->
         <div class="desktop-categories">
           <div class="category-scroll-container">
-            <div class="category-tags-wrapper" :class="{ 'collapsed': isCollapsed }">
+            <div class="category-tags-wrapper animate__animated animate__fadeInUp" 
+                 :class="{ 'collapsed': isCollapsed }"
+                 style="animation-delay: 0.15s;">
               <a href="#"
                 v-for="(category, index) in displayCategories"
                 :key="category.id"
-                :class="['category-chip', 'animate__animated', 'animate__fadeInUp', {'active': activeCategory === category.id}]"
-                :style="{ 'animation-delay': `${index * 0.03}s` }"
+                :class="[
+                  'category-chip',
+                  'animate__animated', 
+                  'animate__fadeInUp',
+                  {'active': activeCategory === category.id}
+                ]"
+                :style="{ 'animation-delay': `${0.12 + index * 0.02}s` }"
                 @click.prevent="handleCategoryChange(category.id)">
                 <div class="chip-icon">
                   <font-awesome-icon :icon="getCategoryIconArray(category)" />
@@ -89,10 +96,11 @@
                 <span class="chip-label">{{ category.name }}</span>
                 <div class="chip-badge" v-if="category.count">{{ category.count }}</div>
               </a>
-              <!-- 展开/折叠按钮 -->
+              <!-- iOS风格展开/折叠按钮 -->
               <button
                 v-if="categoryList.length > maxDisplayCategories"
-                class="toggle-btn"
+                class="toggle-btn animate__animated animate__fadeInRight"
+                style="animation-delay: 0.25s;"
                 @click="toggleCategories">
                 <span class="toggle-text">{{ isCollapsed ? `展开全部 (${categoryList.length})` : '收起' }}</span>
                 <el-icon class="toggle-icon" :class="{ 'rotated': !isCollapsed }">
@@ -236,7 +244,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, markRaw } from 'vue';
 import { useRouter } from 'vue-router';
 import { message } from 'ant-design-vue';
 import { Search, Filter, ArrowDown, Check, Document, Star, Clock, Promotion } from '@element-plus/icons-vue';
@@ -327,10 +335,10 @@ const categoryList = ref<Category[]>([]);
 
 // 筛选选项配置
 const filterOptions = ref([
-  { value: 'all', label: '全部文章', icon: Document },
-  { value: 'recommended', label: '推荐文章', icon: Star },
-  { value: 'latest', label: '最新发布', icon: Clock },
-  { value: 'popular', label: '热门文章', icon: Promotion }
+  { value: 'all', label: '全部文章', icon: markRaw(Document) },
+  { value: 'recommended', label: '推荐文章', icon: markRaw(Star) },
+  { value: 'latest', label: '最新发布', icon: markRaw(Clock) },
+  { value: 'popular', label: '热门文章', icon: markRaw(Promotion) }
 ]);
 
 // 响应式分页布局
@@ -1050,49 +1058,51 @@ onMounted(async (): Promise<void> => {
             }
           }
         }
+      }
+      
+      // 筛选选项样式 
+      .filter-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        width: 100%;
 
-        // 筛选选项样式
-        .filter-option {
+        .option-icon {
+          font-size: 14px;
+          width: 16px;
           display: flex;
           align-items: center;
-          gap: 10px;
-          padding: 10px 12px;
-          width: 100%;
+          justify-content: center;
+          flex-shrink: 0;
+        }
 
-          .option-icon {
-            font-size: 14px;
-            width: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-          }
+        .option-text {
+          flex: 1;
+          font-size: 13px;
+          font-weight: 500;
+          line-height: 1.2;
+        }
 
-          .option-text {
-            flex: 1;
-            font-size: 13px;
-            font-weight: 500;
-            line-height: 1.2;
-          }
-
-          .check-icon {
-            font-size: 12px;
-            color: var(--el-color-primary);
-            flex-shrink: 0;
-          }
+        .check-icon {
+          font-size: 12px;
+          color: var(--el-color-primary);
+          flex-shrink: 0;
         }
       }
     }
 
-    // 精美的分类导航
+    // iOS风格精美分类导航 - 毛玻璃质感设计
     .category-navigation {
-      padding: 0 24px 16px;
+      padding: 0 24px 20px;
+      position: relative;
+      z-index: 10;
 
       @media (max-width: 768px) {
-        padding: 0 18px 12px;
+        padding: 0 18px 16px;
       }
 
-      // 桌面端分类标签 - 紧凑网格布局
+      // 桌面端分类标签 - iOS风格毛玻璃容器
       .desktop-categories {
         @media (max-width: 768px) {
           display: none;
@@ -1102,46 +1112,249 @@ onMounted(async (): Promise<void> => {
           .category-tags-wrapper {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            padding: 4px 0;
-            transition: all 0.3s ease;
+            gap: 8px;
+            padding: 20px 24px;
+            
+            // iOS风格毛玻璃背景 - 使用Element UI Plus变量
+            background: linear-gradient(135deg, 
+              var(--el-bg-color) 0%,
+              var(--el-fill-color-extra-light) 100%
+            );
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 12px;
+            border: 0.5px solid rgba(22, 119, 255, 0.1);
+            
+            // 精美阴影层叠
+            box-shadow: 
+              0 8px 32px rgba(0, 0, 0, 0.06),
+              0 2px 12px rgba(22, 119, 255, 0.08),
+              inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: visible;
+            
+            // 流光效果层
+            &::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(22, 119, 255, 0.03) 50%,
+                transparent 100%
+              );
+              border-radius: 12px;
+              pointer-events: none;
+              opacity: 0;
+              transition: opacity 0.4s ease;
+            }
+            
+            // 悬停时的增强效果层
+            &::after {
+              content: '';
+              position: absolute;
+              inset: -0.5px;
+              border-radius: 16px;
+              background: linear-gradient(135deg, 
+                rgba(22, 119, 255, 0.05) 0%,
+                rgba(105, 177, 255, 0.03) 100%
+              );
+              opacity: 0;
+              transition: opacity 0.3s ease;
+              z-index: -1;
+            }
+            
+            &:hover {
+              background: linear-gradient(135deg, 
+                var(--el-bg-color) 0%,
+                var(--el-fill-color-blank) 100%
+              );
+              border-color: rgba(22, 119, 255, 0.15);
+              transform: translateY(-2px) scale(1.01);
+              box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.1),
+                0 4px 16px rgba(22, 119, 255, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+              
+              &::before {
+                opacity: 1;
+              }
+              
+              &::after {
+                opacity: 1;
+              }
+            }
 
+            // 优化的展开收缩动画 - 平滑过渡
+            .category-chip {
+              opacity: 1;
+              transform: scale(1) translateY(0);
+              transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+              
+              // 默认状态下所有chip都显示
+            }
+            
             &.collapsed {
-              max-height: 80px;
-              overflow: hidden;
+              .category-chip {
+                // 从第7个开始隐藏，使用平滑的动画
+                &:nth-child(n+7) {
+                  opacity: 0;
+                  transform: scale(0.95) translateY(-8px);
+                  pointer-events: none;
+                  
+                  // 分步收缩，创造波浪效果 - 更快响应
+                  &:nth-child(7) {
+                    transition-delay: 0s;
+                  }
+                  &:nth-child(8) {
+                    transition-delay: 0.02s;
+                  }
+                  &:nth-child(9) {
+                    transition-delay: 0.04s;
+                  }
+                  &:nth-child(n+10) {
+                    transition-delay: 0.06s;
+                  }
+                }
+              }
+            }
+            
+            &:not(.collapsed) {
+              .category-chip {
+                &:nth-child(n+7) {
+                  opacity: 1;
+                  transform: scale(1) translateY(0);
+                  pointer-events: auto;
+                  
+                  // 分步展开，创造波浪效果 - 更快响应
+                  &:nth-child(7) {
+                    transition-delay: 0.06s;
+                  }
+                  &:nth-child(8) {
+                    transition-delay: 0.04s;
+                  }
+                  &:nth-child(9) {
+                    transition-delay: 0.02s;
+                  }
+                  &:nth-child(n+10) {
+                    transition-delay: 0s;
+                  }
+                }
+              }
             }
 
             .toggle-btn {
               display: flex;
               align-items: center;
-              gap: 4px;
-              padding: 6px 12px;
-              background: var(--el-fill-color-light);
-              border: 1px solid var(--el-border-color-light);
-              border-radius: 16px;
-              color: var(--el-text-color-regular);
-              font-size: 12px;
+              gap: 6px;
+              padding: 8px 12px;
+              height: 36px;
+              border: none;
+              border-radius: 8px;
+              font-size: 13px;
+              font-weight: 500;
               cursor: pointer;
-              transition: all 0.3s ease;
               white-space: nowrap;
-              height: 32px;
+              position: relative;
+              overflow: hidden;
+              z-index: 5;
+              margin-top: 0;
+              margin-left: 0;
+              flex-shrink: 0;
+              align-self: flex-start;
+              width: auto;
+              max-width: 140px;
+              
+            // iOS风格按钮背景 - 使用Element UI变量
+              background: linear-gradient(135deg, 
+                var(--el-color-primary-light-9) 0%,
+                var(--el-color-primary-light-8) 100%
+              );
+              color: var(--el-color-primary);
+              backdrop-filter: blur(12px);
+              border: 0.5px solid rgba(22, 119, 255, 0.12);
+              
+              box-shadow: 
+                0 4px 12px rgba(22, 119, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+              
+              transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+              
+              // 流光动画层
+              &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg,
+                  transparent,
+                  rgba(255, 255, 255, 0.4),
+                  transparent
+                );
+                transition: left 0.6s ease;
+              }
+              
+              &::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                border-radius: 8px;
+                background: linear-gradient(135deg, 
+                  rgba(22, 119, 255, 0.1) 0%,
+                  rgba(105, 177, 255, 0.06) 100%
+                );
+                opacity: 0;
+                transition: opacity 0.3s ease;
+              }
 
               &:hover {
-                background: var(--el-color-primary-light-9);
-                color: var(--el-color-primary);
-                border-color: var(--el-color-primary-light-7);
+                background: linear-gradient(135deg, 
+                  var(--el-color-primary-light-8) 0%,
+                  var(--el-color-primary-light-9) 100%
+                );
+                border-color: rgba(22, 119, 255, 0.2);
+                transform: translateY(-1px) scale(1.02);
+                box-shadow: 
+                  0 8px 20px rgba(22, 119, 255, 0.15),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.4);
+                
+                &::before {
+                  left: 100%;
+                }
+                
+                &::after {
+                  opacity: 1;
+                }
+              }
+              
+              &:active {
+                transform: translateY(0) scale(0.98);
               }
 
               .toggle-text {
-                font-weight: 500;
+                font-weight: 600;
+                position: relative;
+                z-index: 3;
+                letter-spacing: -0.1px;
+                transition: all 0.3s ease;
               }
 
               .toggle-icon {
-                font-size: 12px;
-                transition: transform 0.3s ease;
+                font-size: 14px;
+                position: relative;
+                z-index: 3;
+                transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                filter: drop-shadow(0 1px 2px rgba(22, 119, 255, 0.2));
 
                 &.rotated {
-                  transform: rotate(180deg);
+                  transform: rotate(180deg) scale(1.1);
                 }
               }
             }
@@ -1243,50 +1456,96 @@ onMounted(async (): Promise<void> => {
       }
     }
 
-      // 精致的分类标签样式
+      // iOS风格精致分类标签
       .category-chip {
         display: flex;
         align-items: center;
         gap: 6px;
         padding: 8px 12px;
-        background: var(--el-fill-color-blank);
-        border: 1px solid var(--el-border-color-light);
-        border-radius: 6px;
+        height: 36px;
+        border-radius: 8px;
         text-decoration: none;
         font-size: 13px;
         font-weight: 500;
-        color: var(--el-text-color-regular);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        white-space: nowrap;
         position: relative;
         overflow: hidden;
-        height: 36px;
-        white-space: nowrap;
-
-        // 微妙的光泽效果
+        
+        // 增强的iOS风格毛玻璃背景 - 更明显的液态玻璃效果
+        background: linear-gradient(135deg, 
+          rgba(255, 255, 255, 0.25) 0%,
+          rgba(255, 255, 255, 0.15) 50%,
+          rgba(255, 255, 255, 0.1) 100%
+        );
+        backdrop-filter: blur(20px) saturate(180%) brightness(110%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(110%);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--el-text-color-regular);
+        
+        // 增强的精美阴影和液态效果
+        box-shadow: 
+          0 8px 32px rgba(0, 0, 0, 0.1),
+          0 4px 16px rgba(0, 0, 0, 0.06),
+          0 2px 8px rgba(22, 119, 255, 0.05),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+        
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        
+        // 增强的流光效果
         &::before {
           content: '';
           position: absolute;
           top: 0;
-          left: 0;
-          right: 0;
-          height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-          opacity: 0.8;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, 
+            transparent,
+            rgba(255, 255, 255, 0.6),
+            rgba(255, 255, 255, 0.3),
+            transparent
+          );
+          opacity: 0;
+          transition: all 0.6s ease;
+          border-radius: 8px;
+        }
+        
+        // 悬停效果层
+        &::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 8px;
+          background: linear-gradient(135deg, 
+            rgba(22, 119, 255, 0.05) 0%,
+            rgba(105, 177, 255, 0.03) 100%
+          );
+          opacity: 0;
+          transition: opacity 0.3s ease;
         }
 
         .chip-icon {
           width: 18px;
           height: 18px;
-          background: var(--el-color-primary-light-9);
-          border-radius: 4px;
+          border-radius: 6px;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: var(--el-color-primary);
           font-size: 10px;
-          transition: all 0.3s ease;
           flex-shrink: 0;
+          position: relative;
+          z-index: 3;
+          
+          // iOS风格微妙背景 - 使用Element变量
+          background: linear-gradient(135deg, 
+            var(--el-color-primary-light-9) 0%,
+            var(--el-color-primary-light-8) 100%
+          );
+          color: var(--el-color-primary);
+          backdrop-filter: blur(8px);
+          
+          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .chip-label {
@@ -1296,52 +1555,100 @@ onMounted(async (): Promise<void> => {
           text-overflow: ellipsis;
           white-space: nowrap;
           line-height: 1.2;
+          position: relative;
+          z-index: 3;
+          transition: all 0.3s ease;
         }
 
-        .chip-badge {
-          background: var(--el-color-info-light-8);
-          color: var(--el-color-info);
+          .chip-badge {
+          background: linear-gradient(135deg, 
+            var(--el-fill-color-light) 0%,
+            var(--el-border-color-light) 100%
+          );
+          color: var(--el-text-color-regular);
           font-size: 10px;
-          padding: 2px 5px;
+          padding: 2px 6px;
           border-radius: 4px;
           font-weight: 600;
           min-width: 16px;
           text-align: center;
           line-height: 1;
           flex-shrink: 0;
+          position: relative;
+          z-index: 3;
+          backdrop-filter: blur(6px);
+          transition: all 0.3s ease;
         }
 
         &:hover {
-          background: var(--el-color-primary-light-9);
-          border-color: var(--el-color-primary-light-6);
+          background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.4) 0%,
+            rgba(255, 255, 255, 0.25) 50%,
+            rgba(255, 255, 255, 0.15) 100%
+          );
+          border-color: rgba(22, 119, 255, 0.3);
           color: var(--el-color-primary);
-          transform: translateY(-1px);
-          box-shadow: 0 2px 8px rgba(22, 119, 255, 0.12);
+          transform: translateY(-3px) scale(1.03);
+          box-shadow: 
+            0 12px 40px rgba(0, 0, 0, 0.15),
+            0 8px 24px rgba(22, 119, 255, 0.2),
+            0 4px 12px rgba(22, 119, 255, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.9),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+          backdrop-filter: blur(25px) saturate(200%) brightness(120%);
+          -webkit-backdrop-filter: blur(25px) saturate(200%) brightness(120%);
+          
+          &::before {
+            opacity: 1;
+            left: 100%;
+          }
+          
+          &::after {
+            opacity: 1;
+          }
 
           .chip-icon {
-            background: var(--el-color-primary-light-7);
+            background: linear-gradient(135deg, 
+              rgba(22, 119, 255, 0.12) 0%,
+              rgba(105, 177, 255, 0.16) 100%
+            );
             color: var(--el-color-primary);
-            transform: scale(1.05);
+            transform: scale(1.1) rotate(5deg);
           }
 
           .chip-label {
             color: var(--el-color-primary);
+            transform: translateX(1px);
           }
 
           .chip-badge {
-            background: var(--el-color-primary-light-7);
+            background: linear-gradient(135deg, 
+              rgba(22, 119, 255, 0.1) 0%,
+              rgba(105, 177, 255, 0.08) 100%
+            );
             color: var(--el-color-primary);
+            transform: scale(1.05);
           }
         }
 
         &.active {
-          background: var(--el-color-primary);
+          background: linear-gradient(135deg, 
+            var(--el-color-primary) 0%,
+            rgba(22, 119, 255, 0.9) 100%
+          );
           border-color: var(--el-color-primary);
           color: white;
-          box-shadow: 0 2px 6px rgba(22, 119, 255, 0.25);
+          transform: translateY(-1px);
+          box-shadow: 
+            0 4px 12px rgba(22, 119, 255, 0.3),
+            0 2px 6px rgba(22, 119, 255, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
 
           .chip-icon {
-            background: rgba(255, 255, 255, 0.15);
+            background: linear-gradient(135deg, 
+              rgba(255, 255, 255, 0.2) 0%,
+              rgba(255, 255, 255, 0.15) 100%
+            );
             color: white;
           }
 
@@ -1351,12 +1658,220 @@ onMounted(async (): Promise<void> => {
           }
 
           .chip-badge {
-            background: rgba(255, 255, 255, 0.15);
+            background: linear-gradient(135deg, 
+              rgba(255, 255, 255, 0.2) 0%,
+              rgba(255, 255, 255, 0.15) 100%
+            );
             color: white;
           }
         }
       }
     }
+    
+    // 暗色模式适配 - iOS风格精致设计
+    html.dark & {
+      .desktop-categories .category-scroll-container .category-tags-wrapper {
+          // 毛玻璃容器暗色适配
+          background: linear-gradient(135deg, 
+            rgba(28, 28, 30, 0.85) 0%,
+            rgba(44, 44, 46, 0.9) 100%
+          );
+          border-color: rgba(100, 168, 255, 0.15);
+          box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.3),
+            0 2px 12px rgba(100, 168, 255, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+          
+          &::before {
+            background: linear-gradient(90deg,
+              transparent 0%,
+              rgba(100, 168, 255, 0.05) 50%,
+              transparent 100%
+            );
+          }
+          
+          &::after {
+            background: linear-gradient(135deg, 
+              rgba(100, 168, 255, 0.08) 0%,
+              rgba(64, 168, 255, 0.05) 100%
+            );
+          }
+          
+          &:hover {
+            background: linear-gradient(135deg, 
+              rgba(28, 28, 30, 0.92) 0%,
+              rgba(44, 44, 46, 0.95) 100%
+            );
+            border-color: rgba(100, 168, 255, 0.25);
+            box-shadow: 
+              0 12px 40px rgba(0, 0, 0, 0.4),
+              0 4px 16px rgba(100, 168, 255, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.08);
+          }
+          
+          .category-chip {
+            background: linear-gradient(135deg, 
+              rgba(58, 58, 60, 0.6) 0%,
+              rgba(72, 72, 74, 0.7) 100%
+            );
+            border-color: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.85);
+            box-shadow: 
+              0 2px 8px rgba(0, 0, 0, 0.2),
+              0 1px 3px rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            
+            &::before {
+              background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.15), 
+                transparent
+              );
+            }
+            
+            &::after {
+              background: linear-gradient(135deg, 
+                rgba(100, 168, 255, 0.08) 0%,
+                rgba(64, 168, 255, 0.05) 100%
+              );
+            }
+            
+            .chip-icon {
+              background: linear-gradient(135deg, 
+                rgba(100, 168, 255, 0.12) 0%,
+                rgba(64, 168, 255, 0.15) 100%
+              );
+              color: var(--el-color-primary);
+            }
+            
+            .chip-label {
+              color: rgba(255, 255, 255, 0.9);
+            }
+            
+            .chip-badge {
+              background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.08) 0%,
+                rgba(255, 255, 255, 0.1) 100%
+              );
+              color: rgba(255, 255, 255, 0.7);
+            }
+            
+            &:hover {
+              background: linear-gradient(135deg, 
+                rgba(58, 58, 60, 0.8) 0%,
+                rgba(72, 72, 74, 0.85) 100%
+              );
+              border-color: rgba(100, 168, 255, 0.25);
+              color: var(--el-color-primary);
+              box-shadow: 
+                0 6px 16px rgba(0, 0, 0, 0.25),
+                0 2px 8px rgba(100, 168, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+              
+              .chip-icon {
+                background: linear-gradient(135deg, 
+                  rgba(100, 168, 255, 0.18) 0%,
+                  rgba(64, 168, 255, 0.22) 100%
+                );
+                color: #64A8FF;
+              }
+              
+              .chip-label {
+                color: #64A8FF;
+              }
+              
+              .chip-badge {
+                background: linear-gradient(135deg, 
+                  rgba(100, 168, 255, 0.15) 0%,
+                  rgba(64, 168, 255, 0.12) 100%
+                );
+                color: #64A8FF;
+              }
+            }
+            
+            &.active {
+              background: linear-gradient(135deg, 
+                #64A8FF 0%,
+                rgba(100, 168, 255, 0.9) 100%
+              );
+              border-color: #64A8FF;
+              color: rgba(255, 255, 255, 0.95);
+              box-shadow: 
+                0 4px 12px rgba(100, 168, 255, 0.3),
+                0 2px 6px rgba(100, 168, 255, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+              
+              .chip-icon {
+                background: linear-gradient(135deg, 
+                  rgba(255, 255, 255, 0.25) 0%,
+                  rgba(255, 255, 255, 0.2) 100%
+                );
+                color: white;
+              }
+              
+              .chip-label {
+                color: white;
+              }
+              
+              .chip-badge {
+                background: linear-gradient(135deg, 
+                  rgba(255, 255, 255, 0.25) 0%,
+                  rgba(255, 255, 255, 0.2) 100%
+                );
+                color: white;
+              }
+            }
+          
+          .toggle-btn {
+            background: linear-gradient(135deg, 
+              rgba(100, 168, 255, 0.1) 0%,
+              rgba(64, 168, 255, 0.08) 100%
+            );
+            color: #64A8FF;
+            border-color: rgba(100, 168, 255, 0.15);
+            box-shadow: 
+              0 4px 12px rgba(100, 168, 255, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            
+            &::before {
+              background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+              );
+            }
+            
+            &::after {
+              background: linear-gradient(135deg, 
+                rgba(100, 168, 255, 0.12) 0%,
+                rgba(64, 168, 255, 0.08) 100%
+              );
+            }
+            
+            &:hover {
+              background: linear-gradient(135deg, 
+                rgba(100, 168, 255, 0.15) 0%,
+                rgba(64, 168, 255, 0.12) 100%
+              );
+              border-color: rgba(100, 168, 255, 0.25);
+              box-shadow: 
+                0 8px 20px rgba(100, 168, 255, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            }
+          }
+        }
+      }
+    }
+
+  // 简化的流光动画 - 用于增强视觉效果
+  @keyframes glassShimmer {
+    0% {
+      background-position: -200px 0;
+    }
+    100% {
+      background-position: 200px 0;
+    }
+  }
 
   // Article List - 精美紧凑设计
   .article-list {
