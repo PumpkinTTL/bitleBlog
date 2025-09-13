@@ -275,11 +275,12 @@ onMounted(() => {
   right: 0;
   height: 60px;
   background: var(--el-bg-color);
-  border-bottom: 1px solid var(--el-border-color);
+  border-bottom: 1px solid var(--el-border-color-extra-light);
   z-index: 1000;
-  backdrop-filter: blur(10px);
-  box-shadow: var(--el-box-shadow-light);
+  backdrop-filter: blur(8px); // 减少模糊效果
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); // 简化阴影
   padding: 0;
+  transition: all 0.3s ease;
 }
 
 .header-container {
@@ -332,19 +333,22 @@ onMounted(() => {
 .btn-icon {
   width: 36px;
   height: 36px;
-  border: none;
+  border: 1px solid var(--el-border-color-light);
   background: var(--el-fill-color-light);
-  border-radius: var(--el-border-radius-base);
+  border-radius: 6px; // 减小圆角
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--el-text-color-regular);
-  transition: all var(--el-transition-duration);
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
   &:hover {
-    background: var(--el-fill-color);
+    background: var(--el-color-primary-light-9);
     color: var(--el-color-primary);
+    border-color: var(--el-color-primary-light-7);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -353,14 +357,19 @@ onMounted(() => {
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: var(--el-border-radius-base);
-  transition: all var(--el-transition-duration);
+  padding: 6px 10px;
+  border-radius: 6px; // 减小圆角
+  transition: all 0.2s ease;
   color: var(--el-text-color-primary);
+  border: 1px solid var(--el-border-color-light);
+  background: var(--el-fill-color-light);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
   &:hover {
     background: var(--el-color-primary-light-9);
     color: var(--el-color-primary);
+    border-color: var(--el-color-primary-light-7);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
 
   span {
@@ -376,18 +385,21 @@ onMounted(() => {
   display: none;
   width: 36px;
   height: 36px;
-  border: none;
+  border: 1px solid var(--el-border-color-light);
   background: var(--el-fill-color-light);
-  border-radius: var(--el-border-radius-base);
+  border-radius: 6px;
   cursor: pointer;
   align-items: center;
   justify-content: center;
   color: var(--el-text-color-regular);
-  transition: all var(--el-transition-duration);
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
   &:hover {
-    background: var(--el-fill-color);
+    background: var(--el-color-primary-light-9);
     color: var(--el-color-primary);
+    border-color: var(--el-color-primary-light-7);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
 }
 
