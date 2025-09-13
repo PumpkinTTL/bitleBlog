@@ -266,6 +266,10 @@ onMounted(() => {
 
 .header-spacer {
   height: 60px;
+  
+  @media (max-width: 768px) {
+    height: 50px; // 移动端减少高度
+  }
 }
 
 .main-header {
@@ -274,13 +278,22 @@ onMounted(() => {
   left: 0;
   right: 0;
   height: 60px;
-  background: var(--el-bg-color);
+  background: linear-gradient(135deg, 
+    var(--el-bg-color) 0%, 
+    var(--el-fill-color-extra-light) 100%); // 恢复微妙渐变
   border-bottom: 1px solid var(--el-border-color-extra-light);
   z-index: 1000;
-  backdrop-filter: blur(8px); // 减少模糊效果
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); // 简化阴影
+  backdrop-filter: blur(12px) saturate(150%); // 增强液态效果
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.04); // 增强阴影层次
   padding: 0;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  @media (max-width: 768px) {
+    height: 50px; // 移动端减少高度
+  }
 }
 
 .header-container {
@@ -291,6 +304,10 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
+  
+  @media (max-width: 768px) {
+    padding: 0 12px; // 移动端减少内边距
+  }
 }
 
 .logo {
@@ -300,6 +317,10 @@ onMounted(() => {
 
   img {
     height: 32px;
+    
+    @media (max-width: 768px) {
+      height: 26px; // 移动端减小 logo 尺寸
+    }
   }
 }
 
@@ -328,27 +349,47 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 12px;
+  
+  @media (max-width: 768px) {
+    gap: 8px; // 移动端减小间距
+  }
 }
 
 .btn-icon {
   width: 36px;
   height: 36px;
   border: 1px solid var(--el-border-color-light);
-  background: var(--el-fill-color-light);
-  border-radius: 6px; // 减小圆角
+  background: linear-gradient(135deg, 
+    var(--el-fill-color-light) 0%, 
+    var(--el-fill-color) 100%); // 恢复渐变
+  border-radius: 8px; // 恢复圆角
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--el-text-color-regular);
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 2px 6px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(8px);
+  
+  @media (max-width: 768px) {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+  }
 
   &:hover {
-    background: var(--el-color-primary-light-9);
+    background: linear-gradient(135deg, 
+      var(--el-color-primary-light-9) 0%, 
+      var(--el-color-primary-light-8) 100%);
     color: var(--el-color-primary);
     border-color: var(--el-color-primary-light-7);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.1),
+      0 2px 6px rgba(22, 119, 255, 0.15);
+    transform: translateY(-1px);
   }
 }
 
@@ -358,24 +399,64 @@ onMounted(() => {
   gap: 8px;
   cursor: pointer;
   padding: 6px 10px;
-  border-radius: 6px; // 减小圆角
-  transition: all 0.2s ease;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   color: var(--el-text-color-primary);
   border: 1px solid var(--el-border-color-light);
-  background: var(--el-fill-color-light);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  background: linear-gradient(135deg, 
+    var(--el-fill-color-light) 0%, 
+    var(--el-fill-color) 100%);
+  box-shadow: 
+    0 2px 6px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(8px);
+  
+  @media (max-width: 768px) {
+    padding: 3px 6px; // 大幅减小内边距
+    gap: 4px; // 减小间距
+    border-radius: 6px;
+    background: none; // 移动端去除背景
+    border: none; // 去除边框
+    box-shadow: none; // 去除阴影
+    backdrop-filter: none;
+    padding: 2px 4px; // 更小的内边距
+  }
 
   &:hover {
-    background: var(--el-color-primary-light-9);
+    background: linear-gradient(135deg, 
+      var(--el-color-primary-light-9) 0%, 
+      var(--el-color-primary-light-8) 100%);
     color: var(--el-color-primary);
     border-color: var(--el-color-primary-light-7);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.1),
+      0 2px 6px rgba(22, 119, 255, 0.15);
+    transform: translateY(-1px);
+    
+    @media (max-width: 768px) {
+      background: var(--el-color-primary-light-9); // 移动端简化hover
+      transform: none;
+      box-shadow: none;
+      border: none;
+    }
   }
 
   span {
     font-weight: 500;
     font-size: 14px;
     color: inherit;
+    
+    @media (max-width: 768px) {
+      font-size: 12px; // 移动端减小字体
+    }
+  }
+  
+  :deep(.el-avatar) {
+    @media (max-width: 768px) {
+      width: 24px !important; // 移动端减小头像
+      height: 24px !important;
+      font-size: 12px !important;
+    }
   }
 }
 
@@ -383,23 +464,33 @@ onMounted(() => {
 
 .btn-menu {
   display: none;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border: 1px solid var(--el-border-color-light);
-  background: var(--el-fill-color-light);
+  background: linear-gradient(135deg, 
+    var(--el-fill-color-light) 0%, 
+    var(--el-fill-color) 100%);
   border-radius: 6px;
   cursor: pointer;
   align-items: center;
   justify-content: center;
   color: var(--el-text-color-regular);
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 2px 6px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(8px);
 
   &:hover {
-    background: var(--el-color-primary-light-9);
+    background: linear-gradient(135deg, 
+      var(--el-color-primary-light-9) 0%, 
+      var(--el-color-primary-light-8) 100%);
     color: var(--el-color-primary);
     border-color: var(--el-color-primary-light-7);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.1),
+      0 2px 6px rgba(22, 119, 255, 0.15);
+    transform: translateY(-1px);
   }
 }
 
