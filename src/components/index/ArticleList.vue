@@ -1115,79 +1115,21 @@ onMounted(async (): Promise<void> => {
             gap: 8px;
             padding: 20px 24px;
             
-            // iOS风格毛玻璃背景 - 使用Element UI Plus变量
-            background: linear-gradient(135deg, 
-              var(--el-bg-color) 0%,
-              var(--el-fill-color-extra-light) 100%
-            );
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-radius: 12px;
-            border: 0.5px solid rgba(22, 119, 255, 0.1);
+            // 简洁的背景设计
+            background: var(--el-bg-color);
+            border-radius: 8px;
+            border: 1px solid var(--el-border-color-extra-light);
             
-            // 精美阴影层叠
-            box-shadow: 
-              0 8px 32px rgba(0, 0, 0, 0.06),
-              0 2px 12px rgba(22, 119, 255, 0.08),
-              inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            // 简化阴影效果
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             
-            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.3s ease;
             position: relative;
             overflow: visible;
             
-            // 流光效果层
-            &::before {
-              content: '';
-              position: absolute;
-              top: 0;
-              left: 0;
-              right: 0;
-              bottom: 0;
-              background: linear-gradient(90deg,
-                transparent 0%,
-                rgba(22, 119, 255, 0.03) 50%,
-                transparent 100%
-              );
-              border-radius: 12px;
-              pointer-events: none;
-              opacity: 0;
-              transition: opacity 0.4s ease;
-            }
-            
-            // 悬停时的增强效果层
-            &::after {
-              content: '';
-              position: absolute;
-              inset: -0.5px;
-              border-radius: 16px;
-              background: linear-gradient(135deg, 
-                rgba(22, 119, 255, 0.05) 0%,
-                rgba(105, 177, 255, 0.03) 100%
-              );
-              opacity: 0;
-              transition: opacity 0.3s ease;
-              z-index: -1;
-            }
-            
             &:hover {
-              background: linear-gradient(135deg, 
-                var(--el-bg-color) 0%,
-                var(--el-fill-color-blank) 100%
-              );
-              border-color: rgba(22, 119, 255, 0.15);
-              transform: translateY(-2px) scale(1.01);
-              box-shadow: 
-                0 12px 40px rgba(0, 0, 0, 0.1),
-                0 4px 16px rgba(22, 119, 255, 0.12),
-                inset 0 1px 0 rgba(255, 255, 255, 0.9);
-              
-              &::before {
-                opacity: 1;
-              }
-              
-              &::after {
-                opacity: 1;
-              }
+              border-color: var(--el-color-primary-light-8);
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             }
 
             // 优化的展开收缩动画 - 平滑过渡
@@ -1200,50 +1142,22 @@ onMounted(async (): Promise<void> => {
             }
             
             &.collapsed {
+              flex-wrap: nowrap; // 禁止换行
+              
               .category-chip {
-                // 从第7个开始隐藏，使用平滑的动画
+                // 从第7个开始隐藏
                 &:nth-child(n+7) {
-                  opacity: 0;
-                  transform: scale(0.95) translateY(-8px);
-                  pointer-events: none;
-                  
-                  // 分步收缩，创造波浪效果 - 更快响应
-                  &:nth-child(7) {
-                    transition-delay: 0s;
-                  }
-                  &:nth-child(8) {
-                    transition-delay: 0.02s;
-                  }
-                  &:nth-child(9) {
-                    transition-delay: 0.04s;
-                  }
-                  &:nth-child(n+10) {
-                    transition-delay: 0.06s;
-                  }
+                  display: none; // 完全隐藏而不是透明度
                 }
               }
             }
             
             &:not(.collapsed) {
+              flex-wrap: wrap; // 允许换行
+              
               .category-chip {
                 &:nth-child(n+7) {
-                  opacity: 1;
-                  transform: scale(1) translateY(0);
-                  pointer-events: auto;
-                  
-                  // 分步展开，创造波浪效果 - 更快响应
-                  &:nth-child(7) {
-                    transition-delay: 0.06s;
-                  }
-                  &:nth-child(8) {
-                    transition-delay: 0.04s;
-                  }
-                  &:nth-child(9) {
-                    transition-delay: 0.02s;
-                  }
-                  &:nth-child(n+10) {
-                    transition-delay: 0s;
-                  }
+                  display: flex; // 显示所有标签
                 }
               }
             }
@@ -1254,84 +1168,31 @@ onMounted(async (): Promise<void> => {
               gap: 6px;
               padding: 8px 12px;
               height: 36px;
-              border: none;
-              border-radius: 8px;
+              border: 1px solid var(--el-border-color-light);
+              border-radius: 6px;
               font-size: 13px;
               font-weight: 500;
               cursor: pointer;
               white-space: nowrap;
               position: relative;
-              overflow: hidden;
-              z-index: 5;
-              margin-top: 0;
-              margin-left: 0;
+              z-index: 10; // 增加z-index确保可点击
+              margin-left: 8px; // 添加间距
               flex-shrink: 0;
-              align-self: flex-start;
               width: auto;
               max-width: 140px;
+              pointer-events: auto; // 确保可点击
               
-            // iOS风格按钮背景 - 使用Element UI变量
-              background: linear-gradient(135deg, 
-                var(--el-color-primary-light-9) 0%,
-                var(--el-color-primary-light-8) 100%
-              );
+              // 简洁背景
+              background: var(--el-fill-color-light);
               color: var(--el-color-primary);
-              backdrop-filter: blur(12px);
-              border: 0.5px solid rgba(22, 119, 255, 0.12);
-              
-              box-shadow: 
-                0 4px 12px rgba(22, 119, 255, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-              
-              transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-              
-              // 流光动画层
-              &::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg,
-                  transparent,
-                  rgba(255, 255, 255, 0.4),
-                  transparent
-                );
-                transition: left 0.6s ease;
-              }
-              
-              &::after {
-                content: '';
-                position: absolute;
-                inset: 0;
-                border-radius: 8px;
-                background: linear-gradient(135deg, 
-                  rgba(22, 119, 255, 0.1) 0%,
-                  rgba(105, 177, 255, 0.06) 100%
-                );
-                opacity: 0;
-                transition: opacity 0.3s ease;
-              }
+              box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+              transition: all 0.2s ease;
 
               &:hover {
-                background: linear-gradient(135deg, 
-                  var(--el-color-primary-light-8) 0%,
-                  var(--el-color-primary-light-9) 100%
-                );
-                border-color: rgba(22, 119, 255, 0.2);
-                transform: translateY(-1px) scale(1.02);
-                box-shadow: 
-                  0 8px 20px rgba(22, 119, 255, 0.15),
-                  inset 0 1px 0 rgba(255, 255, 255, 0.4);
-                
-                &::before {
-                  left: 100%;
-                }
-                
-                &::after {
-                  opacity: 1;
-                }
+                background: var(--el-color-primary-light-9);
+                border-color: var(--el-color-primary);
+                transform: translateY(-1px);
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
               }
               
               &:active {
@@ -1456,96 +1317,40 @@ onMounted(async (): Promise<void> => {
       }
     }
 
-      // iOS风格精致分类标签
+      // 简洁分类标签
       .category-chip {
         display: flex;
         align-items: center;
         gap: 6px;
         padding: 8px 12px;
         height: 36px;
-        border-radius: 8px;
+        border-radius: 6px; // 减小圆角
         text-decoration: none;
         font-size: 13px;
         font-weight: 500;
         white-space: nowrap;
-        position: relative;
-        overflow: hidden;
+        transition: all 0.2s ease; // 简化过渡
         
-        // 增强的iOS风格毛玻璃背景 - 更明显的液态玻璃效果
-        background: linear-gradient(135deg, 
-          rgba(255, 255, 255, 0.25) 0%,
-          rgba(255, 255, 255, 0.15) 50%,
-          rgba(255, 255, 255, 0.1) 100%
-        );
-        backdrop-filter: blur(20px) saturate(180%) brightness(110%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(110%);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: var(--el-text-color-regular);
-        
-        // 增强的精美阴影和液态效果
-        box-shadow: 
-          0 8px 32px rgba(0, 0, 0, 0.1),
-          0 4px 16px rgba(0, 0, 0, 0.06),
-          0 2px 8px rgba(22, 119, 255, 0.05),
-          inset 0 1px 0 rgba(255, 255, 255, 0.8),
-          inset 0 -1px 0 rgba(0, 0, 0, 0.05);
-        
-        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        
-        // 增强的流光效果
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, 
-            transparent,
-            rgba(255, 255, 255, 0.6),
-            rgba(255, 255, 255, 0.3),
-            transparent
-          );
-          opacity: 0;
-          transition: all 0.6s ease;
-          border-radius: 8px;
-        }
-        
-        // 悬停效果层
-        &::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          border-radius: 8px;
-          background: linear-gradient(135deg, 
-            rgba(22, 119, 255, 0.05) 0%,
-            rgba(105, 177, 255, 0.03) 100%
-          );
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
+        // 简洁背景
+        background: var(--el-fill-color-light);
+        border: 1px solid var(--el-border-color-light);
+        color: var(--el-text-color-primary);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); // 微妙阴影
 
         .chip-icon {
           width: 18px;
           height: 18px;
-          border-radius: 6px;
+          border-radius: 4px;
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 10px;
           flex-shrink: 0;
-          position: relative;
-          z-index: 3;
           
-          // iOS风格微妙背景 - 使用Element变量
-          background: linear-gradient(135deg, 
-            var(--el-color-primary-light-9) 0%,
-            var(--el-color-primary-light-8) 100%
-          );
+          // 简洁背景
+          background: var(--el-color-primary-light-9);
           color: var(--el-color-primary);
-          backdrop-filter: blur(8px);
-          
-          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          transition: all 0.2s ease;
         }
 
         .chip-label {
@@ -1555,100 +1360,52 @@ onMounted(async (): Promise<void> => {
           text-overflow: ellipsis;
           white-space: nowrap;
           line-height: 1.2;
-          position: relative;
-          z-index: 3;
-          transition: all 0.3s ease;
+          transition: all 0.2s ease;
         }
 
           .chip-badge {
-          background: linear-gradient(135deg, 
-            var(--el-fill-color-light) 0%,
-            var(--el-border-color-light) 100%
-          );
+          background: var(--el-fill-color);
           color: var(--el-text-color-regular);
           font-size: 10px;
           padding: 2px 6px;
-          border-radius: 4px;
+          border-radius: 3px;
           font-weight: 600;
           min-width: 16px;
           text-align: center;
           line-height: 1;
           flex-shrink: 0;
-          position: relative;
-          z-index: 3;
-          backdrop-filter: blur(6px);
-          transition: all 0.3s ease;
+          transition: all 0.2s ease;
         }
 
         &:hover {
-          background: linear-gradient(135deg, 
-            rgba(255, 255, 255, 0.4) 0%,
-            rgba(255, 255, 255, 0.25) 50%,
-            rgba(255, 255, 255, 0.15) 100%
-          );
-          border-color: rgba(22, 119, 255, 0.3);
+          background: var(--el-color-primary-light-9);
+          border-color: var(--el-color-primary-light-7);
           color: var(--el-color-primary);
-          transform: translateY(-3px) scale(1.03);
-          box-shadow: 
-            0 12px 40px rgba(0, 0, 0, 0.15),
-            0 8px 24px rgba(22, 119, 255, 0.2),
-            0 4px 12px rgba(22, 119, 255, 0.15),
-            inset 0 1px 0 rgba(255, 255, 255, 0.9),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-          backdrop-filter: blur(25px) saturate(200%) brightness(120%);
-          -webkit-backdrop-filter: blur(25px) saturate(200%) brightness(120%);
-          
-          &::before {
-            opacity: 1;
-            left: 100%;
-          }
-          
-          &::after {
-            opacity: 1;
-          }
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 
           .chip-icon {
-            background: linear-gradient(135deg, 
-              rgba(22, 119, 255, 0.12) 0%,
-              rgba(105, 177, 255, 0.16) 100%
-            );
+            background: var(--el-color-primary-light-8);
             color: var(--el-color-primary);
-            transform: scale(1.1) rotate(5deg);
           }
 
           .chip-label {
             color: var(--el-color-primary);
-            transform: translateX(1px);
           }
 
           .chip-badge {
-            background: linear-gradient(135deg, 
-              rgba(22, 119, 255, 0.1) 0%,
-              rgba(105, 177, 255, 0.08) 100%
-            );
+            background: var(--el-color-primary-light-8);
             color: var(--el-color-primary);
-            transform: scale(1.05);
           }
         }
 
         &.active {
-          background: linear-gradient(135deg, 
-            var(--el-color-primary) 0%,
-            rgba(22, 119, 255, 0.9) 100%
-          );
+          background: var(--el-color-primary);
           border-color: var(--el-color-primary);
           color: white;
-          transform: translateY(-1px);
-          box-shadow: 
-            0 4px 12px rgba(22, 119, 255, 0.3),
-            0 2px 6px rgba(22, 119, 255, 0.4),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          box-shadow: 0 2px 6px rgba(22, 119, 255, 0.3);
 
           .chip-icon {
-            background: linear-gradient(135deg, 
-              rgba(255, 255, 255, 0.2) 0%,
-              rgba(255, 255, 255, 0.15) 100%
-            );
+            background: rgba(255, 255, 255, 0.2);
             color: white;
           }
 
@@ -1658,10 +1415,7 @@ onMounted(async (): Promise<void> => {
           }
 
           .chip-badge {
-            background: linear-gradient(135deg, 
-              rgba(255, 255, 255, 0.2) 0%,
-              rgba(255, 255, 255, 0.15) 100%
-            );
+            background: rgba(255, 255, 255, 0.2);
             color: white;
           }
         }
