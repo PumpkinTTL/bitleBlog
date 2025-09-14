@@ -4,6 +4,7 @@
     class="logo-container" 
     :class="{ 'mobile': isMobile }"
     :title="title || '返回首页 - 知识棱镜'"
+    :style="cssVars"
     @click="handleClick"
   >
     <div class="logo-icon">
@@ -17,17 +18,35 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+
 interface Props {
   isMobile?: boolean
   showText?: boolean
   title?: string
+  primaryColor?: string
+  secondaryColor?: string
+  accentColor?: string
 }
 
-defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  primaryColor: '#9333ea',
+  secondaryColor: '#a855f7', 
+  accentColor: '#7c3aed'
+})
 
 const emit = defineEmits<{
   click: []
 }>()
+
+const cssVars = computed(() => ({
+  '--logo-primary': props.primaryColor,
+  '--logo-secondary': props.secondaryColor,
+  '--logo-accent': props.accentColor,
+  '--logo-primary-alpha': props.primaryColor + '15', // 8% opacity
+  '--logo-secondary-alpha': props.secondaryColor + '20', // 12% opacity
+  '--logo-shadow': props.primaryColor + '50' // 30% opacity for shadows
+}))
 
 const handleClick = () => {
   emit('click')
@@ -38,20 +57,20 @@ const handleClick = () => {
 .logo-container {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   text-decoration: none;
-  padding: 8px 14px;
-  border-radius: 14px;
+  padding: 6px 12px;
+  border-radius: 10px;
   background: linear-gradient(135deg, 
     var(--el-fill-color-extra-light) 0%, 
     var(--el-fill-color-light) 50%,
     var(--el-fill-color) 100%);
   border: 1px solid var(--el-border-color-extra-light);
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   box-shadow: 
-    0 3px 12px var(--el-box-shadow-lighter),
-    0 1px 4px var(--el-box-shadow-light),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    0 2px 8px var(--el-box-shadow-lighter),
+    0 1px 3px var(--el-box-shadow-light),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(12px) saturate(160%);
   -webkit-backdrop-filter: blur(12px) saturate(160%);
   position: relative;
@@ -72,54 +91,52 @@ const handleClick = () => {
   }
   
   &:hover {
-    transform: translateY(-2px) scale(1.02);
     background: linear-gradient(135deg, 
-      rgba(147, 51, 234, 0.08) 0%, 
-      rgba(168, 85, 247, 0.05) 50%,
-      rgba(147, 51, 234, 0.08) 100%);
-    border-color: rgba(147, 51, 234, 0.2);
+      var(--logo-primary-alpha) 0%, 
+      var(--logo-secondary-alpha) 50%,
+      var(--logo-primary-alpha) 100%);
+    border-color: var(--logo-primary);
     box-shadow: 
-      0 6px 20px rgba(0, 0, 0, 0.1),
-      0 2px 8px rgba(147, 51, 234, 0.15),
+      0 4px 16px rgba(0, 0, 0, 0.08),
+      0 2px 8px var(--logo-shadow),
       inset 0 1px 0 rgba(255, 255, 255, 0.6);
       
     .logo-icon {
-      transform: scale(1.1) rotate(15deg);
       background: linear-gradient(135deg, 
-        #9333ea 0%,
-        #a855f7 50%,
-        #8b5cf6 100%);
+        var(--logo-primary) 0%,
+        var(--logo-secondary) 50%,
+        var(--logo-accent) 100%);
       box-shadow: 
-        0 4px 12px rgba(147, 51, 234, 0.4),
-        0 2px 6px rgba(168, 85, 247, 0.3),
+        0 3px 12px var(--logo-shadow),
+        0 1px 4px var(--logo-shadow),
         inset 0 1px 0 rgba(255, 255, 255, 0.4);
       
+      i {
+        animation: logo-pulse 0.6s ease;
+      }
+      
       &::after {
-        opacity: 0.6;
+        opacity: 0.5;
       }
     }
     
     .logo-main {
-      background: linear-gradient(135deg, #9333ea, #a855f7, #8b5cf6);
+      background: linear-gradient(135deg, var(--logo-primary), var(--logo-secondary), var(--logo-accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
     
     .logo-sub {
-      color: rgba(147, 51, 234, 0.8);
+      color: var(--logo-primary);
+      opacity: 1;
     }
   }
   
   &.mobile {
-    gap: 10px;
-    padding: 6px 10px;
-    border-radius: 10px;
-    transform: none !important; // 移动端禁用悬停变换
-    
-    &:hover {
-      transform: none !important;
-    }
+    gap: 8px;
+    padding: 5px 8px;
+    border-radius: 8px;
   }
 }
 
@@ -127,21 +144,21 @@ const handleClick = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   background: linear-gradient(135deg, 
-    #a855f7 0%,
-    #9333ea 50%,
-    #7c3aed 100%);
-  border-radius: 12px;
+    var(--logo-secondary) 0%,
+    var(--logo-primary) 50%,
+    var(--logo-accent) 100%);
+  border-radius: 8px;
   color: white;
-  font-size: 20px;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  font-size: 16px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   box-shadow: 
-    0 4px 12px rgba(147, 51, 234, 0.35),
-    0 2px 6px rgba(168, 85, 247, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    0 2px 8px var(--logo-shadow),
+    0 1px 3px var(--logo-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
   
   // 图标光晕效果
   &::after {
@@ -152,10 +169,10 @@ const handleClick = () => {
     right: -2px;
     bottom: -2px;
     background: linear-gradient(135deg, 
-      rgba(147, 51, 234, 0.6), 
+      var(--logo-primary), 
       transparent, 
-      rgba(168, 85, 247, 0.6));
-    border-radius: 12px;
+      var(--logo-secondary));
+    border-radius: 10px;
     z-index: -1;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -174,55 +191,62 @@ const handleClick = () => {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0px;
-  line-height: 1.15;
-  height: 40px; // 与图标高度保持一致
+  gap: 2px;
+  line-height: 1.2;
+  height: 32px; // 与图标高度保持一致
 }
 
 .logo-main {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--el-text-color-primary);
   transition: all 0.3s ease;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
   font-family: 'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif;
   margin: 0;
   padding: 0;
 }
 
 .logo-sub {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 500;
   color: var(--el-text-color-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.8px;
-  opacity: 0.75;
+  letter-spacing: 0.6px;
+  opacity: 0.7;
   transition: all 0.3s ease;
   font-family: 'Arial', 'Helvetica', 'Segoe UI', sans-serif;
-  margin: -2px 0 0 0;
+  margin: 0;
   padding: 0;
 }
 
 // 移动端样式调整
 .mobile {
   .logo-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 16px;
-    border-radius: 8px;
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+    border-radius: 6px;
   }
   
   .logo-text {
-    height: 32px; // 与移动端图标高度保持一致
+    height: 28px; // 与移动端图标高度保持一致
+    gap: 1px;
   }
   
   .logo-main {
-    font-size: 15px;
+    font-size: 14px;
   }
   
   .logo-sub {
     font-size: 8px;
-    margin-top: -1px;
   }
+}
+
+// 添加跳动动画
+@keyframes logo-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 </style>

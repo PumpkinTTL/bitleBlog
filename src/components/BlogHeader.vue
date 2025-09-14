@@ -5,7 +5,13 @@
     <el-header class="main-header">
       <el-container class="header-container">
         <!-- Logo -->
-        <Logo :show-text="true" class="header-logo" />
+        <Logo 
+          :show-text="true" 
+          class="header-logo"
+          primary-color="#6366f1"
+          secondary-color="#8b5cf6"
+          accent-color="#3b82f6"
+        />
 
         <!-- 导航 -->
         <nav class="nav">
@@ -79,6 +85,9 @@
               :show-text="true" 
               :is-mobile="true" 
               title="返回首页 - 知识棱镜"
+              primary-color="#6366f1"
+              secondary-color="#8b5cf6"
+              accent-color="#3b82f6"
               @click="mobileMenuOpen = false"
             />
             <button class="drawer-close-btn" @click="mobileMenuOpen = false">
