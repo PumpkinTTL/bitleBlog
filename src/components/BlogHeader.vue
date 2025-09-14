@@ -25,7 +25,7 @@
 
         <!-- 右侧操作 -->
         <div class="actions">
-          <button class="btn-icon" @click="toggleTheme">
+          <button class="btn-icon theme-toggle" :class="{ 'dark-mode': isDarkMode }" @click="toggleTheme">
             <i :class="isDarkMode ? 'fas fa-sun' : 'fas fa-moon'"></i>
           </button>
 
@@ -393,61 +393,120 @@ onMounted(() => {
 .btn-icon {
   width: 36px;
   height: 36px;
-  border: 1px solid var(--el-border-color-light);
-  background: linear-gradient(135deg, 
-    var(--el-fill-color-extra-light) 0%, 
-    var(--el-fill-color-light) 50%,
-    var(--el-fill-color) 100%);
-  border-radius: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--el-text-color-regular);
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  box-shadow: 
-    0 4px 12px var(--el-box-shadow-light),
-    0 2px 6px var(--el-box-shadow-lighter),
-    inset 0 1px 0 var(--el-border-color-extra-light);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   overflow: hidden;
-  
-  // 内部高亮效果
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 50%;
-    background: linear-gradient(180deg, 
-      var(--el-border-color-extra-light) 0%, 
-      transparent 100%);
-    pointer-events: none;
-  }
   
   @media (max-width: 768px) {
     width: 32px;
     height: 32px;
-    border-radius: 10px;
-    backdrop-filter: blur(12px) saturate(160%);
-    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    border-radius: 6px;
+  }
+
+  // 图标旋转动画
+  i {
+    transition: all 0.3s ease;
   }
 
   &:hover {
-    background: linear-gradient(135deg, 
-      rgba(22, 119, 255, 0.3) 0%, 
-      rgba(22, 119, 255, 0.2) 50%,
-      rgba(22, 119, 255, 0.25) 100%);
     color: var(--el-color-primary);
-    border-color: rgba(22, 119, 255, 0.4);
+    background: linear-gradient(135deg, 
+      var(--el-color-primary-light-9) 0%, 
+      var(--el-color-primary-light-8) 50%,
+      var(--el-color-primary-light-9) 100%);
+    border-color: var(--el-color-primary-light-7);
+    backdrop-filter: blur(8px) saturate(150%);
+    -webkit-backdrop-filter: blur(8px) saturate(150%);
     box-shadow: 
-      0 8px 24px rgba(0, 0, 0, 0.12),
-      0 4px 12px rgba(22, 119, 255, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    transform: translateY(-2px) scale(1.05);
+      0 2px 8px var(--el-color-primary-light-9),
+      inset 0 1px 0 var(--el-color-primary-light-8);
+    transform: translateY(-1px);
+    
+    // 内部光泽
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(180deg, 
+        var(--el-color-primary-light-8) 0%, 
+        transparent 100%);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    
+    // 悬停时图标轻微旋转
+    i {
+      transform: rotate(15deg) scale(1.1);
+    }
+  }
+  
+  // 点击时的旋转动画
+  &:active {
+    i {
+      transform: rotate(180deg) scale(0.9);
+    }
+  }
+}
+
+// 主题切换按钮特殊样式
+.theme-toggle {
+  // 暗黑模式下的特殊样式
+  &.dark-mode {
+    color: #fbbf24; // 暖黄色，表示太阳
+    
+    &:hover {
+      color: #f59e0b;
+      background: linear-gradient(135deg, 
+        rgba(251, 191, 36, 0.1) 0%, 
+        rgba(245, 158, 11, 0.08) 50%,
+        rgba(251, 191, 36, 0.1) 100%);
+      border-color: rgba(251, 191, 36, 0.3);
+      box-shadow: 
+        0 2px 8px rgba(251, 191, 36, 0.2),
+        inset 0 1px 0 rgba(251, 191, 36, 0.15);
+        
+      &::before {
+        background: linear-gradient(180deg, 
+          rgba(251, 191, 36, 0.12) 0%, 
+          transparent 100%);
+        opacity: 0.6;
+      }
+    }
+  }
+  
+  // 浅色模式下的特殊样式  
+  &:not(.dark-mode) {
+    color: #6366f1; // 深蓝色，表示月亮
+    
+    &:hover {
+      color: #4f46e5;
+      background: linear-gradient(135deg, 
+        rgba(99, 102, 241, 0.1) 0%, 
+        rgba(79, 70, 229, 0.08) 50%,
+        rgba(99, 102, 241, 0.1) 100%);
+      border-color: rgba(99, 102, 241, 0.3);
+      box-shadow: 
+        0 2px 8px rgba(99, 102, 241, 0.2),
+        inset 0 1px 0 rgba(99, 102, 241, 0.15);
+        
+      &::before {
+        background: linear-gradient(180deg, 
+          rgba(99, 102, 241, 0.12) 0%, 
+          transparent 100%);
+        opacity: 0.6;
+      }
+    }
   }
 }
 
