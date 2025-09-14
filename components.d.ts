@@ -200,6 +200,7 @@ declare module 'vue' {
     ListItem: typeof import('./src/components/ListItem.vue')['default']
     Loader: typeof import('./src/components/index/Loader.vue')['default']
     LoginModal: typeof import('./src/components/LoginModal.vue')['default']
+    Logo: typeof import('./src/components/Logo.vue')['default']
     MonthlyHotArticles: typeof import('./src/components/index/MonthlyHotArticles.vue')['default']
     Music: typeof import('./src/components/Music.vue')['default']
     MusicContent: typeof import('./src/components/MusicContent.vue')['default']

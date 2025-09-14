@@ -5,9 +5,7 @@
     <el-header class="main-header">
       <el-container class="header-container">
         <!-- Logo -->
-        <router-link to="/" class="logo">
-          <img src="@/assets/logo.png" alt="Bitle Blog" />
-        </router-link>
+        <Logo :show-text="true" class="header-logo" />
 
         <!-- 导航 -->
         <nav class="nav">
@@ -75,6 +73,22 @@
 
         <!-- 统一的菜单内容容器 -->
         <div class="menu-content">
+          <!-- 移动端Logo标识 -->
+          <div class="mobile-logo">
+            <Logo 
+              :show-text="true" 
+              :is-mobile="true" 
+              title="返回首页 - 知识棱镜"
+              @click="mobileMenuOpen = false"
+            />
+            <button class="drawer-close-btn" @click="mobileMenuOpen = false">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          
+          <!-- 分割线 -->
+          <div class="divider"></div>
+          
           <!-- 用户信息区域 -->
           <div class="user-section" v-if="isLoggedIn">
             <div class="user-avatar-section">
@@ -172,6 +186,7 @@ import { ElMessage } from 'element-plus'
 import { User, Setting, SwitchButton } from '@element-plus/icons-vue'
 import { useStore } from '../store'
 import { useThemeStore } from '@/stores/theme'
+import Logo from './Logo.vue'
 
 const router = useRouter()
 const store = useStore()
@@ -316,19 +331,19 @@ onMounted(() => {
   }
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-
-  img {
-    height: 32px;
+// 头部Logo移动端样式
+.header-logo {
+  @media (max-width: 768px) {
+    :deep(.logo-text) {
+      display: none; // 移动端隐藏文字
+    }
     
-    @media (max-width: 768px) {
-      height: 26px; // 移动端减小 logo 尺寸
+    :deep(.logo-container) {
+      padding: 4px 6px; // 减少内边距
     }
   }
 }
+
 
 .nav {
   display: flex;
@@ -742,6 +757,41 @@ onMounted(() => {
   overflow-y: auto;
   overflow-x: hidden;
   transition: background-color 0.3s ease;
+}
+
+// 移动端Logo区域
+.mobile-logo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  margin-bottom: 8px;
+  
+  :deep(.logo-container) {
+    flex: 1;
+    margin-right: 8px;
+  }
+}
+
+.drawer-close-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--el-border-color-light);
+  background: var(--el-fill-color-light);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--el-text-color-regular);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: var(--el-color-error-light-8);
+    border-color: var(--el-color-error-light-6);
+    color: var(--el-color-error);
+    transform: scale(1.05);
+  }
 }
 
 // 简洁的菜单内容容器
