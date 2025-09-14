@@ -741,13 +741,13 @@ onMounted(() => {
   background: var(--el-bg-color);
   overflow-y: auto;
   overflow-x: hidden;
+  transition: background-color 0.3s ease;
 }
-
 
 // 简洁的菜单内容容器
 .menu-content {
   flex: 1;
-  padding: 20px 16px;
+  padding: 16px 0;
 }
 
 // 精致的用户信息区域
@@ -756,11 +756,12 @@ onMounted(() => {
   align-items: center;
   gap: 10px;
   padding: 12px;
+  margin: 0 16px 12px;
   background: var(--el-fill-color-blank);
   border-radius: 8px;
-  margin-bottom: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
   border: 1px solid var(--el-border-color-light);
+  transition: all 0.3s ease;
 
   .user-avatar-section {
     position: relative;
@@ -842,11 +843,12 @@ onMounted(() => {
 // 精致的登录区域
 .login-section {
   padding: 12px;
+  margin: 0 16px 12px;
   background: var(--el-fill-color-blank);
   border-radius: 8px;
-  margin-bottom: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
   border: 1px solid var(--el-border-color-light);
+  transition: all 0.3s ease;
 
   .login-content {
     display: flex;
@@ -960,7 +962,8 @@ onMounted(() => {
 .divider {
   height: 1px;
   background: var(--el-border-color-extra-light);
-  margin: 6px 0;
+  margin: 6px 16px;
+  transition: background-color 0.3s ease;
 }
 
 // 简洁的区域标题样式
@@ -968,13 +971,14 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-bottom: 6px;
+  margin: 0 16px 6px;
   font-size: 11px;
   font-weight: 600;
   color: var(--el-text-color-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   opacity: 0.8;
+  transition: color 0.3s ease;
 
   i {
     font-size: 10px;
@@ -995,11 +999,11 @@ onMounted(() => {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 6px;
+    padding: 8px 22px;
     text-decoration: none;
     color: var(--el-text-color-primary);
     border-radius: 4px;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     animation: slideInLeft 0.3s ease forwards;
     opacity: 0;
 
@@ -1028,7 +1032,7 @@ onMounted(() => {
       justify-content: center;
       color: var(--el-color-primary);
       font-size: 11px;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
       flex-shrink: 0;
       border: 1px solid var(--el-border-color-light);
     }
