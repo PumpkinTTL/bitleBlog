@@ -72,20 +72,6 @@
     <!-- 移动端菜单 -->
     <el-drawer v-model="mobileMenuOpen" size="320px" direction="rtl" :with-header="false">
       <div class="mobile-menu">
-        <!-- 简洁的头部区域 -->
-        <div class="menu-header">
-          <div class="header-content">
-            <div class="brand-section">
-              <div class="brand-icon">
-                <i class="fas fa-blog"></i>
-              </div>
-              <span class="brand-name">BitlE Blog</span>
-            </div>
-            <button class="close-btn" @click="mobileMenuOpen = false">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-        </div>
 
         <!-- 统一的菜单内容容器 -->
         <div class="menu-content">
@@ -279,20 +265,40 @@ onMounted(() => {
   right: 0;
   height: 60px;
   background: linear-gradient(135deg, 
-    var(--el-bg-color) 0%, 
-    var(--el-fill-color-extra-light) 100%); // 恢复微妙渐变
-  border-bottom: 1px solid var(--el-border-color-extra-light);
+    var(--el-bg-color-overlay) 0%, 
+    var(--el-bg-color-page) 50%,
+    var(--el-bg-color-overlay) 100%);
+  border-bottom: 1px solid var(--el-border-color-lighter);
   z-index: 1000;
-  backdrop-filter: blur(12px) saturate(150%); // 增强液态效果
-  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.08),
-    0 2px 6px rgba(0, 0, 0, 0.04); // 增强阴影层次
+    0 8px 32px rgba(0, 0, 0, 0.06),
+    0 4px 16px rgba(0, 0, 0, 0.04),
+    0 2px 8px rgba(0, 0, 0, 0.02),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
   padding: 0;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  // 添加顶部光泽效果
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      var(--el-border-color-light) 50%, 
+      transparent 100%);
+  }
   
   @media (max-width: 768px) {
-    height: 50px; // 移动端减少高度
+    height: 50px;
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    background: var(--el-bg-color-overlay);
   }
 }
 
@@ -336,12 +342,41 @@ onMounted(() => {
   padding: 8px 12px;
   text-decoration: none;
   color: var(--el-text-color-regular);
-  border-radius: var(--el-border-radius-base);
-  transition: all var(--el-transition-duration);
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: transparent;
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
 
   &:hover, &.active {
     color: var(--el-color-primary);
-    background: var(--el-color-primary-light-9);
+    background: linear-gradient(135deg, 
+      var(--el-color-primary-light-9) 0%, 
+      var(--el-color-primary-light-8) 50%,
+      var(--el-color-primary-light-9) 100%);
+    border-color: var(--el-color-primary-light-7);
+    backdrop-filter: blur(8px) saturate(150%);
+    -webkit-backdrop-filter: blur(8px) saturate(150%);
+    box-shadow: 
+      0 2px 8px var(--el-color-primary-light-9),
+      inset 0 1px 0 var(--el-color-primary-light-8);
+    transform: translateY(-1px);
+    
+    // 内部光泽
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(180deg, 
+        var(--el-color-primary-light-8) 0%, 
+        transparent 100%);
+      opacity: 0.5;
+      pointer-events: none;
+    }
   }
 }
 
@@ -360,36 +395,59 @@ onMounted(() => {
   height: 36px;
   border: 1px solid var(--el-border-color-light);
   background: linear-gradient(135deg, 
-    var(--el-fill-color-light) 0%, 
-    var(--el-fill-color) 100%); // 恢复渐变
-  border-radius: 8px; // 恢复圆角
+    var(--el-fill-color-extra-light) 0%, 
+    var(--el-fill-color-light) 50%,
+    var(--el-fill-color) 100%);
+  border-radius: 12px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--el-text-color-regular);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   box-shadow: 
-    0 2px 6px rgba(0, 0, 0, 0.06),
-    0 1px 3px rgba(0, 0, 0, 0.04);
-  backdrop-filter: blur(8px);
+    0 4px 12px var(--el-box-shadow-light),
+    0 2px 6px var(--el-box-shadow-lighter),
+    inset 0 1px 0 var(--el-border-color-extra-light);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  position: relative;
+  overflow: hidden;
+  
+  // 内部高亮效果
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, 
+      var(--el-border-color-extra-light) 0%, 
+      transparent 100%);
+    pointer-events: none;
+  }
   
   @media (max-width: 768px) {
     width: 32px;
     height: 32px;
-    border-radius: 6px;
+    border-radius: 10px;
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
   }
 
   &:hover {
     background: linear-gradient(135deg, 
-      var(--el-color-primary-light-9) 0%, 
-      var(--el-color-primary-light-8) 100%);
+      rgba(22, 119, 255, 0.3) 0%, 
+      rgba(22, 119, 255, 0.2) 50%,
+      rgba(22, 119, 255, 0.25) 100%);
     color: var(--el-color-primary);
-    border-color: var(--el-color-primary-light-7);
+    border-color: rgba(22, 119, 255, 0.4);
     box-shadow: 
-      0 4px 12px rgba(0, 0, 0, 0.1),
-      0 2px 6px rgba(22, 119, 255, 0.15);
-    transform: translateY(-1px);
+      0 8px 24px rgba(0, 0, 0, 0.12),
+      0 4px 12px rgba(22, 119, 255, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transform: translateY(-2px) scale(1.05);
   }
 }
 
@@ -398,46 +456,67 @@ onMounted(() => {
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  padding: 6px 10px;
-  border-radius: 8px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 8px 14px;
+  border-radius: 20px;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   color: var(--el-text-color-primary);
   border: 1px solid var(--el-border-color-light);
   background: linear-gradient(135deg, 
-    var(--el-fill-color-light) 0%, 
+    var(--el-fill-color-extra-light) 0%, 
+    var(--el-fill-color-light) 50%,
     var(--el-fill-color) 100%);
   box-shadow: 
-    0 2px 6px rgba(0, 0, 0, 0.06),
-    0 1px 3px rgba(0, 0, 0, 0.04);
-  backdrop-filter: blur(8px);
+    0 4px 12px var(--el-box-shadow-light),
+    0 2px 6px var(--el-box-shadow-lighter),
+    inset 0 1px 0 var(--el-border-color-extra-light);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  position: relative;
+  overflow: hidden;
+  
+  // 内部光泽效果
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, 
+      var(--el-border-color-extra-light) 0%, 
+      transparent 100%);
+    pointer-events: none;
+  }
   
   @media (max-width: 768px) {
-    padding: 3px 6px; // 大幅减小内边距
-    gap: 4px; // 减小间距
-    border-radius: 6px;
-    background: none; // 移动端去除背景
-    border: none; // 去除边框
-    box-shadow: none; // 去除阴影
-    backdrop-filter: none;
-    padding: 2px 4px; // 更小的内边距
+    padding: 4px 8px;
+    gap: 6px;
+    border-radius: 16px;
+    background: var(--el-fill-color-light);
+    border: 1px solid var(--el-border-color-lighter);
+    box-shadow: 0 2px 6px var(--el-box-shadow-lighter);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
   }
 
   &:hover {
     background: linear-gradient(135deg, 
-      var(--el-color-primary-light-9) 0%, 
-      var(--el-color-primary-light-8) 100%);
+      rgba(22, 119, 255, 0.25) 0%, 
+      rgba(22, 119, 255, 0.15) 50%,
+      rgba(22, 119, 255, 0.2) 100%);
     color: var(--el-color-primary);
-    border-color: var(--el-color-primary-light-7);
+    border-color: rgba(22, 119, 255, 0.4);
     box-shadow: 
-      0 4px 12px rgba(0, 0, 0, 0.1),
-      0 2px 6px rgba(22, 119, 255, 0.15);
-    transform: translateY(-1px);
+      0 8px 24px rgba(0, 0, 0, 0.12),
+      0 4px 12px rgba(22, 119, 255, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transform: translateY(-2px) scale(1.02);
     
     @media (max-width: 768px) {
-      background: var(--el-color-primary-light-9); // 移动端简化hover
-      transform: none;
-      box-shadow: none;
-      border: none;
+      transform: scale(1.02);
+      background: rgba(22, 119, 255, 0.2);
+      border-color: rgba(22, 119, 255, 0.3);
+      box-shadow: 0 3px 8px rgba(22, 119, 255, 0.15);
     }
   }
 
@@ -460,7 +539,85 @@ onMounted(() => {
   }
 }
 
-/* 登录按钮现在使用 Element Plus 按钮组件 */
+/* 登录按钮液态玻璃效果 */
+:deep(.el-button--primary) {
+  background: linear-gradient(135deg, 
+    var(--el-color-primary-light-9) 0%, 
+    var(--el-color-primary-light-8) 50%,
+    var(--el-color-primary-light-9) 100%) !important;
+  border: 1px solid var(--el-color-primary-light-7) !important;
+  color: var(--el-color-primary) !important;
+  border-radius: 8px;
+  font-weight: 600;
+  backdrop-filter: blur(8px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(150%) !important;
+  box-shadow: 
+    0 2px 8px var(--el-color-primary-light-9),
+    inset 0 1px 0 var(--el-color-primary-light-8) !important;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  
+  // 内部光泽
+  &::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 50% !important;
+    background: linear-gradient(180deg, 
+      var(--el-color-primary-light-8) 0%, 
+      transparent 100%) !important;
+    opacity: 0.5 !important;
+    pointer-events: none !important;
+  }
+  
+  &:hover {
+    background: linear-gradient(135deg, 
+      var(--el-color-primary-light-8) 0%, 
+      var(--el-color-primary-light-7) 50%,
+      var(--el-color-primary-light-8) 100%) !important;
+    border-color: var(--el-color-primary-light-6) !important;
+    color: var(--el-color-primary) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 
+      0 4px 12px var(--el-color-primary-light-8),
+      inset 0 1px 0 var(--el-color-primary-light-7) !important;
+      
+    &::before {
+      opacity: 0.7 !important;
+    }
+  }
+  
+  &:focus {
+    background: linear-gradient(135deg, 
+      var(--el-color-primary-light-9) 0%, 
+      var(--el-color-primary-light-8) 50%,
+      var(--el-color-primary-light-9) 100%) !important;
+    border-color: var(--el-color-primary-light-7) !important;
+    color: var(--el-color-primary) !important;
+  }
+  
+  &:active {
+    background: linear-gradient(135deg, 
+      var(--el-color-primary-light-8) 0%, 
+      var(--el-color-primary-light-7) 50%,
+      var(--el-color-primary-light-8) 100%) !important;
+    border-color: var(--el-color-primary-light-6) !important;
+    color: var(--el-color-primary) !important;
+    transform: translateY(0px) !important;
+  }
+  
+  .el-icon {
+    margin-right: 6px;
+    color: var(--el-color-primary) !important;
+  }
+  
+  span {
+    color: var(--el-color-primary) !important;
+  }
+}
 
 .btn-menu {
   display: none;
@@ -468,35 +625,56 @@ onMounted(() => {
   height: 32px;
   border: 1px solid var(--el-border-color-light);
   background: linear-gradient(135deg, 
-    var(--el-fill-color-light) 0%, 
+    var(--el-fill-color-extra-light) 0%, 
+    var(--el-fill-color-light) 50%,
     var(--el-fill-color) 100%);
-  border-radius: 6px;
+  border-radius: 10px;
   cursor: pointer;
   align-items: center;
   justify-content: center;
   color: var(--el-text-color-regular);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   box-shadow: 
-    0 2px 6px rgba(0, 0, 0, 0.06),
-    0 1px 3px rgba(0, 0, 0, 0.04);
-  backdrop-filter: blur(8px);
+    0 4px 12px var(--el-box-shadow-light),
+    0 2px 6px var(--el-box-shadow-lighter),
+    inset 0 1px 0 var(--el-border-color-extra-light);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  position: relative;
+  overflow: hidden;
+  
+  // 内部高亮效果
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, 
+      var(--el-border-color-extra-light) 0%, 
+      transparent 100%);
+    pointer-events: none;
+  }
 
   &:hover {
     background: linear-gradient(135deg, 
-      var(--el-color-primary-light-9) 0%, 
-      var(--el-color-primary-light-8) 100%);
+      rgba(22, 119, 255, 0.3) 0%, 
+      rgba(22, 119, 255, 0.2) 50%,
+      rgba(22, 119, 255, 0.25) 100%);
     color: var(--el-color-primary);
-    border-color: var(--el-color-primary-light-7);
+    border-color: rgba(22, 119, 255, 0.4);
     box-shadow: 
-      0 4px 12px rgba(0, 0, 0, 0.1),
-      0 2px 6px rgba(22, 119, 255, 0.15);
-    transform: translateY(-1px);
+      0 8px 24px rgba(0, 0, 0, 0.12),
+      0 4px 12px rgba(22, 119, 255, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transform: translateY(-2px) scale(1.05);
   }
 }
 
 
 
-/* 简洁的移动端菜单 */
+/* 简洁精致的移动端菜单 */
 .mobile-menu {
   height: 100vh;
   display: flex;
@@ -506,102 +684,55 @@ onMounted(() => {
   overflow-x: hidden;
 }
 
-// 简洁的菜单头部
-.menu-header {
-  padding: 16px 0;
-  border-bottom: 1px solid var(--el-border-color-extra-light);
 
-  .header-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .brand-section {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    .brand-icon {
-      width: 28px;
-      height: 28px;
-      background: linear-gradient(135deg, var(--el-color-primary), var(--el-color-primary-dark-2));
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 14px;
-      box-shadow: 0 2px 4px rgba(22, 119, 255, 0.3);
-    }
-
-    .brand-name {
-      font-size: 15px;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--el-color-primary), var(--el-color-primary-dark-2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: 0.5px;
-    }
-  }
-
-  .close-btn {
-    width: 28px;
-    height: 28px;
-    border: none;
-    background: var(--el-fill-color-light);
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--el-text-color-secondary);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    font-size: 12px;
-    border: 1px solid var(--el-border-color-light);
-
-    &:hover {
-      background: linear-gradient(135deg, var(--el-color-danger), var(--el-color-danger-dark-2));
-      color: white;
-      transform: rotate(90deg) scale(1.05);
-      border-color: var(--el-color-danger);
-      box-shadow: 0 2px 6px rgba(245, 108, 108, 0.4);
-    }
-  }
-}
-
-// 统一的菜单内容容器
+// 简洁的菜单内容容器
 .menu-content {
   flex: 1;
-  background: var(--el-bg-color);
+  padding: 20px 16px;
 }
 
-// 用户信息区域
+// 精致的用户信息区域
 .user-section {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px 0;
+  gap: 10px;
+  padding: 12px;
+  background: var(--el-fill-color-blank);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--el-border-color-light);
 
   .user-avatar-section {
     position: relative;
 
     .user-avatar {
-      border: 2px solid var(--el-color-primary-light-7);
-      box-shadow: 0 2px 6px rgba(22, 119, 255, 0.2);
+      border: 2px solid var(--el-color-primary-light-6);
+      box-shadow: 
+        0 3px 8px var(--el-color-primary-light-8),
+        0 1px 3px var(--el-color-primary-light-7);
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 
+          0 4px 12px var(--el-color-primary-light-7),
+          0 2px 6px var(--el-color-primary-light-6);
+      }
     }
 
     .online-indicator {
       position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 8px;
-      height: 8px;
+      bottom: 1px;
+      right: 1px;
+      width: 10px;
+      height: 10px;
       background: var(--el-color-success);
       border-radius: 50%;
-      border: 2px solid white;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      border: 2px solid var(--el-bg-color);
+      box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 var(--el-color-success-light-3);
     }
   }
 
@@ -610,197 +741,249 @@ onMounted(() => {
 
     .user-name {
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--el-text-color-primary);
       margin: 0 0 2px;
+      line-height: 1.2;
     }
 
     .user-status {
       font-size: 11px;
       color: var(--el-color-success);
       margin: 0;
-      font-weight: 600;
+      opacity: 0.85;
+      font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
   }
 
   .logout-btn {
-    width: 28px;
-    height: 28px;
-    border: none;
-    background: linear-gradient(135deg, var(--el-color-danger-light-8), var(--el-color-danger-light-9));
-    color: var(--el-color-danger);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    font-size: 12px;
+    width: 24px;
+    height: 24px;
     border: 1px solid var(--el-color-danger-light-7);
+    background: var(--el-color-danger-light-9);
+    color: var(--el-color-danger);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:hover {
-      background: linear-gradient(135deg, var(--el-color-danger), var(--el-color-danger-dark-2));
+      background: var(--el-color-danger);
       color: white;
-      transform: scale(1.05) rotate(5deg);
-      box-shadow: 0 2px 6px rgba(245, 108, 108, 0.4);
+      border-color: var(--el-color-danger);
     }
   }
 }
 
-// 登录区域
+// 精致的登录区域
 .login-section {
-  padding: 16px 0;
+  padding: 12px;
+  background: var(--el-fill-color-blank);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--el-border-color-light);
 
   .login-content {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     margin-bottom: 12px;
 
     .login-icon {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, var(--el-color-primary), var(--el-color-primary-dark-2));
-      border-radius: 8px;
+      width: 30px;
+      height: 30px;
+      background: var(--el-color-primary);
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 18px;
-      box-shadow: 0 2px 6px rgba(22, 119, 255, 0.3);
+      font-size: 15px;
+      box-shadow: 0 2px 4px var(--el-color-primary-light-8);
     }
 
     .login-text {
       h4 {
         font-size: 14px;
-        font-weight: 700;
+        font-weight: 600;
         color: var(--el-text-color-primary);
         margin: 0 0 2px;
       }
 
       p {
-        font-size: 11px;
+        font-size: 12px;
         color: var(--el-text-color-secondary);
         margin: 0;
-        opacity: 0.8;
+        opacity: 0.85;
       }
     }
   }
 
-  .login-btn {
+  :deep(.login-btn) {
     width: 100%;
     height: 36px;
     border-radius: 8px;
-    font-weight: 700;
     font-size: 14px;
-    background: linear-gradient(135deg, var(--el-color-primary), var(--el-color-primary-dark-2));
-    border: none;
-    box-shadow: 0 2px 6px rgba(22, 119, 255, 0.3);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-
+    font-weight: 600;
+    background: linear-gradient(135deg, 
+      var(--el-color-primary-light-9) 0%, 
+      var(--el-color-primary-light-8) 50%,
+      var(--el-color-primary-light-9) 100%) !important;
+    border: 1px solid var(--el-color-primary-light-7) !important;
+    color: var(--el-color-primary) !important;
+    backdrop-filter: blur(8px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(150%) !important;
+    box-shadow: 
+      0 2px 8px var(--el-color-primary-light-9),
+      inset 0 1px 0 var(--el-color-primary-light-8) !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    
+    // 内部光泽
+    &::before {
+      content: '' !important;
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      height: 50% !important;
+      background: linear-gradient(180deg, 
+        var(--el-color-primary-light-8) 0%, 
+        transparent 100%) !important;
+      opacity: 0.5 !important;
+      pointer-events: none !important;
+    }
+    
     &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(22, 119, 255, 0.4);
+      background: linear-gradient(135deg, 
+        var(--el-color-primary-light-8) 0%, 
+        var(--el-color-primary-light-7) 50%,
+        var(--el-color-primary-light-8) 100%) !important;
+      border-color: var(--el-color-primary-light-6) !important;
+      color: var(--el-color-primary) !important;
+      transform: translateY(-1px) !important;
+      box-shadow: 
+        0 4px 12px var(--el-color-primary-light-8),
+        inset 0 1px 0 var(--el-color-primary-light-7) !important;
+        
+      &::before {
+        opacity: 0.7 !important;
+      }
+    }
+    
+    &:focus {
+      background: linear-gradient(135deg, 
+        var(--el-color-primary-light-9) 0%, 
+        var(--el-color-primary-light-8) 50%,
+        var(--el-color-primary-light-9) 100%) !important;
+      border-color: var(--el-color-primary-light-7) !important;
+      color: var(--el-color-primary) !important;
+    }
+    
+    .el-icon {
+      color: var(--el-color-primary) !important;
+    }
+    
+    span {
+      color: var(--el-color-primary) !important;
     }
   }
 }
 
-// 分割线
+// 简洁的分割线
 .divider {
   height: 1px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    var(--el-border-color-light) 20%,
-    var(--el-border-color-light) 80%,
-    transparent 100%);
-  margin: 8px 0;
+  background: var(--el-border-color-extra-light);
+  margin: 6px 0;
 }
 
-// 统一的区域标题样式
+// 简洁的区域标题样式
 .section-title {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-  padding: 0 4px;
+  gap: 4px;
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--el-text-color-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.8;
 
   i {
-    color: var(--el-color-primary);
-    font-size: 14px;
-  }
-
-  span {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--el-text-color-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 10px;
   }
 }
 
-// 导航区域
+// 简洁的导航区域
 .nav-section {
-  padding: 16px 0;
+  margin-bottom: 8px;
 
   .nav-list {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 1px;
   }
 
   .nav-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px;
+    gap: 8px;
+    padding: 8px 6px;
     text-decoration: none;
     color: var(--el-text-color-primary);
-    border-radius: 8px;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    position: relative;
-    animation: slideInLeft 0.5s ease forwards;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    animation: slideInLeft 0.3s ease forwards;
     opacity: 0;
 
     &:hover {
       background: var(--el-color-primary-light-9);
       color: var(--el-color-primary);
-      transform: translateX(4px);
+      transform: translateX(2px);
 
       .nav-icon {
         background: var(--el-color-primary);
         color: white;
-        transform: scale(1.05);
       }
 
       .nav-arrow {
         opacity: 1;
-        transform: translateX(2px);
       }
     }
 
     .nav-icon {
-      width: 32px;
-      height: 32px;
-      background: var(--el-fill-color-light);
-      border-radius: 6px;
+      width: 24px;
+      height: 24px;
+      background: var(--el-fill-color-blank);
+      border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--el-color-primary);
-      font-size: 14px;
-      transition: all 0.3s ease;
+      font-size: 11px;
+      transition: all 0.2s ease;
       flex-shrink: 0;
+      border: 1px solid var(--el-border-color-light);
     }
 
     .nav-text {
       flex: 1;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
     }
 
     .nav-arrow {
       color: var(--el-text-color-placeholder);
-      font-size: 10px;
-      transition: all 0.3s ease;
+      font-size: 9px;
+      transition: all 0.2s ease;
       opacity: 0;
     }
 
@@ -837,44 +1020,42 @@ onMounted(() => {
   }
 }
 
-// 主题设置区域
+// 简洁的主题设置区域
 .theme-section {
-  padding: 16px 0;
-
   .theme-control {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px;
-    background: var(--el-fill-color-light);
-    border-radius: 8px;
-    transition: all 0.3s ease;
+    padding: 8px 6px;
+    background: var(--el-fill-color-blank);
+    border-radius: 6px;
+    border: 1px solid var(--el-border-color-light);
+    transition: all 0.2s ease;
 
     &:hover {
       background: var(--el-color-primary-light-9);
-      transform: translateY(-1px);
+      border-color: var(--el-color-primary-light-7);
     }
 
     .theme-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-
       .theme-label {
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 600;
         color: var(--el-text-color-primary);
+        margin-bottom: 1px;
+        line-height: 1.2;
       }
 
       .theme-desc {
-        font-size: 11px;
+        font-size: 10px;
         color: var(--el-text-color-secondary);
+        opacity: 0.8;
+        line-height: 1;
       }
     }
 
     .theme-switch {
-      flex-shrink: 0;
-      transform: scale(0.9);
+      transform: scale(0.8);
     }
   }
 }
