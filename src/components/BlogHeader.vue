@@ -216,7 +216,7 @@ const isDarkMode = computed(() => themeStore.isDark)
 const navItems = ref([
   { title: '首页', path: '/index', icon: 'fas fa-home' },
   { title: '资源', path: '/resources', icon: 'fas fa-folder' },
-  { title: '订单', path: '/order', icon: 'fas fa-list' },
+  { title: '商城', path: '/shop', icon: 'fas fa-list' },
   { title: '创作', path: '/write', icon: 'fas fa-edit' },
   { title: '关于', path: '/about', icon: 'fas fa-info' }
 ])

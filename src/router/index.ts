@@ -190,14 +190,14 @@ const routes: RouteRecordRaw[] = [
         }
     },
     {
-        path: '/order',
-        name: 'order',
-        component: () => import('@/views/Order.vue'),
+        path: '/shop',
+        name: 'shop',
+        component: () => import('@/views/Shop.vue'),
         meta: {
-            title: '我的订单',
+            title: '商城',
             header: false,
             footer: true,
-            requiresAuth: true
+            requiresAuth: false
         }
     },
     {

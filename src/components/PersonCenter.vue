@@ -378,11 +378,11 @@ const router = useRouter();
 
 // 订单相关函数
 const goToOrderPage = (status = '') => {
-  // 使用Vue Router跳转到订单页面
+  // 使用Vue Router跳转到商城页面
   if (status) {
-    router.push(`/order?status=${status}`);
+    router.push(`/shop?status=${status}`);
   } else {
-    router.push('/order');
+    router.push('/shop');
   }
 };
 
