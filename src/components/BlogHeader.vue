@@ -485,50 +485,92 @@ onMounted(() => {
 
 // 主题切换按钮特殊样式
 .theme-toggle {
-  // 暗黑模式下的特殊样式
+  // 暗黑模式下的特殊样式 - 保持原来的暖黄色
   &.dark-mode {
     color: #fbbf24; // 暖黄色，表示太阳
+    background: linear-gradient(135deg, 
+      rgba(251, 191, 36, 0.1) 0%, 
+      rgba(245, 158, 11, 0.08) 50%,
+      rgba(251, 191, 36, 0.1) 100%);
+    border-color: rgba(251, 191, 36, 0.3);
+    box-shadow: 
+      0 2px 8px rgba(251, 191, 36, 0.2),
+      inset 0 1px 0 rgba(251, 191, 36, 0.15);
+      
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(180deg, 
+        rgba(251, 191, 36, 0.12) 0%, 
+        transparent 100%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
     
     &:hover {
       color: #f59e0b;
       background: linear-gradient(135deg, 
-        rgba(251, 191, 36, 0.1) 0%, 
-        rgba(245, 158, 11, 0.08) 50%,
-        rgba(251, 191, 36, 0.1) 100%);
-      border-color: rgba(251, 191, 36, 0.3);
+        rgba(251, 191, 36, 0.15) 0%, 
+        rgba(245, 158, 11, 0.12) 50%,
+        rgba(251, 191, 36, 0.15) 100%);
+      border-color: rgba(251, 191, 36, 0.4);
       box-shadow: 
+        0 4px 12px rgba(251, 191, 36, 0.25),
         0 2px 8px rgba(251, 191, 36, 0.2),
-        inset 0 1px 0 rgba(251, 191, 36, 0.15);
+        inset 0 1px 0 rgba(251, 191, 36, 0.2);
+      transform: translateY(-1px) scale(1.05);
         
       &::before {
-        background: linear-gradient(180deg, 
-          rgba(251, 191, 36, 0.12) 0%, 
-          transparent 100%);
-        opacity: 0.6;
+        opacity: 0.8;
       }
     }
   }
   
-  // 浅色模式下的特殊样式  
+  // 浅色模式下的特殊样式 - 真正的蓝色
   &:not(.dark-mode) {
-    color: #6366f1; // 深蓝色，表示月亮
+    color: #3b82f6; // 真正的蓝色
+    background: linear-gradient(135deg, 
+      rgba(59, 130, 246, 0.1) 0%, 
+      rgba(37, 99, 235, 0.08) 50%,
+      rgba(59, 130, 246, 0.1) 100%);
+    border-color: rgba(59, 130, 246, 0.3);
+    box-shadow: 
+      0 2px 8px rgba(59, 130, 246, 0.2),
+      inset 0 1px 0 rgba(59, 130, 246, 0.15);
+      
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(180deg, 
+        rgba(59, 130, 246, 0.12) 0%, 
+        transparent 100%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
     
     &:hover {
-      color: #4f46e5;
+      color: #2563eb;
       background: linear-gradient(135deg, 
-        rgba(99, 102, 241, 0.1) 0%, 
-        rgba(79, 70, 229, 0.08) 50%,
-        rgba(99, 102, 241, 0.1) 100%);
-      border-color: rgba(99, 102, 241, 0.3);
+        rgba(59, 130, 246, 0.15) 0%, 
+        rgba(37, 99, 235, 0.12) 50%,
+        rgba(59, 130, 246, 0.15) 100%);
+      border-color: rgba(59, 130, 246, 0.4);
       box-shadow: 
-        0 2px 8px rgba(99, 102, 241, 0.2),
-        inset 0 1px 0 rgba(99, 102, 241, 0.15);
+        0 4px 12px rgba(59, 130, 246, 0.25),
+        0 2px 8px rgba(59, 130, 246, 0.2),
+        inset 0 1px 0 rgba(59, 130, 246, 0.2);
+      transform: translateY(-1px) scale(1.05);
         
       &::before {
-        background: linear-gradient(180deg, 
-          rgba(99, 102, 241, 0.12) 0%, 
-          transparent 100%);
-        opacity: 0.6;
+        opacity: 0.8;
       }
     }
   }
