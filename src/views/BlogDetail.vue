@@ -27,6 +27,9 @@
         </div>
       </div>
     </div>
+    
+    <!-- page-header占位空间 -->
+    <div style="height: 84px;"></div>
 
     <!-- 主要内容区域 -->
     <div class="page-content">
@@ -935,9 +938,12 @@ onMounted(() => {
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
     padding: 18px 0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1001;
     border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
     box-shadow: 
       0 8px 32px rgba(0, 0, 0, 0.04),

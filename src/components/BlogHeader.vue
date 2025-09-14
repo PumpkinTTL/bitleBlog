@@ -8,8 +8,8 @@
         <Logo 
           :show-text="true" 
           class="header-logo"
-          primary-color="#6366f1"
-          secondary-color="#8b5cf6"
+          primary-color="#8b5cf6"
+          secondary-color="#d946ef"
           accent-color="#3b82f6"
         />
 
@@ -85,8 +85,8 @@
               :show-text="true" 
               :is-mobile="true" 
               title="返回首页 - 知识棱镜"
-              primary-color="#6366f1"
-              secondary-color="#8b5cf6"
+              primary-color="#8b5cf6"
+              secondary-color="#d946ef"
               accent-color="#3b82f6"
               @click="mobileMenuOpen = false"
             />
@@ -250,7 +250,7 @@ const showLogin = () => {
 const goToProfile = () => {
   router.push('/profile')
 }
-
+ 
 const goToSettings = () => {
   router.push('/settings')
 }
@@ -327,7 +327,7 @@ onMounted(() => {
 }
 
 .header-container {
-  max-width: 1200px;
+  max-width: 1440px;
   margin: 0 auto;
   height: 100%;
   display: flex;
