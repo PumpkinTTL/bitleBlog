@@ -38,7 +38,7 @@
             <div class="articles-list" v-if="tagArticles.length">
                 <div v-for="(article, index) in tagArticles" :key="index" class="article-card animate-item"
                     :style="{ 'animation-delay': `${0.05 * (index + 1)}s` }"
-                    @click="$router.push(`/blogdetail?id=${article.id}`)">
+                    @click="$router.push(`/blogDetail/${article.id}`)">
                     <div class="article-image" v-if="article.cover">
                         <img :src="article.cover" :alt="article.title" loading="lazy">
                     </div>

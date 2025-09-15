@@ -766,11 +766,9 @@ const formatDate = (dateString: string) => {
 
 // 点击文章标题处理
 const handClickArticleTitle = (id: number) => {
-  router.replace({
-    path: "/blogdetail",
-    query: {
-      id: id.toString()
-    }
+  router.push({
+    path: `/blogDetail/${id}`,
+    query: { transition: 'slide-fade' }
   });
 };
 

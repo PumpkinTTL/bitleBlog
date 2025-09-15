@@ -57,13 +57,6 @@ const routes: RouteRecordRaw[] = [
            
         },
     },
-    { path: '/blogdetail', name: 'blogdetail', component: () => import('@/views/BlogDetail.vue'),
-        meta: { 
-            header:false,
-            footer:true,
-           
-        },
-    },
     { path: '/premium', name: 'premium', component: () => import('@/views/Premium.vue'),
         meta: { 
             header:false,
@@ -185,6 +178,8 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/BlogDetail.vue'),
         meta: {
             title: '博客详情',
+            header: false,
+            footer: true,
             keepAlive: false,
             requireAuth: false
         }
