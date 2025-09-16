@@ -1247,93 +1247,132 @@ onMounted(() => {
 
 html.dark .shop-page {
   .shop-header {
-    background: linear-gradient(135deg, 
-      rgba(28, 28, 30, 0.95) 0%,
-      rgba(44, 44, 46, 0.9) 100%
-    );
+    background: var(--el-bg-color);
     border-bottom-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.4),
-      0 1px 0 rgba(255, 255, 255, 0.05),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   }
   
   .results-header-container {
-    background: var(--el-bg-color);
-    border-color: rgba(139, 92, 246, 0.15);
+    // 彻底移除液态玻璃效果
+    background: var(--el-bg-color) !important;
+    backdrop-filter: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     
-    // 修复分类标签暗色模式样式 - 扁平化设计
+    // 移除所有::before和::after效果
+    &::before {
+      display: none !important;
+    }
+    
+    &::after {
+      display: none !important;
+    }
+    
+    &:hover::before {
+      display: none !important;
+    }
+    
+    // 完全重写分类标签样式 - 扁平化无液态玻璃
     .category-tab {
+      // 重置所有液态玻璃效果
+      backdrop-filter: none !important;
+      box-shadow: none !important;
+      
       &:not(.active) {
-        background: rgba(48, 48, 52, 0.8);
-        color: rgba(255, 255, 255, 0.9);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: none;
+        background: rgba(55, 55, 58, 1) !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
         
         &:hover {
-          background: rgba(60, 60, 65, 0.9);
-          color: rgba(255, 255, 255, 1);
-          border-color: rgba(139, 92, 246, 0.4);
-          transform: translateY(-1px);
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+          background: rgba(68, 68, 71, 1) !important;
+          color: rgba(255, 255, 255, 1) !important;
+          border-color: rgba(139, 92, 246, 0.5) !important;
+          transform: translateY(-1px) !important;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
           
           .tab-count {
-            background: rgba(139, 92, 246, 0.25);
-            color: rgba(255, 255, 255, 0.95);
+            background: rgba(139, 92, 246, 0.3) !important;
+            color: rgba(255, 255, 255, 1) !important;
           }
         }
         
         .tab-count {
-          background: rgba(139, 92, 246, 0.15);
-          color: rgba(139, 92, 246, 0.9);
+          background: rgba(139, 92, 246, 0.2) !important;
+          color: rgba(139, 92, 246, 1) !important;
+        }
+      }
+      
+      // 激活状态保持原样，因为紫色渐变在暗色下是好看的
+      &.active {
+        background: linear-gradient(135deg, #8b5cf6, #a855f7) !important;
+        border-color: #8b5cf6 !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3) !important;
+        
+        .tab-count {
+          background: rgba(255, 255, 255, 0.25) !important;
+          color: rgba(255, 255, 255, 0.95) !important;
         }
       }
     }
     
-    // 修复快速筛选按钮暗色模式样式
+    // 完全重写快速筛选按钮样式
     .quick-filter-btn {
+      backdrop-filter: none !important;
+      box-shadow: none !important;
+      
       &:not(.active) {
-        background: rgba(48, 48, 52, 0.8);
-        color: rgba(255, 255, 255, 0.85);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        backdrop-filter: none;
+        background: rgba(55, 55, 58, 1) !important;
+        color: rgba(255, 255, 255, 0.85) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
         
         &:hover {
-          background: rgba(60, 60, 65, 0.9);
-          color: rgba(255, 255, 255, 1);
-          border-color: rgba(139, 92, 246, 0.3);
-          transform: translateY(-1px);
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+          background: rgba(68, 68, 71, 1) !important;
+          color: rgba(255, 255, 255, 1) !important;
+          border-color: rgba(139, 92, 246, 0.4) !important;
+          transform: translateY(-1px) !important;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
         }
+      }
+      
+      // 激活状态保持紫色渐变
+      &.active {
+        background: linear-gradient(135deg, #8b5cf6, #a855f7) !important;
+        border-color: #8b5cf6 !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3) !important;
       }
     }
     
+    // 排序控件扁平化
     .sort-controls {
       .sort-label {
-        color: rgba(255, 255, 255, 0.85);
+        color: rgba(255, 255, 255, 0.9) !important;
       }
       
       .sort-select {
-        background: rgba(48, 48, 52, 0.8);
-        color: rgba(255, 255, 255, 0.9);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%23ffffff" d="M6 8L0 0h12z"/></svg>');
+        background: rgba(55, 55, 58, 1) !important;
+        color: rgba(255, 255, 255, 0.95) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        backdrop-filter: none !important;
+        box-shadow: none !important;
+        background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%23ffffff" d="M6 8L0 0h12z"/></svg>') !important;
         
         &:hover {
-          background: rgba(60, 60, 65, 0.9);
-          border-color: rgba(139, 92, 246, 0.3);
+          background: rgba(68, 68, 71, 1) !important;
+          border-color: rgba(139, 92, 246, 0.4) !important;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
         }
         
         &:focus {
-          background: rgba(60, 60, 65, 0.9);
-          border-color: rgba(139, 92, 246, 0.4);
-          box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+          background: rgba(68, 68, 71, 1) !important;
+          border-color: rgba(139, 92, 246, 0.6) !important;
+          box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3) !important;
         }
         
         option {
-          background: #2c2c2e;
-          color: rgba(255, 255, 255, 0.9);
+          background: #2c2c2e !important;
+          color: rgba(255, 255, 255, 0.95) !important;
         }
       }
     }
@@ -1342,19 +1381,20 @@ html.dark .shop-page {
     .results-info {
       .results-count {
         background: transparent !important;
-        color: rgba(255, 255, 255, 0.9) !important;
+        color: rgba(255, 255, 255, 0.95) !important;
         -webkit-background-clip: unset !important;
         background-clip: unset !important;
-        -webkit-text-fill-color: rgba(255, 255, 255, 0.9) !important;
+        -webkit-text-fill-color: rgba(255, 255, 255, 0.95) !important;
         filter: none !important;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        text-shadow: none !important;
       }
       
       .filter-tags .filter-tag {
-        background: rgba(139, 92, 246, 0.2);
-        color: rgba(139, 92, 246, 0.9);
-        border-color: rgba(139, 92, 246, 0.3);
-        backdrop-filter: none;
+        background: rgba(139, 92, 246, 0.25) !important;
+        color: rgba(139, 92, 246, 1) !important;
+        border-color: rgba(139, 92, 246, 0.4) !important;
+        backdrop-filter: none !important;
+        box-shadow: none !important;
       }
     }
   }
