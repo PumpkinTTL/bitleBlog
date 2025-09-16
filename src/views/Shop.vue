@@ -1028,7 +1028,7 @@ onMounted(() => {
               font-weight: 500;
               cursor: pointer;
               outline: none;
-              transition: all 0.3s ease;
+              transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
               min-width: 150px;
               appearance: none;
               background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%238b5cf6" d="M6 8L0 0h12z"/></svg>');
@@ -1039,8 +1039,7 @@ onMounted(() => {
               
               &:hover {
                 background: rgba(139, 92, 246, 0.12);
-                transform: translateY(-1px);
-                box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+                box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
               }
               
               &:focus {
@@ -1261,75 +1260,75 @@ html.dark .shop-page {
   
   .results-header-container {
     background: var(--el-bg-color);
-    border-color: rgba(139, 92, 246, 0.1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-color: rgba(139, 92, 246, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     
+    // 修复分类标签暗色模式样式 - 扁平化设计
     .category-tab {
       &:not(.active) {
-        background: linear-gradient(135deg, 
-          rgba(55, 55, 58, 0.8) 0%,
-          rgba(68, 68, 71, 0.85) 100%
-        );
-        color: rgba(255, 255, 255, 0.85);
-        border-color: rgba(139, 92, 246, 0.15);
+        background: rgba(48, 48, 52, 0.8);
+        color: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: none;
         
         &:hover {
-          background: linear-gradient(135deg, 
-            rgba(68, 68, 71, 0.9) 0%,
-            rgba(82, 82, 86, 0.95) 100%
-          );
-          color: rgba(255, 255, 255, 0.95);
-          border-color: rgba(139, 92, 246, 0.3);
+          background: rgba(60, 60, 65, 0.9);
+          color: rgba(255, 255, 255, 1);
+          border-color: rgba(139, 92, 246, 0.4);
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
           
           .tab-count {
-            background: rgba(139, 92, 246, 0.2);
-            color: rgba(255, 255, 255, 0.9);
+            background: rgba(139, 92, 246, 0.25);
+            color: rgba(255, 255, 255, 0.95);
           }
         }
         
         .tab-count {
-          background: rgba(139, 92, 246, 0.12);
-          color: rgba(139, 92, 246, 0.8);
+          background: rgba(139, 92, 246, 0.15);
+          color: rgba(139, 92, 246, 0.9);
         }
       }
     }
     
+    // 修复快速筛选按钮暗色模式样式
     .quick-filter-btn {
       &:not(.active) {
-        background: linear-gradient(135deg, 
-          rgba(55, 55, 58, 0.7) 0%,
-          rgba(68, 68, 71, 0.8) 100%
-        );
-        color: rgba(255, 255, 255, 0.8);
-        border-color: rgba(139, 92, 246, 0.12);
+        background: rgba(48, 48, 52, 0.8);
+        color: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: none;
         
         &:hover {
-          background: linear-gradient(135deg, 
-            rgba(68, 68, 71, 0.85) 0%,
-            rgba(82, 82, 86, 0.9) 100%
-          );
-          color: rgba(255, 255, 255, 0.9);
-          border-color: rgba(139, 92, 246, 0.25);
+          background: rgba(60, 60, 65, 0.9);
+          color: rgba(255, 255, 255, 1);
+          border-color: rgba(139, 92, 246, 0.3);
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
       }
     }
     
     .sort-controls {
       .sort-label {
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 0.85);
       }
       
       .sort-select {
-        background: rgba(139, 92, 246, 0.15);
+        background: rgba(48, 48, 52, 0.8);
         color: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%23ffffff" d="M6 8L0 0h12z"/></svg>');
         
         &:hover {
-          background: rgba(139, 92, 246, 0.2);
+          background: rgba(60, 60, 65, 0.9);
+          border-color: rgba(139, 92, 246, 0.3);
         }
         
         &:focus {
-          background: rgba(139, 92, 246, 0.2);
+          background: rgba(60, 60, 65, 0.9);
+          border-color: rgba(139, 92, 246, 0.4);
+          box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
         }
         
         option {
@@ -1339,8 +1338,24 @@ html.dark .shop-page {
       }
     }
     
-    .results-count {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, #8b5cf6 100%) !important;
+    // 修复"共找到"文字显示问题
+    .results-info {
+      .results-count {
+        background: transparent !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+        -webkit-background-clip: unset !important;
+        background-clip: unset !important;
+        -webkit-text-fill-color: rgba(255, 255, 255, 0.9) !important;
+        filter: none !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      }
+      
+      .filter-tags .filter-tag {
+        background: rgba(139, 92, 246, 0.2);
+        color: rgba(139, 92, 246, 0.9);
+        border-color: rgba(139, 92, 246, 0.3);
+        backdrop-filter: none;
+      }
     }
   }
 }
