@@ -395,52 +395,31 @@ const handleTagClick = (tag: string) => {
         }
       }
       
-      // 主要操作按钮 - 居中（使用紫色渐变样式）
+      // 主要操作按钮 - 居中（与博客详情页面保持一致）
       .primary-action-btn {
-        height: 42px;
-        min-width: 140px;
-        border-radius: 21px;
+        height: 36px;
+        padding: 0 18px;
+        border: none;
+        border-radius: 18px;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
-        font-weight: 600;
-        font-size: 14px;
-        padding: 0 24px;
-        position: relative;
-        overflow: hidden;
+        gap: 6px;
         background: linear-gradient(135deg, rgba(255, 64, 255, 0.85), rgba(128, 0, 191, 0.85));
-        border: none;
         color: white;
-        box-shadow: 0 6px 16px rgba(128, 0, 191, 0.35),
-          0 3px 6px rgba(128, 0, 191, 0.25),
-          inset 0 1px 2px rgba(255, 255, 255, 0.3);
-        transition: transform 0.2s ease;
-        transform: translateZ(0);
-        cursor: pointer;
         
         &:hover {
-          transform: scale(1.05) translateZ(0);
+          background: linear-gradient(135deg, rgba(255, 64, 255, 1), rgba(128, 0, 191, 1));
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(128, 0, 191, 0.4);
         }
         
         &:active {
-          transform: scale(0.98) translateZ(0);
-          box-shadow: 0 2px 6px rgba(128, 0, 191, 0.4),
-            inset 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        
-        i {
-          font-size: 16px;
-          transition: transform 0.3s ease;
-          z-index: 1;
-          position: relative;
-          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-        }
-        
-        span {
-          position: relative;
-          z-index: 1;
-          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+          transform: scale(0.98);
         }
       }
     }
@@ -585,7 +564,13 @@ const handleTagClick = (tag: string) => {
         .current-price {
           font-size: 16px;
           font-weight: 600;
-          color: #1677FF;
+          color: #e65100;
+          background: linear-gradient(135deg, #e65100 0%, #ff8a65 100%);
+          background-size: 200% 100%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          color: transparent;
         }
         
         .price-unit {
@@ -609,8 +594,13 @@ const handleTagClick = (tag: string) => {
         
         .discount-text {
           font-size: 12px;
-          color: #ef4444;
+          color: #e65100;
           font-weight: 600;
+          background: linear-gradient(135deg, #e65100 0%, #ff8a65 100%);
+          background-size: 200% 100%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
         }
       }
     }
@@ -725,6 +715,93 @@ html.dark .product-card {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
   }
   
+  // 商品信息在暗色模式下的文字颜色适配
+  .product-info {
+    .product-title {
+      color: rgba(255, 255, 255, 0.95) !important;
+    }
+    
+    .product-description {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+    
+    .product-tags {
+      .tag-item {
+        &.primary {
+          background: rgba(139, 92, 246, 0.2) !important;
+          color: rgba(139, 92, 246, 1) !important;
+          border: 1px solid rgba(139, 92, 246, 0.4) !important;
+          
+          &:hover {
+            background: rgba(139, 92, 246, 0.3) !important;
+            color: rgba(139, 92, 246, 1) !important;
+            border-color: rgba(139, 92, 246, 0.6) !important;
+          }
+        }
+        
+        &.success {
+          background: rgba(34, 197, 94, 0.2) !important;
+          color: rgba(34, 197, 94, 1) !important;
+          border: 1px solid rgba(34, 197, 94, 0.4) !important;
+          
+          &:hover {
+            background: rgba(34, 197, 94, 0.3) !important;
+            color: rgba(34, 197, 94, 1) !important;
+            border-color: rgba(34, 197, 94, 0.6) !important;
+          }
+        }
+        
+        &.warning {
+          background: rgba(245, 158, 11, 0.2) !important;
+          color: rgba(245, 158, 11, 1) !important;
+          border: 1px solid rgba(245, 158, 11, 0.4) !important;
+          
+          &:hover {
+            background: rgba(245, 158, 11, 0.3) !important;
+            color: rgba(245, 158, 11, 1) !important;
+            border-color: rgba(245, 158, 11, 0.6) !important;
+          }
+        }
+        
+        &.info {
+          background: rgba(6, 182, 212, 0.2) !important;
+          color: rgba(6, 182, 212, 1) !important;
+          border: 1px solid rgba(6, 182, 212, 0.4) !important;
+          
+          &:hover {
+            background: rgba(6, 182, 212, 0.3) !important;
+            color: rgba(6, 182, 212, 1) !important;
+            border-color: rgba(6, 182, 212, 0.6) !important;
+          }
+        }
+        
+        &.danger {
+          background: rgba(239, 68, 68, 0.2) !important;
+          color: rgba(239, 68, 68, 1) !important;
+          border: 1px solid rgba(239, 68, 68, 0.4) !important;
+          
+          &:hover {
+            background: rgba(239, 68, 68, 0.3) !important;
+            color: rgba(239, 68, 68, 1) !important;
+            border-color: rgba(239, 68, 68, 0.6) !important;
+          }
+        }
+      }
+    }
+    
+    .product-meta {
+      .rating {
+        .rating-text {
+          color: rgba(255, 255, 255, 0.8) !important;
+        }
+      }
+      
+      .sales {
+        color: rgba(255, 255, 255, 0.6) !important;
+      }
+    }
+  }
+  
   .product-overlay {
     .share-btn {
       background: rgba(55, 55, 58, 0.95) !important;
@@ -741,18 +818,15 @@ html.dark .product-card {
     .primary-action-btn {
       background: linear-gradient(135deg, rgba(255, 64, 255, 0.85), rgba(128, 0, 191, 0.85)) !important;
       color: white !important;
-      box-shadow: 0 6px 16px rgba(128, 0, 191, 0.4),
-        0 3px 6px rgba(128, 0, 191, 0.3),
-        inset 0 1px 2px rgba(255, 255, 255, 0.3) !important;
-
       
       &:hover {
-        transform: scale(1.05) translateZ(0) !important;
+        background: linear-gradient(135deg, rgba(255, 64, 255, 1), rgba(128, 0, 191, 1)) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(128, 0, 191, 0.4) !important;
       }
       
       &:active {
-        box-shadow: 0 2px 6px rgba(128, 0, 191, 0.4),
-          inset 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+        transform: scale(0.98) !important;
       }
     }
   }
@@ -776,6 +850,30 @@ html.dark .product-card {
         font-size: 20px;
       }
     }
+    
+    // 价格在暗色模式下的适配
+    .product-price {
+      .price-main {
+        .current-price {
+          background: linear-gradient(135deg, #ff7043 0%, #ffab91 100%) !important;
+          background-size: 200% 100% !important;
+          -webkit-background-clip: text !important;
+          background-clip: text !important;
+          -webkit-text-fill-color: transparent !important;
+        }
+      }
+      
+      .price-original {
+        .discount-text {
+          background: linear-gradient(135deg, #ff7043 0%, #ffab91 100%) !important;
+          background-size: 200% 100% !important;
+          -webkit-background-clip: text !important;
+          background-clip: text !important;
+          -webkit-text-fill-color: transparent !important;
+        }
+      }
+    }
+    
   }
 }
 
