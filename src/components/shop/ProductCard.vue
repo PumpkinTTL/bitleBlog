@@ -246,18 +246,26 @@ const handleTagClick = (tag: string) => {
 <style lang="less" scoped>
 .product-card {
   position: relative;
-  background: var(--el-bg-color);
-  border-radius: 8px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 250, 252, 0.98) 100%
+  );
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.06);
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: 1px solid rgba(139, 92, 246, 0.08);
+  backdrop-filter: blur(10px) saturate(120%);
   
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    border-color: rgba(22, 119, 255, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
+    border-color: rgba(139, 92, 246, 0.2);
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(248, 250, 252, 1) 100%
+    );
     
     .product-image .product-overlay {
       opacity: 1;
@@ -289,27 +297,27 @@ const handleTagClick = (tag: string) => {
     transition: all 0.3s ease;
     
     &.free-badge {
-      background: #f1f5f9;
+      background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(34, 197, 94, 0.08));
       color: #059669;
       border: 1px solid rgba(5, 150, 105, 0.15);
     }
     
     &.featured-badge {
-      background: #f1f5f9;
-      color: #f59e0b;
-      border: 1px solid rgba(245, 158, 11, 0.15);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(168, 85, 247, 0.08));
+      color: #8b5cf6;
+      border: 1px solid rgba(139, 92, 246, 0.15);
     }
     
     &.discount-badge {
-      background: #f1f5f9;
-      color: #ef4444;
-      border: 1px solid rgba(239, 68, 68, 0.15);
+      background: linear-gradient(135deg, rgba(217, 70, 239, 0.1), rgba(236, 72, 153, 0.08));
+      color: #d946ef;
+      border: 1px solid rgba(217, 70, 239, 0.15);
     }
     
     &.default-badge {
-      background: #f1f5f9;
-      color: #1677FF;
-      border: 1px solid rgba(22, 119, 255, 0.15);
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(192, 132, 252, 0.08));
+      color: #a855f7;
+      border: 1px solid rgba(168, 85, 247, 0.15);
     }
   }
   
@@ -392,13 +400,13 @@ const handleTagClick = (tag: string) => {
           
           &.primary {
             padding: 12px 24px;
-            background: linear-gradient(135deg, #1677FF, #40a9ff);
+            background: linear-gradient(135deg, #d946ef, #ec4899);
             color: white;
-            box-shadow: 0 4px 12px rgba(22, 119, 255, 0.4);
+            box-shadow: 0 4px 12px rgba(217, 70, 239, 0.4);
             
             &:hover {
               transform: translateY(-2px) scale(1.05);
-              box-shadow: 0 8px 24px rgba(22, 119, 255, 0.5);
+              box-shadow: 0 8px 24px rgba(217, 70, 239, 0.5);
             }
           }
           
@@ -409,6 +417,15 @@ const handleTagClick = (tag: string) => {
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            
+            i {
+              font-size: 16px;
+              line-height: 1;
+            }
             
             &:hover {
               background: rgba(255, 255, 255, 0.3);
@@ -483,52 +500,57 @@ const handleTagClick = (tag: string) => {
           border: 1px solid rgba(22, 119, 255, 0.15);
           
           &:hover {
-            background: rgba(22, 119, 255, 0.1);
-            border-color: rgba(22, 119, 255, 0.3);
+            background: #e2e8f0;
+            border-color: rgba(22, 119, 255, 0.25);
+            transform: translateY(-1px);
           }
         }
         
         &.success {
-          background: #f1f5f9;
+          background: #f0fdf4;
           color: #059669;
           border: 1px solid rgba(5, 150, 105, 0.15);
           
           &:hover {
-            background: rgba(5, 150, 105, 0.1);
-            border-color: rgba(5, 150, 105, 0.3);
+            background: #dcfce7;
+            border-color: rgba(5, 150, 105, 0.25);
+            transform: translateY(-1px);
           }
         }
         
         &.warning {
-          background: #f1f5f9;
+          background: #fffbeb;
           color: #f59e0b;
           border: 1px solid rgba(245, 158, 11, 0.15);
           
           &:hover {
-            background: rgba(245, 158, 11, 0.1);
-            border-color: rgba(245, 158, 11, 0.3);
+            background: #fef3c7;
+            border-color: rgba(245, 158, 11, 0.25);
+            transform: translateY(-1px);
           }
         }
         
         &.info {
-          background: #f1f5f9;
+          background: #f0f9ff;
           color: #06b6d4;
           border: 1px solid rgba(6, 182, 212, 0.15);
           
           &:hover {
-            background: rgba(6, 182, 212, 0.1);
-            border-color: rgba(6, 182, 212, 0.3);
+            background: #e0f2fe;
+            border-color: rgba(6, 182, 212, 0.25);
+            transform: translateY(-1px);
           }
         }
         
         &.danger {
-          background: #f1f5f9;
+          background: #fef2f2;
           color: #ef4444;
           border: 1px solid rgba(239, 68, 68, 0.15);
           
           &:hover {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: rgba(239, 68, 68, 0.3);
+            background: #fee2e2;
+            border-color: rgba(239, 68, 68, 0.25);
+            transform: translateY(-1px);
           }
         }
         

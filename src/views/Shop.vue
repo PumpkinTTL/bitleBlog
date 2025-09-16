@@ -51,100 +51,89 @@
     <div class="shop-content">
       <div class="container">
         <div class="content-layout">
-          <!-- 侧边栏 -->
-          <div class="sidebar">
-            <div class="sidebar-container animate__animated animate__fadeInLeft">
-              <!-- 分类筛选 -->
-              <div class="filter-widget">
-                <div class="widget-header">
-                  <i class="fas fa-filter"></i>
-                  <span>商品分类</span>
+          <!-- 商品区域 -->
+          <div class="main-content">
+            <!-- 筛选结果提示和商品网格 -->
+            <div class="results-header-container animate__animated animate__fadeIn">
+              <div class="results-header">
+                <!-- 第一行：分类和排序 -->
+                <div class="header-top">
+                  <div class="category-tabs">
+                    <button 
+                      v-for="category in categories" 
+                      :key="category.id" 
+                      class="category-tab"
+                      :class="{ 'active': currentCategory === category.id }"
+                      @click="handleCategoryChange(category.id)"
+                    >
+                      <div class="tab-icon" :style="{ backgroundColor: category.color }">
+                        <i :class="category.icon"></i>
+                      </div>
+                      <span class="tab-name">{{ category.name }}</span>
+                      <span class="tab-count">{{ category.count }}</span>
+                    </button>
+                  </div>
+                  
+                  <div class="sort-controls">
+                    <span class="sort-label">排序：</span>
+                    <select 
+                      v-model="currentSort" 
+                      class="sort-select"
+                      @change="handleSortChange(currentSort)"
+                    >
+                      <option 
+                        v-for="option in sortOptions" 
+                        :key="option.value" 
+                        :value="option.value"
+                      >
+                        {{ option.label }}
+                      </option>
+                    </select>
+                  </div>
                 </div>
-                <div class="category-list">
-                  <div 
-                    v-for="category in categories" 
-                    :key="category.id" 
-                    class="category-item"
-                    :class="{ 'active': currentCategory === category.id }"
-                    @click="handleCategoryChange(category.id)"
-                  >
-                    <div class="category-icon" :style="{ background: category.color }">
-                      <i :class="category.icon"></i>
-                    </div>
-                    <div class="category-info">
-                      <span class="category-name">{{ category.name }}</span>
-                      <span class="category-count">{{ category.count }}</span>
-                    </div>
+                
+                <!-- 第二行：筛选信息和快速筛选 -->
+                <div class="header-bottom">
+                  <div class="results-info">
+                    <span class="results-count">共找到 {{ filteredProducts.length }} 款商品</span>
+                    <span v-if="currentCategory !== 'all'" class="filter-tags">
+                      <span class="filter-tag">
+                        {{ getCategoryName(currentCategory) }}
+                        <i class="fas fa-times" @click="handleCategoryChange('all')"></i>
+                      </span>
+                    </span>
+                  </div>
+                  
+                  <div class="quick-filters">
+                    <button 
+                      v-for="filter in quickFilters" 
+                      :key="filter.key" 
+                      class="quick-filter-btn"
+                      :class="{ 'active': activeFilters.includes(filter.key) }"
+                      @click="toggleQuickFilter(filter.key)"
+                    >
+                      <i :class="filter.icon"></i>
+                      <span>{{ filter.label }}</span>
+                    </button>
                   </div>
                 </div>
               </div>
               
-            </div>
-          </div>
-          
-          <!-- 商品区域 -->
-          <div class="main-content">
-            <!-- 筛选结果提示 -->
-            <div class="results-header animate__animated animate__fadeIn">
-              <div class="results-left">
-                <div class="results-info">
-                  <span class="results-count">共找到 {{ filteredProducts.length }} 款商品</span>
-                  <span v-if="currentCategory !== 'all'" class="filter-tags">
-                    <span class="filter-tag">
-                      {{ getCategoryName(currentCategory) }}
-                      <i class="fas fa-times" @click="handleCategoryChange('all')"></i>
-                    </span>
-                  </span>
-                </div>
-                
-                <div class="quick-filters">
-                  <button 
-                    v-for="filter in quickFilters" 
-                    :key="filter.key" 
-                    class="quick-filter-btn"
-                    :class="{ 'active': activeFilters.includes(filter.key) }"
-                    @click="toggleQuickFilter(filter.key)"
-                  >
-                    <i :class="filter.icon"></i>
-                    <span>{{ filter.label }}</span>
-                  </button>
-                </div>
+              <!-- 商品网格 -->
+              <div class="products-grid" :class="{ 'list-view': viewMode === 'list' }">
+                <ProductCard
+                  v-for="(product, index) in paginatedProducts"
+                  :key="product.id"
+                  :product="product"
+                  :animation-delay="index * 50"
+                  @product-click="handleProductClick"
+                  @primary-action="handlePrimaryAction"
+                  @favorite="handleFavorite"
+                  @share="handleShare"
+                  @tag-click="handleTagClick"
+                  class="product-item animate__animated animate__fadeInUp"
+                />
               </div>
-              
-              <div class="results-right">
-                <div class="sort-controls">
-                  <span class="sort-label">排序：</span>
-                  <select 
-                    v-model="currentSort" 
-                    class="sort-select"
-                    @change="handleSortChange(currentSort)"
-                  >
-                    <option 
-                      v-for="option in sortOptions" 
-                      :key="option.value" 
-                      :value="option.value"
-                    >
-                      {{ option.label }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            
-            <!-- 商品网格 -->
-            <div class="products-grid" :class="{ 'list-view': viewMode === 'list' }">
-              <ProductCard
-                v-for="(product, index) in paginatedProducts"
-                :key="product.id"
-                :product="product"
-                :animation-delay="index * 50"
-                @product-click="handleProductClick"
-                @primary-action="handlePrimaryAction"
-                @favorite="handleFavorite"
-                @share="handleShare"
-                @tag-click="handleTagClick"
-                class="product-item animate__animated animate__fadeInUp"
-              />
             </div>
             
             <!-- 加载更多 -->
@@ -682,7 +671,6 @@ onMounted(() => {
   min-height: 100vh;
   background: var(--el-bg-color-page);
   
-  // 商城头部
   .shop-header {
     background: var(--el-bg-color);
     padding: 20px 0;
@@ -837,7 +825,6 @@ onMounted(() => {
     }
   }
   
-  // 主体内容
   .shop-content {
     padding: 30px 0;
     
@@ -848,327 +835,385 @@ onMounted(() => {
     }
     
     .content-layout {
-      display: flex;
-      gap: 30px;
-      
-      @media (max-width: 1024px) {
-        flex-direction: column;
-        gap: 20px;
-      }
-    }
-  }
-  
-  // 侧边栏
-  .sidebar {
-    width: 280px;
-    flex-shrink: 0;
-    
-    @media (max-width: 1024px) {
       width: 100%;
     }
-    
-    .sidebar-container {
-      position: sticky;
-      top: 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      
-      @media (max-width: 1024px) {
-        position: static;
-        flex-direction: row;
-        overflow-x: auto;
-        gap: 16px;
-        padding-bottom: 10px;
-      }
-      
-      @media (max-width: 768px) {
-        flex-direction: column;
-      }
-    }
   }
   
-  // 筛选组件
-  .filter-widget {
-    background: var(--el-bg-color);
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-    overflow: hidden;
-    margin-bottom: 20px;
+  .main-content {
+    width: 100%;
     
-    @media (max-width: 1024px) {
-      min-width: 250px;
-    }
-    
-    .widget-header {
-      padding: 15px;
-      border-bottom: 1px solid #f1f5f9;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 15px;
-      font-weight: 600;
-      color: #1e293b;
+    .results-header-container {
+      position: sticky;
+      top: 140px;
+      z-index: 100;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, 
+        var(--el-bg-color) 0%,
+        rgba(248, 250, 252, 0.98) 100%
+      );
+      backdrop-filter: blur(20px) saturate(180%);
+      border-radius: 16px;
+      border: 1px solid rgba(139, 92, 246, 0.08);
+      box-shadow: 
+        0 8px 32px rgba(139, 92, 246, 0.08),
+        0 1px 0 rgba(255, 255, 255, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       
-      i {
-        font-size: 16px;
-        color: #1677FF;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg,
+          transparent 0%,
+          rgba(139, 92, 246, 0.03) 50%,
+          transparent 100%
+        );
+        border-radius: 16px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
       }
-    }
-    
-    .category-list {
-      padding: 12px;
       
-      .category-item {
+      &:hover::before {
+        opacity: 1;
+      }
+      
+      .results-header {
+        padding: 20px;
         display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 8px 0;
-        border-bottom: 1px solid #f8fafc;
-        cursor: pointer;
-        transition: all 0.3s ease;
+        flex-direction: column;
+        gap: 16px;
         
-        &:last-child {
-          border-bottom: none;
+        @media (max-width: 768px) {
+          padding: 16px;
+          gap: 14px;
         }
         
-        &:hover {
-          transform: translateX(3px);
-        }
-        
-        &.active {
-          .category-name {
-            color: #1677FF;
-            font-weight: 600;
-          }
-        }
-        
-        .category-icon {
-          width: 32px;
-          height: 32px;
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-size: 14px;
-          opacity: 0.9;
-        }
-        
-        .category-info {
-          flex: 1;
+        .header-top {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          gap: 20px;
           
-          .category-name {
-            font-size: 14px;
-            font-weight: 500;
-            color: #374151;
+          @media (max-width: 968px) {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 16px;
           }
           
-          .category-count {
-            font-size: 11px;
-            color: #9ca3af;
-            background: #f9fafb;
-            padding: 2px 6px;
-            border-radius: 4px;
-            border: 1px solid #f3f4f6;
-          }
-        }
-      }
-    }
-    
-  }
-  
-  // 主内容区
-  .main-content {
-    flex: 1;
-    min-width: 0;
-    
-    .results-header {
-      background: var(--el-bg-color);
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-      padding: 16px;
-      margin-bottom: 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 20px;
-      
-      @media (max-width: 768px) {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 16px;
-        padding: 14px;
-      }
-      
-      .results-left {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        flex: 1;
-        
-        .results-info {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          
-          .results-count {
-            font-size: 15px;
-            font-weight: 600;
-            color: #1e293b;
-          }
-          
-          .filter-tags {
+          .category-tabs {
             display: flex;
-            gap: 6px;
+            gap: 8px;
+            flex-wrap: wrap;
+            flex: 1;
             
-            .filter-tag {
+            @media (max-width: 576px) {
+              gap: 6px;
+            }
+            
+            .category-tab {
               display: flex;
               align-items: center;
-              gap: 4px;
-              padding: 4px 8px;
-              background: #f1f5f9;
-              color: #1677FF;
-              border-radius: 6px;
-              font-size: 12px;
+              gap: 8px;
+              padding: 8px 12px;
+              border: 1px solid rgba(139, 92, 246, 0.12);
+              border-radius: 10px;
+              background: linear-gradient(135deg, 
+                var(--el-bg-color) 0%,
+                rgba(248, 250, 252, 0.95) 100%
+              );
+              color: var(--el-text-color-regular);
+              font-size: 13px;
               font-weight: 500;
-              border: 1px solid rgba(22, 119, 255, 0.1);
+              cursor: pointer;
+              transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+              backdrop-filter: blur(8px);
+              white-space: nowrap;
               
-              i {
-                cursor: pointer;
-                opacity: 0.7;
-                font-size: 10px;
+              &:hover {
+                border-color: #8b5cf6;
+                background: linear-gradient(135deg, 
+                  rgba(139, 92, 246, 0.08) 0%,
+                  rgba(196, 132, 252, 0.12) 100%
+                );
+                color: #6d28d9;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+                
+                .tab-count {
+                  background: rgba(139, 92, 246, 0.15);
+                  color: #6d28d9;
+                }
+              }
+              
+              &.active {
+                background: linear-gradient(135deg, #8b5cf6, #a855f7);
+                border-color: #8b5cf6;
+                color: white;
+                transform: translateY(-1px);
+                box-shadow: 0 6px 16px rgba(139, 92, 246, 0.25);
+                
+                .tab-icon {
+                  background-color: rgba(255, 255, 255, 0.2) !important;
+                }
+                
+                .tab-count {
+                  background: rgba(255, 255, 255, 0.2);
+                  color: rgba(255, 255, 255, 0.9);
+                }
                 
                 &:hover {
-                  opacity: 1;
+                  transform: translateY(-2px);
+                  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
                 }
+              }
+              
+              .tab-icon {
+                width: 20px;
+                height: 20px;
+                border-radius: 6px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 10px;
+                opacity: 0.9;
+                transition: all 0.3s ease;
+              }
+              
+              .tab-name {
+                font-weight: 600;
+                
+                @media (max-width: 576px) {
+                  font-size: 12px;
+                }
+              }
+              
+              .tab-count {
+                font-size: 11px;
+                background: rgba(139, 92, 246, 0.1);
+                color: #8b5cf6;
+                padding: 2px 6px;
+                border-radius: 6px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+              }
+            }
+          }
+          
+          .sort-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+            
+            .sort-label {
+              font-size: 14px;
+              color: var(--el-text-color-regular);
+              font-weight: 600;
+              white-space: nowrap;
+            }
+            
+            .sort-select {
+              padding: 10px 16px;
+              border: none;
+              border-radius: 10px;
+              background: rgba(139, 92, 246, 0.08);
+              color: var(--el-text-color-primary);
+              font-size: 13px;
+              font-weight: 500;
+              cursor: pointer;
+              outline: none;
+              transition: all 0.3s ease;
+              min-width: 150px;
+              appearance: none;
+              background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%238b5cf6" d="M6 8L0 0h12z"/></svg>');
+              background-repeat: no-repeat;
+              background-position: right 12px center;
+              background-size: 12px;
+              padding-right: 32px;
+              
+              &:hover {
+                background: rgba(139, 92, 246, 0.12);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+              }
+              
+              &:focus {
+                background: rgba(139, 92, 246, 0.12);
+                box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+              }
+              
+              option {
+                padding: 12px;
+                color: var(--el-text-color-primary);
+                background: var(--el-bg-color);
+                border: none;
               }
             }
           }
         }
         
-        .quick-filters {
+        .header-bottom {
           display: flex;
-          gap: 8px;
+          justify-content: space-between;
+          align-items: center;
+          gap: 20px;
           
-          @media (max-width: 576px) {
-            flex-wrap: wrap;
+          @media (max-width: 768px) {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
           }
           
-          .quick-filter-btn {
+          .results-info {
             display: flex;
             align-items: center;
-            gap: 5px;
-            padding: 6px 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            background: #ffffff;
-            color: #64748b;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            gap: 12px;
             
-            &:hover {
-              border-color: #1677FF;
-              color: #1677FF;
-              background: #f8faff;
+            .results-count {
+              font-size: 15px;
+              font-weight: 600;
+              background: linear-gradient(135deg, var(--el-text-color-primary) 0%, #8b5cf6 100%);
+              background-size: 200% 100%;
+              -webkit-background-clip: text;
+              background-clip: text;
+              -webkit-text-fill-color: transparent;
+              color: transparent;
+              filter: drop-shadow(0 1px 2px rgba(139, 92, 246, 0.1));
             }
             
-            &.active {
-              background: #1677FF;
-              border-color: #1677FF;
-              color: white;
+            .filter-tags {
+              display: flex;
+              gap: 6px;
+              
+              .filter-tag {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                padding: 4px 10px;
+                background: linear-gradient(135deg, 
+                  rgba(139, 92, 246, 0.1) 0%,
+                  rgba(196, 132, 252, 0.08) 100%
+                );
+                color: #8b5cf6;
+                border-radius: 8px;
+                font-size: 12px;
+                font-weight: 500;
+                border: 1px solid rgba(139, 92, 246, 0.15);
+                backdrop-filter: blur(8px);
+                
+                i {
+                  cursor: pointer;
+                  opacity: 0.7;
+                  font-size: 10px;
+                  transition: all 0.3s ease;
+                  
+                  &:hover {
+                    opacity: 1;
+                    transform: scale(1.1);
+                  }
+                }
+              }
+            }
+          }
+          
+          .quick-filters {
+            display: flex;
+            gap: 8px;
+            
+            @media (max-width: 576px) {
+              flex-wrap: wrap;
             }
             
-            i {
-              font-size: 11px;
+            .quick-filter-btn {
+              display: flex;
+              align-items: center;
+              gap: 5px;
+              padding: 6px 12px;
+              border: 1px solid rgba(139, 92, 246, 0.12);
+              border-radius: 8px;
+              background: linear-gradient(135deg, 
+                var(--el-bg-color) 0%,
+                rgba(248, 250, 252, 0.9) 100%
+              );
+              color: var(--el-text-color-regular);
+              font-size: 12px;
+              font-weight: 500;
+              cursor: pointer;
+              transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+              backdrop-filter: blur(8px);
+              
+              &:hover {
+                border-color: #8b5cf6;
+                color: #8b5cf6;
+                background: linear-gradient(135deg, 
+                  rgba(139, 92, 246, 0.05) 0%,
+                  rgba(196, 132, 252, 0.08) 100%
+                );
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+              }
+              
+              &.active {
+                background: linear-gradient(135deg, #8b5cf6, #a855f7);
+                border-color: #8b5cf6;
+                color: white;
+                transform: translateY(-1px);
+                box-shadow: 0 6px 16px rgba(139, 92, 246, 0.25);
+                
+                &:hover {
+                  transform: translateY(-2px);
+                  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+                }
+              }
+              
+              i {
+                font-size: 11px;
+              }
             }
           }
         }
       }
       
-      .results-right {
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
+      .products-grid {
+        padding: 0 20px 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        justify-content: start;
         
-        .sort-controls {
-          display: flex;
-          align-items: center;
-          gap: 8px;
+        @media (min-width: 1440px) {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        
+        @media (max-width: 768px) {
+          grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+          gap: 16px;
+          padding: 0 16px 16px;
+        }
+        
+        @media (max-width: 480px) {
+          grid-template-columns: 1fr;
+          gap: 16px;
+          padding: 0 16px 16px;
+        }
+        
+        &.list-view {
+          grid-template-columns: 1fr;
           
-          .sort-label {
-            font-size: 14px;
-            color: #64748b;
-            font-weight: 500;
-            white-space: nowrap;
-          }
-          
-          .sort-select {
-            padding: 6px 10px;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            background: #ffffff;
-            color: #1e293b;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            outline: none;
-            transition: all 0.3s ease;
-            min-width: 140px;
-            
-            &:hover {
-              border-color: #1677FF;
-            }
-            
-            &:focus {
-              border-color: #1677FF;
-              box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.1);
-            }
-            
-            option {
-              padding: 8px;
-              color: #1e293b;
-              background: #ffffff;
-            }
+          .product-item {
+            max-width: none;
           }
         }
-      }
-    }
-    
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, 280px);
-      gap: 20px;
-      justify-content: start;
-      
-      @media (max-width: 768px) {
-        grid-template-columns: repeat(auto-fill, 260px);
-        gap: 16px;
-        justify-content: center;
-      }
-      
-      @media (max-width: 480px) {
-        grid-template-columns: 1fr;
-        gap: 16px;
-        justify-content: stretch;
-      }
-      
-      &.list-view {
-        grid-template-columns: 1fr;
-        justify-content: stretch;
         
         .product-item {
-          max-width: none;
+          width: 100%;
         }
-      }
-      
-      .product-item {
-        width: 100%;
       }
     }
     
@@ -1201,7 +1246,6 @@ onMounted(() => {
   }
 }
 
-// 暗色模式适配
 html.dark .shop-page {
   .shop-header {
     background: linear-gradient(135deg, 
@@ -1215,13 +1259,89 @@ html.dark .shop-page {
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
   
-  .filter-widget {
-    background: rgba(28, 28, 30, 0.9);
-    border-color: rgba(255, 255, 255, 0.06);
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.3),
-      0 1px 0 rgba(255, 255, 255, 0.03),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  .results-header-container {
+    background: var(--el-bg-color);
+    border-color: rgba(139, 92, 246, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    .category-tab {
+      &:not(.active) {
+        background: linear-gradient(135deg, 
+          rgba(55, 55, 58, 0.8) 0%,
+          rgba(68, 68, 71, 0.85) 100%
+        );
+        color: rgba(255, 255, 255, 0.85);
+        border-color: rgba(139, 92, 246, 0.15);
+        
+        &:hover {
+          background: linear-gradient(135deg, 
+            rgba(68, 68, 71, 0.9) 0%,
+            rgba(82, 82, 86, 0.95) 100%
+          );
+          color: rgba(255, 255, 255, 0.95);
+          border-color: rgba(139, 92, 246, 0.3);
+          
+          .tab-count {
+            background: rgba(139, 92, 246, 0.2);
+            color: rgba(255, 255, 255, 0.9);
+          }
+        }
+        
+        .tab-count {
+          background: rgba(139, 92, 246, 0.12);
+          color: rgba(139, 92, 246, 0.8);
+        }
+      }
+    }
+    
+    .quick-filter-btn {
+      &:not(.active) {
+        background: linear-gradient(135deg, 
+          rgba(55, 55, 58, 0.7) 0%,
+          rgba(68, 68, 71, 0.8) 100%
+        );
+        color: rgba(255, 255, 255, 0.8);
+        border-color: rgba(139, 92, 246, 0.12);
+        
+        &:hover {
+          background: linear-gradient(135deg, 
+            rgba(68, 68, 71, 0.85) 0%,
+            rgba(82, 82, 86, 0.9) 100%
+          );
+          color: rgba(255, 255, 255, 0.9);
+          border-color: rgba(139, 92, 246, 0.25);
+        }
+      }
+    }
+    
+    .sort-controls {
+      .sort-label {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      
+      .sort-select {
+        background: rgba(139, 92, 246, 0.15);
+        color: rgba(255, 255, 255, 0.9);
+        background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%23ffffff" d="M6 8L0 0h12z"/></svg>');
+        
+        &:hover {
+          background: rgba(139, 92, 246, 0.2);
+        }
+        
+        &:focus {
+          background: rgba(139, 92, 246, 0.2);
+        }
+        
+        option {
+          background: #2c2c2e;
+          color: rgba(255, 255, 255, 0.9);
+        }
+      }
+    }
+    
+    .results-count {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, #8b5cf6 100%) !important;
+    }
   }
 }
 </style>
