@@ -26,27 +26,12 @@
               </button>
             </div>
             
-            <div class="view-controls">
-              <button 
-                class="view-btn" 
-                :class="{ 'active': viewMode === 'grid' }"
-                @click="handleViewModeChange('grid')"
-              >
-                <i class="fas fa-th-large"></i>
-              </button>
-              <button 
-                class="view-btn" 
-                :class="{ 'active': viewMode === 'list' }"
-                @click="handleViewModeChange('list')"
-              >
-                <i class="fas fa-list"></i>
-              </button>
-            </div>
           </div>
         </div>
       </div>
     </div>
-
+    <!-- 占位区域 -->
+	<div style="height:110px;"></div>
     <!-- 主体内容区域 -->
     <div class="shop-content">
       <div class="container">
@@ -151,7 +136,7 @@
               </div>
               
               <!-- 商品网格 -->
-              <div class="products-grid" :class="{ 'list-view': viewMode === 'list' }">
+              <div class="products-grid">
                 <ProductCard
                   v-for="(product, index) in paginatedProducts"
                   :key="product.id"
@@ -223,7 +208,6 @@ const loading = ref(false)
 const searchKeyword = ref('')
 const currentCategory = ref('all')
 const currentSort = ref('popularity')
-const viewMode = ref<'grid' | 'list'>('grid')
 const activeFilters = ref<string[]>([])
 const currentPage = ref(1)
 const pageSize = ref(12)
@@ -698,10 +682,6 @@ const getCurrentSortIcon = () => {
   return getCurrentSortOption().icon
 }
 
-const handleViewModeChange = (mode: 'grid' | 'list') => {
-  viewMode.value = mode
-  console.log('视图模式:', mode)
-}
 
 const toggleQuickFilter = (filterKey: string) => {
   const index = activeFilters.value.indexOf(filterKey)
@@ -763,7 +743,9 @@ onMounted(() => {
     background: var(--el-bg-color);
     padding: 20px 0;
     border-bottom: 1px solid #f1f5f9;
-    
+    width:100%;
+	position:fixed;
+	z-index:9999;
     .container {
       max-width: 1440px;
       margin: 0 auto;
@@ -788,31 +770,77 @@ onMounted(() => {
       .page-title {
         display: flex;
         align-items: center;
-        gap: 10px;
-        font-size: 24px;
-        font-weight: 600;
-        color: var(--el-text-color-primary);
-        margin-bottom: 6px;
+        gap: 12px;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        position: relative;
+        
+        // 渐变文字效果
+        background: linear-gradient(135deg, 
+          var(--el-text-color-primary) 0%, 
+          rgba(139, 92, 246, 0.9) 100%
+        );
+        background-size: 200% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.1));
         
         i {
-          color: var(--el-color-primary);
-          font-size: 20px;
+          background: linear-gradient(135deg, rgba(255, 64, 255, 0.8), rgba(128, 0, 191, 0.9));
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          color: transparent;
+          font-size: 24px;
+          filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.2));
         }
         
         @media (max-width: 768px) {
-          font-size: 28px;
+          font-size: 24px;
           justify-content: center;
+          
+          i {
+            font-size: 20px;
+          }
         }
       }
       
       .page-subtitle {
         font-size: 16px;
+        font-weight: 500;
         color: var(--el-text-color-regular);
         margin: 0;
+        line-height: 1.6;
+        letter-spacing: 0.2px;
+        position: relative;
+        
+        // 添加微妙的背景装饰
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: -4px;
+          width: 60px;
+          height: 2px;
+          background: linear-gradient(90deg, 
+            rgba(139, 92, 246, 0.6) 0%, 
+            rgba(196, 132, 252, 0.3) 100%
+          );
+          border-radius: 1px;
+        }
         
         @media (max-width: 768px) {
           text-align: center;
           font-size: 14px;
+          
+          &::before {
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+          }
         }
       }
     }
@@ -833,81 +861,69 @@ onMounted(() => {
       display: flex;
       
       .search-input {
-        width: 280px;
-        height: 36px;
-        padding: 0 45px 0 14px;
-        border: 1px solid #e2e8f0;
-        border-radius: 18px;
-        background: var(--el-bg-color);
+        width: 300px;
+        height: 42px;
+        padding: 0 50px 0 16px;
+        border: 2px solid rgba(139, 92, 246, 0.15);
+        border-radius: 21px;
+        background: linear-gradient(135deg, 
+          var(--el-bg-color) 0%, 
+          rgba(248, 250, 252, 0.9) 100%
+        );
         font-size: 14px;
+        font-weight: 500;
         outline: none;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
+        backdrop-filter: blur(8px);
         
         &:focus {
-          border-color: var(--el-color-primary);
-          box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+          border-color: rgba(139, 92, 246, 0.5);
+          background: linear-gradient(135deg, 
+            rgba(139, 92, 246, 0.08) 0%, 
+            rgba(196, 132, 252, 0.12) 100%
+          );
+          box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2), 0 0 0 3px rgba(139, 92, 246, 0.1);
+          transform: translateY(-1px);
         }
         
         &::placeholder {
           color: var(--el-text-color-placeholder);
+          font-weight: 400;
         }
         
         @media (max-width: 576px) {
-          width: 240px;
+          width: 260px;
+          height: 38px;
+          font-size: 13px;
         }
       }
       
       .search-btn {
         position: absolute;
-        right: 3px;
-        top: 3px;
-        width: 30px;
-        height: 30px;
+        right: 4px;
+        top: 4px;
+        width: 34px;
+        height: 34px;
         border: none;
         border-radius: 50%;
-        background: var(--el-color-primary);
+        background: linear-gradient(135deg, rgba(255, 64, 255, 0.85), rgba(128, 0, 191, 0.85));
         color: white;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(128, 0, 191, 0.3);
         
         &:hover {
-          transform: scale(1.05);
-          box-shadow: 0 4px 12px rgba(22, 119, 255, 0.3);
-        }
-      }
-    }
-    
-    .view-controls {
-      display: flex;
-      background: rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(8px);
-      border-radius: 12px;
-      border: 0.5px solid rgba(0, 0, 0, 0.08);
-      overflow: hidden;
-      
-      .view-btn {
-        width: 40px;
-        height: 40px;
-        border: none;
-        background: transparent;
-        color: var(--el-text-color-regular);
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        
-        &:hover {
-          background: rgba(22, 119, 255, 0.1);
-          color: var(--el-color-primary);
+          background: linear-gradient(135deg, rgba(255, 64, 255, 1), rgba(128, 0, 191, 1));
+          transform: scale(1.05) translateY(-1px);
+          box-shadow: 0 4px 15px rgba(128, 0, 191, 0.4);
         }
         
-        &.active {
-          background: var(--el-color-primary);
-          color: white;
+        &:active {
+          transform: scale(0.98);
         }
       }
     }
@@ -1222,6 +1238,7 @@ onMounted(() => {
                     gap: 12px;
                     width: 100%;
                     padding: 12px 12px;
+                    margin-bottom: 4px;
                     border: none;
                     border-radius: 8px;
                     background: transparent;
@@ -1231,6 +1248,10 @@ onMounted(() => {
                     transition: all 0.3s ease;
                     position: relative;
                     overflow: hidden;
+                    
+                    &:last-child {
+                      margin-bottom: 0;
+                    }
                     
                     &::before {
                       content: '';
@@ -1557,14 +1578,6 @@ onMounted(() => {
           padding: 0 16px 16px;
         }
         
-        &.list-view {
-          grid-template-columns: 1fr;
-          
-          .product-item {
-            max-width: none;
-          }
-        }
-        
         .product-item {
           width: 100%;
         }
@@ -1605,6 +1618,71 @@ html.dark .shop-page {
     background: var(--el-bg-color);
     border-bottom-color: rgba(255, 255, 255, 0.08);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    
+    .search-box {
+      .search-input {
+        background: rgba(55, 55, 58, 1) !important;
+        color: rgba(255, 255, 255, 0.95) !important;
+        border: 2px solid rgba(255, 255, 255, 0.12) !important;
+        backdrop-filter: none !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+        
+        &:focus {
+          background: rgba(68, 68, 71, 1) !important;
+          border-color: rgba(139, 92, 246, 0.5) !important;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(139, 92, 246, 0.3) !important;
+          transform: translateY(-1px) !important;
+        }
+        
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.6) !important;
+        }
+      }
+      
+      .search-btn {
+        background: linear-gradient(135deg, rgba(255, 64, 255, 0.85), rgba(128, 0, 191, 0.85)) !important;
+        box-shadow: 0 2px 8px rgba(128, 0, 191, 0.4) !important;
+        
+        &:hover {
+          background: linear-gradient(135deg, rgba(255, 64, 255, 1), rgba(128, 0, 191, 1)) !important;
+          box-shadow: 0 4px 15px rgba(128, 0, 191, 0.5) !important;
+        }
+      }
+    }
+    
+    // 优化标题和副标题在暗色模式下的显示
+    .page-title {
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.95) 0%, 
+        rgba(139, 92, 246, 1) 100%
+      ) !important;
+      background-size: 200% 100% !important;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      color: transparent !important;
+      filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.3)) !important;
+      
+      i {
+        background: linear-gradient(135deg, rgba(255, 64, 255, 1), rgba(168, 85, 247, 1)) !important;
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        color: transparent !important;
+        filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.4)) !important;
+      }
+    }
+    
+    .page-subtitle {
+      color: rgba(255, 255, 255, 0.8) !important;
+      
+      &::before {
+        background: linear-gradient(90deg, 
+          rgba(139, 92, 246, 0.8) 0%, 
+          rgba(196, 132, 252, 0.4) 100%
+        ) !important;
+      }
+    }
   }
   
   .results-header-container {

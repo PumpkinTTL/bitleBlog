@@ -22,20 +22,16 @@
         
         <!-- 悬停覆盖层 -->
         <div class="product-overlay">
-          <div class="overlay-content">
-            <button class="action-btn primary" @click.stop="handlePrimaryAction">
-              <i :class="primaryActionIcon"></i>
-              <span>{{ primaryActionText }}</span>
-            </button>
-            <div class="secondary-actions">
-              <button class="action-btn secondary" @click.stop="handleFavorite" :class="{ 'active': isFavorited }">
-                <i :class="isFavorited ? 'fas fa-heart' : 'far fa-heart'"></i>
-              </button>
-              <button class="action-btn secondary" @click.stop="handleShare">
-                <i class="fas fa-share-alt"></i>
-              </button>
-            </div>
-          </div>
+          <!-- 分享按钮在左上角 -->
+          <button class="share-btn" @click.stop="handleShare">
+            <i class="fas fa-share-alt"></i>
+          </button>
+          
+          <!-- 主要操作按钮居中 -->
+          <button class="primary-action-btn" @click.stop="handlePrimaryAction">
+            <i :class="primaryActionIcon"></i>
+            <span>{{ primaryActionText }}</span>
+          </button>
         </div>
       </div>
     </div>
@@ -246,26 +242,18 @@ const handleTagClick = (tag: string) => {
 <style lang="less" scoped>
 .product-card {
   position: relative;
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(248, 250, 252, 0.98) 100%
-  );
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.06);
+  background: var(--el-bg-color);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  border: 1px solid rgba(139, 92, 246, 0.08);
-  backdrop-filter: blur(10px) saturate(120%);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(139, 92, 246, 0.1);
   
   &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
-    border-color: rgba(139, 92, 246, 0.2);
-    background: linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.98) 0%,
-      rgba(248, 250, 252, 1) 100%
-    );
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+    border-color: rgba(139, 92, 246, 0.25);
     
     .product-image .product-overlay {
       opacity: 1;
@@ -324,7 +312,7 @@ const handleTagClick = (tag: string) => {
   // 商品图片区域
   .product-image {
     position: relative;
-    height: 120px;
+    height: 160px;
     overflow: hidden;
     
     .image-container {
@@ -361,87 +349,98 @@ const handleTagClick = (tag: string) => {
       }
     }
     
-    // 悬停覆盖层
+    // 悬停覆盖层 - 扁平化设计
     .product-overlay {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(135deg, 
-        rgba(0, 0, 0, 0.7) 0%, 
-        rgba(0, 0, 0, 0.5) 100%
-      );
-      backdrop-filter: blur(4px);
+      background: rgba(15, 15, 15, 0.75);
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
       visibility: hidden;
-      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: all 0.3s ease;
       
-      .overlay-content {
+      // 分享按钮 - 在左上角
+      .share-btn {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 36px;
+        height: 36px;
+        border: none;
+        border-radius: 8px;
+        background: rgba(55, 55, 58, 0.9);
+        color: rgba(255, 255, 255, 0.9);
         display: flex;
-        flex-direction: column;
         align-items: center;
-        gap: 12px;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.15);
         
-        .action-btn {
-          border: none;
-          border-radius: 25px;
-          font-weight: 600;
+        i {
           font-size: 14px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          backdrop-filter: blur(10px);
-          
-          &.primary {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #d946ef, #ec4899);
-            color: white;
-            box-shadow: 0 4px 12px rgba(217, 70, 239, 0.4);
-            
-            &:hover {
-              transform: translateY(-2px) scale(1.05);
-              box-shadow: 0 8px 24px rgba(217, 70, 239, 0.5);
-            }
-          }
-          
-          &.secondary {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            
-            i {
-              font-size: 16px;
-              line-height: 1;
-            }
-            
-            &:hover {
-              background: rgba(255, 255, 255, 0.3);
-              transform: scale(1.1);
-            }
-            
-            &.active {
-              background: linear-gradient(135deg, #ef4444, #dc2626);
-              border-color: rgba(239, 68, 68, 0.5);
-            }
-          }
         }
         
-        .secondary-actions {
-          display: flex;
-          gap: 8px;
+        &:hover {
+          background: rgba(139, 92, 246, 0.9);
+          color: white;
+          border-color: rgba(139, 92, 246, 0.5);
+          transform: translateY(-1px) scale(1.05);
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+        }
+      }
+      
+      // 主要操作按钮 - 居中（使用紫色渐变样式）
+      .primary-action-btn {
+        height: 42px;
+        min-width: 140px;
+        border-radius: 21px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 0 24px;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, rgba(255, 64, 255, 0.85), rgba(128, 0, 191, 0.85));
+        border: none;
+        color: white;
+        box-shadow: 0 6px 16px rgba(128, 0, 191, 0.35),
+          0 3px 6px rgba(128, 0, 191, 0.25),
+          inset 0 1px 2px rgba(255, 255, 255, 0.3);
+        transition: transform 0.2s ease;
+        transform: translateZ(0);
+        cursor: pointer;
+        
+        &:hover {
+          transform: scale(1.05) translateZ(0);
+        }
+        
+        &:active {
+          transform: scale(0.98) translateZ(0);
+          box-shadow: 0 2px 6px rgba(128, 0, 191, 0.4),
+            inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        i {
+          font-size: 16px;
+          transition: transform 0.3s ease;
+          z-index: 1;
+          position: relative;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+        }
+        
+        span {
+          position: relative;
+          z-index: 1;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
         }
       }
     }
@@ -715,22 +714,47 @@ const handleTagClick = (tag: string) => {
   }
 }
 
-// 暗色模式适配
+// 暗色模式适配 - 扁平化设计
 html.dark .product-card {
-  background: rgba(28, 28, 30, 0.9);
-  backdrop-filter: blur(30px) saturate(200%);
-  border-color: rgba(255, 255, 255, 0.06);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    0 1px 0 rgba(255, 255, 255, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  background: rgba(28, 28, 30, 1) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
     
   &:hover {
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 
-      0 20px 48px rgba(0, 0, 0, 0.4),
-      0 1px 0 rgba(255, 255, 255, 0.05),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    border-color: rgba(139, 92, 246, 0.4) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+  }
+  
+  .product-overlay {
+    .share-btn {
+      background: rgba(55, 55, 58, 0.95) !important;
+      color: rgba(255, 255, 255, 0.9) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      
+      &:hover {
+        background: rgba(139, 92, 246, 0.9) !important;
+        color: white !important;
+        border-color: rgba(139, 92, 246, 0.6) !important;
+      }
+    }
+    
+    .primary-action-btn {
+      background: linear-gradient(135deg, rgba(255, 64, 255, 0.85), rgba(128, 0, 191, 0.85)) !important;
+      color: white !important;
+      box-shadow: 0 6px 16px rgba(128, 0, 191, 0.4),
+        0 3px 6px rgba(128, 0, 191, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.3) !important;
+
+      
+      &:hover {
+        transform: scale(1.05) translateZ(0) !important;
+      }
+      
+      &:active {
+        box-shadow: 0 2px 6px rgba(128, 0, 191, 0.4),
+          inset 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+      }
+    }
   }
 }
 
