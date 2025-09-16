@@ -75,27 +75,58 @@
                   </div>
                   
                   <div class="sort-controls">
-                    <span class="sort-label">排序：</span>
-                    <select 
-                      v-model="currentSort" 
-                      class="sort-select"
-                      @change="handleSortChange(currentSort)"
-                    >
-                      <option 
-                        v-for="option in sortOptions" 
-                        :key="option.value" 
-                        :value="option.value"
+                    <span class="sort-label">
+                      <i class="fas fa-sort-amount-down"></i>
+                      <span>排序</span>
+                    </span>
+                    <div class="sort-dropdown" :class="{ 'active': sortDropdownOpen }">
+                      <button 
+                        class="sort-trigger" 
+                        @click="toggleSortDropdown"
+                        @blur="closeSortDropdown"
                       >
-                        {{ option.label }}
-                      </option>
-                    </select>
+                        <span class="current-sort">
+                          <i :class="getCurrentSortIcon()"></i>
+                          <span>{{ getCurrentSortLabel() }}</span>
+                        </span>
+                        <i class="fas fa-chevron-down dropdown-arrow" :class="{ 'rotated': sortDropdownOpen }"></i>
+                      </button>
+                      
+                      <div class="sort-menu" v-show="sortDropdownOpen">
+                        <div class="sort-menu-header">
+                          <i class="fas fa-filter"></i>
+                          <span>选择排序方式</span>
+                        </div>
+                        <div class="sort-options">
+                          <button 
+                            v-for="option in sortOptions" 
+                            :key="option.value"
+                            class="sort-option"
+                            :class="{ 'active': currentSort === option.value }"
+                            @click="handleSortChange(option.value)"
+                          >
+                            <i :class="option.icon"></i>
+                            <div class="option-content">
+                              <span class="option-label">{{ option.label }}</span>
+                              <span class="option-desc">{{ option.desc }}</span>
+                            </div>
+                            <i v-if="currentSort === option.value" class="fas fa-check option-check"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 
                 <!-- 第二行：筛选信息和快速筛选 -->
                 <div class="header-bottom">
                   <div class="results-info">
-                    <span class="results-count">共找到 {{ filteredProducts.length }} 款商品</span>
+                    <div class="results-count">
+                      <i class="fas fa-search"></i>
+                      <span class="count-text">共找到</span>
+                      <span class="count-number">{{ filteredProducts.length }}</span>
+                      <span class="count-text">款商品</span>
+                    </div>
                     <span v-if="currentCategory !== 'all'" class="filter-tags">
                       <span class="filter-tag">
                         {{ getCategoryName(currentCategory) }}
@@ -196,6 +227,7 @@ const viewMode = ref<'grid' | 'list'>('grid')
 const activeFilters = ref<string[]>([])
 const currentPage = ref(1)
 const pageSize = ref(12)
+const sortDropdownOpen = ref(false)
 
 // 分类数据
 const categories = ref<Category[]>([
@@ -571,12 +603,42 @@ const products = ref<Product[]>([
 
 // 排序选项
 const sortOptions = ref([
-  { label: '综合排序', value: 'popularity' },
-  { label: '最新上架', value: 'newest' },
-  { label: '价格从低到高', value: 'price-asc' },
-  { label: '价格从高到低', value: 'price-desc' },
-  { label: '评分最高', value: 'rating' },
-  { label: '销量最高', value: 'sales' }
+  { 
+    label: '综合排序', 
+    value: 'popularity', 
+    icon: 'fas fa-fire',
+    desc: '根据热度和综合评价排序'
+  },
+  { 
+    label: '最新上架', 
+    value: 'newest', 
+    icon: 'fas fa-clock',
+    desc: '按商品上架时间排序'
+  },
+  { 
+    label: '价格从低到高', 
+    value: 'price-asc', 
+    icon: 'fas fa-sort-amount-up-alt',
+    desc: '价格由低到高排列'
+  },
+  { 
+    label: '价格从高到低', 
+    value: 'price-desc', 
+    icon: 'fas fa-sort-amount-down-alt',
+    desc: '价格由高到低排列'
+  },
+  { 
+    label: '评分最高', 
+    value: 'rating', 
+    icon: 'fas fa-star',
+    desc: '按用户评分排序'
+  },
+  { 
+    label: '销量最高', 
+    value: 'sales', 
+    icon: 'fas fa-shopping-cart',
+    desc: '按销售数量排序'
+  }
 ])
 
 // 快速筛选选项
@@ -607,7 +669,33 @@ const handleCategoryChange = (categoryId: string) => {
 
 const handleSortChange = (sortValue: string) => {
   currentSort.value = sortValue
+  sortDropdownOpen.value = false
   console.log('排序改变:', sortValue)
+}
+
+// 下拉框控制方法
+const toggleSortDropdown = () => {
+  sortDropdownOpen.value = !sortDropdownOpen.value
+}
+
+const closeSortDropdown = () => {
+  // 延迟关闭，等待点击事件先执行
+  setTimeout(() => {
+    sortDropdownOpen.value = false
+  }, 150)
+}
+
+// 获取当前排序选项的信息
+const getCurrentSortOption = () => {
+  return sortOptions.value.find(option => option.value === currentSort.value) || sortOptions.value[0]
+}
+
+const getCurrentSortLabel = () => {
+  return getCurrentSortOption().label
+}
+
+const getCurrentSortIcon = () => {
+  return getCurrentSortOption().icon
 }
 
 const handleViewModeChange = (mode: 'grid' | 'list') => {
@@ -1008,51 +1096,245 @@ onMounted(() => {
           .sort-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             flex-shrink: 0;
+            position: relative;
             
             .sort-label {
+              display: flex;
+              align-items: center;
+              gap: 6px;
               font-size: 14px;
               color: var(--el-text-color-regular);
               font-weight: 600;
               white-space: nowrap;
+              
+              i {
+                color: rgba(139, 92, 246, 0.8);
+                font-size: 13px;
+              }
             }
             
-            .sort-select {
-              padding: 10px 16px;
-              border: none;
-              border-radius: 10px;
-              background: rgba(139, 92, 246, 0.08);
-              color: var(--el-text-color-primary);
-              font-size: 13px;
-              font-weight: 500;
-              cursor: pointer;
-              outline: none;
-              transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-              min-width: 150px;
-              appearance: none;
-              background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%238b5cf6" d="M6 8L0 0h12z"/></svg>');
-              background-repeat: no-repeat;
-              background-position: right 12px center;
-              background-size: 12px;
-              padding-right: 32px;
+            .sort-dropdown {
+              position: relative;
               
-              &:hover {
-                background: rgba(139, 92, 246, 0.12);
-                box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
-              }
-              
-              &:focus {
-                background: rgba(139, 92, 246, 0.12);
-                box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
-              }
-              
-              option {
-                padding: 12px;
+              .sort-trigger {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                padding: 10px 16px;
+                min-width: 180px;
+                border: 2px solid rgba(139, 92, 246, 0.15);
+                border-radius: 10px;
+                background: linear-gradient(135deg, 
+                  var(--el-bg-color) 0%, 
+                  rgba(248, 250, 252, 0.9) 100%
+                );
                 color: var(--el-text-color-primary);
-                background: var(--el-bg-color);
-                border: none;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                outline: none;
+                transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
+                backdrop-filter: blur(8px);
+                
+                .current-sort {
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  flex: 1;
+                  
+                  i {
+                    color: rgba(139, 92, 246, 0.8);
+                    font-size: 13px;
+                  }
+                }
+                
+                .dropdown-arrow {
+                  color: rgba(139, 92, 246, 0.6);
+                  font-size: 12px;
+                  transition: transform 0.3s ease;
+                  
+                  &.rotated {
+                    transform: rotate(180deg);
+                  }
+                }
+                
+                &:hover {
+                  background: linear-gradient(135deg, 
+                    rgba(139, 92, 246, 0.08) 0%, 
+                    rgba(196, 132, 252, 0.12) 100%
+                  );
+                  border-color: rgba(139, 92, 246, 0.3);
+                  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
+                  transform: translateY(-2px);
+                }
+                
+                &:focus {
+                  border-color: rgba(139, 92, 246, 0.5);
+                  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2), 0 0 0 3px rgba(139, 92, 246, 0.1);
+                }
               }
+              
+              .sort-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                margin-top: 8px;
+                background: var(--el-bg-color);
+                border: 2px solid rgba(139, 92, 246, 0.15);
+                border-radius: 12px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(139, 92, 246, 0.1);
+                backdrop-filter: blur(20px);
+                z-index: 1000;
+                overflow: hidden;
+                animation: sortMenuFadeIn 0.3s ease;
+                
+                .sort-menu-header {
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  padding: 12px 16px;
+                  background: linear-gradient(135deg, 
+                    rgba(139, 92, 246, 0.05) 0%, 
+                    rgba(196, 132, 252, 0.08) 100%
+                  );
+                  border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+                  font-size: 13px;
+                  font-weight: 600;
+                  color: var(--el-text-color-regular);
+                  
+                  i {
+                    color: rgba(139, 92, 246, 0.8);
+                    font-size: 12px;
+                  }
+                }
+                
+                .sort-options {
+                  padding: 8px;
+                  
+                  .sort-option {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    width: 100%;
+                    padding: 12px 12px;
+                    border: none;
+                    border-radius: 8px;
+                    background: transparent;
+                    color: var(--el-text-color-primary);
+                    font-size: 14px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    position: relative;
+                    overflow: hidden;
+                    
+                    &::before {
+                      content: '';
+                      position: absolute;
+                      top: 0;
+                      left: -100%;
+                      width: 100%;
+                      height: 100%;
+                      background: linear-gradient(90deg,
+                        transparent 0%,
+                        rgba(139, 92, 246, 0.1) 50%,
+                        transparent 100%
+                      );
+                      transition: left 0.5s ease;
+                    }
+                    
+                    > i {
+                      color: rgba(139, 92, 246, 0.7);
+                      font-size: 14px;
+                      width: 16px;
+                      flex-shrink: 0;
+                    }
+                    
+                    .option-content {
+                      flex: 1;
+                      text-align: left;
+                      
+                      .option-label {
+                        display: block;
+                        font-weight: 500;
+                        margin-bottom: 2px;
+                      }
+                      
+                      .option-desc {
+                        display: block;
+                        font-size: 12px;
+                        color: var(--el-text-color-secondary);
+                        opacity: 0.8;
+                      }
+                    }
+                    
+                    .option-check {
+                      color: #22c55e;
+                      font-size: 14px;
+                      opacity: 0;
+                      transform: scale(0.8);
+                      transition: all 0.3s ease;
+                    }
+                    
+                    &:hover {
+                      background: rgba(139, 92, 246, 0.08);
+                      color: var(--el-text-color-primary);
+                      transform: translateX(4px);
+                      
+                      &::before {
+                        left: 100%;
+                      }
+                      
+                      > i {
+                        color: rgba(139, 92, 246, 1);
+                        transform: scale(1.1);
+                      }
+                      
+                      .option-desc {
+                        opacity: 1;
+                      }
+                    }
+                    
+                    &.active {
+                      background: linear-gradient(135deg, 
+                        rgba(139, 92, 246, 0.15) 0%, 
+                        rgba(196, 132, 252, 0.12) 100%
+                      );
+                      color: var(--el-text-color-primary);
+                      
+                      > i {
+                        color: #8b5cf6;
+                        transform: scale(1.1);
+                      }
+                      
+                      .option-check {
+                        opacity: 1;
+                        transform: scale(1);
+                      }
+                      
+                      .option-desc {
+                        color: var(--el-text-color-regular);
+                        opacity: 1;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          
+          @keyframes sortMenuFadeIn {
+            from {
+              opacity: 0;
+              transform: translateY(-8px) scale(0.95);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0) scale(1);
             }
           }
         }
@@ -1075,15 +1357,88 @@ onMounted(() => {
             gap: 12px;
             
             .results-count {
-              font-size: 15px;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              padding: 8px 16px;
+              border-radius: 8px;
+              font-size: 14px;
               font-weight: 600;
-              background: linear-gradient(135deg, var(--el-text-color-primary) 0%, #8b5cf6 100%);
-              background-size: 200% 100%;
-              -webkit-background-clip: text;
-              background-clip: text;
-              -webkit-text-fill-color: transparent;
-              color: transparent;
-              filter: drop-shadow(0 1px 2px rgba(139, 92, 246, 0.1));
+              background: linear-gradient(135deg, 
+                rgba(139, 92, 246, 0.1) 0%, 
+                rgba(196, 132, 252, 0.08) 100%
+              );
+              border: 1px solid rgba(139, 92, 246, 0.15);
+              box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+              backdrop-filter: blur(8px);
+              transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+              position: relative;
+              overflow: hidden;
+              
+              i {
+                font-size: 12px;
+                color: rgba(139, 92, 246, 0.8);
+                opacity: 0.8;
+              }
+              
+              .count-number {
+                background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+                background-size: 200% 100%;
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+                color: transparent;
+                font-weight: 700;
+                animation: gradient-shift 3s ease-in-out infinite;
+              }
+              
+              .count-text {
+                color: var(--el-text-color-regular);
+                font-weight: 500;
+              }
+              
+              &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg,
+                  transparent 0%,
+                  rgba(139, 92, 246, 0.2) 50%,
+                  transparent 100%
+                );
+                animation: shimmer 3s infinite;
+              }
+              
+              &:hover {
+                background: linear-gradient(135deg, 
+                  rgba(139, 92, 246, 0.15) 0%, 
+                  rgba(196, 132, 252, 0.12) 100%
+                );
+                border-color: rgba(139, 92, 246, 0.25);
+                box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+                transform: translateY(-1px) scale(1.02);
+              }
+            }
+            
+            @keyframes gradient-shift {
+              0%, 100% {
+                background-position: 200% center;
+              }
+              50% {
+                background-position: 0% center;
+              }
+            }
+            
+            @keyframes shimmer {
+              0% {
+                left: -100%;
+              }
+              100% {
+                left: 100%;
+              }
             }
             
             .filter-tags {
@@ -1344,35 +1699,153 @@ html.dark .shop-page {
       }
     }
     
-    // 排序控件扁平化
+    // 排序控件暗色模式
     .sort-controls {
       .sort-label {
         color: rgba(255, 255, 255, 0.9) !important;
+        
+        i {
+          color: rgba(139, 92, 246, 1) !important;
+        }
       }
       
-      .sort-select {
+      .sort-dropdown {
+        .sort-trigger {
+          background: rgba(55, 55, 58, 1) !important;
+          color: rgba(255, 255, 255, 0.95) !important;
+          border: 2px solid rgba(255, 255, 255, 0.12) !important;
+          backdrop-filter: none !important;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+          
+          .current-sort i {
+            color: rgba(139, 92, 246, 1) !important;
+          }
+          
+          .dropdown-arrow {
+            color: rgba(139, 92, 246, 0.8) !important;
+          }
+          
+          &:hover {
+            background: rgba(68, 68, 71, 1) !important;
+            border-color: rgba(139, 92, 246, 0.5) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+            transform: translateY(-1px) !important;
+          }
+          
+          &:focus {
+            background: rgba(68, 68, 71, 1) !important;
+            border-color: rgba(139, 92, 246, 0.7) !important;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(139, 92, 246, 0.3) !important;
+            transform: translateY(-2px) !important;
+          }
+        }
+        
+        .sort-menu {
+          background: rgba(28, 28, 30, 0.95) !important;
+          border: 2px solid rgba(255, 255, 255, 0.12) !important;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+          backdrop-filter: blur(20px) !important;
+          
+          .sort-menu-header {
+            background: rgba(55, 55, 58, 0.8) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: rgba(255, 255, 255, 0.9) !important;
+            
+            i {
+              color: rgba(139, 92, 246, 1) !important;
+            }
+          }
+          
+          .sort-options {
+            .sort-option {
+              color: rgba(255, 255, 255, 0.95) !important;
+              
+              &::before {
+                background: linear-gradient(90deg,
+                  transparent 0%,
+                  rgba(139, 92, 246, 0.2) 50%,
+                  transparent 100%
+                ) !important;
+              }
+              
+              > i {
+                color: rgba(139, 92, 246, 0.8) !important;
+              }
+              
+              .option-desc {
+                color: rgba(255, 255, 255, 0.6) !important;
+              }
+              
+              &:hover {
+                background: rgba(139, 92, 246, 0.15) !important;
+                color: rgba(255, 255, 255, 1) !important;
+                
+                > i {
+                  color: rgba(139, 92, 246, 1) !important;
+                }
+                
+                .option-desc {
+                  color: rgba(255, 255, 255, 0.8) !important;
+                }
+              }
+              
+              &.active {
+                background: rgba(139, 92, 246, 0.2) !important;
+                color: rgba(255, 255, 255, 1) !important;
+                
+                > i {
+                  color: #a855f7 !important;
+                }
+                
+                .option-desc {
+                  color: rgba(255, 255, 255, 0.9) !important;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    // 商品数量显示暗色模式样式
+    .results-info {
+      .results-count {
         background: rgba(55, 55, 58, 1) !important;
-        color: rgba(255, 255, 255, 0.95) !important;
         border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
         backdrop-filter: none !important;
-        box-shadow: none !important;
-        background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%23ffffff" d="M6 8L0 0h12z"/></svg>') !important;
+        
+        i {
+          color: rgba(139, 92, 246, 1) !important;
+          opacity: 1 !important;
+        }
+        
+        &::after {
+          background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(139, 92, 246, 0.3) 50%,
+            transparent 100%
+          ) !important;
+        }
+        
+        .count-text {
+          color: rgba(255, 255, 255, 0.85) !important;
+        }
+        
+        .count-number {
+          background: linear-gradient(135deg, #a855f7 0%, #c084fc 100%) !important;
+          background-size: 200% 100% !important;
+          -webkit-background-clip: text !important;
+          background-clip: text !important;
+          -webkit-text-fill-color: transparent !important;
+          color: transparent !important;
+        }
         
         &:hover {
           background: rgba(68, 68, 71, 1) !important;
-          border-color: rgba(139, 92, 246, 0.4) !important;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
-        }
-        
-        &:focus {
-          background: rgba(68, 68, 71, 1) !important;
-          border-color: rgba(139, 92, 246, 0.6) !important;
-          box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3) !important;
-        }
-        
-        option {
-          background: #2c2c2e !important;
-          color: rgba(255, 255, 255, 0.95) !important;
+          border-color: rgba(139, 92, 246, 0.3) !important;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+          transform: translateY(-1px) scale(1.02) !important;
         }
       }
     }
