@@ -5,14 +5,15 @@
     
     <!-- 主要内容区域 - 使用栅格系统 -->
     <div class="layout-container">
-      <el-row class="layout-wrapper" :gutter="16">
+      <div class="layout-wrapper">
+        <el-row class="content-row" :gutter="16">
         <!-- 左侧边栏 -->
         <el-col 
           :xs="0" 
           :sm="0" 
-          :md="6" 
-          :lg="5" 
-          :xl="4"
+          :md="7" 
+          :lg="6" 
+          :xl="5"
           class="left-sidebar-col"
         >
           <aside class="left-sidebar" :class="{ 'mobile-open': isMobileMenuOpen }">
@@ -24,17 +25,17 @@
         <el-col 
           :xs="24" 
           :sm="24" 
-          :md="18" 
-          :lg="19"
-          :xl="20"
+          :md="17" 
+          :lg="18"
+          :xl="19"
           class="main-content-col"
         >
-          <main class="main-content" :class="mainContentClasses">
-            <slot name="main-content" />
-          </main>
-        </el-col>
-
-      </el-row>
+            <main class="main-content" :class="mainContentClasses">
+              <slot name="main-content" />
+            </main>
+          </el-col>
+        </el-row>
+      </div>
     </div>
 
     <!-- 移动端遮罩层 -->
@@ -180,10 +181,12 @@ onUnmounted(() => {
 }
 
 .layout-wrapper {
-  max-width: 1440px;
+  max-width: 1440px; // 与其他页面保持一致的版心宽度
   margin: 0 auto;
   padding: 20px;
   position: relative;
+  width: 100%; // 确保在小屏幕上能够完全利用空间
+  box-sizing: border-box; // 确保padding包含在宽度内
   
   @media (max-width: 1200px) {
     padding: 16px;
@@ -194,9 +197,36 @@ onUnmounted(() => {
   }
 }
 
+// 栅格系统行样式 - 关键修复，确保版心对齐
+.content-row {
+  width: 100%;
+  margin: 0; // 移除Element Plus默认的margin
+  
+  // 确保栅格列正确对齐
+  &.el-row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    
+    // 重写Element Plus栅格系统的默认样式
+    .el-col {
+      padding-left: 8px !important;
+      padding-right: 8px !important;
+    }
+    
+    // 特殊处理：确保第一列和最后一列的对齐
+    .el-col:first-child {
+      padding-left: 0 !important;
+    }
+    
+    .el-col:last-child {
+      padding-right: 0 !important;
+    }
+  }
+}
+
 // 左侧边栏
 .left-sidebar-col {
-  // 栅格列样式
+  // 栅格列样式，由上面的content-row统一管理padding
 }
 
 .left-sidebar {
@@ -207,7 +237,9 @@ onUnmounted(() => {
   overflow-y: auto;
   background: var(--el-bg-color);
   border-radius: 8px;
-  padding: 16px;
+  padding: 18px; // 略微增加内边距，让内容更舒适
+  width: 100%; // 确保充满栅格列
+  min-width: 200px; // 设置最小宽度，防止过窄
   
   &::-webkit-scrollbar {
     width: 6px;
@@ -249,6 +281,7 @@ onUnmounted(() => {
 // 主内容区
 .main-content-col {
   min-height: 100vh;
+  // padding由content-row统一管理
   
   @media (max-width: 768px) {
     min-height: auto;

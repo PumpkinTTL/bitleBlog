@@ -612,11 +612,12 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
 </script>
 
 <style lang="less" scoped>
-// 让IndexLayout的原生样式处理布局
+// 确保主内容区域与其他页面保持一致的版心设计
 
 .main-content-wrapper {
   width: 100%;
   min-height: 100vh;
+  // 这里不需要额外设置max-width，因为IndexLayout已经处理了版心
 }
 
 // 搜索和过滤区域 - 小巧精致扁平化设计
@@ -1135,16 +1136,22 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
     }
   }
   
-  // 卡片视图 - 响应式网格设计
+  // 卡片视图 - 精致化设计，调整尺寸让三列显示更加美观
   .articles-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); // 缩小最小宽度，让卡片更紧凑
+    gap: 18px; // 略微减小间距
     margin-top: 16px;
     
-    @media (max-width: 1200px) {
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    // 为PC端大屏幕优化：确保三列的完美显示
+    @media (min-width: 1200px) {
+      grid-template-columns: repeat(3, 1fr); // 强制三列布局
       gap: 20px;
+    }
+    
+    @media (max-width: 1199px) and (min-width: 769px) {
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
     }
     
     @media (max-width: 768px) {
@@ -1267,7 +1274,7 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
       
       .article-cover {
         position: relative;
-        height: 180px;
+        height: 160px; // 略微减小封面图高度，让整体更紧凑
         overflow: hidden;
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         
@@ -1344,7 +1351,7 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
       }
       
       .article-content {
-        padding: 20px;
+        padding: 16px; // 缩小内边距，让内容更紧凑
         background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
         position: relative;
         
@@ -1365,13 +1372,13 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
         }
         
         .article-header {
-          margin-bottom: 16px;
+          margin-bottom: 14px; // 略微减小间距
           
           .article-title {
-            font-size: 18px;
+            font-size: 16px; // 略微减小标题字体，让整体更精致
             font-weight: 700;
             color: var(--el-text-color-primary);
-            margin-bottom: 10px;
+            margin-bottom: 8px; // 减小下间距
             line-height: 1.3;
             overflow: hidden;
             display: -webkit-box;
@@ -1383,11 +1390,11 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
           
           .article-excerpt {
             color: var(--el-text-color-regular);
-            line-height: 1.6;
-            font-size: 13px;
+            line-height: 1.5; // 略微缩小行高
+            font-size: 12px; // 略微减小字体
             overflow: hidden;
             display: -webkit-box;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 2; // 减少到两行，让内容更紧凑
             -webkit-box-orient: vertical;
             opacity: 0.75;
             transition: opacity 0.3s ease;
@@ -1398,7 +1405,7 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
           display: flex;
           align-items: center;
           gap: 6px;
-          margin-bottom: 12px;
+          margin-bottom: 10px; // 略微减小间距
           
           .author-info {
             display: flex;
@@ -1442,7 +1449,7 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
           justify-content: space-between;
           align-items: flex-end;
           margin-top: auto;
-          padding-top: 12px;
+          padding-top: 10px; // 缩小上间距
           border-top: 1px solid rgba(240, 240, 240, 0.6);
           
           html.dark & {
