@@ -16,7 +16,7 @@
           :xl="5"
           class="left-sidebar-col"
         >
-          <aside class="left-sidebar" :class="{ 'mobile-open': isMobileMenuOpen }">
+          <aside class="left-sidebar" :class="{ 'mobile-open': isMobileMenuOpen }" style="overflow: hidden;">
             <slot name="left-sidebar" />
           </aside>
         </el-col>

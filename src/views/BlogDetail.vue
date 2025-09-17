@@ -236,7 +236,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick, watch } from 'vue';
+import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 // 导入组件
@@ -377,13 +377,18 @@ const readingProgress = ref(0);
 
 // 获取文章详情
 const fetchArticleDetail = async () => {
-  isLoading.value = true;
-  hasError.value = false;
-
   try {
+    isLoading.value = true;
+    hasError.value = false;
+    
+    // 检查文章ID是否有效
+    if (!articleId.value || articleId.value <= 0) {
+      throw new Error('无效的文章ID');
+    }
+
     console.log('正在获取文章详情，ID:', articleId.value);
 
-    const response = await getArticleDetailR(articleId.value || 0);
+    const response = await getArticleDetailR(articleId.value);
     console.log('API响应:', response);
 
     // 根据你提供的API响应格式解析数据
@@ -454,8 +459,37 @@ const fetchArticleDetail = async () => {
 
   } catch (error) {
     console.error('获取文章详情出错:', error);
+    
+    // 设置错误状态
     hasError.value = true;
     errorMessage.value = error instanceof Error ? error.message : '获取文章详情失败，请稍后重试';
+    
+    // 设置默认文章数据以防止白屏
+    article.value = {
+      id: articleId.value,
+      title: '加载失败',
+      content: '文章加载失败，请点击重新加载。',
+      author: {
+        id: 0,
+        username: '系统',
+        nickname: '系统',
+        avatar: 'https://picsum.photos/60/60?random=0'
+      },
+      category: {
+        id: 0,
+        name: '未分类',
+        slug: 'uncategorized'
+      },
+      tags: [],
+      views: 0,
+      likes_count: 0,
+      comments_count: 0
+    };
+    
+    // 确保加载状态被清除
+    isLoading.value = false;
+  } finally {
+    // 无论成功还是失败，确保加载状态被清除
     isLoading.value = false;
   }
 };
@@ -707,11 +741,14 @@ watch(() => route.params.id, (newId) => {
 onMounted(() => {
   // 监听窗口滚动事件
   window.addEventListener('scroll', handleScroll);
+});
 
-  // 组件卸载时移除事件监听
-  return () => {
-    window.removeEventListener('scroll', handleScroll);
-  };
+// 组件卸载时清理事件监听
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+  window.removeEventListener('scroll', updateActiveHeading);
+  // 恢复页面滚动
+  document.body.style.overflow = '';
 });
 </script>
 

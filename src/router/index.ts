@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, RouterOptions, Router, RouteRecordRaw } from 'vue-router'
-import { message } from 'ant-design-vue';
 import { KeepAlive, ref } from 'vue';
-const loadingTitle = ref('加载中...')
+// const loadingTitle = ref('加载中...')
 const routes: RouteRecordRaw[] = [
   {
     path: '/dual-token-test',
@@ -105,7 +104,7 @@ const routes: RouteRecordRaw[] = [
     
     {
         path: '/index', name: 'index',
-        component: () => import('@/components/index/v2/IndexV2.vue'),
+        component: () => import('@/views/IndexV2.vue'),
         meta: { 
             header:false,
             footer: true,
@@ -222,15 +221,20 @@ const options: RouterOptions = {
 const router: Router = createRouter(options)
 
 router.beforeEach((to, from, next) => {
- 
-    const loading = message.loading(loadingTitle.value, 0)
-
-    // 如果访问的页面不存在则重定向到404界面
-    if (!to.name) return next('/404')
+    // 简化路由守卫，移除所有loading和阻塞
+    if (!to.name) {
+        return next('/404')
+    }
     next()
-    
 })
+
+// router.afterEach 可以用来更新标题
 router.afterEach((to, from) => {
-    message.destroy()
+    // 更新页面标题
+    if (to.meta?.title) {
+        document.title = `${to.meta.title} - BitlEBlog`
+    } else {
+        document.title = 'BitlEBlog'
+    }
 })
 export default router

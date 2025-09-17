@@ -11,9 +11,17 @@
           <ThemeSwitcher @theme-change="handleThemeChange" />
         </div> -->
         
-        <router-view v-slot="{ Component }">
-          <transition name="slide-fade" mode="out-in">
-            <component :is="Component" />
+        <router-view v-slot="{ Component, route }">
+          <transition 
+            name="slide-fade" 
+            mode="out-in" 
+            appear
+            :duration="{ enter: 250, leave: 200 }"
+            @enter="onTransitionEnter"
+            @leave="onTransitionLeave"
+            @enter-cancelled="onTransitionCancelled"
+            @leave-cancelled="onTransitionCancelled">
+            <component :is="Component" :key="route.fullPath" />
           </transition>
         </router-view>
 
@@ -132,6 +140,25 @@ const validateLoginStatus = async () => {
 
 const route = useRoute()
 
+// 过渡动画事件处理
+const onTransitionEnter = (el: Element) => {
+  // console.log('Page transition enter started')
+}
+
+const onTransitionLeave = (el: Element) => {
+  // console.log('Page transition leave started')
+}
+
+const onTransitionCancelled = () => {
+  // console.log('Page transition cancelled - forcing completion')
+  // 如果动画被取消，确保没有遗留的样式
+  document.querySelectorAll('.slide-fade-enter-active, .slide-fade-leave-active').forEach(el => {
+    ;(el as HTMLElement).style.transition = 'none'
+    ;(el as HTMLElement).style.transform = 'none'
+    ;(el as HTMLElement).style.opacity = ''
+  })
+}
+
 onMounted(() => {
   // 初始化主题
   initTheme()
@@ -167,20 +194,62 @@ onMounted(() => {
   position: relative;
 }
 
-/* 路由切换动画 */
-.slide-fade-enter-active,
+/* 路由切换动画 - 优化版 */
+.slide-fade-enter-active {
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
 .slide-fade-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53);
 }
 
 .slide-fade-enter-from {
-  transform: translateX(-20px);
+  transform: translateX(-15px);
   opacity: 0;
 }
 
 .slide-fade-leave-to {
-  transform: translateX(20px);
+  transform: translateX(15px);
   opacity: 0;
+}
+
+/* 确保动画期间的性能 */
+.slide-fade-enter-active *,
+.slide-fade-leave-active * {
+  will-change: auto;
+}
+
+/* 防止动画期间的渲染问题 */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  position: relative;
+  z-index: 1;
+}
+
+/* 安全机制：确保动画不会无限继续 */
+.slide-fade-enter-active {
+  animation-fill-mode: both;
+  animation-duration: 0.25s;
+}
+
+.slide-fade-leave-active {
+  animation-fill-mode: both;
+  animation-duration: 0.2s;
+}
+
+/* 媒体查询：在低性能设备上禁用动画 */
+@media (prefers-reduced-motion: reduce) {
+  .slide-fade-enter-active,
+  .slide-fade-leave-active {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .slide-fade-enter-from,
+  .slide-fade-leave-to {
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }
 
 /* Element Plus 全局暗色模式适配 */

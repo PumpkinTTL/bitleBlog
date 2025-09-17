@@ -48,7 +48,7 @@
           </div>
         </div>
 
-        <div class="sidebar-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+        <div class="sidebar-card animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
           <div class="card-header">
             <div class="card-icon hot-icon">
               <i class="fas fa-fire"></i>
@@ -82,7 +82,7 @@
 
 
         <!-- 搜索和过滤区域 -->
-        <div class="search-filter-section animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+      <div class="search-filter-section animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
           <div class="search-filter-header">
             <div class="search-container">
               <div class="search-wrapper">
@@ -136,7 +136,7 @@
               <el-tag
                 v-for="category in categories"
                 :key="category.id"
-                :type="activeCategory === category.id ? 'primary' : ''"
+                :type="activeCategory === category.id ? 'primary' : undefined"
                 class="category-tag"
                 @click="handleCategoryChange(category.id)"
                 effect="plain">
@@ -149,7 +149,7 @@
         </div>
 
         <!-- 文章列表 -->
-        <div class="articles-section animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
+      <div class="articles-section animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
           <div class="section-header">
             <h2 class="section-title">最新文章</h2>
             <div class="view-toggle">
@@ -169,7 +169,7 @@
             <div 
               v-for="(article, index) in displayArticles" 
               :key="article.id"
-              class="article-card animate__animated animate__fadeInUp"
+            class="article-card animate__animated animate__fadeInUp"
               :style="`animation-delay: ${0.6 + index * 0.1}s`"
               @click="navigateToArticle(article.id)"
             >
@@ -306,7 +306,8 @@
               v-model:page-size="pageSize"
               :page-sizes="[6, 12, 24, 48]"
               :total="totalArticles"
-              layout="total, sizes, prev, pager, next, jumper"
+              :layout="paginationLayout"
+              :small="isMobile"
               background
               @size-change="handleSizeChange"
               @current-change="handlePageChange"
@@ -320,12 +321,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ArrowRight, Search, Filter, ArrowDown, Check, Grid, Menu, Document, Star, Clock, Promotion } from '@element-plus/icons-vue'
 import IndexLayout from './layout/IndexLayout.vue'
 
 const router = useRouter()
+
+// 响应式屏幕尺寸检测
+const screenWidth = ref(window.innerWidth)
+const isMobile = computed(() => screenWidth.value < 768)
+const paginationLayout = computed(() => {
+  if (screenWidth.value < 480) {
+    return 'prev, pager, next'
+  } else if (screenWidth.value < 768) {
+    return 'total, prev, pager, next'
+  } else {
+    return 'total, sizes, prev, pager, next, jumper'
+  }
+})
+
+const handleResize = () => {
+  screenWidth.value = window.innerWidth
+}
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
 
 // 响应式数据
 const searchKeyword = ref('')
@@ -575,11 +601,17 @@ const getFilterLabel = (value: string) => {
   return option ? option.label : '全部文章'
 }
 
-const navigateToArticle = (articleId: number) => {
-  router.push({
-    path: `/blogDetail/${articleId}`,
-    query: { transition: 'slide-fade' }
-  })
+const navigateToArticle = async (articleId: number) => {
+  try {
+    await router.push({
+      path: `/blogDetail/${articleId}`,
+      query: { transition: 'slide-fade' }
+    })
+  } catch (error) {
+    console.error('路由跳转失败:', error)
+    // 如果路由跳转失败，尝试直接跳转
+    window.location.href = `/blogDetail/${articleId}`
+  }
 }
 
 const getAuthorClass = (author: any) => {
@@ -1705,6 +1737,58 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
     margin-top: 32px;
     display: flex;
     justify-content: center;
+    
+    // 移动端优化
+    @media (max-width: 768px) {
+      margin-top: 24px;
+      padding: 0 8px;
+      
+      :deep(.el-pagination) {
+        .el-pagination__total,
+        .el-pagination__sizes,
+        .el-pagination__jump {
+          margin: 0 2px;
+        }
+        
+        .el-pager {
+          li {
+            min-width: 28px;
+            height: 28px;
+            font-size: 12px;
+          }
+        }
+        
+        .btn-prev,
+        .btn-next {
+          min-width: 28px;
+          height: 28px;
+          font-size: 12px;
+        }
+      }
+    }
+    
+    // 超小屏幕优化
+    @media (max-width: 480px) {
+      padding: 0 4px;
+      
+      :deep(.el-pagination) {
+        .el-pager {
+          li {
+            min-width: 24px;
+            height: 24px;
+            font-size: 11px;
+            margin: 0 1px;
+          }
+        }
+        
+        .btn-prev,
+        .btn-next {
+          min-width: 24px;
+          height: 24px;
+          font-size: 11px;
+        }
+      }
+    }
   }
 }
 
