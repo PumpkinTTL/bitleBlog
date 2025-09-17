@@ -11,46 +11,58 @@
           
           <div class="card-body">
             <div class="site-brand">
-          <div class="brand-logo">
-            <i class="fas fa-gem"></i>
-          </div>
+              <div class="brand-logo">
+                <i class="fas fa-gem"></i>
+              </div>
               <div class="brand-text">
-                <div class="brand-header">
-                  <h4 class="brand-name">
+                <h4 class="brand-name">
                     <span class="name-zh glow-text">知识棱镜</span>
-                    <span class="name-en">Knowledge Prism</span>
-                  </h4>
+                  <span class="name-en">Knowledge Prism</span>
+                </h4>
+                <div class="brand-desc">
+                  <span class="desc-text">技术分享 · 知识传递 · 成长记录</span>
                   <div class="status-badge">
                     <div class="status-dot"></div>
                     <span class="status-text">稳定运行</span>
                   </div>
                 </div>
-                <div class="brand-desc">
-                  <span class="desc-text">技术分享 · 知识传递 · 成长记录</span>
-                </div>
               </div>
             </div>
             
             <div class="site-stats">
-              <div class="stat-item">
-                <i class="fas fa-file-alt"></i>
-                <div class="stat-data">
-                  <span class="num">234</span>
-                  <span class="label">文章</span>
-                </div>
+              <div class="stats-title">
+                <i class="fas fa-chart-bar"></i>
+                <span>站点数据</span>
               </div>
-              <div class="stat-item">
-                <i class="fas fa-folder"></i>
-                <div class="stat-data">
-                  <span class="num">56</span>
-                  <span class="label">分类</span>
+              <div class="stats-grid">
+                <div class="stat-item">
+                  <div class="stat-icon articles">
+                    <i class="fas fa-file-alt"></i>
+                  </div>
+                  <div class="stat-text">
+                    <span class="stat-value">234</span>
+                    <span class="stat-label">文章</span>
+                  </div>
                 </div>
-              </div>
-              <div class="stat-item">
-                <i class="fas fa-eye"></i>
-                <div class="stat-data">
-                  <span class="num">1.2k</span>
-                  <span class="label">访问</span>
+                
+                <div class="stat-item">
+                  <div class="stat-icon categories">
+                    <i class="fas fa-folder"></i>
+                  </div>
+                  <div class="stat-text">
+                    <span class="stat-value">56</span>
+                    <span class="stat-label">分类</span>
+                  </div>
+                </div>
+                
+                <div class="stat-item">
+                  <div class="stat-icon views">
+                    <i class="fas fa-eye"></i>
+                  </div>
+                  <div class="stat-text">
+                    <span class="stat-value">1.2k</span>
+                    <span class="stat-label">访问</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2152,15 +2164,15 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
   }
   
   .card-body {
-    padding: 15px;
+    padding: 10px;
     
-    .site-brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 18px;
-      
-      .brand-logo {
+      .site-brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 18px;
+        
+        .brand-logo {
         position: relative;
         width: 40px;
         height: 40px;
@@ -2200,55 +2212,60 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
       .brand-text {
         flex: 1;
         
-        .brand-header {
+        .brand-name {
+          margin: 0 0 10px 0;
           display: flex;
-          align-items: flex-start;
-          justify-content: space-between;
-          margin-bottom: 8px;
+          flex-direction: column;
+          gap: 4px;
           
-          .brand-name {
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
+          .name-zh {
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--el-text-color-primary);
+            line-height: 1.1;
+            letter-spacing: 0.6px;
+            
+            &.glow-text {
+              background: linear-gradient(135deg, #e91e63, #ec4899, #a855f7, #7c3aed);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+            }
+          }
+          
+          .name-en {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--el-text-color-regular);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            opacity: 0.7;
+          }
+        }
+        
+        .brand-desc {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          
+          .desc-text {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--el-text-color-regular);
+            line-height: 1.4;
+            letter-spacing: 0.2px;
             flex: 1;
-            
-            .name-zh {
-              font-size: 18px;
-              font-weight: 700;
-              color: var(--el-text-color-primary);
-              line-height: 1.1;
-              letter-spacing: 0.5px;
-              
-              &.glow-text {
-                background: linear-gradient(135deg, #9333ea, #a855f7, #c084fc);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                text-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
-                filter: drop-shadow(0 0 8px rgba(147, 51, 234, 0.2));
-              }
-            }
-            
-            .name-en {
-              font-size: 11px;
-              font-weight: 500;
-              color: var(--el-text-color-regular);
-              letter-spacing: 0.8px;
-              text-transform: uppercase;
-              opacity: 0.7;
-            }
           }
           
           .status-badge {
             display: flex;
             align-items: center;
-            gap: 4px;
-            padding: 4px 8px;
-            background: rgba(34, 197, 94, 0.1);
-            border-radius: 10px;
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            margin-top: 2px;
+            gap: 5px;
+            padding: 5px 10px;
+            background: rgba(34, 197, 94, 0.08);
+            border-radius: 12px;
+            border: 1px solid rgba(34, 197, 94, 0.15);
             flex-shrink: 0;
             
             .status-dot {
@@ -2268,63 +2285,95 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
             }
           }
         }
-        
-        .brand-desc {
-          .desc-text {
-            font-size: 12px;
-            font-weight: 400;
-            color: var(--el-text-color-regular);
-            line-height: 1.4;
-            letter-spacing: 0.2px;
-          }
-        }
       }
     }
     
     .site-stats {
+      margin-top: 20px;
       display: flex;
-      gap: 8px;
+      flex-direction: column;
       
-      .stat-item {
-        flex: 1;
+      .stats-title {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 10px 8px;
-        background: var(--el-fill-color-extra-light);
-        border: 1px solid var(--el-border-color-extra-light);
-        border-radius: 8px;
-        transition: all 0.2s ease;
-        
-        &:hover {
-          background: var(--el-fill-color-light);
-          transform: translateY(-1px);
-        }
+        justify-content: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--el-color-primary);
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+        order: 1;
         
         i {
-          font-size: 12px;
-          color: var(--el-color-primary);
-          width: 16px;
-          text-align: center;
-          flex-shrink: 0;
+          font-size: 11px;
+          opacity: 0.8;
         }
+      }
+      
+      .stats-grid {
+        display: flex;
+        gap: 8px;
+        order: 2;
         
-        .stat-data {
+        .stat-item {
+          flex: 1;
           display: flex;
-          flex-direction: column;
-          align-items: flex-start;
+          align-items: center;
+          gap: 8px;
+          padding: 8px;
+          background: var(--el-fill-color-extra-light);
+          border-radius: 6px;
+          border: 1px solid var(--el-border-color-extra-light);
+          min-width: 0;
           
-          .num {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--el-text-color-primary);
-            line-height: 1;
+          .stat-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            
+            i {
+              font-size: 11px;
+              color: white;
+            }
+            
+            &.articles {
+              background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            }
+            
+            &.categories {
+              background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            }
+            
+            &.views {
+              background: linear-gradient(135deg, #34d399, #10b981);
+            }
           }
           
-          .label {
-            font-size: 10px;
-            color: var(--el-text-color-secondary);
-            margin-top: 1px;
+          .stat-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0px;
+            min-width: 0;
+            
+            .stat-value {
+              font-size: 14px;
+              font-weight: 700;
+              color: var(--el-text-color-primary);
+              line-height: 1.1;
+            }
+            
+            .stat-label {
+              font-size: 9px;
+              color: var(--el-text-color-secondary);
+              font-weight: 500;
+              opacity: 0.8;
+              line-height: 1;
+            }
           }
         }
       }
@@ -3431,25 +3480,32 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
     
     .site-brand {
       .brand-text {
-        .brand-header {
-          .brand-name {
-            .name-zh.glow-text {
-              background: linear-gradient(135deg, #a855f7, #c084fc, #ddd6fe);
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-              background-clip: text;
-              text-shadow: 0 0 25px rgba(168, 85, 247, 0.4);
-              filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.3));
-            }
+        .brand-name {
+          .name-zh.glow-text {
+            background: linear-gradient(135deg, #f472b6, #e879f9, #c084fc, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
           }
-          
+        }
+        
+        .brand-desc {
           .status-badge {
-            background: rgba(34, 197, 94, 0.15);
-            border-color: rgba(34, 197, 94, 0.3);
+            background: rgba(34, 197, 94, 0.12);
+            border-color: rgba(34, 197, 94, 0.25);
             
             .status-text {
               color: #4ade80;
             }
+          }
+        }
+      }
+      
+      .site-stats {
+        .stats-grid {
+          .stat-item {
+            background: #1a1a1a;
+            border-color: #303030;
           }
         }
       }
@@ -3495,5 +3551,6 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
     transform: scale(1.05);
   }
 }
+
 */
 </style>
