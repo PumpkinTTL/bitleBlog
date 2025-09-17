@@ -86,28 +86,28 @@
           <div class="search-filter-header">
             <div class="search-container">
               <div class="search-wrapper">
-                <el-input
-                  v-model="searchKeyword"
-                  placeholder="输入关键词搜索文章..."
-                  size="large"
-                  class="search-input"
-                  @keyup.enter="handleSearch(searchKeyword)"
-                  clearable>
-                  <template #prefix>
-                    <el-icon class="search-icon">
-                      <Search />
-                    </el-icon>
-                  </template>
-                  <template #suffix>
-                    <el-button
-                      type="primary"
-                      class="search-btn"
-                      @click="handleSearch(searchKeyword)"
-                      :icon="Search">
-                      搜索
-                    </el-button>
-                  </template>
-                </el-input>
+                <div class="search-input-group">
+                  <el-input
+                    v-model="searchKeyword"
+                    placeholder="输入关键词搜索文章..."
+                    size="large"
+                    class="search-input"
+                    @keyup.enter="handleSearch(searchKeyword)"
+                    clearable>
+                    <template #prefix>
+                      <el-icon class="search-icon">
+                        <Search />
+                      </el-icon>
+                    </template>
+                  </el-input>
+                  <el-button
+                    type="primary"
+                    class="search-btn"
+                    @click="handleSearch(searchKeyword)"
+                    :icon="Search">
+                    搜索
+                  </el-button>
+                </div>
               </div>
             </div>
             
@@ -652,85 +652,103 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
       
       .search-wrapper {
         width: 100%;
-        max-width: 400px;
+        max-width: 450px;
         
-        .search-input {
-          width: 100%;
+        .search-input-group {
+          display: flex;
+          gap: 8px;
+          align-items: center;
           
-          :deep(.el-input__wrapper) {
-            background: #ffffff;
-            border: 1px solid #e8f4fd;
-            border-radius: 6px;
-            box-shadow: 0 1px 2px rgba(24, 144, 255, 0.04);
-            transition: all 0.2s ease;
-            height: 36px;
-            padding-right: 0;
-            display: flex;
-            align-items: center;
-            
-            &:hover {
-              border-color: #bae0ff;
-              box-shadow: 0 1px 4px rgba(24, 144, 255, 0.08);
-            }
-            
-            &.is-focus {
-              border-color: #1890ff;
-              box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
-            }
-          }
-          
-          :deep(.el-input__inner) {
-            font-size: 14px;
-            color: var(--el-text-color-primary);
-            padding: 0 8px 0 40px;
-            border: none;
-            background: transparent;
-            height: 34px;
+          .search-input {
             flex: 1;
             
-            &::placeholder {
-              color: var(--el-text-color-placeholder);
-            }
-          }
-          
-          :deep(.el-input__prefix) {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 1;
-            
-            .search-icon {
-              color: #1890ff;
-              font-size: 16px;
-            }
-          }
-          
-          :deep(.el-input__suffix) {
-            padding: 0;
-            margin: 0;
-            position: relative;
-            
-            .search-btn {
-              margin: 0;
-              height: 34px;
-              padding: 0 16px;
-              font-size: 12px;
-              font-weight: 500;
-              border-radius: 0 5px 5px 0;
-              background: #1890ff;
-              border: none;
-              color: white;
+            :deep(.el-input__wrapper) {
+              background: #ffffff;
+              border: 1px solid #e8f4fd;
+              border-radius: 6px;
+              box-shadow: 0 1px 2px rgba(24, 144, 255, 0.04);
               transition: all 0.2s ease;
-              border-left: 1px solid #e8f4fd;
+              height: 36px;
+              display: flex;
+              align-items: center;
               
               &:hover {
-                background: #40a9ff;
+                border-color: #bae0ff;
+                box-shadow: 0 1px 4px rgba(24, 144, 255, 0.08);
               }
               
-              &:active {
-                background: #096dd9;
+              &.is-focus {
+                border-color: #1890ff;
+                box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
               }
+            }
+            
+            :deep(.el-input__inner) {
+              font-size: 14px;
+              color: var(--el-text-color-primary);
+              padding: 0 8px 0 40px;
+              border: none;
+              background: transparent;
+              height: 34px;
+              flex: 1;
+              
+              &::placeholder {
+                color: var(--el-text-color-placeholder);
+              }
+            }
+            
+            :deep(.el-input__prefix) {
+              position: absolute;
+              left: 12px;
+              top: 50%;
+              transform: translateY(-50%);
+              z-index: 1;
+              
+              .search-icon {
+                color: #1890ff;
+                font-size: 16px;
+              }
+            }
+          }
+          
+          .search-btn {
+            height: 36px;
+            min-width: 60px;
+            padding: 0 16px;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 6px;
+            background: #1677ff;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            
+            &:hover {
+              background: #4096ff;
+              transform: translateY(-1px);
+              box-shadow: 0 4px 12px rgba(22, 119, 255, 0.25);
+            }
+            
+            &:active {
+              background: #0958d9;
+              transform: translateY(0);
+              box-shadow: 0 2px 6px rgba(22, 119, 255, 0.3);
+            }
+            
+            &:focus {
+              outline: none;
+              box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.2);
+            }
+            
+            i {
+              font-size: 14px;
+              line-height: 1;
             }
           }
         }
@@ -899,47 +917,52 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
     .search-filter-header {
       .search-container {
         .search-wrapper {
-          .search-input {
-            :deep(.el-input__wrapper) {
-              background: #1f1f1f;
-              border-color: #434343;
-              
-              &:hover {
-                border-color: #177ddc;
-              }
-              
-              &.is-focus {
-                border-color: #177ddc;
-                box-shadow: 0 0 0 2px rgba(23, 125, 220, 0.2);
-              }
-            }
-            
-            :deep(.el-input__inner) {
-              color: rgba(255, 255, 255, 0.85);
-              
-              &::placeholder {
-                color: rgba(255, 255, 255, 0.45);
-              }
-            }
-            
-            :deep(.el-input__prefix) {
-              .search-icon {
-                color: #177ddc;
-              }
-            }
-            
-            :deep(.el-input__suffix) {
-              .search-btn {
-                background: #177ddc;
-                border-left-color: #434343;
+          .search-input-group {
+            .search-input {
+              :deep(.el-input__wrapper) {
+                background: #1f1f1f;
+                border-color: #434343;
                 
                 &:hover {
-                  background: #3c9be8;
+                  border-color: #177ddc;
                 }
                 
-                &:active {
-                  background: #0958d9;
+                &.is-focus {
+                  border-color: #177ddc;
+                  box-shadow: 0 0 0 2px rgba(23, 125, 220, 0.2);
                 }
+              }
+              
+              :deep(.el-input__inner) {
+                color: rgba(255, 255, 255, 0.85);
+                
+                &::placeholder {
+                  color: rgba(255, 255, 255, 0.45);
+                }
+              }
+              
+              :deep(.el-input__prefix) {
+                .search-icon {
+                  color: #177ddc;
+                }
+              }
+            }
+            
+            .search-btn {
+              background: #1677ff;
+              
+              &:hover {
+                background: #4096ff;
+                box-shadow: 0 4px 12px rgba(22, 119, 255, 0.3);
+              }
+              
+              &:active {
+                background: #0958d9;
+                box-shadow: 0 2px 6px rgba(22, 119, 255, 0.4);
+              }
+              
+              &:focus {
+                box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.3);
               }
             }
           }
