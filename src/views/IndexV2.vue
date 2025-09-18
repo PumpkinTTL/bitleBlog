@@ -80,6 +80,7 @@
                 v-for="(article, index) in hotArticles" 
                 :key="article.id"
                 class="hot-item"
+                @click="navigateToArticle(article.id)"
               >
                 <div class="rank" :class="`rank-${index + 1}`">{{ index + 1 }}</div>
                 <div class="article">
@@ -95,10 +96,9 @@
         </div>
       </div>
     </template>
-    
+	<!-- 主体 -->
     <template #main-content>
       <div class="main-content-wrapper">
-
 
         <!-- 搜索和过滤区域 -->
       <div class="search-filter-section animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
@@ -269,7 +269,7 @@
               </div>
             </div>
           </div>
-          
+       
           <!-- 列表视图 -->
           <div v-else class="articles-list">
             <div 
@@ -2381,85 +2381,94 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
   }
 }
 
-// 简洁的热门卡片
+// 现代扮平化热门卡片
 .hot-card {
   background: var(--el-bg-color);
-  border: 1px solid var(--el-border-color-lighter);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 8px;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    border-color: var(--el-color-primary-light-8);
+    border-color: rgba(24, 144, 255, 0.15);
+    background: rgba(24, 144, 255, 0.02);
+    transform: translateY(-1px);
   }
   
   .card-header {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 15px;
-    border-bottom: 1px solid var(--el-border-color-extra-light);
-    background: rgba(255, 107, 107, 0.02);
+    padding: 14px 16px 10px;
     
     i {
-      color: #ff6b6b;
-      font-size: 14px;
+      width: 20px;
+      height: 20px;
+      background: #ff6b6b;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 10px;
     }
     
     span {
       font-size: 14px;
       font-weight: 600;
       color: var(--el-text-color-primary);
+      letter-spacing: 0.3px;
     }
   }
   
   .card-body {
-    padding: 6px 0;
+    padding: 0 6px 6px;
     
     .hot-list {
       .hot-item {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 10px 15px;
-        border-bottom: 1px solid var(--el-border-color-extra-light);
-        transition: background 0.2s ease;
-        
-        &:last-child {
-          border-bottom: none;
-        }
+        gap: 12px;
+        padding: 10px;
+        border-radius: 6px;
+        transition: all 0.25s ease;
+        cursor: pointer;
         
         &:hover {
-          background: var(--el-fill-color-extra-light);
+          background: rgba(24, 144, 255, 0.04);
+          transform: translateX(2px);
+          
+          .article .title {
+            color: var(--el-color-primary);
+          }
         }
         
         .rank {
-          width: 20px;
-          height: 20px;
-          border-radius: 4px;
+          width: 22px;
+          height: 22px;
+          border-radius: 6px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 12px;
-          font-weight: 700;
-          background: var(--el-fill-color);
-          color: var(--el-text-color-secondary);
+          font-size: 11px;
+          font-weight: 600;
+          background: #d9d9d9;
+          color: #666666;
           flex-shrink: 0;
+          transition: all 0.25s ease;
           
           &.rank-1 {
-            background: #ffd700;
-            color: #fff;
+            background: #faad14;
+            color: white;
           }
           
           &.rank-2 {
-            background: #c0c0c0;
-            color: #fff;
+            background: #52c41a;
+            color: white;
           }
           
           &.rank-3 {
-            background: #cd7f32;
-            color: #fff;
+            background: #1890ff;
+            color: white;
           }
         }
         
@@ -2471,11 +2480,12 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
             font-size: 13px;
             font-weight: 500;
             color: var(--el-text-color-primary);
-            line-height: 1.3;
+            line-height: 1.4;
             margin-bottom: 4px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            transition: color 0.25s ease;
           }
           
           .views {
@@ -2487,6 +2497,7 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
             
             i {
               color: var(--el-color-primary);
+              font-size: 10px;
               opacity: 0.7;
             }
           }
@@ -2494,125 +2505,27 @@ const handleMobileMenuToggle = (isOpen: boolean) => {
       }
     }
   }
-}
-
-// 紧凑精致的本月热门
-.hot-card {
-  background: var(--el-bg-color);
-  border: 1px solid var(--el-border-color-lighter);
-  border-radius: 8px;
-  transition: all 0.2s ease;
   
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    border-color: var(--el-color-primary-light-8);
-  }
-  
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 14px;
-    border-bottom: 1px solid var(--el-border-color-extra-light);
+  // 暗色模式适配
+  html.dark & {
+    background: #1a1a1a;
+    border-color: rgba(255, 255, 255, 0.08);
     
-    .header-icon {
-      font-size: 14px;
-      
-      &.hot {
-        color: #ff6b6b;
-      }
+    &:hover {
+      border-color: rgba(24, 144, 255, 0.2);
+      background: rgba(24, 144, 255, 0.03);
     }
-    
-    .header-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--el-text-color-primary);
-      margin: 0;
-    }
-  }
-  
-  .card-content {
-    padding: 6px 0;
     
     .hot-list {
       .hot-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 14px;
-        border-bottom: 1px solid var(--el-border-color-extra-light);
-        transition: background 0.2s ease;
-        
-        &:last-child {
-          border-bottom: none;
-        }
-        
         &:hover {
-          background: var(--el-fill-color-extra-light);
-        }
-        
-        .rank {
-          width: 18px;
-          height: 18px;
-          border-radius: 4px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 11px;
-          font-weight: 700;
-          background: var(--el-fill-color-light);
-          color: var(--el-text-color-secondary);
-          flex-shrink: 0;
-        }
-        
-        &.rank-1 .rank {
-          background: #ffd700;
-          color: #fff;
-        }
-        
-        &.rank-2 .rank {
-          background: #c0c0c0;
-          color: #fff;
-        }
-        
-        &.rank-3 .rank {
-          background: #cd7f32;
-          color: #fff;
-        }
-        
-        .content {
-          flex: 1;
-          min-width: 0;
-          
-          .title {
-            margin: 0 0 3px 0;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--el-text-color-primary);
-            line-height: 1.3;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
-          
-          .views {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            font-size: 10px;
-            color: var(--el-text-color-secondary);
-            
-            i {
-              color: var(--el-color-primary);
-              opacity: 0.6;
-            }
-          }
+          background: rgba(24, 144, 255, 0.06);
         }
       }
     }
   }
 }
+
 
 // 旧样式 - 已移除
 .about-site-card-old {

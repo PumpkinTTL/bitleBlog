@@ -101,6 +101,7 @@ declare module 'vue' {
     Logo: typeof import('./src/components/Logo.vue')['default']
     Menu: typeof import('primevue/menu')['default']
     MonthlyHotArticles: typeof import('./src/components/index/MonthlyHotArticles.vue')['default']
+    MonthlyHotPreview: typeof import('./src/components/test/MonthlyHotPreview.vue')['default']
     Music: typeof import('./src/components/Music.vue')['default']
     MusicContent: typeof import('./src/components/MusicContent.vue')['default']
     MyButton: typeof import('./src/components/MyButton.vue')['default']
