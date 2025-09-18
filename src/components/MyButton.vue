@@ -13,14 +13,21 @@ const props = defineProps({
 </script>
 <style lang="less">
 .my-button-container {
-    border: 1px solid #B3D5FF;
-    background-color: #F4F9FF;
+    border: 1px solid #86efac;
+    background-color: #ecfdf5;
     cursor: pointer;
     padding: 0 10px;
-    color: #007FFF;
+    color: #059669;
     margin-left: 20px;
     height: 32px;
-    border-radius: 4px;
+    border-radius: 6px;
     line-height: 32px;
+    transition: all 0.2s ease;
+    
+    &:hover {
+        border-color: #059669;
+        background-color: #d1fae5;
+        color: #047857;
+    }
 }
 </style>
