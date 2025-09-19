@@ -1,5 +1,8 @@
 <template>
   <div class="right-sidebar" :class="{'mobile-hidden': isMobileView}">
+    <!-- Notice Section -->
+    <NoticeCard />
+    
     <!-- Popular Posts Section -->
     <div class="sidebar-section">
       <h3 class="section-title">
@@ -125,6 +128,7 @@
 
 <script setup lang="ts">
 import { ref, defineProps, defineEmits } from 'vue';
+import NoticeCard from './v2/NoticeCard.vue';
 
 const props = defineProps<{
   isMobileView?: boolean;

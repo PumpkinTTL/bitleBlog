@@ -1,48 +1,81 @@
 <template>
   <div class="search-filter-section animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
-    <div class="search-filter-header">
-      <div class="search-container">
-        <div class="search-wrapper">
-          <div class="search-input-group">
-            <el-input v-model="searchKeyword" placeholder="输入关键词搜索文章..." size="large" class="search-input"
-              @keyup.enter="handleSearch(searchKeyword)" clearable>
-              <template #prefix>
-                <el-icon class="search-icon">
-                  <Search />
-                </el-icon>
-              </template>
-            </el-input>
-            <el-button type="primary" class="search-btn" @click="handleSearch(searchKeyword)" :icon="Search">
-              搜索
-            </el-button>
-          </div>
-        </div>
-      </div>
-
-      <div class="filter-container">
-        <div class="filter-buttons">
-          <el-button v-for="item in filterOptions" :key="item.value"
-            :type="activeFilter === item.value ? 'primary' : 'default'" :plain="activeFilter !== item.value"
-            size="default" class="filter-item" @click="handleFilterChange(item.value)">
-            <el-icon class="filter-icon">
-              <component :is="item.icon" />
+    <!-- 搜索区域 -->
+    <div class="search-section">
+      <div class="search-input-wrapper">
+        <el-input 
+          v-model="searchKeyword" 
+          placeholder="搜索文章标题、内容或标签..." 
+          size="large" 
+          class="search-input"
+          @keyup.enter="handleSearch(searchKeyword)" 
+          clearable
+        >
+          <template #prefix>
+            <el-icon class="input-search-icon">
+              <Search />
             </el-icon>
-            <span class="filter-text">{{ item.label }}</span>
-          </el-button>
-        </div>
+          </template>
+        </el-input>
+        <el-button 
+          type="primary" 
+          class="search-btn" 
+          @click="handleSearch(searchKeyword)"
+        >
+          <el-icon class="btn-icon">
+            <Search />
+          </el-icon>
+          <span class="btn-text">搜索</span>
+        </el-button>
       </div>
     </div>
 
-    <!-- 分类标签 -->
-    <div class="category-tags">
-      <div class="category-scroll">
-        <el-tag v-for="category in categories" :key="category.id"
-          :type="activeCategory === category.id ? 'primary' : undefined" class="category-tag"
-          @click="handleCategoryChange(category.id)" effect="plain">
+    <!-- 过滤器区域 -->
+    <div class="filter-section">
+      <div class="section-title">
+        <el-icon class="title-icon">
+          <Filter />
+        </el-icon>
+        <span>筛选条件</span>
+      </div>
+      
+      <div class="filter-buttons">
+        <button 
+          v-for="item in filterOptions" 
+          :key="item.value"
+          :class="['filter-btn', { 'active': activeFilter === item.value }]"
+          @click="handleFilterChange(item.value)"
+        >
+          <el-icon class="btn-icon">
+            <component :is="item.icon" />
+          </el-icon>
+          <span class="btn-label">{{ item.label }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 分类标签区域 -->
+    <div class="category-section">
+      <div class="section-title">
+        <el-icon class="title-icon">
+          <Collection />
+        </el-icon>
+        <span>文章分类</span>
+      </div>
+      
+      <div class="category-tags">
+        <button 
+          v-for="(category, index) in categories" 
+          :key="category.id"
+          :class="['category-tag', 
+                   `category-${index}`, 
+                   { 'active': activeCategory === category.id }]"
+          @click="handleCategoryChange(category.id)"
+        >
           <i :class="category.icon" class="tag-icon"></i>
-          {{ category.name }}
-          <span v-if="category.count" class="tag-count">({{ category.count }})</span>
-        </el-tag>
+          <span class="tag-name">{{ category.name }}</span>
+          <span v-if="category.count" class="tag-count">{{ category.count }}</span>
+        </button>
       </div>
     </div>
   </div>
@@ -50,7 +83,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Search, Star, Clock, TrendCharts, Grid } from '@element-plus/icons-vue'
+import { Search, Star, Clock, TrendCharts, Grid, Filter, Collection } from '@element-plus/icons-vue'
 
 // Props
 interface Props {
@@ -114,358 +147,451 @@ const handleCategoryChange = (categoryId: number) => {
 </script>
 
 <style lang="less" scoped>
-// 现代化搜索过滤区域
+// 紧凑克制的搜索过滤区域（统一配色，弱化阴影/线条/圆角）
 .search-filter-section {
-  margin-bottom: 24px;
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 16px;
-  border: 1px solid #e5e7eb;
-  transition: all 0.2s ease;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--el-bg-color) 0%, var(--el-fill-color-extra-light) 100%);
+  border: 1px solid var(--el-border-color-lighter);
+  border-radius: 6px;
+  padding: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at top center, rgba(var(--el-color-primary-rgb), 0.02) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
 
   &:hover {
-    border-color: #d1d5db;
+    border-color: var(--el-border-color);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    
+    &::before {
+      opacity: 1;
+    }
   }
 
-  .search-filter-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  // 搜索区域
+  .search-section {
     margin-bottom: 12px;
 
-    @media (max-width: 768px) {
-      flex-direction: column;
+    .search-input-wrapper {
+      display: flex;
+      gap: 8px;
       align-items: stretch;
-      gap: 10px;
-    }
-
-    .search-container {
-      flex: 1;
-      min-width: 280px;
 
       @media (max-width: 768px) {
-        min-width: auto;
+        flex-direction: column;
+        gap: 10px;
       }
 
-      .search-wrapper {
-        .search-input-group {
-          display: flex;
-          gap: 6px;
+      :deep(.search-input) {
+        flex: 1;
 
-          :deep(.search-input) {
-            flex: 1;
-
-            .el-input__wrapper {
-              border-radius: 6px;
-              border: 1px solid #d1d5db;
-              background: #ffffff;
-              height: 36px;
-              transition: all 0.2s ease;
-
-              &:hover {
-                border-color: #3b82f6;
-                box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.1);
-              }
-
-              &.is-focus {
-                border-color: #3b82f6;
-                box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-              }
-            }
-
-            .el-input__prefix {
-              .search-icon {
-                color: #6b7280;
-                font-size: 16px;
-              }
-            }
-          }
-
-          .search-btn {
-            height: 36px;
-            border-radius: 6px;
-            background: #059669;
-            border: none;
-            color: white;
-            font-weight: 500;
-            font-size: 13px;
-            padding: 0 16px;
-            transition: all 0.2s ease;
-
-            &:hover {
-              background: #047857;
-            }
-          }
-        }
-      }
-    }
-
-    .filter-container {
-      .filter-buttons {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-
-        @media (max-width: 768px) {
-          gap: 4px;
-        }
-
-        .filter-item {
-          height: 32px !important;
-          padding: 0 10px !important;
-          font-size: 12px !important;
-          border-radius: 6px !important;
-          border: 1px solid #e5e7eb !important;
-          background: #ffffff !important;
-          color: #6b7280 !important;
-          transition: all 0.2s ease !important;
+        .el-input__wrapper {
+          height: 34px;
+          border-radius: 4px;
+          background: var(--el-fill-color-blank);
+          border: 1px solid var(--el-border-color);
+          box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+          transition: all 0.3s ease;
 
           &:hover {
-            border-color: #3b82f6 !important;
-            background: #eff6ff !important;
-            color: #3b82f6 !important;
+            border-color: var(--el-border-color-darker);
+            background: var(--el-fill-color-light);
           }
 
-          &.el-button--primary {
-            background: #3b82f6 !important;
-            border-color: #3b82f6 !important;
-            color: white !important;
-
-            &:hover {
-              background: #2563eb !important;
-              border-color: #2563eb !important;
-            }
+          &.is-focus {
+            border-color: var(--el-color-primary);
+            background: var(--el-bg-color);
+            box-shadow: 0 0 0 2px rgba(var(--el-color-primary-rgb), 0.1);
           }
 
-          .filter-text {
-            @media (max-width: 768px) {
-              display: none;
+          input {
+            font-size: 13px;
+            color: var(--el-text-color-primary);
+
+            &::placeholder {
+              color: var(--el-text-color-placeholder);
+              font-size: 13px;
             }
+          }
+        }
+
+        .el-input__prefix {
+          left: 8px;
+
+          .input-search-icon {
+            color: var(--el-text-color-secondary);
+            font-size: 14px;
+          }
+        }
+      }
+
+      .search-btn {
+        height: 34px;
+        min-width: 68px;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 0 12px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: linear-gradient(135deg, var(--el-color-primary), var(--el-color-primary-dark-2));
+        box-shadow: 0 1px 3px rgba(var(--el-color-primary-rgb), 0.3);
+        transition: all 0.3s ease;
+        
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 2px 6px rgba(var(--el-color-primary-rgb), 0.4);
+        }
+
+        .btn-icon {
+          font-size: 13px;
+        }
+
+        .btn-text {
+          @media (max-width: 480px) {
+            display: none;
           }
         }
       }
     }
   }
 
-  .category-tags {
-    .category-scroll {
+  // 通用区域标题
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+    color: var(--el-text-color-primary);
+    font-size: 13px;
+    font-weight: 600;
+
+    .title-icon {
+      color: var(--el-color-primary);
+      font-size: 13px;
+      opacity: 0.8;
+    }
+  }
+
+  // 过滤器区域（改为中性描边按钮 + 轻微主色激活）
+  .filter-section {
+    margin-bottom: 12px;
+
+    .filter-buttons {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
-      padding: 6px 0;
 
-      .category-tag {
-        font-size: 13px !important;
-        padding: 4px 10px !important;
-        border-radius: 6px !important;
+      .filter-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        background: linear-gradient(135deg, var(--el-fill-color-blank) 0%, var(--el-fill-color-light) 100%);
+        border: 1px solid var(--el-border-color);
+        border-radius: 4px;
+        color: var(--el-text-color-regular);
+        font-size: 12px;
+        font-weight: 500;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
 
-        // 清新的浅色背景配深色边框
-        &:nth-child(1):not(.el-tag--primary) {
-          background: #f8fafc !important;
-          color: #64748b !important;
-          border: 1px solid #cbd5e1 !important;
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          transition: left 0.5s ease;
         }
 
-        &:nth-child(2):not(.el-tag--primary) {
-          background: #f0fdf4 !important;
-          color: #16a34a !important;
-          border: 1px solid #bbf7d0 !important;
+        .btn-icon {
+          font-size: 12px;
+          color: inherit;
+          transition: transform 0.3s ease;
         }
 
-        &:nth-child(3):not(.el-tag--primary) {
-          background: #fff7ed !important;
-          color: #ea580c !important;
-          border: 1px solid #fed7aa !important;
-        }
-
-        &:nth-child(4):not(.el-tag--primary) {
-          background: #faf5ff !important;
-          color: #9333ea !important;
-          border: 1px solid #ddd6fe !important;
-        }
-
-        &:nth-child(5):not(.el-tag--primary) {
-          background: #eff6ff !important;
-          color: #2563eb !important;
-          border: 1px solid #bfdbfe !important;
-        }
-
-        &:nth-child(6):not(.el-tag--primary) {
-          background: #fffbeb !important;
-          color: #d97706 !important;
-          border: 1px solid #fde68a !important;
-        }
-
-        &:nth-child(7):not(.el-tag--primary) {
-          background: #f0fdf4 !important;
-          color: #059669 !important;
-          border: 1px solid #a7f3d0 !important;
-        }
-
-        &:nth-child(8):not(.el-tag--primary) {
-          background: #fafafa !important;
-          color: #525252 !important;
-          border: 1px solid #d4d4d8 !important;
-        }
-
-        // 选中状态
-        &.el-tag--primary {
-          background: #3b82f6 !important;
-          color: #ffffff !important;
-          transform: scale(1.02);
-
-          &:hover {
-            background: #2563eb !important;
+        .btn-label {
+          color: inherit;
+          @media (max-width: 640px) {
+            display: none;
           }
         }
 
-        &:hover:not(.el-tag--primary) {
+        &:hover {
+          background: linear-gradient(135deg, var(--el-fill-color-light) 0%, var(--el-fill-color) 100%);
+          border-color: var(--el-border-color-darker);
           transform: translateY(-1px);
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+          
+          &::before {
+            left: 100%;
+          }
+          
+          .btn-icon {
+            transform: scale(1.05);
+          }
+        }
+
+        &.active {
+          background: linear-gradient(135deg, var(--el-color-primary-light-9) 0%, var(--el-color-primary-light-8) 100%);
+          border-color: var(--el-color-primary-light-5);
+          color: var(--el-color-primary);
+          box-shadow: 0 1px 3px rgba(var(--el-color-primary-rgb), 0.2);
+          
+          .btn-icon {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+  }
+
+  // 分类区域（统一为中性色签，激活时轻主色）
+  .category-section {
+    .category-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+
+      .category-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 8px;
+        background: linear-gradient(135deg, var(--el-fill-color-blank) 0%, var(--el-fill-color-light) 100%);
+        border: 1px solid var(--el-border-color);
+        border-radius: 4px;
+        color: var(--el-text-color-regular);
+        font-size: 11px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: radial-gradient(ellipse at center, rgba(var(--el-color-primary-rgb), 0.03) 0%, transparent 70%);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          pointer-events: none;
+        }
+
+        .tag-icon {
+          font-size: 11px;
+          color: var(--el-color-primary);
+          opacity: 0.7;
+          transition: all 0.3s ease;
+        }
+
+        .tag-name {
+          font-size: 11px;
+        }
+
+        .tag-count {
+          font-size: 10px;
+          font-weight: 600;
+          background: linear-gradient(135deg, var(--el-fill-color) 0%, var(--el-fill-color-dark) 100%);
+          color: var(--el-text-color-secondary);
+          padding: 1px 4px;
+          border-radius: 8px;
+          min-width: 16px;
+          text-align: center;
+          line-height: 1.2;
+          transition: all 0.3s ease;
+        }
+
+        &:hover {
+          background: linear-gradient(135deg, var(--el-fill-color-light) 0%, var(--el-fill-color) 100%);
+          border-color: var(--el-border-color-darker);
+          transform: translateY(-1px);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+          
+          &::after {
+            opacity: 1;
+          }
+          
+          .tag-icon {
+            opacity: 1;
+            transform: scale(1.1);
+          }
+        }
+
+        &.active {
+          background: linear-gradient(135deg, var(--el-color-primary-light-9) 0%, var(--el-color-primary-light-8) 100%);
+          border-color: var(--el-color-primary-light-5);
+          color: var(--el-color-primary);
+          box-shadow: 0 0 0 1px rgba(var(--el-color-primary-rgb), 0.1), 0 1px 3px rgba(var(--el-color-primary-rgb), 0.2);
+          transform: scale(1.02);
+          
+          &::after {
+            opacity: 1;
+          }
+
+          .tag-icon { 
+            color: var(--el-color-primary); 
+            opacity: 1;
+            transform: scale(1.15);
+          }
+          .tag-count { 
+            background: linear-gradient(135deg, var(--el-color-primary-light-8) 0%, var(--el-color-primary-light-7) 100%);
+            color: var(--el-color-primary);
+            transform: scale(1.05);
+          }
         }
       }
     }
   }
 }
 
-// 暗色模式
+// 暗色模式适配（保持克制的对比和中性色）
 html.dark & {
   .search-filter-section {
-    background: #111827;
-    border-color: #374151;
+    background: linear-gradient(135deg, var(--el-bg-color) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border-color: #3a3a3a;
+
+    &::before {
+      background: radial-gradient(ellipse at top center, rgba(100, 168, 255, 0.03) 0%, transparent 50%);
+    }
 
     &:hover {
-      border-color: #4b5563;
+      border-color: #4a4a4a;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }
 
-    .search-filter-header {
-      .search-container {
-        .search-wrapper {
-          .search-input-group {
-            :deep(.search-input) {
-              .el-input__wrapper {
-                background: #1f2937;
-                border-color: #4b5563;
-                color: #f3f4f6;
+    .section-title {
+      color: var(--el-text-color-primary);
 
-                &:hover {
-                  border-color: #3b82f6;
-                  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.2);
-                }
+      .title-icon {
+        color: #64A8FF;
+        opacity: 0.8;
+      }
+    }
 
-                &.is-focus {
-                  border-color: #3b82f6;
-                  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-                }
-              }
+    .search-section {
+      .search-input-wrapper {
+        :deep(.search-input) {
+          .el-input__wrapper {
+            background: var(--el-fill-color-blank);
+            border-color: #444;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 
-              .el-input__prefix {
-                .search-icon {
-                  color: #9ca3af;
-                }
-              }
+            &:hover { 
+              border-color: #555; 
+              background: rgba(255, 255, 255, 0.02);
+            }
+            &.is-focus { 
+              border-color: #64A8FF; 
+              background: var(--el-bg-color);
+              box-shadow: 0 0 0 2px rgba(100, 168, 255, 0.15);
             }
 
-            .search-btn {
-              background: #3b82f6;
-
-              &:hover {
-                background: #2563eb;
-              }
+            input {
+              color: var(--el-text-color-primary);
+              &::placeholder { color: var(--el-text-color-placeholder); }
             }
           }
-        }
-      }
-
-      .filter-container {
-        .filter-buttons {
-          .filter-item {
-            background: #1f2937 !important;
-            border-color: #4b5563 !important;
-            color: #9ca3af !important;
-
-            &:hover {
-              border-color: #3b82f6 !important;
-              background: #1e293b !important;
-              color: #3b82f6 !important;
-            }
-
-            &.el-button--primary {
-              background: #3b82f6 !important;
-              border-color: #3b82f6 !important;
-              color: white !important;
-
-              &:hover {
-                background: #2563eb !important;
-                border-color: #2563eb !important;
-              }
-            }
+          .el-input__prefix {
+            .input-search-icon { color: var(--el-text-color-secondary); }
           }
         }
       }
     }
 
-    .category-tags {
-      .category-scroll {
+    .filter-section {
+      .filter-buttons {
+        .filter-btn {
+          background: linear-gradient(135deg, var(--el-fill-color-blank) 0%, rgba(255, 255, 255, 0.02) 100%);
+          border-color: #444;
+          color: var(--el-text-color-regular);
+
+          &::before {
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+          }
+
+          &:hover { 
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.08) 100%);
+            border-color: #555;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          }
+
+          &.active {
+            background: linear-gradient(135deg, rgba(100, 168, 255, 0.08) 0%, rgba(100, 168, 255, 0.12) 100%);
+            border-color: rgba(100, 168, 255, 0.35);
+            color: #64A8FF;
+            box-shadow: 0 1px 3px rgba(100, 168, 255, 0.3);
+          }
+        }
+      }
+    }
+
+    .category-section {
+      .category-tags {
         .category-tag {
-          &.el-tag--primary {
-            background: #3b82f6 !important;
-            color: #ffffff !important;
+          background: linear-gradient(135deg, var(--el-fill-color-blank) 0%, rgba(255, 255, 255, 0.02) 100%);
+          border-color: #444;
+          color: var(--el-text-color-regular);
 
-            &:hover {
-              background: #2563eb !important;
+          &::after {
+            background: radial-gradient(ellipse at center, rgba(100, 168, 255, 0.05) 0%, transparent 70%);
+          }
+
+          &:hover { 
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.08) 100%);
+            border-color: #555;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          }
+
+          .tag-icon { 
+            color: #64A8FF;
+            opacity: 0.7;
+          }
+          .tag-count { 
+            background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.1) 100%);
+            color: var(--el-text-color-secondary); 
+          }
+
+          &.active {
+            background: linear-gradient(135deg, rgba(100, 168, 255, 0.08) 0%, rgba(100, 168, 255, 0.12) 100%);
+            border-color: rgba(100, 168, 255, 0.35);
+            color: #64A8FF;
+            box-shadow: 0 0 0 1px rgba(100, 168, 255, 0.1), 0 1px 3px rgba(100, 168, 255, 0.3);
+            transform: scale(1.02);
+
+            .tag-icon { 
+              color: #64A8FF;
+              opacity: 1;
+              transform: scale(1.15);
             }
-          }
-
-          // 暗色模式下浅色背景配深色边框
-          &:nth-child(1):not(.el-tag--primary) {
-            background: #1e293b !important;
-            color: #cbd5e1 !important;
-            border: 1px solid #475569 !important;
-          }
-
-          &:nth-child(2):not(.el-tag--primary) {
-            background: #0f2027 !important;
-            color: #86efac !important;
-            border: 1px solid #166534 !important;
-          }
-
-          &:nth-child(3):not(.el-tag--primary) {
-            background: #2c1810 !important;
-            color: #fbbf24 !important;
-            border: 1px solid #b45309 !important;
-          }
-
-          &:nth-child(4):not(.el-tag--primary) {
-            background: #1e1b2e !important;
-            color: #c4b5fd !important;
-            border: 1px solid #6d28d9 !important;
-          }
-
-          &:nth-child(5):not(.el-tag--primary) {
-            background: #0f1829 !important;
-            color: #93c5fd !important;
-            border: 1px solid #1d4ed8 !important;
-          }
-
-          &:nth-child(6):not(.el-tag--primary) {
-            background: #2d1b0a !important;
-            color: #fcd34d !important;
-            border: 1px solid #b45309 !important;
-          }
-
-          &:nth-child(7):not(.el-tag--primary) {
-            background: #0a2f1a !important;
-            color: #6ee7b7 !important;
-            border: 1px solid #047857 !important;
-          }
-
-          &:nth-child(8):not(.el-tag--primary) {
-            background: #27272a !important;
-            color: #d4d4d8 !important;
-            border: 1px solid #52525b !important;
+            .tag-count { 
+              background: linear-gradient(135deg, rgba(100, 168, 255, 0.15) 0%, rgba(100, 168, 255, 0.2) 100%);
+              color: #64A8FF;
+              transform: scale(1.05);
+            }
           }
         }
       }

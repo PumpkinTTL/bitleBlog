@@ -1,9 +1,11 @@
 <template>
   <IndexLayout class="index-v2-container">
-    <template #left-sidebar>
+<template #left-sidebar>
       <div class="sidebar-content">
         <!-- 关于本站卡片组件 -->
         <AboutSiteCard />
+        <!-- 网站公告组件 -->
+        <NoticeCard />
         <!-- 本月热门文章组件 -->
         <MonthlyHotArticles />
       </div>
@@ -29,6 +31,7 @@
 import { ref } from 'vue'
 import IndexLayout from '@/components/index/v2/layout/IndexLayout.vue'
 import AboutSiteCard from '@/components/index/v2/AboutSiteCard.vue'
+import NoticeCard from '@/components/index/v2/NoticeCard.vue'
 import MonthlyHotArticles from '@/components/index/v2/MonthlyHotArticles.vue'
 import SearchFilterSection from '@/components/index/v2/SearchFilterSection.vue'
 import ArticleList from '@/components/index/v2/ArticleList.vue'
@@ -200,6 +203,5 @@ const handleCategoryChange = (categoryId: number) => {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  overflow: hidden;
 }
 </style>

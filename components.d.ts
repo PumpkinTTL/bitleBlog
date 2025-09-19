@@ -109,6 +109,7 @@ declare module 'vue' {
     MyButton: typeof import('./src/components/MyButton.vue')['default']
     NavigationBar: typeof import('./src/components/index/v2/layout/NavigationBar.vue')['default']
     Newsletter: typeof import('./src/components/index/Newsletter.vue')['default']
+    NoticeCard: typeof import('./src/components/index/v2/NoticeCard.vue')['default']
     Notification: typeof import('./src/components/Notification.vue')['default']
     PersonCenter: typeof import('./src/components/PersonCenter.vue')['default']
     PersonInfoCard: typeof import('./src/components/person/PersonInfoCard.vue')['default']

@@ -233,8 +233,6 @@ onUnmounted(() => {
   position: sticky;
   top: 20px;
   height: fit-content;
-  max-height: calc(100vh - 40px);
-  overflow-y: auto;
   background: var(--el-bg-color);
   border-radius: 8px;
   padding: 18px; // 略微增加内边距，让内容更舒适
