@@ -355,8 +355,8 @@ const toggleCategoryCollapse = () => {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
-
-        .filter-btn {
+      
+      .filter-btn {
           position: relative;
           display: inline-flex;
           align-items: center;
@@ -434,23 +434,23 @@ const toggleCategoryCollapse = () => {
       gap: 6px;
       flex-wrap: wrap;
       padding-top: 4px;
-
-        .category-tag {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          padding: 4px 8px;
-          background: linear-gradient(135deg, var(--el-fill-color-blank) 0%, var(--el-fill-color-light) 100%);
-          border: 1px solid var(--el-border-color);
-          border-radius: 4px;
-          color: var(--el-text-color-regular);
-          font-size: 11px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          position: relative;
-          overflow: hidden;
-        }
+      
+      .category-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 8px;
+        background: linear-gradient(135deg, var(--el-fill-color-blank) 0%, var(--el-fill-color-light) 100%);
+        border: 1px solid var(--el-border-color);
+        border-radius: 4px;
+        color: var(--el-text-color-regular);
+        font-size: 11px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        
         &::after {
           content: '';
           position: absolute;
@@ -662,41 +662,45 @@ html.dark & {
   }
 }
 
-// 简化的折叠过渡动画
-.filter-collapse-enter-active,
-.category-collapse-enter-active {
-  transition: all 0.3s ease;
-  overflow: hidden;
+// 使用transform优化的折叠动画
+.filter-collapse-enter-active {
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
+  transform-origin: top;
 }
 
-.filter-collapse-leave-active,
+.filter-collapse-leave-active {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 1, 1), opacity 0.25s ease;
+  transform-origin: top;
+}
+
+.category-collapse-enter-active {
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
+  transform-origin: top;
+}
+
 .category-collapse-leave-active {
-  transition: all 0.25s ease;
-  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 1, 1), opacity 0.25s ease;
+  transform-origin: top;
 }
 
 .filter-collapse-enter-from,
 .category-collapse-enter-from {
+  transform: scaleY(0) translateY(-10px);
   opacity: 0;
-  max-height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
 }
 
 .filter-collapse-leave-to,
 .category-collapse-leave-to {
+  transform: scaleY(0) translateY(-8px);
   opacity: 0;
-  max-height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
 }
 
 .filter-collapse-enter-to,
 .filter-collapse-leave-from,
 .category-collapse-enter-to,
 .category-collapse-leave-from {
+  transform: scaleY(1) translateY(0);
   opacity: 1;
-  max-height: 200px;
 }
 
 </style>
