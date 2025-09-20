@@ -47,8 +47,8 @@
           <button 
             v-for="(item, index) in filterOptions" 
             :key="item.value"
-            :class="['filter-btn', { 'active': activeFilter === item.value }]"
-            :style="{ 'animation-delay': `${index * 0.05}s` }"
+            :class="['filter-btn', 'animate__animated', 'animate__fadeInUp', { 'active': activeFilter === item.value }]"
+            :style="{ 'animation-delay': `${index * 50}ms` }"
             @click="handleFilterChange(item.value)"
           >
             <el-icon class="btn-icon">
@@ -78,9 +78,9 @@
             v-for="(category, index) in categories" 
             :key="category.id"
             :class="['category-tag', 
-                     `category-${index}`, 
+                     'animate__animated', 'animate__fadeInUp',
                      { 'active': activeCategory === category.id }]"
-            :style="{ '--index': index }"
+            :style="{ 'animation-delay': `${index * 60}ms` }"
             @click="handleCategoryChange(category.id)"
           >
             <i :class="category.icon" class="tag-icon"></i>
@@ -357,10 +357,11 @@ const toggleCategoryCollapse = () => {
       flex-wrap: wrap;
 
         .filter-btn {
+          position: relative;
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          padding: 6px 10px;
+          padding: 6px 12px;
           background: linear-gradient(135deg, var(--el-fill-color-blank) 0%, var(--el-fill-color-light) 100%);
           border: 1px solid var(--el-border-color);
           border-radius: 4px;
@@ -369,9 +370,7 @@ const toggleCategoryCollapse = () => {
           font-weight: 500;
           cursor: pointer;
           transition: all 0.3s ease;
-          position: relative;
           overflow: hidden;
-          animation: filterBtnFadeIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) both;
 
         &::before {
           content: '';
@@ -434,6 +433,7 @@ const toggleCategoryCollapse = () => {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
+      padding-top: 4px;
 
         .category-tag {
           display: inline-flex;
@@ -450,11 +450,6 @@ const toggleCategoryCollapse = () => {
           transition: all 0.3s ease;
           position: relative;
           overflow: hidden;
-          animation: categoryTagFadeIn 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) both;
-        }
-
-        .category-tag {
-          animation-delay: calc(var(--index) * 50ms);
         }
         &::after {
           content: '';
@@ -667,47 +662,33 @@ html.dark & {
   }
 }
 
-// 折叠过渡动画 - 优化版
-.filter-collapse-enter-active {
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  overflow: hidden;
-}
-
-.filter-collapse-leave-active {
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  overflow: hidden;
-}
-
+// 简化的折叠过渡动画
+.filter-collapse-enter-active,
 .category-collapse-enter-active {
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.3s ease;
   overflow: hidden;
 }
 
+.filter-collapse-leave-active,
 .category-collapse-leave-active {
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.25s ease;
   overflow: hidden;
 }
 
 .filter-collapse-enter-from,
 .category-collapse-enter-from {
   opacity: 0;
-  transform: translateY(-8px) scale(0.96);
   max-height: 0;
   padding-top: 0;
   padding-bottom: 0;
-  margin-top: 0;
-  margin-bottom: 0;
 }
 
 .filter-collapse-leave-to,
 .category-collapse-leave-to {
   opacity: 0;
-  transform: translateY(-5px) scale(0.98);
   max-height: 0;
   padding-top: 0;
   padding-bottom: 0;
-  margin-top: 0;
-  margin-bottom: 0;
 }
 
 .filter-collapse-enter-to,
@@ -715,31 +696,7 @@ html.dark & {
 .category-collapse-enter-to,
 .category-collapse-leave-from {
   opacity: 1;
-  transform: translateY(0) scale(1);
-  max-height: 300px;
+  max-height: 200px;
 }
 
-// 分类标签入场动画
-@keyframes categoryTagFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-// 筛选按钮入场动画（已存在但确保位置正确）
-@keyframes buttonFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
 </style>
