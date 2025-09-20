@@ -7,18 +7,38 @@
       </h2>
       <div class="view-toggle">
         <el-button-group>
-          <el-button :type="viewMode === 'card' ? 'primary' : 'default'" @click="viewMode = 'card'">
+          <el-button :type="viewMode === 'card' ? 'primary' : 'default'" @click="setViewMode('card')">
             <el-icon><Grid /></el-icon>
           </el-button>
-          <el-button :type="viewMode === 'list' ? 'primary' : 'default'" @click="viewMode = 'list'">
+          <el-button :type="viewMode === 'list' ? 'primary' : 'default'" @click="setViewMode('list')">
             <el-icon><Menu /></el-icon>
           </el-button>
         </el-button-group>
+        
+        <!-- 列数切换按钮（仅在卡片模式下显示） -->
+        <div v-if="viewMode === 'card'" class="column-toggle">
+          <el-button-group>
+            <el-button 
+              :type="gridColumns === 2 ? 'primary' : 'default'" 
+              @click="setGridColumns(2)"
+              title="两列显示"
+            >
+              <i class="fas fa-th-large"></i>
+            </el-button>
+            <el-button 
+              :type="gridColumns === 3 ? 'primary' : 'default'" 
+              @click="setGridColumns(3)"
+              title="三列显示"
+            >
+              <i class="fas fa-th"></i>
+            </el-button>
+          </el-button-group>
+        </div>
       </div>
     </div>
     
     <!-- 卡片视图 -->
-    <div v-if="viewMode === 'card'" class="articles-grid">
+    <div v-if="viewMode === 'card'" class="articles-grid" :class="`grid-columns-${gridColumns}`">
       <ArticleCard
         v-for="(article, index) in displayArticles"
         :key="article.id"
@@ -99,8 +119,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 // 响应式数据
 const viewMode = ref<'card' | 'list'>('card')
+const gridColumns = ref(2) // 默认两列
 const currentPage = ref(1)
-const pageSize = ref(12)
+const pageSize = ref(12) // 恢复为12
 const totalArticles = ref(0)
 
 // 计算属性 - 筛选和分页后的文章
@@ -144,6 +165,48 @@ const displayArticles = computed(() => {
   
   return filtered.slice(startIndex, endIndex)
 })
+
+// 本地存储相关函数
+const STORAGE_KEY_COLUMNS = 'article-grid-columns'
+const STORAGE_KEY_VIEW_MODE = 'article-view-mode'
+
+// 网格列数相关
+const loadGridColumns = () => {
+  const saved = localStorage.getItem(STORAGE_KEY_COLUMNS)
+  return saved ? parseInt(saved, 10) : 2
+}
+
+const saveGridColumns = (columns: number) => {
+  localStorage.setItem(STORAGE_KEY_COLUMNS, columns.toString())
+}
+
+const setGridColumns = (columns: number) => {
+  gridColumns.value = columns
+  saveGridColumns(columns)
+  // 重置分页
+  resetPagination()
+}
+
+// 视图模式相关
+const loadViewMode = (): 'card' | 'list' => {
+  const saved = localStorage.getItem(STORAGE_KEY_VIEW_MODE)
+  return saved === 'list' ? 'list' : 'card'
+}
+
+const saveViewMode = (mode: 'card' | 'list') => {
+  localStorage.setItem(STORAGE_KEY_VIEW_MODE, mode)
+}
+
+const setViewMode = (mode: 'card' | 'list') => {
+  viewMode.value = mode
+  saveViewMode(mode)
+  // 重置分页
+  resetPagination()
+}
+
+// 初始化加载本地存储的设置
+gridColumns.value = loadGridColumns()
+viewMode.value = loadViewMode()
 
 // 事件处理函数
 const handlePageChange = (page: number) => {
@@ -214,6 +277,7 @@ watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () 
     .view-toggle {
       display: flex;
       align-items: center;
+      gap: 12px;
       
       :deep(.el-button-group) {
         border-radius: 4px;
@@ -247,20 +311,55 @@ watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () 
           .el-icon {
             font-size: 14px !important;
           }
+          
+          // FontAwesome 图标样式
+          i {
+            font-size: 13px !important;
+          }
+        }
+      }
+      
+      .column-toggle {
+        :deep(.el-button-group) {
+          .el-button {
+            width: 32px !important;
+            
+            i {
+              font-size: 12px !important;
+            }
+          }
         }
       }
     }
   }
   
-  // 卡片网格布局
+  // 卡片网格布局 - 动态列数
   .articles-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
     
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-      gap: 16px;
+    // 两列布局
+    &.grid-columns-2 {
+      grid-template-columns: repeat(2, 1fr);
+      
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+    
+    // 三列布局
+    &.grid-columns-3 {
+      grid-template-columns: repeat(3, 1fr);
+      
+      @media (max-width: 1200px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
     }
   }
   
