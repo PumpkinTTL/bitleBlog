@@ -116,9 +116,6 @@ const techStack = ref([
   will-change: transform, box-shadow; // 优化渲染性能
   overflow: hidden;
   
-  // 确保文字清晰
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   
 }
 
@@ -142,7 +139,7 @@ const techStack = ref([
     font-size: 13px;
     font-weight: 600;
     color: var(--el-text-color-primary);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'OPPO Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 }
 
@@ -189,15 +186,25 @@ const techStack = ref([
         }
         
         .brand-logo {
-          transform: scale(1.05);
+          transform: scale(1.1) translateY(-2px);
+          box-shadow: 0 6px 16px rgba(64, 158, 255, 0.35), 0 0 0 1px rgba(64, 158, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
           
           i {
-            animation: gentleRotate 2s linear infinite;
+            animation: gentlePulse 0.6s ease-in-out;
+            text-shadow: 0 1px 3px rgba(64, 158, 255, 0.3);
+            transform: scale(1.1);
           }
         }
         
         .site-title {
           color: var(--el-color-primary);
+          text-shadow: 0 1px 3px rgba(64, 158, 255, 0.2);
+          transform: translateX(2px);
+        }
+        
+        .site-tagline {
+          color: rgba(64, 158, 255, 0.8);
+          transform: translateX(2px);
         }
       }
       
@@ -243,7 +250,7 @@ const techStack = ref([
             margin-bottom: 2px;
             line-height: 1.3;
             transition: color 0.3s ease;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-family: 'OPPO Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           }
         
         .site-tagline {
@@ -335,7 +342,7 @@ const techStack = ref([
           color: var(--el-text-color-primary);
           line-height: 1.2;
           margin-bottom: 2px;
-          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+          font-family: 'OPPO Sans', -apple-system, BlinkMacSystemFont, sans-serif;
           transition: color 0.3s ease;
         }
         
@@ -419,11 +426,48 @@ const techStack = ref([
   .description-text {
     font-size: 12px;
     color: var(--el-text-color-regular);
-    line-height: 1.5;
-    margin: 0 0 12px 0;
+    line-height: 1.6;
+    margin: 0 0 16px 0;
     text-align: center;
     font-weight: 500;
-    font-family: OPPO Sans, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'OPPO Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    position: relative;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(64, 158, 255, 0.03), rgba(64, 158, 255, 0.01));
+    border-radius: 8px;
+    border: 1px solid rgba(64, 158, 255, 0.1);
+    transition: all 0.3s ease;
+    
+    &::before {
+      content: '"';
+      position: absolute;
+      left: 8px;
+      top: 4px;
+      font-size: 20px;
+      color: rgba(64, 158, 255, 0.3);
+      font-family: 'Times New Roman', serif;
+    }
+    
+    &::after {
+      content: '"';
+      position: absolute;
+      right: 8px;
+      bottom: 4px;
+      font-size: 20px;
+      color: rgba(64, 158, 255, 0.3);
+      font-family: 'Times New Roman', serif;
+    }
+    
+    &:hover {
+      background: linear-gradient(135deg, rgba(64, 158, 255, 0.05), rgba(64, 158, 255, 0.02));
+      border-color: rgba(64, 158, 255, 0.2);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(64, 158, 255, 0.1);
+      
+      &::before, &::after {
+        color: rgba(64, 158, 255, 0.5);
+      }
+    }
   }
   
   .tech-tags {
@@ -709,15 +753,8 @@ const techStack = ref([
 }
 
 // 暗色模式适配
-html.dark & {
-  .about-site-card {
-    border-color: var(--el-border-color-dark);
-    
-    &:hover {
-      border-color: rgba(64, 158, 255, 0.5);
-      box-shadow: 0 4px 16px rgba(64, 158, 255, 0.2);
-    }
-  }
+html.dark .about-site-card {
+  border-color: var(--el-border-color-dark);
   
   .card-header {
     background: var(--el-fill-color-dark);
