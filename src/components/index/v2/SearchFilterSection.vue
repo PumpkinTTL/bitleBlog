@@ -111,12 +111,12 @@ const activeFilter = ref(props.activeFilter)
 const activeCategory = ref(props.activeCategory)
 
 // 过滤选项
-const filterOptions = ref([
+const filterOptions = [
   { value: 'all', label: '全部文章', icon: Grid },
   { value: 'recommended', label: '推荐', icon: Star },
   { value: 'latest', label: '最新', icon: Clock },
   { value: 'popular', label: '热门', icon: TrendCharts }
-])
+]
 
 // 分类数据
 const categories = ref([

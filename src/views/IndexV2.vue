@@ -24,6 +24,42 @@
 
       </div>
     </template>
+    
+    <!-- 右侧边栏 -->
+    <template #right-sidebar>
+      <div class="right-sidebar-content">
+        <!-- 热门标签云 -->
+        <HotTagsCard />
+        <!-- 精选文章推荐 -->
+        <FeaturedArticlesCard 
+          title="热门推荐" 
+          header-icon="fas fa-fire" 
+          :articles="featuredArticles"
+          :page-size="2"
+          :show-pagination="true"
+          @article-click="handleArticleClick"
+          @load-more="handleLoadMore"
+        />
+        <!-- 精选推广卡片 -->
+        <PromotionCard 
+          type="standard" 
+          title="前端开发者必备工具集" 
+          description="包含50+精选开发工具，提升10倍工作效率，限时优惠中！"
+          image-url="https://picsum.photos/300/200" 
+          image-alt="推广图片" 
+          :radius="false" 
+          badge-text="精选"
+          badge-icon="fas fa-crown" 
+          button-text="立即购买" 
+          :show-overlay="true" 
+          overlay-text="立即查看"
+          :show-price="true" 
+          current-price="￥199" 
+          original-price="￥399" 
+          @click="handlePromotionClick" 
+        />
+      </div>
+    </template>
   </IndexLayout>
 
 </template>
@@ -36,11 +72,139 @@ import NoticeCard from '@/components/index/v2/NoticeCard.vue'
 import MonthlyHotArticles from '@/components/index/v2/MonthlyHotArticles.vue'
 import SearchFilterSection from '@/components/index/v2/SearchFilterSection.vue'
 import ArticleList from '@/components/index/v2/ArticleList.vue'
+// 右侧栏组件
+import HotTagsCard from '@/components/index/v2/HotTagsCard.vue'
+import FeaturedArticlesCard from '@/components/index/v2/FeaturedArticlesCard.vue'
+import PromotionCard from '@/components/blog/BlogDetail/PromotionCard.vue'
 
 // 响应式数据
 const searchKeyword = ref('')
 const activeFilter = ref('all')
 const activeCategory = ref(0)
+
+// 精选文章数据
+const featuredArticles = ref([
+  {
+    id: 1,
+    title: 'Vue 3 Composition API 最佳实践指南',
+    excerpt: '深入解析 Vue 3 的 Composition API，从基础到高级的实际应用技巧。',
+    cover: 'https://picsum.photos/300/180?random=101',
+    category: 'Vue.js',
+    date: '2024-01-15',
+    views: 12580,
+    likes: 892,
+    comments: 156,
+    isHot: true,
+    isNew: false,
+    isTrending: false,
+    readProgress: 85
+  },
+  {
+    id: 2,
+    title: 'React 18 并发渲染原理剖析',
+    excerpt: '全面分析 React 18 的并发渲染机制，揭示其内部工作原理。',
+    cover: 'https://picsum.photos/300/180?random=102',
+    category: 'React',
+    date: '2024-01-12',
+    views: 9876,
+    likes: 654,
+    comments: 89,
+    isHot: false,
+    isNew: true,
+    isTrending: false,
+    readProgress: 65
+  },
+  {
+    id: 3,
+    title: 'TypeScript 4.9 新特性详解',
+    excerpt: '详细介绍 TypeScript 4.9 版本的新特性和改进，提升开发效率。',
+    cover: 'https://picsum.photos/300/180?random=103',
+    category: 'TypeScript',
+    date: '2024-01-10',
+    views: 7845,
+    likes: 432,
+    comments: 67,
+    isHot: false,
+    isNew: false,
+    isTrending: true,
+    readProgress: 45
+  },
+  {
+    id: 4,
+    title: '前端性能优化实战技巧',
+    excerpt: '从代码分割到懒加载，全面提升前端应用的性能表现。',
+    cover: 'https://picsum.photos/300/180?random=104',
+    category: '性能优化',
+    date: '2024-01-08',
+    views: 15632,
+    likes: 1203,
+    comments: 234,
+    isHot: true,
+    isNew: false,
+    isTrending: true,
+    readProgress: 92
+  },
+  {
+    id: 5,
+    title: 'Vite 4.0 构建工具全面指南',
+    excerpt: '深入探索 Vite 4.0 的各种特性和优化技巧，打造高效开发流程。',
+    cover: 'https://picsum.photos/300/180?random=105',
+    category: '前端工程化',
+    date: '2024-01-05',
+    views: 6754,
+    likes: 398,
+    comments: 52,
+    isHot: false,
+    isNew: true,
+    isTrending: false,
+    readProgress: 38
+  },
+  {
+    id: 6,
+    title: 'CSS Grid 布局完全指南',
+    excerpt: '从基础语法到高级技巧，全面掌握 CSS Grid 布局。',
+    cover: 'https://picsum.photos/300/180?random=106',
+    category: 'CSS',
+    date: '2024-01-03',
+    views: 5432,
+    likes: 287,
+    comments: 34,
+    isHot: false,
+    isNew: false,
+    isTrending: false,
+    readProgress: 72
+  },
+  {
+    id: 7,
+    title: 'Node.js 微服务架构实践',
+    excerpt: '详细介绍如何使用 Node.js 构建微服务架构。',
+    cover: 'https://picsum.photos/300/180?random=107',
+    category: 'Node.js',
+    date: '2024-01-01',
+    views: 4321,
+    likes: 198,
+    comments: 23,
+    isHot: false,
+    isNew: false,
+    isTrending: false,
+    readProgress: 56
+  },
+  {
+    id: 8,
+    title: 'JavaScript ES2024 新特性',
+    excerpt: '探索 JavaScript 最新的 ES2024 特性和用法。',
+    cover: 'https://picsum.photos/300/180?random=108',
+    category: 'JavaScript',
+    date: '2023-12-28',
+    views: 3876,
+    likes: 156,
+    comments: 18,
+    isHot: false,
+    isNew: false,
+    isTrending: false,
+    readProgress: 41
+  }
+])
 
 // 丰富的文章数据
 const allArticles = ref([
@@ -190,6 +354,27 @@ const handleFilterChange = (filterValue: string) => {
 const handleCategoryChange = (categoryId: number) => {
   activeCategory.value = categoryId
 }
+
+// 精选文章点击处理
+const handleArticleClick = (article: any) => {
+  console.log('精选文章被点击', article)
+  // 这里可以添加跳转逻辑
+  // 例如：$router.push(`/article/${article.id}`)
+}
+
+// 加载更多处理
+const handleLoadMore = () => {
+  console.log('加载更多文章')
+  // 这里可以添加加载更多数据的逻辑
+  // 例如：发起 API 请求加载更多数据
+}
+
+// 推广卡片点击处理
+const handlePromotionClick = (event: MouseEvent) => {
+  console.log('推广卡片被点击', event)
+  // 这里可以添加跳转逻辑或统计代码
+  // 例如：window.open('https://example.com/promotion', '_blank')
+}
 </script>
 
 <style lang="less" scoped>
@@ -201,6 +386,13 @@ const handleCategoryChange = (categoryId: number) => {
 
 // 侧边栏内容布局
 .sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// 右侧边栏内容布局
+.right-sidebar-content {
   display: flex;
   flex-direction: column;
   gap: 20px;

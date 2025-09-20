@@ -13,13 +13,18 @@
           </el-col>
 
           <!-- 主内容区 -->
-          <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="main-content-col">
+          <el-col :xs="24" :sm="24" :md="10" :lg="12" :xl="14" class="main-content-col">
             <main class="main-content" :class="mainContentClasses">
               <slot name="main-content" />
             </main>
           </el-col>
-          <!-- 右边内容 -->
-          1231312
+          
+          <!-- 右侧边栏 -->
+          <el-col :xs="0" :sm="0" :md="7" :lg="6" :xl="5" class="right-sidebar-col">
+            <aside class="right-sidebar" style="overflow: hidden;">
+              <slot name="right-sidebar" />
+            </aside>
+          </el-col>
         </el-row>
       </div>
     </div>
@@ -218,6 +223,15 @@ onUnmounted(() => {
   padding: 18px; // 略微增加内边距，让内容更舒适
   width: 100%; // 确保充满栅格列
   min-width: 200px; // 设置最小宽度，防止过窄
+}
+
+.right-sidebar {
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+  background: transparent;
+  width: 100%;
+  min-width: 200px;
 
   &::-webkit-scrollbar {
     width: 6px;
