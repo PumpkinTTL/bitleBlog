@@ -4,8 +4,6 @@
       <div class="sidebar-content">
         <!-- 关于本站卡片组件 -->
         <AboutSiteCard />
-        <!-- 网站公告组件 -->
-        <NoticeCard />
         <!-- 本月热门文章组件 -->
         <MonthlyHotArticles />
       </div>
@@ -28,8 +26,8 @@
     <!-- 右侧边栏 -->
     <template #right-sidebar>
       <div class="right-sidebar-content">
-        <!-- 热门标签云 -->
-        <HotTagsCard />
+        <!-- 网站公告 -->
+        <NoticeCard />
         <!-- 精选文章推荐 -->
         <FeaturedArticlesCard 
           title="热门推荐" 
