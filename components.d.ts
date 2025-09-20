@@ -102,6 +102,7 @@ declare module 'vue' {
     LeftContentNav: typeof import('./src/components/LeftContentNav.vue')['default']
     ListItem: typeof import('./src/components/ListItem.vue')['default']
     LiveStatsCard: typeof import('./src/components/index/v2/LiveStatsCard.vue')['default']
+    Login: typeof import('./src/components/login/index.vue')['default']
     LoginModal: typeof import('./src/components/LoginModal.vue')['default']
     Logo: typeof import('./src/components/Logo.vue')['default']
     Menu: typeof import('primevue/menu')['default']

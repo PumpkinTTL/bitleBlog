@@ -32,58 +32,68 @@
 
     <!-- 过滤器区域 -->
     <div class="filter-section">
-      <div class="section-title">
+      <div class="section-title" @click="toggleFilterCollapse">
         <el-icon class="title-icon">
           <Filter />
         </el-icon>
         <span>筛选条件</span>
+        <el-icon class="collapse-icon" :class="{ 'collapsed': isFilterCollapsed }">
+          <ArrowDown />
+        </el-icon>
       </div>
       
-      <div class="filter-buttons">
-        <button 
-          v-for="item in filterOptions" 
-          :key="item.value"
-          :class="['filter-btn', { 'active': activeFilter === item.value }]"
-          @click="handleFilterChange(item.value)"
-        >
-          <el-icon class="btn-icon">
-            <component :is="item.icon" />
-          </el-icon>
-          <span class="btn-label">{{ item.label }}</span>
-        </button>
-      </div>
+      <Transition name="filter-collapse">
+        <div v-show="!isFilterCollapsed" class="filter-buttons">
+          <button 
+            v-for="item in filterOptions" 
+            :key="item.value"
+            :class="['filter-btn', { 'active': activeFilter === item.value }]"
+            @click="handleFilterChange(item.value)"
+          >
+            <el-icon class="btn-icon">
+              <component :is="item.icon" />
+            </el-icon>
+            <span class="btn-label">{{ item.label }}</span>
+          </button>
+        </div>
+      </Transition>
     </div>
 
     <!-- 分类标签区域 -->
     <div class="category-section">
-      <div class="section-title">
+      <div class="section-title" @click="toggleCategoryCollapse">
         <el-icon class="title-icon">
           <Collection />
         </el-icon>
         <span>文章分类</span>
+        <el-icon class="collapse-icon" :class="{ 'collapsed': isCategoryCollapsed }">
+          <ArrowDown />
+        </el-icon>
       </div>
       
-      <div class="category-tags">
-        <button 
-          v-for="(category, index) in categories" 
-          :key="category.id"
-          :class="['category-tag', 
-                   `category-${index}`, 
-                   { 'active': activeCategory === category.id }]"
-          @click="handleCategoryChange(category.id)"
-        >
-          <i :class="category.icon" class="tag-icon"></i>
-          <span class="tag-name">{{ category.name }}</span>
-          <span v-if="category.count" class="tag-count">{{ category.count }}</span>
-        </button>
-      </div>
+      <Transition name="category-collapse">
+        <div v-show="!isCategoryCollapsed" class="category-tags">
+          <button 
+            v-for="(category, index) in categories" 
+            :key="category.id"
+            :class="['category-tag', 
+                     `category-${index}`, 
+                     { 'active': activeCategory === category.id }]"
+            @click="handleCategoryChange(category.id)"
+          >
+            <i :class="category.icon" class="tag-icon"></i>
+            <span class="tag-name">{{ category.name }}</span>
+            <span v-if="category.count" class="tag-count">{{ category.count }}</span>
+          </button>
+        </div>
+      </Transition>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Search, Star, Clock, TrendCharts, Grid, Filter, Collection } from '@element-plus/icons-vue'
+import { Search, Star, Clock, TrendCharts, Grid, Filter, Collection, ArrowDown } from '@element-plus/icons-vue'
 
 // Props
 interface Props {
@@ -109,6 +119,10 @@ const emit = defineEmits<{
 const searchKeyword = ref(props.searchKeyword)
 const activeFilter = ref(props.activeFilter)
 const activeCategory = ref(props.activeCategory)
+
+// 折叠状态
+const isFilterCollapsed = ref(false)
+const isCategoryCollapsed = ref(false)
 
 // 过滤选项
 const filterOptions = [
@@ -143,6 +157,15 @@ const handleFilterChange = (filterValue: string) => {
 const handleCategoryChange = (categoryId: number) => {
   activeCategory.value = categoryId
   emit('categoryChange', categoryId)
+}
+
+// 折叠切换函数
+const toggleFilterCollapse = () => {
+  isFilterCollapsed.value = !isFilterCollapsed.value
+}
+
+const toggleCategoryCollapse = () => {
+  isCategoryCollapsed.value = !isCategoryCollapsed.value
 }
 </script>
 
@@ -279,11 +302,37 @@ const handleCategoryChange = (categoryId: number) => {
     color: var(--el-text-color-primary);
     font-size: 13px;
     font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    padding: 4px 6px;
+    margin: -4px -6px 8px -6px;
+
+    &:hover {
+      background: var(--el-fill-color-extra-light);
+      color: var(--el-color-primary);
+      
+      .collapse-icon {
+        color: var(--el-color-primary);
+      }
+    }
 
     .title-icon {
       color: var(--el-color-primary);
       font-size: 13px;
       opacity: 0.8;
+    }
+    
+    .collapse-icon {
+      color: var(--el-text-color-secondary);
+      font-size: 12px;
+      margin-left: auto;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      
+      &.collapsed {
+        transform: rotate(-90deg);
+      }
     }
   }
 
@@ -597,5 +646,32 @@ html.dark & {
       }
     }
   }
+}
+
+// 折叠过渡动画
+.filter-collapse-enter-active,
+.filter-collapse-leave-active,
+.category-collapse-enter-active,
+.category-collapse-leave-active {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+}
+
+.filter-collapse-enter-from,
+.filter-collapse-leave-to,
+.category-collapse-enter-from,
+.category-collapse-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+  max-height: 0;
+}
+
+.filter-collapse-enter-to,
+.filter-collapse-leave-from,
+.category-collapse-enter-to,
+.category-collapse-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 200px;
 }
 </style>
