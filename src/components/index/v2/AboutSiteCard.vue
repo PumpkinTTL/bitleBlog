@@ -112,8 +112,6 @@ const techStack = ref([
   border-radius: 8px;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   animation: fadeIn 0.6s ease-out;
-  transform: translateZ(0); // 启用硬件加速
-  will-change: transform, box-shadow; // 优化渲染性能
   overflow: hidden;
   
   
@@ -233,7 +231,6 @@ const techStack = ref([
             height: 100%;
             color: white;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
           }
         }
     
@@ -255,10 +252,10 @@ const techStack = ref([
         
         .site-tagline {
           font-size: 11px;
-          color: var(--el-text-color-secondary);
+          color: var(--el-text-color-regular);
           font-weight: 500;
-          opacity: 0.8;
-          transition: opacity 0.3s ease;
+          transition: color 0.3s ease;
+          font-family: 'OPPO Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
       }
     
@@ -491,7 +488,6 @@ const techStack = ref([
       &:hover {
         transform: translateY(-2px) scale(1.05);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        filter: brightness(1.1) saturate(1.2);
       }
       
       // 根据不同技术栈的悬停效果
@@ -762,7 +758,6 @@ html.dark .about-site-card {
     
     i {
       color: #409eff;
-      filter: brightness(1.2) saturate(1.1);
     }
   }
   
@@ -786,7 +781,6 @@ html.dark .about-site-card {
       i {
         color: white;
         text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
       }
     }
   }
@@ -888,11 +882,9 @@ html.dark .about-site-card {
   
   .tech-tags .tech-tag {
     // 暗色模式下保持原有颜色，只调整背景
-    filter: brightness(1.1) saturate(0.9);
     border-width: 1px;
     
     &:hover {
-      filter: brightness(1.3) saturate(1.1);
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     }
     
