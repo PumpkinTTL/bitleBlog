@@ -97,10 +97,10 @@ const siteStats = ref([
 
 // 技术栈标签
 const techStack = ref([
-  { name: 'Vue3', color: '#4fc08d', bgColor: 'rgba(79, 192, 141, 0.1)' },
-  { name: 'TypeScript', color: '#3178c6', bgColor: 'rgba(49, 120, 198, 0.1)' },
-  { name: 'Vite', color: '#646cff', bgColor: 'rgba(100, 108, 255, 0.1)' },
-  { name: 'Element Plus', color: '#409eff', bgColor: 'rgba(64, 158, 255, 0.1)' }
+  { name: '编程', color: '#4fc08d', bgColor: 'rgba(79, 192, 141, 0.1)' },
+  { name: '互联网', color: '#3178c6', bgColor: 'rgba(49, 120, 198, 0.1)' },
+  { name: '生活', color: '#646cff', bgColor: 'rgba(100, 108, 255, 0.1)' },
+  { name: '加密货币', color: '#409eff', bgColor: 'rgba(64, 158, 255, 0.1)' }
 ])
 </script>
 

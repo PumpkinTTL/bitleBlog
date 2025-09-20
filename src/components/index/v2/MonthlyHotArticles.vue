@@ -57,94 +57,100 @@ const handleArticleClick = async (articleId: number) => {
 </script>
 
 <style lang="less" scoped>
-// 现代扁平化热门卡片
+// 统一风格热门卡片
 .hot-card {
   background: var(--el-bg-color);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--el-border-color-lighter);
   border-radius: 8px;
-  transition: all 0.25s ease;
+  transition: all 0.3s ease;
   
   &:hover {
-    border-color: rgba(24, 144, 255, 0.15);
-    background: rgba(24, 144, 255, 0.02);
-    transform: translateY(-1px);
+    border-color: rgba(244, 114, 182, 0.3);
+    box-shadow: 0 4px 16px rgba(244, 114, 182, 0.08);
   }
   
   .card-header {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    padding: 14px 16px 10px;
+    padding: 14px 16px;
+    background: var(--el-fill-color-extra-light);
+    border-bottom: 1px solid var(--el-border-color-extra-light);
+    border-radius: 8px 8px 0 0;
     
     i {
-      width: 20px;
-      height: 20px;
-      background: #ff6b6b;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 10px;
+      color: #f472b6;
+      font-size: 14px;
     }
     
     span {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--el-text-color-primary);
-      letter-spacing: 0.3px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
   }
   
   .card-body {
-    padding: 0 6px 6px;
+    padding: 16px;
     
     .hot-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      
       .hot-item {
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 10px;
+        padding: 12px;
+        background: var(--el-fill-color-extra-light);
         border-radius: 6px;
-        transition: all 0.25s ease;
+        transition: all 0.3s ease;
         cursor: pointer;
         
         &:hover {
-          background: rgba(24, 144, 255, 0.04);
-          transform: translateX(2px);
+          background: rgba(244, 114, 182, 0.05);
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(244, 114, 182, 0.1);
           
           .article .title {
-            color: var(--el-color-primary);
+            color: #f472b6;
           }
         }
         
         .rank {
-          width: 22px;
-          height: 22px;
-          border-radius: 6px;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 11px;
           font-weight: 600;
-          background: #d9d9d9;
-          color: #666666;
+          background: var(--el-fill-color-light);
+          color: var(--el-text-color-secondary);
           flex-shrink: 0;
-          transition: all 0.25s ease;
+          transition: all 0.3s ease;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
           
           &.rank-1 {
-            background: #faad14;
+            background: linear-gradient(135deg, #f472b6, #e879f9);
             color: white;
+            box-shadow: 0 2px 8px rgba(244, 114, 182, 0.3);
           }
           
           &.rank-2 {
-            background: #52c41a;
+            background: linear-gradient(135deg, #e879f9, #c084fc);
             color: white;
+            box-shadow: 0 2px 8px rgba(232, 121, 249, 0.3);
           }
           
           &.rank-3 {
-            background: #1890ff;
+            background: linear-gradient(135deg, #c084fc, #a78bfa);
             color: white;
+            box-shadow: 0 2px 8px rgba(192, 132, 252, 0.3);
           }
         }
         
@@ -172,9 +178,9 @@ const handleArticleClick = async (articleId: number) => {
             color: var(--el-text-color-secondary);
             
             i {
-              color: var(--el-color-primary);
+              color: #f472b6;
               font-size: 10px;
-              opacity: 0.7;
+              opacity: 0.8;
             }
           }
         }
@@ -184,18 +190,15 @@ const handleArticleClick = async (articleId: number) => {
   
   // 暗色模式适配
   html.dark & {
-    background: #1a1a1a;
-    border-color: rgba(255, 255, 255, 0.08);
-    
     &:hover {
-      border-color: rgba(24, 144, 255, 0.2);
-      background: rgba(24, 144, 255, 0.03);
+      box-shadow: 0 4px 16px rgba(244, 114, 182, 0.15);
     }
     
     .hot-list {
       .hot-item {
         &:hover {
-          background: rgba(24, 144, 255, 0.06);
+          background: rgba(244, 114, 182, 0.08);
+          box-shadow: 0 2px 8px rgba(244, 114, 182, 0.2);
         }
       }
     }

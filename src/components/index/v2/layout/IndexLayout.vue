@@ -1,53 +1,33 @@
 <template>
   <div class="index-layout" :class="layoutClasses">
     <!-- 页面头部区域 -->
-
-    
     <!-- 主要内容区域 - 使用栅格系统 -->
     <div class="layout-container">
       <div class="layout-wrapper">
         <el-row class="content-row" :gutter="16">
-        <!-- 左侧边栏 -->
-        <el-col 
-          :xs="0" 
-          :sm="0" 
-          :md="7" 
-          :lg="6" 
-          :xl="5"
-          class="left-sidebar-col"
-        >
-          <aside class="left-sidebar" :class="{ 'mobile-open': isMobileMenuOpen }" style="overflow: hidden;">
-            <slot name="left-sidebar" />
-          </aside>
-        </el-col>
+          <!-- 左侧边栏 -->
+          <el-col :xs="0" :sm="0" :md="7" :lg="6" :xl="5" class="left-sidebar-col">
+            <aside class="left-sidebar" :class="{ 'mobile-open': isMobileMenuOpen }" style="overflow: hidden;">
+              <slot name="left-sidebar" />
+            </aside>
+          </el-col>
 
-        <!-- 主内容区 -->
-        <el-col 
-          :xs="24" 
-          :sm="24" 
-          :md="17" 
-          :lg="18"
-          :xl="19"
-          class="main-content-col"
-        >
+          <!-- 主内容区 -->
+          <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="main-content-col">
             <main class="main-content" :class="mainContentClasses">
               <slot name="main-content" />
             </main>
           </el-col>
+          <!-- 右边内容 -->
+          1231312
         </el-row>
       </div>
     </div>
 
     <!-- 移动端遮罩层 -->
-    <div 
-      v-if="isMobileMenuOpen" 
-      class="mobile-overlay"
-      @click="handleMobileMenuToggle"
-    ></div>
-
+    <div v-if="isMobileMenuOpen" class="mobile-overlay" @click="handleMobileMenuToggle"></div>
     <!-- 全局滚动指示器 -->
     <ScrollIndicator v-if="showScrollIndicator" />
-    
     <!-- 回到顶部按钮 -->
     <BackToTop v-if="showBackToTop" />
   </div>
@@ -112,7 +92,7 @@ const handleSearch = (query: string) => {
 const handleMobileMenuToggle = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
   emit('mobileMenuToggle', isMobileMenuOpen.value)
-  
+
   // 控制body滚动
   if (isMobileMenuOpen.value) {
     document.body.style.overflow = 'hidden'
@@ -144,14 +124,14 @@ onUnmounted(() => {
   background: var(--el-bg-color-page);
   transition: all 0.3s ease;
   position: relative;
-  
+
   // 现代布局模式
   &.layout-modern {
     .layout-container {
       padding-top: 0; // 已删除头部，不需要预留空间
     }
   }
-  
+
   // 杂志布局模式
   &.layout-magazine {
     .main-content {
@@ -159,14 +139,14 @@ onUnmounted(() => {
       margin: 0 auto;
     }
   }
-  
+
   // 瀑布流布局模式
   &.layout-masonry {
     .main-content {
       width: 100%;
     }
   }
-  
+
   // 经典布局模式
   &.layout-classic {
     .layout-wrapper {
@@ -187,11 +167,11 @@ onUnmounted(() => {
   position: relative;
   width: 100%; // 确保在小屏幕上能够完全利用空间
   box-sizing: border-box; // 确保padding包含在宽度内
-  
+
   @media (max-width: 1200px) {
     padding: 16px;
   }
-  
+
   @media (max-width: 768px) {
     padding: 12px;
   }
@@ -201,23 +181,23 @@ onUnmounted(() => {
 .content-row {
   width: 100%;
   margin: 0; // 移除Element Plus默认的margin
-  
+
   // 确保栅格列正确对齐
   &.el-row {
     margin-left: 0 !important;
     margin-right: 0 !important;
-    
+
     // 重写Element Plus栅格系统的默认样式
     .el-col {
       padding-left: 8px !important;
       padding-right: 8px !important;
     }
-    
+
     // 特殊处理：确保第一列和最后一列的对齐
     .el-col:first-child {
       padding-left: 0 !important;
     }
-    
+
     .el-col:last-child {
       padding-right: 0 !important;
     }
@@ -238,25 +218,25 @@ onUnmounted(() => {
   padding: 18px; // 略微增加内边距，让内容更舒适
   width: 100%; // 确保充满栅格列
   min-width: 200px; // 设置最小宽度，防止过窄
-  
+
   &::-webkit-scrollbar {
     width: 6px;
   }
-  
+
   &::-webkit-scrollbar-track {
     background: var(--el-fill-color-lighter);
     border-radius: 3px;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background: var(--el-border-color);
     border-radius: 3px;
-    
+
     &:hover {
       background: var(--el-border-color-dark);
     }
   }
-  
+
   @media (max-width: 768px) {
     position: fixed;
     top: 0;
@@ -269,7 +249,7 @@ onUnmounted(() => {
     transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-y: auto;
     padding: 20px;
-    
+
     &.mobile-open {
       left: 0;
     }
@@ -280,7 +260,7 @@ onUnmounted(() => {
 .main-content-col {
   min-height: 100vh;
   // padding由content-row统一管理
-  
+
   @media (max-width: 768px) {
     min-height: auto;
   }
@@ -295,16 +275,16 @@ onUnmounted(() => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
   position: relative;
-  
+
   &:hover {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
-  
+
   &.full-width {
     max-width: 1200px;
     margin: 0 auto;
   }
-  
+
   @media (max-width: 768px) {
     padding: 16px;
     border-radius: 8px;
@@ -324,7 +304,7 @@ onUnmounted(() => {
   z-index: 999;
   opacity: 0;
   animation: fadeIn 0.3s ease forwards;
-  
+
   @media (min-width: 769px) {
     display: none;
   }
@@ -341,23 +321,23 @@ html.dark & {
   .index-layout {
     background: var(--el-bg-color-page);
   }
-  
+
   .main-content {
     background: var(--el-bg-color);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    
+
     &:hover {
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     }
   }
-  
+
   .left-sidebar {
     @media (max-width: 768px) {
       background: var(--el-bg-color);
       box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3);
     }
   }
-  
+
   .mobile-overlay {
     background: rgba(0, 0, 0, 0.7);
   }
@@ -368,7 +348,7 @@ html.dark & {
   .layout-wrapper {
     padding: 8px;
   }
-  
+
   .main-content {
     padding: 12px;
   }

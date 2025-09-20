@@ -25,6 +25,7 @@
       </div>
     </template>
   </IndexLayout>
+
 </template>
 
 <script setup lang="ts">
