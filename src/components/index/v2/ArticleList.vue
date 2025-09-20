@@ -7,33 +7,19 @@
       </h2>
       <div class="view-toggle">
         <el-button-group>
-          <el-button :type="viewMode === 'card' ? 'primary' : 'default'" @click="setViewMode('card')">
-            <el-icon><Grid /></el-icon>
-          </el-button>
+          <!-- 列表模式 -->
           <el-button :type="viewMode === 'list' ? 'primary' : 'default'" @click="setViewMode('list')">
             <el-icon><Menu /></el-icon>
           </el-button>
+          <!-- 2列卡片模式 -->
+          <el-button :type="viewMode === 'card' && gridColumns === 2 ? 'primary' : 'default'" @click="setCardMode(2)">
+            <i class="fas fa-th-large"></i>
+          </el-button>
+          <!-- 3列卡片模式 -->
+          <el-button :type="viewMode === 'card' && gridColumns === 3 ? 'primary' : 'default'" @click="setCardMode(3)">
+            <i class="fas fa-th"></i>
+          </el-button>
         </el-button-group>
-        
-        <!-- 列数切换按钮（仅在卡片模式下显示） -->
-        <div v-if="viewMode === 'card'" class="column-toggle">
-          <el-button-group>
-            <el-button 
-              :type="gridColumns === 2 ? 'primary' : 'default'" 
-              @click="setGridColumns(2)"
-              title="两列显示"
-            >
-              <i class="fas fa-th-large"></i>
-            </el-button>
-            <el-button 
-              :type="gridColumns === 3 ? 'primary' : 'default'" 
-              @click="setGridColumns(3)"
-              title="三列显示"
-            >
-              <i class="fas fa-th"></i>
-            </el-button>
-          </el-button-group>
-        </div>
       </div>
     </div>
     
@@ -187,6 +173,7 @@ const setGridColumns = (columns: number) => {
   resetPagination()
 }
 
+
 // 视图模式相关
 const loadViewMode = (): 'card' | 'list' => {
   const saved = localStorage.getItem(STORAGE_KEY_VIEW_MODE)
@@ -200,6 +187,15 @@ const saveViewMode = (mode: 'card' | 'list') => {
 const setViewMode = (mode: 'card' | 'list') => {
   viewMode.value = mode
   saveViewMode(mode)
+  // 重置分页
+  resetPagination()
+}
+
+const setCardMode = (columns: number) => {
+  viewMode.value = 'card'
+  gridColumns.value = columns
+  saveViewMode('card')
+  saveGridColumns(columns)
   // 重置分页
   resetPagination()
 }
@@ -319,17 +315,6 @@ watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () 
         }
       }
       
-      .column-toggle {
-        :deep(.el-button-group) {
-          .el-button {
-            width: 32px !important;
-            
-            i {
-              font-size: 12px !important;
-            }
-          }
-        }
-      }
     }
   }
   
