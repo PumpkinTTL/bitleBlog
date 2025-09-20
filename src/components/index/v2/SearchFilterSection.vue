@@ -45,9 +45,10 @@
       <Transition name="filter-collapse">
         <div v-show="!isFilterCollapsed" class="filter-buttons">
           <button 
-            v-for="item in filterOptions" 
+            v-for="(item, index) in filterOptions" 
             :key="item.value"
             :class="['filter-btn', { 'active': activeFilter === item.value }]"
+            :style="{ 'animation-delay': `${index * 0.05}s` }"
             @click="handleFilterChange(item.value)"
           >
             <el-icon class="btn-icon">
@@ -79,6 +80,7 @@
             :class="['category-tag', 
                      `category-${index}`, 
                      { 'active': activeCategory === category.id }]"
+            :style="{ '--index': index }"
             @click="handleCategoryChange(category.id)"
           >
             <i :class="category.icon" class="tag-icon"></i>
@@ -312,9 +314,15 @@ const toggleCategoryCollapse = () => {
     &:hover {
       background: var(--el-fill-color-extra-light);
       color: var(--el-color-primary);
+      transform: translateX(2px);
       
       .collapse-icon {
         color: var(--el-color-primary);
+        transform: scale(1.15);
+        
+        &.collapsed {
+          transform: rotate(-90deg) scale(1.25);
+        }
       }
     }
 
@@ -328,10 +336,12 @@ const toggleCategoryCollapse = () => {
       color: var(--el-text-color-secondary);
       font-size: 12px;
       margin-left: auto;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.23, 1);
+      transform-origin: center;
       
       &.collapsed {
-        transform: rotate(-90deg);
+        transform: rotate(-90deg) scale(1.1);
+        color: var(--el-color-primary);
       }
     }
   }
@@ -339,27 +349,29 @@ const toggleCategoryCollapse = () => {
   // 过滤器区域（改为中性描边按钮 + 轻微主色激活）
   .filter-section {
     margin-bottom: 12px;
+    transition: all 0.3s ease;
 
     .filter-buttons {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
 
-      .filter-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 10px;
-        background: linear-gradient(135deg, var(--el-fill-color-blank) 0%, var(--el-fill-color-light) 100%);
-        border: 1px solid var(--el-border-color);
-        border-radius: 4px;
-        color: var(--el-text-color-regular);
-        font-size: 12px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
+        .filter-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 6px 10px;
+          background: linear-gradient(135deg, var(--el-fill-color-blank) 0%, var(--el-fill-color-light) 100%);
+          border: 1px solid var(--el-border-color);
+          border-radius: 4px;
+          color: var(--el-text-color-regular);
+          font-size: 12px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+          animation: filterBtnFadeIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) both;
 
         &::before {
           content: '';
@@ -416,27 +428,34 @@ const toggleCategoryCollapse = () => {
 
   // 分类区域（统一为中性色签，激活时轻主色）
   .category-section {
+    transition: all 0.3s ease;
+    
     .category-tags {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
 
-      .category-tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 8px;
-        background: linear-gradient(135deg, var(--el-fill-color-blank) 0%, var(--el-fill-color-light) 100%);
-        border: 1px solid var(--el-border-color);
-        border-radius: 4px;
-        color: var(--el-text-color-regular);
-        font-size: 11px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
+        .category-tag {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 4px 8px;
+          background: linear-gradient(135deg, var(--el-fill-color-blank) 0%, var(--el-fill-color-light) 100%);
+          border: 1px solid var(--el-border-color);
+          border-radius: 4px;
+          color: var(--el-text-color-regular);
+          font-size: 11px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+          animation: categoryTagFadeIn 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+        }
 
+        .category-tag {
+          animation-delay: calc(var(--index) * 50ms);
+        }
         &::after {
           content: '';
           position: absolute;
@@ -648,22 +667,47 @@ html.dark & {
   }
 }
 
-// 折叠过渡动画
-.filter-collapse-enter-active,
-.filter-collapse-leave-active,
-.category-collapse-enter-active,
+// 折叠过渡动画 - 优化版
+.filter-collapse-enter-active {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+.filter-collapse-leave-active {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: hidden;
+}
+
+.category-collapse-enter-active {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
 .category-collapse-leave-active {
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   overflow: hidden;
 }
 
 .filter-collapse-enter-from,
+.category-collapse-enter-from {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.96);
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 .filter-collapse-leave-to,
-.category-collapse-enter-from,
 .category-collapse-leave-to {
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateY(-5px) scale(0.98);
   max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .filter-collapse-enter-to,
@@ -671,7 +715,31 @@ html.dark & {
 .category-collapse-enter-to,
 .category-collapse-leave-from {
   opacity: 1;
-  transform: translateY(0);
-  max-height: 200px;
+  transform: translateY(0) scale(1);
+  max-height: 300px;
+}
+
+// 分类标签入场动画
+@keyframes categoryTagFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// 筛选按钮入场动画（已存在但确保位置正确）
+@keyframes buttonFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 </style>
