@@ -662,45 +662,46 @@ html.dark & {
   }
 }
 
-// 使用transform优化的折叠动画
-.filter-collapse-enter-active {
-  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
-  transform-origin: top;
-}
-
-.filter-collapse-leave-active {
-  transition: transform 0.25s cubic-bezier(0.4, 0, 1, 1), opacity 0.25s ease;
-  transform-origin: top;
-}
-
+// 优化的折叠动画 - 流畅且有高度过渡
+.filter-collapse-enter-active,
 .category-collapse-enter-active {
-  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
-  transform-origin: top;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease,
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  will-change: max-height, opacity, transform;
 }
 
+.filter-collapse-leave-active,
 .category-collapse-leave-active {
-  transition: transform 0.25s cubic-bezier(0.4, 0, 1, 1), opacity 0.25s ease;
-  transform-origin: top;
+  transition: max-height 0.25s cubic-bezier(0.4, 0, 1, 1),
+              opacity 0.25s ease,
+              transform 0.25s cubic-bezier(0.4, 0, 1, 1);
+  overflow: hidden;
+  will-change: max-height, opacity, transform;
 }
 
 .filter-collapse-enter-from,
 .category-collapse-enter-from {
-  transform: scaleY(0) translateY(-10px);
+  max-height: 0;
   opacity: 0;
+  transform: translateY(-4px);
 }
 
 .filter-collapse-leave-to,
 .category-collapse-leave-to {
-  transform: scaleY(0) translateY(-8px);
+  max-height: 0;
   opacity: 0;
+  transform: translateY(-3px);
 }
 
 .filter-collapse-enter-to,
 .filter-collapse-leave-from,
 .category-collapse-enter-to,
 .category-collapse-leave-from {
-  transform: scaleY(1) translateY(0);
+  max-height: 120px; /* 减小高度让动画更快 */
   opacity: 1;
+  transform: translateY(0);
 }
 
 </style>
