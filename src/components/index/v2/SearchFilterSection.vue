@@ -1,113 +1,155 @@
 <template>
-  <div class="search-filter-section animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
-    <!-- 搜索区域 -->
-    <div class="search-section">
-      <div class="search-input-wrapper">
-        <el-input 
-          v-model="searchKeyword" 
-          placeholder="搜索文章标题、内容或标签..." 
-          size="large" 
-          class="search-input"
-          @keyup.enter="handleSearch(searchKeyword)" 
-          clearable
-        >
-          <template #prefix>
-            <el-icon class="input-search-icon">
+  <!-- 浮动搜索筛选栏 -->
+  <div class="floating-search-filter" :class="{ 'scrolled': isScrolled }">
+    <!-- 集成式搜索栏 -->
+    <div class="integrated-header">
+      <div class="header-main">
+        <div class="section-info">
+          <div class="section-title">
+            <el-icon class="title-icon"><Grid /></el-icon>
+            <span>最新文章</span>
+          </div>
+          <div class="article-count" v-if="totalArticles > 0">
+            共 {{ totalArticles }} 篇
+          </div>
+        </div>
+        
+        <div class="header-controls">
+          <!-- 布局切换 -->
+          <div class="layout-toggle">
+            <el-button-group size="small">
+              <el-button 
+                :type="viewMode === 'list' ? 'primary' : 'default'" 
+                @click="handleViewModeChange('list')"
+                :icon="Menu"
+              />
+              <el-button 
+                :type="viewMode === 'card' && gridColumns === 2 ? 'primary' : 'default'" 
+                @click="handleViewModeChange('card', 2)"
+              >
+                <el-icon><Grid /></el-icon>
+              </el-button>
+              <el-button 
+                :type="viewMode === 'card' && gridColumns === 3 ? 'primary' : 'default'" 
+                @click="handleViewModeChange('card', 3)"
+              >
+                <el-icon><Operation /></el-icon>
+              </el-button>
+            </el-button-group>
+          </div>
+          
+          <!-- 搜索触发按钮 -->
+          <div class="search-trigger" @click="togglePanel" :class="{ 'expanded': isPanelOpen }">
+            <el-icon class="search-icon">
               <Search />
             </el-icon>
-          </template>
-        </el-input>
-        <el-button 
-          type="primary" 
-          class="search-btn" 
-          @click="handleSearch(searchKeyword)"
-        >
-          <el-icon class="btn-icon">
-            <Search />
-          </el-icon>
-          <span class="btn-text">搜索</span>
-        </el-button>
-      </div>
-    </div>
-
-    <!-- 过滤器区域 -->
-    <div class="filter-section">
-      <div class="section-title" @click="toggleFilterCollapse">
-        <el-icon class="title-icon">
-          <Filter />
-        </el-icon>
-        <span>筛选条件</span>
-        <el-icon class="collapse-icon" :class="{ 'collapsed': isFilterCollapsed }">
-          <ArrowDown />
-        </el-icon>
-      </div>
-      
-      <Transition name="filter-collapse">
-        <div v-show="!isFilterCollapsed" class="filter-buttons">
-          <button 
-            v-for="(item, index) in filterOptions" 
-            :key="item.value"
-            :class="['filter-btn', 'animate__animated', 'animate__fadeInUp', { 'active': activeFilter === item.value }]"
-            :style="{ 'animation-delay': `${index * 50}ms` }"
-            @click="handleFilterChange(item.value)"
-          >
-            <el-icon class="btn-icon">
-              <component :is="item.icon" />
+            <span class="search-text">{{ getDisplayText() }}</span>
+            <el-icon class="expand-icon" :class="{ 'rotated': isPanelOpen }">
+              <ArrowDown />
             </el-icon>
-            <span class="btn-label">{{ item.label }}</span>
-          </button>
+          </div>
         </div>
-      </Transition>
+      </div>
     </div>
 
-    <!-- 分类标签区域 -->
-    <div class="category-section">
-      <div class="section-title" @click="toggleCategoryCollapse">
-        <el-icon class="title-icon">
-          <Collection />
-        </el-icon>
-        <span>文章分类</span>
-        <el-icon class="collapse-icon" :class="{ 'collapsed': isCategoryCollapsed }">
-          <ArrowDown />
-        </el-icon>
-      </div>
-      
-      <Transition name="category-collapse">
-        <div v-show="!isCategoryCollapsed" class="category-tags">
-          <button 
-            v-for="(category, index) in categories" 
-            :key="category.id"
-            :class="['category-tag', 
-                     'animate__animated', 'animate__fadeInUp',
-                     { 'active': activeCategory === category.id }]"
-            :style="{ 'animation-delay': `${index * 60}ms` }"
-            @click="handleCategoryChange(category.id)"
-          >
-            <i :class="category.icon" class="tag-icon"></i>
-            <span class="tag-name">{{ category.name }}</span>
-            <span v-if="category.count" class="tag-count">{{ category.count }}</span>
-          </button>
+    <!-- 展开面板 -->
+    <Transition name="slide-down">
+      <div v-if="isPanelOpen" class="search-panel">
+        <!-- 搜索行 -->
+        <div class="search-row">
+          <div class="search-wrapper">
+            <el-input 
+              v-model="searchKeyword"
+              placeholder="输入关键词搜索..."
+              size="default"
+              class="search-input"
+              @keyup.enter="handleSearch(searchKeyword)"
+              clearable
+              ref="searchInputRef"
+            >
+              <template #prefix>
+                <el-icon class="input-icon"><Search /></el-icon>
+              </template>
+            </el-input>
+            <el-button type="primary" @click="handleSearch(searchKeyword)" class="search-btn">
+              搜索
+            </el-button>
+          </div>
         </div>
-      </Transition>
-    </div>
+
+        <!-- 筛选行 -->
+        <div class="filter-row">
+          <div class="filter-section">
+            <span class="section-label">类型</span>
+            <div class="filter-tags">
+              <button 
+                v-for="item in filterOptions" 
+                :key="item.value"
+                :class="['filter-tag', { 'active': activeFilter === item.value }]"
+                @click="handleFilterChange(item.value)"
+              >
+                <el-icon class="tag-icon"><component :is="item.icon" /></el-icon>
+                <span>{{ item.label }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 分类行 -->
+        <div class="category-row">
+          <div class="category-section">
+            <span class="section-label">分类</span>
+            <div class="category-tags">
+              <button 
+                v-for="category in categories.slice(0, isMobile ? 6 : 8)" 
+                :key="category.id"
+                :class="['category-tag', { 'active': activeCategory === category.id }]"
+                @click="handleCategoryChange(category.id)"
+              >
+                <i :class="category.icon" class="tag-icon"></i>
+                <span>{{ category.name }}</span>
+                <em v-if="category.count" class="tag-count">{{ category.count }}</em>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 底部操作 -->
+        <div class="actions-row">
+          <el-button size="small" @click="handleReset" class="reset-btn">
+            <el-icon><RefreshLeft /></el-icon>
+            <span>重置</span>
+          </el-button>
+          <el-button size="small" type="primary" @click="closePanel" class="close-btn">
+            <span>收起</span>
+          </el-button>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Search, Star, Clock, TrendCharts, Grid, Filter, Collection, ArrowDown } from '@element-plus/icons-vue'
+import { ref, nextTick, computed, onMounted, onUnmounted, watch } from 'vue'
+import { Search, Star, Clock, TrendCharts, Grid, Filter, Collection, Close, RefreshLeft, Check, ArrowDown, Menu, Operation } from '@element-plus/icons-vue'
 
 // Props
 interface Props {
   searchKeyword?: string
   activeFilter?: string
   activeCategory?: number
+  viewMode?: 'card' | 'list'
+  gridColumns?: number
+  totalArticles?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
   searchKeyword: '',
   activeFilter: 'all',
-  activeCategory: 0
+  activeCategory: 0,
+  viewMode: 'card',
+  gridColumns: 2,
+  totalArticles: 0
 })
 
 // Emits
@@ -115,16 +157,21 @@ const emit = defineEmits<{
   search: [query: string]
   filterChange: [filter: string]
   categoryChange: [categoryId: number]
+  viewModeChange: [mode: 'card' | 'list', columns?: number]
 }>()
 
 // 响应式数据
 const searchKeyword = ref(props.searchKeyword)
 const activeFilter = ref(props.activeFilter)
 const activeCategory = ref(props.activeCategory)
+const viewMode = ref(props.viewMode)
+const gridColumns = ref(props.gridColumns)
+const totalArticles = ref(props.totalArticles)
 
-// 折叠状态
-const isFilterCollapsed = ref(false)
-const isCategoryCollapsed = ref(false)
+// 面板状态
+const isPanelOpen = ref(false)
+const searchInputRef = ref(null)
+const isScrolled = ref(false)
 
 // 过滤选项
 const filterOptions = [
@@ -146,9 +193,25 @@ const categories = ref([
   { id: 7, name: '性能优化', icon: 'fas fa-rocket', count: 8 }
 ])
 
+// 面板控制函数
+const togglePanel = async () => {
+  isPanelOpen.value = !isPanelOpen.value
+  
+  if (isPanelOpen.value) {
+    // 面板打开后自动聚焦搜索框
+    await nextTick()
+    searchInputRef.value?.focus()
+  }
+}
+
+const closePanel = () => {
+  isPanelOpen.value = false
+}
+
 // 事件处理函数
 const handleSearch = (query: string) => {
   emit('search', query)
+  // 搜索后保持面板开启，方便用户进一步筛选
 }
 
 const handleFilterChange = (filterValue: string) => {
@@ -161,547 +224,636 @@ const handleCategoryChange = (categoryId: number) => {
   emit('categoryChange', categoryId)
 }
 
-// 折叠切换函数
-const toggleFilterCollapse = () => {
-  isFilterCollapsed.value = !isFilterCollapsed.value
+// 布局切换处理
+const handleViewModeChange = (mode: 'card' | 'list', columns?: number) => {
+  viewMode.value = mode
+  if (columns) {
+    gridColumns.value = columns
+  }
+  emit('viewModeChange', mode, columns)
 }
 
-const toggleCategoryCollapse = () => {
-  isCategoryCollapsed.value = !isCategoryCollapsed.value
+// 新增的事件处理
+const handleReset = () => {
+  searchKeyword.value = ''
+  activeFilter.value = 'all'
+  activeCategory.value = 0
+  
+  // 发出重置事件
+  emit('search', '')
+  emit('filterChange', 'all')
+  emit('categoryChange', 0)
+}
+
+const handleApply = () => {
+  // 应用当前的所有筛选条件
+  emit('search', searchKeyword.value)
+  emit('filterChange', activeFilter.value)
+  emit('categoryChange', activeCategory.value)
+  closePanel()
+}
+
+// 移动端检测
+const windowWidth = ref(window.innerWidth)
+const isMobile = computed(() => windowWidth.value <= 768)
+
+const handleResize = () => {
+  windowWidth.value = window.innerWidth
+}
+
+// 滚动检测
+const handleScroll = () => {
+  // 获取父容器的滚动位置
+  const container = document.querySelector('.main-content-body')
+  if (container) {
+    isScrolled.value = container.scrollTop > 10
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize)
+  
+  // 监听主容器的滚动事件
+  const container = document.querySelector('.main-content-body')
+  if (container) {
+    container.addEventListener('scroll', handleScroll)
+  }
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+  
+  const container = document.querySelector('.main-content-body')
+  if (container) {
+    container.removeEventListener('scroll', handleScroll)
+  }
+})
+
+// 监听props变化，同步更新响应式数据
+watch(() => props.viewMode, (newValue) => {
+  viewMode.value = newValue
+}, { immediate: true })
+
+watch(() => props.gridColumns, (newValue) => {
+  gridColumns.value = newValue
+}, { immediate: true })
+
+watch(() => props.totalArticles, (newValue) => {
+  totalArticles.value = newValue
+}, { immediate: true })
+
+// 获取显示文本
+const getDisplayText = () => {
+  if (searchKeyword.value) {
+    return isMobile.value ? `搜索: ${searchKeyword.value.slice(0, 8)}...` : `搜索: ${searchKeyword.value}`
+  }
+  if (activeFilter.value !== 'all') {
+    const filter = filterOptions.find(f => f.value === activeFilter.value)
+    return filter ? `${filter.label}` : '搜索筛选'
+  }
+  if (activeCategory.value !== 0) {
+    const category = categories.value.find(c => c.id === activeCategory.value)
+    return category ? `${category.name}` : '搜索筛选'
+  }
+  return isMobile.value ? '搜索筛选' : '搜索筛选文章'
 }
 </script>
 
-<style lang="less" scoped>
-// 紧凑克制的搜索过滤区域（统一配色，弱化阴影/线条/圆角）
-.search-filter-section {
-  margin-bottom: 16px;
-  background: linear-gradient(135deg, var(--el-bg-color) 0%, var(--el-fill-color-extra-light) 100%);
-  border: 1px solid var(--el-border-color-lighter);
-  border-radius: 6px;
-  padding: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(ellipse at top center, rgba(var(--el-color-primary-rgb), 0.02) 0%, transparent 50%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
+<style scoped>
+/* ==== 紧凑搜索筛选栏样式 ==== */
+.floating-search-filter {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--el-bg-color);
+  backdrop-filter: blur(20px);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border-bottom: 1px solid transparent;
+  
+  /* 默认就有阴影，表明固定性质 */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  
+  /* 滚动时增强视觉反馈 */
+  &.scrolled {
+    border-bottom-color: var(--el-border-color-light);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
   }
-
-  &:hover {
-    border-color: var(--el-border-color);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  
+  /* 移动端适配 */
+  @media (max-width: 768px) {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     
-    &::before {
-      opacity: 1;
+    &.scrolled {
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
     }
   }
+}
 
-  // 搜索区域
-  .search-section {
-    margin-bottom: 12px;
-
-    .search-input-wrapper {
-      display: flex;
-      gap: 8px;
-      align-items: stretch;
-
-      @media (max-width: 768px) {
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      :deep(.search-input) {
-        flex: 1;
-
-        .el-input__wrapper {
-          height: 34px;
-          border-radius: 4px;
-          background: var(--el-fill-color-blank);
-          border: 1px solid var(--el-border-color);
-          box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
-          transition: all 0.3s ease;
-
-          &:hover {
-            border-color: var(--el-border-color-darker);
-            background: var(--el-fill-color-light);
-          }
-
-          &.is-focus {
-            border-color: var(--el-color-primary);
-            background: var(--el-bg-color);
-            box-shadow: 0 0 0 2px rgba(var(--el-color-primary-rgb), 0.1);
-          }
-
-          input {
-            font-size: 13px;
-            color: var(--el-text-color-primary);
-
-            &::placeholder {
-              color: var(--el-text-color-placeholder);
-              font-size: 13px;
-            }
-          }
-        }
-
-        .el-input__prefix {
-          left: 8px;
-
-          .input-search-icon {
-            color: var(--el-text-color-secondary);
-            font-size: 14px;
-          }
-        }
-      }
-
-      .search-btn {
-        height: 34px;
-        min-width: 68px;
-        border-radius: 4px;
-        font-size: 13px;
-        font-weight: 500;
-        padding: 0 12px;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        background: linear-gradient(135deg, var(--el-color-primary), var(--el-color-primary-dark-2));
-        box-shadow: 0 1px 3px rgba(var(--el-color-primary-rgb), 0.3);
-        transition: all 0.3s ease;
-        
-        &:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 2px 6px rgba(var(--el-color-primary-rgb), 0.4);
-        }
-
-        .btn-icon {
-          font-size: 13px;
-        }
-
-        .btn-text {
-          @media (max-width: 480px) {
-            display: none;
-          }
-        }
-      }
-    }
+/* 集成式搜索头部 */
+.integrated-header {
+  padding: 20px 24px;
+  
+  @media (max-width: 768px) {
+    padding: 16px;
   }
-
-  // 通用区域标题
-  .section-title {
+  
+  .header-main {
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin-bottom: 8px;
-    color: var(--el-text-color-primary);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.3s ease;
-    border-radius: 4px;
-    padding: 4px 6px;
-    margin: -4px -6px 8px -6px;
-
-    &:hover {
-      background: var(--el-fill-color-extra-light);
-      color: var(--el-color-primary);
-      transform: translateX(2px);
-      
-      .collapse-icon {
-        color: var(--el-color-primary);
-        transform: scale(1.15);
-        
-        &.collapsed {
-          transform: rotate(-90deg) scale(1.25);
-        }
-      }
-    }
-
-    .title-icon {
-      color: var(--el-color-primary);
-      font-size: 13px;
-      opacity: 0.8;
-    }
+    justify-content: space-between;
+    gap: 16px;
     
-    .collapse-icon {
-      color: var(--el-text-color-secondary);
-      font-size: 12px;
-      margin-left: auto;
-      transition: all 0.35s cubic-bezier(0.4, 0, 0.23, 1);
-      transform-origin: center;
-      
-      &.collapsed {
-        transform: rotate(-90deg) scale(1.1);
-        color: var(--el-color-primary);
-      }
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
     }
   }
-
-  // 过滤器区域（改为中性描边按钮 + 轻微主色激活）
-  .filter-section {
-    margin-bottom: 12px;
-    transition: all 0.3s ease;
-
-    .filter-buttons {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      
-      .filter-btn {
-          position: relative;
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          padding: 6px 12px;
-          background: linear-gradient(135deg, var(--el-fill-color-blank) 0%, var(--el-fill-color-light) 100%);
-          border: 1px solid var(--el-border-color);
-          border-radius: 4px;
-          color: var(--el-text-color-regular);
-          font-size: 12px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          overflow: hidden;
-
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-          transition: left 0.5s ease;
-        }
-
-        .btn-icon {
-          font-size: 12px;
-          color: inherit;
-          transition: transform 0.3s ease;
-        }
-
-        .btn-label {
-          color: inherit;
-          @media (max-width: 640px) {
-            display: none;
-          }
-        }
-
-        &:hover {
-          background: linear-gradient(135deg, var(--el-fill-color-light) 0%, var(--el-fill-color) 100%);
-          border-color: var(--el-border-color-darker);
-          transform: translateY(-1px);
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-          
-          &::before {
-            left: 100%;
-          }
-          
-          .btn-icon {
-            transform: scale(1.05);
-          }
-        }
-
-        &.active {
-          background: linear-gradient(135deg, var(--el-color-primary-light-9) 0%, var(--el-color-primary-light-8) 100%);
-          border-color: var(--el-color-primary-light-5);
-          color: var(--el-color-primary);
-          box-shadow: 0 1px 3px rgba(var(--el-color-primary-rgb), 0.2);
-          
-          .btn-icon {
-            transform: scale(1.1);
-          }
-        }
-      }
-    }
-  }
-
-  // 分类区域（统一为中性色签，激活时轻主色）
-  .category-section {
-    transition: all 0.3s ease;
+  
+  .section-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     
-    .category-tags {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      padding-top: 4px;
-      
-      .category-tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 8px;
-        background: linear-gradient(135deg, var(--el-fill-color-blank) 0%, var(--el-fill-color-light) 100%);
-        border: 1px solid var(--el-border-color);
-        border-radius: 4px;
-        color: var(--el-text-color-regular);
-        font-size: 11px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-        
-        &::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: radial-gradient(ellipse at center, rgba(var(--el-color-primary-rgb), 0.03) 0%, transparent 70%);
-          opacity: 0;
-          transition: opacity 0.3s ease;
-          pointer-events: none;
-        }
-
-        .tag-icon {
-          font-size: 11px;
-          color: var(--el-color-primary);
-          opacity: 0.7;
-          transition: all 0.3s ease;
-        }
-
-        .tag-name {
-          font-size: 11px;
-        }
-
-        .tag-count {
-          font-size: 10px;
-          font-weight: 600;
-          background: linear-gradient(135deg, var(--el-fill-color) 0%, var(--el-fill-color-dark) 100%);
-          color: var(--el-text-color-secondary);
-          padding: 1px 4px;
-          border-radius: 8px;
-          min-width: 16px;
-          text-align: center;
-          line-height: 1.2;
-          transition: all 0.3s ease;
-        }
-
-        &:hover {
-          background: linear-gradient(135deg, var(--el-fill-color-light) 0%, var(--el-fill-color) 100%);
-          border-color: var(--el-border-color-darker);
-          transform: translateY(-1px);
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-          
-          &::after {
-            opacity: 1;
-          }
-          
-          .tag-icon {
-            opacity: 1;
-            transform: scale(1.1);
-          }
-        }
-
-        &.active {
-          background: linear-gradient(135deg, var(--el-color-primary-light-9) 0%, var(--el-color-primary-light-8) 100%);
-          border-color: var(--el-color-primary-light-5);
-          color: var(--el-color-primary);
-          box-shadow: 0 0 0 1px rgba(var(--el-color-primary-rgb), 0.1), 0 1px 3px rgba(var(--el-color-primary-rgb), 0.2);
-          transform: scale(1.02);
-          
-          &::after {
-            opacity: 1;
-          }
-
-          .tag-icon { 
-            color: var(--el-color-primary); 
-            opacity: 1;
-            transform: scale(1.15);
-          }
-          .tag-count { 
-            background: linear-gradient(135deg, var(--el-color-primary-light-8) 0%, var(--el-color-primary-light-7) 100%);
-            color: var(--el-color-primary);
-            transform: scale(1.05);
-          }
-        }
-      }
-    }
-  }
-}
-
-// 暗色模式适配（保持克制的对比和中性色）
-html.dark & {
-  .search-filter-section {
-    background: linear-gradient(135deg, var(--el-bg-color) 0%, rgba(255, 255, 255, 0.02) 100%);
-    border-color: #3a3a3a;
-
-    &::before {
-      background: radial-gradient(ellipse at top center, rgba(100, 168, 255, 0.03) 0%, transparent 50%);
-    }
-
-    &:hover {
-      border-color: #4a4a4a;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    }
-
     .section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      font-weight: 600;
       color: var(--el-text-color-primary);
-
+      
+      @media (max-width: 768px) {
+        font-size: 16px;
+      }
+      
       .title-icon {
-        color: #64A8FF;
-        opacity: 0.8;
-      }
-    }
-
-    .search-section {
-      .search-input-wrapper {
-        :deep(.search-input) {
-          .el-input__wrapper {
-            background: var(--el-fill-color-blank);
-            border-color: #444;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-
-            &:hover { 
-              border-color: #555; 
-              background: rgba(255, 255, 255, 0.02);
-            }
-            &.is-focus { 
-              border-color: #64A8FF; 
-              background: var(--el-bg-color);
-              box-shadow: 0 0 0 2px rgba(100, 168, 255, 0.15);
-            }
-
-            input {
-              color: var(--el-text-color-primary);
-              &::placeholder { color: var(--el-text-color-placeholder); }
-            }
-          }
-          .el-input__prefix {
-            .input-search-icon { color: var(--el-text-color-secondary); }
-          }
+        font-size: 20px;
+        color: var(--el-color-primary);
+        
+        @media (max-width: 768px) {
+          font-size: 18px;
         }
       }
     }
-
-    .filter-section {
-      .filter-buttons {
-        .filter-btn {
-          background: linear-gradient(135deg, var(--el-fill-color-blank) 0%, rgba(255, 255, 255, 0.02) 100%);
-          border-color: #444;
-          color: var(--el-text-color-regular);
-
-          &::before {
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-          }
-
-          &:hover { 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.08) 100%);
-            border-color: #555;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          }
-
-          &.active {
-            background: linear-gradient(135deg, rgba(100, 168, 255, 0.08) 0%, rgba(100, 168, 255, 0.12) 100%);
-            border-color: rgba(100, 168, 255, 0.35);
-            color: #64A8FF;
-            box-shadow: 0 1px 3px rgba(100, 168, 255, 0.3);
-          }
-        }
+    
+    .article-count {
+      padding: 4px 12px;
+      background: var(--el-fill-color-light);
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--el-text-color-regular);
+      font-weight: 500;
+      
+      @media (max-width: 768px) {
+        font-size: 11px;
+        padding: 3px 10px;
       }
     }
-
-    .category-section {
-      .category-tags {
-        .category-tag {
-          background: linear-gradient(135deg, var(--el-fill-color-blank) 0%, rgba(255, 255, 255, 0.02) 100%);
-          border-color: #444;
-          color: var(--el-text-color-regular);
-
-          &::after {
-            background: radial-gradient(ellipse at center, rgba(100, 168, 255, 0.05) 0%, transparent 70%);
-          }
-
-          &:hover { 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.08) 100%);
-            border-color: #555;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          }
-
-          .tag-icon { 
-            color: #64A8FF;
-            opacity: 0.7;
-          }
-          .tag-count { 
-            background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.1) 100%);
-            color: var(--el-text-color-secondary); 
-          }
-
-          &.active {
-            background: linear-gradient(135deg, rgba(100, 168, 255, 0.08) 0%, rgba(100, 168, 255, 0.12) 100%);
-            border-color: rgba(100, 168, 255, 0.35);
-            color: #64A8FF;
-            box-shadow: 0 0 0 1px rgba(100, 168, 255, 0.1), 0 1px 3px rgba(100, 168, 255, 0.3);
-            transform: scale(1.02);
-
-            .tag-icon { 
-              color: #64A8FF;
-              opacity: 1;
-              transform: scale(1.15);
-            }
-            .tag-count { 
-              background: linear-gradient(135deg, rgba(100, 168, 255, 0.15) 0%, rgba(100, 168, 255, 0.2) 100%);
-              color: #64A8FF;
-              transform: scale(1.05);
-            }
-          }
+  }
+  
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    @media (max-width: 768px) {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+  
+  .layout-toggle {
+    :deep(.el-button-group) {
+      .el-button {
+        height: 36px;
+        width: 36px;
+        padding: 0;
+        
+        @media (max-width: 768px) {
+          height: 32px;
+          width: 32px;
         }
       }
     }
   }
 }
 
-// 优化的折叠动画 - 流畅且有高度过渡
-.filter-collapse-enter-active,
-.category-collapse-enter-active {
-  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.3s ease,
-              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-  will-change: max-height, opacity, transform;
+/* 搜索触发按钮 */
+.search-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 12px;
+  background: var(--el-fill-color-light);
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 180px;
+  
+  @media (max-width: 768px) {
+    height: 32px;
+    min-width: 140px;
+    padding: 0 10px;
+  }
+  
+  &:hover {
+    background: var(--el-color-primary-light-9);
+    border-color: var(--el-color-primary-light-7);
+    
+    .search-icon {
+      color: var(--el-color-primary);
+    }
+  }
+  
+  &.expanded {
+    background: var(--el-color-primary-light-9);
+    border-color: var(--el-color-primary);
+    
+    .search-icon {
+      color: var(--el-color-primary);
+    }
+    
+    .search-text {
+      color: var(--el-color-primary);
+    }
+  }
+  
+  .search-icon {
+    font-size: 16px;
+    color: var(--el-text-color-regular);
+    transition: color 0.3s ease;
+    
+    @media (max-width: 768px) {
+      font-size: 14px;
+    }
+  }
+  
+  .search-text {
+    flex: 1;
+    font-size: 13px;
+    color: var(--el-text-color-regular);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    @media (max-width: 768px) {
+      font-size: 12px;
+    }
+  }
+  
+  .expand-icon {
+    font-size: 14px;
+    color: var(--el-text-color-secondary);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    
+    @media (max-width: 768px) {
+      font-size: 12px;
+    }
+    
+    &.rotated {
+      transform: rotate(180deg);
+    }
+  }
 }
 
-.filter-collapse-leave-active,
-.category-collapse-leave-active {
-  transition: max-height 0.25s cubic-bezier(0.4, 0, 1, 1),
-              opacity 0.25s ease,
-              transform 0.25s cubic-bezier(0.4, 0, 1, 1);
-  overflow: hidden;
-  will-change: max-height, opacity, transform;
+/* 展开面板 */
+.search-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--el-bg-color);
+  border: 1px solid var(--el-color-primary);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  padding: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  pointer-events: auto;
+  backdrop-filter: blur(12px);
+  z-index: 1001;
 }
 
-.filter-collapse-enter-from,
-.category-collapse-enter-from {
-  max-height: 0;
+/* 滑下动画 */
+.slide-down-enter-active {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.slide-down-leave-active {
+  transition: all 0.25s ease;
+}
+
+.slide-down-enter-from {
   opacity: 0;
-  transform: translateY(-4px);
+  transform: translateY(-10px);
 }
 
-.filter-collapse-leave-to,
-.category-collapse-leave-to {
-  max-height: 0;
+.slide-down-leave-to {
   opacity: 0;
-  transform: translateY(-3px);
+  transform: translateY(-10px);
 }
 
-.filter-collapse-enter-to,
-.filter-collapse-leave-from,
-.category-collapse-enter-to,
-.category-collapse-leave-from {
-  max-height: 120px; /* 减小高度让动画更快 */
-  opacity: 1;
-  transform: translateY(0);
+/* 搜索行 */
+.search-row {
+  margin-bottom: 16px;
 }
 
+.search-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+}
+
+.search-input :deep(.el-input__wrapper) {
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid var(--el-border-color);
+  transition: all 0.2s ease;
+}
+
+.search-input :deep(.el-input__wrapper):hover {
+  border-color: var(--el-color-primary-light-7);
+}
+
+.search-input :deep(.el-input__wrapper.is-focus) {
+  border-color: var(--el-color-primary);
+  box-shadow: 0 0 0 2px var(--el-color-primary-light-8);
+}
+
+.input-icon {
+  font-size: 16px;
+  color: var(--el-text-color-placeholder);
+}
+
+.search-btn {
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* 筛选行 */
+.filter-row,
+.category-row {
+  margin-bottom: 14px;
+}
+
+.filter-section,
+.category-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.section-label {
+  font-size: 13px;
+  color: var(--el-text-color-secondary);
+  font-weight: 600;
+  white-space: nowrap;
+  padding-top: 8px;
+  min-width: 36px;
+  text-align: right;
+}
+
+.filter-tags,
+.category-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 1;
+}
+
+.filter-tag,
+.category-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  height: 32px;
+  background: var(--el-fill-color-light);
+  border: 1px solid var(--el-border-color-lighter);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  color: var(--el-text-color-regular);
+  white-space: nowrap;
+  line-height: 1;
+  font-weight: 500;
+}
+
+.filter-tag:hover,
+.category-tag:hover {
+  background: var(--el-color-primary-light-9);
+  border-color: var(--el-color-primary-light-7);
+  color: var(--el-color-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(64, 158, 255, 0.1);
+}
+
+.filter-tag.active,
+.category-tag.active {
+  background: var(--el-color-primary);
+  border-color: var(--el-color-primary);
+  color: white;
+  box-shadow: 0 2px 8px var(--el-color-primary-light-5);
+}
+
+.tag-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.tag-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: inherit;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  font-style: normal;
+  min-width: 16px;
+  text-align: center;
+  line-height: 1.2;
+  margin-left: 4px;
+}
+
+.category-tag.active .tag-count {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* 操作行 */
+.actions-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--el-border-color-lighter);
+  margin-top: 8px;
+}
+
+.reset-btn,
+.close-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .integrated-header {
+    .section-info {
+      .section-title {
+        span {
+          display: none; /* 移动端隐藏标题文本 */
+        }
+      }
+    }
+  }
+  
+  .search-text {
+    font-size: 13px;
+  }
+  
+  .search-panel {
+    padding: 12px;
+  }
+  
+  .search-wrapper {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .search-btn {
+    width: 100%;
+    height: 36px;
+  }
+  
+  .filter-tags,
+  .category-tags {
+    gap: 6px;
+  }
+  
+  .filter-tag,
+  .category-tag {
+    padding: 4px 10px;
+    height: 28px;
+    font-size: 12px;
+  }
+  
+  .section-label {
+    min-width: 32px;
+    font-size: 12px;
+    padding-top: 6px;
+  }
+  
+  .actions-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .reset-btn,
+  .close-btn {
+    width: 100%;
+    height: 36px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .integrated-header {
+    padding: 12px;
+  }
+  
+  .search-trigger {
+    height: 30px;
+    min-width: 120px;
+    padding: 0 8px;
+  }
+  
+  .search-text {
+    font-size: 11px;
+  }
+  
+  .search-panel {
+    padding: 10px;
+  }
+  
+  .filter-tags,
+  .category-tags {
+    gap: 4px;
+  }
+  
+  .filter-tag,
+  .category-tag {
+    padding: 3px 8px;
+    height: 26px;
+    font-size: 11px;
+  }
+  
+  .section-label {
+    min-width: 28px;
+    font-size: 11px;
+  }
+  
+  .search-input :deep(.el-input__wrapper),
+  .search-btn {
+    height: 36px;
+  }
+}
+
+/* 暗黑主题适配 */
+.dark .floating-search-filter {
+  background: var(--el-bg-color);
+  border-bottom-color: var(--el-border-color-darker);
+  
+  &.scrolled {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.dark .integrated-header {
+  .section-info {
+    .article-count {
+      background: var(--el-fill-color-darker);
+      color: var(--el-text-color-regular);
+    }
+  }
+}
+
+.dark .search-trigger {
+  background: var(--el-fill-color-darker);
+  border-color: var(--el-border-color-darker);
+  
+  &:hover {
+    background: var(--el-fill-color-dark);
+  }
+  
+  &.expanded {
+    background: var(--el-color-primary-light-8);
+    border-color: var(--el-color-primary);
+  }
+}
+
+.dark .filter-tag:hover,
+.dark .category-tag:hover {
+  background: var(--el-fill-color);
+}
+
+.dark .search-panel {
+  background: var(--el-bg-color-page);
+  backdrop-filter: blur(12px);
+}
 </style>

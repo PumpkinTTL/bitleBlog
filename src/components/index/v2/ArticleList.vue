@@ -1,27 +1,5 @@
 <template>
   <div class="articles-section">
-    <div class="section-header">
-      <h2 class="section-title">
-        <i class="fas fa-newspaper"></i>
-        最新文章
-      </h2>
-      <div class="view-toggle">
-        <el-button-group>
-          <!-- 列表模式 -->
-          <el-button :type="viewMode === 'list' ? 'primary' : 'default'" @click="setViewMode('list')">
-            <el-icon><Menu /></el-icon>
-          </el-button>
-          <!-- 2列卡片模式 -->
-          <el-button :type="viewMode === 'card' && gridColumns === 2 ? 'primary' : 'default'" @click="setCardMode(2)">
-            <i class="fas fa-th-large"></i>
-          </el-button>
-          <!-- 3列卡片模式 -->
-          <el-button :type="viewMode === 'card' && gridColumns === 3 ? 'primary' : 'default'" @click="setCardMode(3)">
-            <i class="fas fa-th"></i>
-          </el-button>
-        </el-button-group>
-      </div>
-    </div>
     
     <!-- 卡片视图 -->
     <Transition v-if="viewMode === 'card'" name="articles-transition" mode="out-in">
@@ -100,17 +78,21 @@ interface Props {
   searchKeyword?: string
   activeFilter?: string
   activeCategory?: number
+  viewMode?: 'card' | 'list'
+  gridColumns?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
   searchKeyword: '',
   activeFilter: 'all',
-  activeCategory: 0
+  activeCategory: 0,
+  viewMode: 'card',
+  gridColumns: 2
 })
 
-// 响应式数据
-const viewMode = ref<'card' | 'list'>('card')
-const gridColumns = ref(2) // 默认两列
+// 响应式数据 - 使用外部传入的状态
+const viewMode = computed(() => props.viewMode)
+const gridColumns = computed(() => props.gridColumns)
 const currentPage = ref(1)
 const totalArticles = ref(0)
 const listPageSize = ref(5) // 列表模式页面大小
@@ -194,43 +176,7 @@ const saveGridColumns = (columns: number) => {
   localStorage.setItem(STORAGE_KEY_COLUMNS, columns.toString())
 }
 
-const setGridColumns = (columns: number) => {
-  gridColumns.value = columns
-  saveGridColumns(columns)
-  // 重置分页
-  resetPagination()
-}
-
-
-// 视图模式相关
-const loadViewMode = (): 'card' | 'list' => {
-  const saved = localStorage.getItem(STORAGE_KEY_VIEW_MODE)
-  return saved === 'list' ? 'list' : 'card'
-}
-
-const saveViewMode = (mode: 'card' | 'list') => {
-  localStorage.setItem(STORAGE_KEY_VIEW_MODE, mode)
-}
-
-const setViewMode = (mode: 'card' | 'list') => {
-  viewMode.value = mode
-  saveViewMode(mode)
-  // 重置分页
-  resetPagination()
-}
-
-const setCardMode = (columns: number) => {
-  viewMode.value = 'card'
-  gridColumns.value = columns
-  saveViewMode('card')
-  saveGridColumns(columns)
-  // 重置分页
-  resetPagination()
-}
-
-// 初始化加载本地存储的设置
-gridColumns.value = loadGridColumns()
-viewMode.value = loadViewMode()
+// 移除了重复的布局切换逻辑，现在由SearchFilterSection统一管理
 
 // 事件处理函数
 const handlePageChange = (page: number) => {
@@ -260,93 +206,9 @@ watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () 
 <style lang="less" scoped>
 // 文章列表区域
 .articles-section {
+  position: relative; /* 为搜索栏提供定位参考 */
   margin-bottom: 60px;
   
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding: 14px 0;
-    border-bottom: 1px solid #e9ecef;
-    
-    @media (max-width: 768px) {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 12px 0;
-    }
-    
-    .section-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin: 0;
-      color: #343a40;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      
-      i {
-        font-size: 1rem;
-        color: #007bff;
-      }
-      
-      @media (max-width: 768px) {
-        font-size: 1.1rem;
-        
-        i {
-          font-size: 0.9rem;
-        }
-      }
-    }
-    
-    .view-toggle {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      
-      :deep(.el-button-group) {
-        border-radius: 4px;
-        overflow: hidden;
-        border: 1px solid #dee2e6;
-        
-        .el-button {
-          height: 32px !important;
-          width: 36px !important;
-          padding: 0 !important;
-          font-size: 14px !important;
-          border: none !important;
-          background: #ffffff !important;
-          color: #495057 !important;
-          transition: all 0.2s ease !important;
-          
-          &:hover {
-            background: #f8f9fa !important;
-            color: #343a40 !important;
-          }
-          
-          &.el-button--primary {
-            background: #007bff !important;
-            color: white !important;
-            
-            &:hover {
-              background: #0056b3 !important;
-            }
-          }
-          
-          .el-icon {
-            font-size: 14px !important;
-          }
-          
-          // FontAwesome 图标样式
-          i {
-            font-size: 13px !important;
-          }
-        }
-      }
-      
-    }
-  }
   
   // 卡片网格布局 - 动态列数
   .articles-grid {
@@ -538,42 +400,6 @@ watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () 
 // 暗色模式
 html.dark & {
   .articles-section {
-    .section-header {
-      border-bottom-color: #495057;
-      
-      .section-title {
-        color: #e9ecef;
-        
-        i {
-          color: #007bff;
-        }
-      }
-      
-      .view-toggle {
-        :deep(.el-button-group) {
-          border-color: #495057;
-          
-          .el-button {
-            background: #343a40 !important;
-            color: #f8f9fa !important;
-            
-            &:hover {
-              background: #495057 !important;
-              color: #ffffff !important;
-            }
-            
-            &.el-button--primary {
-              background: #007bff !important;
-              color: white !important;
-              
-              &:hover {
-                background: #007bff !important;
-              }
-            }
-          }
-        }
-      }
-    }
     
     .pagination-container {
       background: #1a1a1a;

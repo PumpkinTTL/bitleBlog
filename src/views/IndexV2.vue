@@ -8,19 +8,34 @@
         <MonthlyHotArticles />
       </div>
     </template>
-    <!-- 主体 -->
+    <!-- 顶部固定区域 -->
+    <template #main-content-top>
+      <!-- 搜索和过滤区域组件 -->
+      <SearchFilterSection 
+        :search-keyword="searchKeyword" 
+        :active-filter="activeFilter"
+        :active-category="activeCategory" 
+        :view-mode="viewMode"
+        :grid-columns="gridColumns" 
+        :total-articles="totalArticles"
+        @search="handleSearch" 
+        @filter-change="handleFilterChange"
+        @category-change="handleCategoryChange"
+        @view-mode-change="handleViewModeChange"
+      />
+    </template>
+    
+    <!-- 主体内容 -->
     <template #main-content>
-      <div class="main-content-wrapper">
-        <!-- 搜索和过滤区域组件 -->
-        <SearchFilterSection :search-keyword="searchKeyword" :active-filter="activeFilter"
-          :active-category="activeCategory" @search="handleSearch" @filter-change="handleFilterChange"
-          @category-change="handleCategoryChange" />
-
-        <!-- 文章列表组件 -->
-        <ArticleList :articles="allArticles" :search-keyword="searchKeyword" :active-filter="activeFilter"
-          :active-category="activeCategory" />
-
-      </div>
+      <!-- 文章列表组件 -->
+      <ArticleList 
+        :articles="allArticles" 
+        :search-keyword="searchKeyword" 
+        :active-filter="activeFilter"
+        :active-category="activeCategory"
+        :view-mode="viewMode"
+        :grid-columns="gridColumns"
+      />
     </template>
     
     <!-- 右侧边栏 -->
@@ -70,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import IndexLayout from '@/components/index/v2/layout/IndexLayout.vue'
 import AboutSiteCard from '@/components/index/v2/AboutSiteCard.vue'
 import NoticeCard from '@/components/index/v2/NoticeCard.vue'
@@ -86,6 +101,10 @@ import PromotionCard from '@/components/blog/BlogDetail/PromotionCard.vue'
 const searchKeyword = ref('')
 const activeFilter = ref('all')
 const activeCategory = ref(0)
+const viewMode = ref<'card' | 'list'>('card')
+const gridColumns = ref(2)
+// 计算文章总数
+const totalArticles = computed(() => allArticles.value.length)
 
 // 公告数据
 const noticeLoading = ref(false)
@@ -540,6 +559,14 @@ const handleCategoryChange = (categoryId: number) => {
   activeCategory.value = categoryId
 }
 
+const handleViewModeChange = (mode: 'card' | 'list', columns?: number) => {
+  viewMode.value = mode
+  if (columns) {
+    gridColumns.value = columns
+  }
+  console.log('布局变更:', mode, columns)
+}
+
 // 精选文章点击处理
 const handleArticleClick = (article: any) => {
   console.log('精选文章被点击', article)
@@ -570,12 +597,6 @@ const handlePromotionClick = (event: MouseEvent) => {
 </script>
 
 <style lang="less" scoped>
-// 确保主内容区域与其他页面保持一致的版心设计
-.main-content-wrapper {
-  width: 100%;
-  min-height: 100vh;
-}
-
 // 侧边栏内容布局
 .sidebar-content {
   display: flex;

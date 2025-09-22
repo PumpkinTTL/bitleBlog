@@ -15,7 +15,14 @@
           <!-- 主内容区 -->
           <el-col :xs="24" :sm="24" :md="10" :lg="12" :xl="14" class="main-content-col">
             <main class="main-content" :class="mainContentClasses">
-              <slot name="main-content" />
+              <!-- 顶部固定区域 -->
+              <div class="main-content-top">
+                <slot name="main-content-top" />
+              </div>
+              <!-- 滚动内容区域 -->
+              <div class="main-content-body">
+                <slot name="main-content" />
+              </div>
             </main>
           </el-col>
           
@@ -282,13 +289,16 @@ onUnmounted(() => {
 
 .main-content {
   width: 100%;
-  min-height: 200px;
+  height: calc(100vh - 60px); /* 固定高度，留出上下边距 */
+  max-height: calc(100vh - 60px);
   background: var(--el-bg-color);
-  border-radius: 12px;
-  padding: 24px;
+  border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 
   &:hover {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
@@ -300,9 +310,113 @@ onUnmounted(() => {
   }
 
   @media (max-width: 768px) {
-    padding: 16px;
-    border-radius: 8px;
+    height: calc(100vh - 40px); /* 移动端调整高度 */
+    max-height: calc(100vh - 40px);
+    border-radius: 6px; /* 移动端更小的圆角 */
     margin-top: 0;
+  }
+}
+
+// 主内容区域结构
+.main-content-top {
+  flex-shrink: 0;
+  /* 顶部区域不受内边距影响 */
+}
+
+.main-content-body {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  overflow-y: overlay;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  
+  /* 对于不支持overlay的浏览器，使用scrollbar-gutter预留空间 */
+  scrollbar-gutter: stable;
+  
+  /* 美化滚动条 - 超细极简模式 */
+  &::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 0;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 1px;
+    border: none;
+    min-height: 10px;
+    transition: background 0.15s ease;
+    
+    &:hover {
+      background: rgba(0, 0, 0, 0.18);
+    }
+    
+    &:active {
+      background: rgba(0, 0, 0, 0.3);
+    }
+  }
+  
+  /* 强制隐藏所有滚动条箭头和按钮 */
+  &::-webkit-scrollbar-button:start:decrement,
+  &::-webkit-scrollbar-button:end:increment {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+  }
+  
+  &::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+  
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  
+  /* Firefox 兼容 */
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
+  
+  @supports not (scrollbar-width: none) {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.08) transparent;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+    
+    &::-webkit-scrollbar {
+      width: 1.5px;
+      height: 1.5px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.1);
+      border: none;
+      border-radius: 0.5px;
+      min-height: 8px;
+    }
+    
+    &::-webkit-scrollbar-button:start:decrement,
+    &::-webkit-scrollbar-button:end:increment {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
+    
+    &::-webkit-scrollbar-button {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
   }
 }
 
@@ -344,6 +458,24 @@ html.dark & {
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     }
   }
+  
+  .main-content-body {
+    /* 暗黑模式 overlay 滚动条 */
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2); /* 暗黑模式下的半透明白色 */
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+      
+      &:active {
+        background: var(--el-color-primary-light-3);
+      }
+    }
+    
+    /* Firefox 暗黑模式 */
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  }
 
   .left-sidebar {
     @media (max-width: 768px) {
@@ -362,8 +494,8 @@ html.dark & {
   .layout-wrapper {
     padding: 8px;
   }
-
-  .main-content {
+  
+  .main-content-body {
     padding: 12px;
   }
 }

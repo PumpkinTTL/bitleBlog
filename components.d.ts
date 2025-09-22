@@ -141,6 +141,7 @@ declare module 'vue' {
     ScrollIndicator: typeof import('./src/components/index/v2/interactive/ScrollIndicator.vue')['default']
     SearchBox: typeof import('./src/components/index/v2/common/SearchBox.vue')['default']
     SearchFilterSection: typeof import('./src/components/index/v2/SearchFilterSection.vue')['default']
+    SearchFilterSectionExample: typeof import('./src/components/index/v2/SearchFilterSectionExample.vue')['default']
     SecurityGuide: typeof import('./src/components/platform/SecurityGuide.vue')['default']
     ShopBanner: typeof import('./src/components/shop/ShopBanner.vue')['default']
     ShopSidebar: typeof import('./src/components/shop/ShopSidebar.vue')['default']
