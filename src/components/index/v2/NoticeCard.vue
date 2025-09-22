@@ -251,7 +251,7 @@ const nextPage = () => {
 }
 
 .card-body {
-  padding: 16px;
+  padding: 12px;
   overflow: hidden;
 }
 
@@ -259,46 +259,32 @@ const nextPage = () => {
 .notice-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   
   .notice-item {
     display: flex;
-    gap: 12px;
-    padding: 16px;
+    gap: 10px;
+    padding: 12px;
     background: var(--el-fill-color-extra-light);
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid transparent;
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
+    cursor: pointer;
     
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(64, 158, 255, 0.1), transparent);
-      transition: left 0.6s ease;
-    }
-    
-      &:hover {
-        background: rgba(64, 158, 255, 0.05);
-        border-color: rgba(64, 158, 255, 0.3);
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 8px 20px rgba(64, 158, 255, 0.15), 0 2px 6px rgba(64, 158, 255, 0.1);
-        
-        &::before {
-          left: 100%;
-        }
+    &:hover {
+      background: rgba(64, 158, 255, 0.04);
+      border-color: rgba(64, 158, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(64, 158, 255, 0.1), 0 1px 4px rgba(64, 158, 255, 0.08);
         
         .notice-icon {
-          transform: scale(1.1) translateY(-2px);
+          transform: scale(1.05) translateY(-1px);
           
           i {
             animation: gentlePulse 0.6s ease-in-out;
-            transform: scale(1.1);
+            transform: scale(1.05);
           }
           
           &.important {
@@ -324,8 +310,7 @@ const nextPage = () => {
         
         .notice-title {
           color: var(--el-color-primary);
-          text-shadow: 0 1px 3px rgba(64, 158, 255, 0.2);
-          transform: translateX(2px);
+          text-shadow: 0 1px 2px rgba(64, 158, 255, 0.15);
         }
       }
     
@@ -381,13 +366,13 @@ const nextPage = () => {
       z-index: 2;
       
       .notice-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 16px;
+        font-size: 14px;
         color: white;
         transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         position: relative;
@@ -435,17 +420,21 @@ const nextPage = () => {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        margin-bottom: 8px;
-        gap: 12px;
+        margin-bottom: 6px;
+        gap: 8px;
         
         .notice-title {
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 600;
           color: var(--el-text-color-primary);
-          line-height: 1.4;
+          line-height: 1.3;
           flex: 1;
           font-family: 'OPPO Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           transition: all 0.3s ease;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
           // 确保文字清晰
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
@@ -458,9 +447,9 @@ const nextPage = () => {
           flex-shrink: 0;
           
           .notice-type-badge {
-            font-size: 10px;
-            padding: 3px 8px;
-            border-radius: 4px;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 3px;
             font-weight: 500;
             line-height: 1;
             font-family: 'OPPO Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -504,10 +493,10 @@ const nextPage = () => {
       }
       
       .notice-desc {
-        font-size: 12px;
+        font-size: 11px;
         color: var(--el-text-color-regular);
-        line-height: 1.6;
-        margin-bottom: 12px;
+        line-height: 1.4;
+        margin-bottom: 8px;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
@@ -522,17 +511,18 @@ const nextPage = () => {
         .notice-date {
           display: inline-flex;
           align-items: center;
-          gap: 4px;
+          gap: 3px;
           font-size: 10px;
-          color: var(--el-text-color-secondary);
+          color: var(--el-text-color-placeholder);
           font-family: 'OPPO Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          opacity: 0.8;
           // 确保文字清晰
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
           
           i {
-            font-size: 9px;
-            opacity: 0.8;
+            font-size: 8px;
+            opacity: 0.7;
           }
         }
       }
@@ -543,14 +533,14 @@ const nextPage = () => {
 // 精美的空状态
 .notice-empty {
   text-align: center;
-  padding: 40px 20px;
+  padding: 32px 16px;
   color: var(--el-text-color-secondary);
   
   .empty-icon-wrapper {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     
     .empty-icon {
-      font-size: 32px;
+      font-size: 28px;
       color: var(--el-text-color-disabled);
       opacity: 0.6;
       animation: gentleBounce 3s infinite;
@@ -558,7 +548,7 @@ const nextPage = () => {
   }
   
   .empty-text {
-    font-size: 13px;
+    font-size: 12px;
     margin: 0;
     font-family: 'OPPO Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     // 确保文字清晰
