@@ -192,8 +192,15 @@ const saveGridColumns = (columns: number) => {
 // 事件处理函数
 const handlePageChange = (page: number) => {
   currentPage.value = page
-  // 滚动到顶部
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  
+  // 滚动到文章容器顶部（而不是页面顶部）
+  const mainContentBody = document.querySelector('.main-content-body')
+  if (mainContentBody) {
+    mainContentBody.scrollTo({ top: 0, behavior: 'smooth' })
+  } else {
+    // 如果找不到主内容容器，就滚动到整个页面顶部
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 }
 
 const handleSizeChange = (size: number) => {
@@ -272,27 +279,40 @@ watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () 
     gap: 16px;
   }
   
-  // 分页器 - 响应式设计
+  // 分页器 - 精致美化设计
   .pagination-container {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 40px;
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 8px;
-    border: 1px solid #f0f0f0;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
-    overflow-x: auto; // 防止水平溢出
+    padding: 24px 20px;
+    background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+    border-radius: 12px;
+    border: 1px solid #e8e8e8;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    overflow-x: auto;
+    position: relative;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+    }
     
     @media (max-width: 768px) {
       margin-top: 24px;
-      padding: 12px 8px;
+      padding: 16px 8px;
       margin-left: -16px;
       margin-right: -16px;
       border-radius: 0;
       border-left: none;
       border-right: none;
+      background: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
     
     :deep(.el-pagination) {
@@ -327,16 +347,20 @@ watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () 
         }
         
         &:hover {
-          background: rgba(24, 144, 255, 0.1);
+          background: linear-gradient(135deg, rgba(24, 144, 255, 0.08), rgba(24, 144, 255, 0.12));
           color: #1890ff;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(24, 144, 255, 0.15);
         }
         
         &.is-active {
-          background: #1890ff;
+          background: linear-gradient(135deg, #1890ff, #40a9ff);
           color: white;
+          box-shadow: 0 3px 12px rgba(24, 144, 255, 0.3);
           
           &:hover {
-            background: #40a9ff;
+            background: linear-gradient(135deg, #40a9ff, #69c0ff);
+            transform: translateY(-1px);
           }
         }
       }
@@ -356,8 +380,10 @@ watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () 
         }
         
         &:hover {
-          background: rgba(24, 144, 255, 0.1);
+          background: linear-gradient(135deg, rgba(24, 144, 255, 0.08), rgba(24, 144, 255, 0.12));
           color: #1890ff;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(24, 144, 255, 0.15);
         }
         
         &:disabled {
