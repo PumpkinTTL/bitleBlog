@@ -1,6 +1,6 @@
 <template>
   <IndexLayout class="index-v2-container">
-<template #left-sidebar>
+    <template #left-sidebar>
       <div class="sidebar-content">
         <!-- 关于本站卡片组件 -->
         <AboutSiteCard />
@@ -11,73 +11,33 @@
     <!-- 顶部固定区域 -->
     <template #main-content-top>
       <!-- 搜索和过滤区域组件 -->
-      <SearchFilterSection 
-        :search-keyword="searchKeyword" 
-        :active-filter="activeFilter"
-        :active-category="activeCategory" 
-        :view-mode="viewMode"
-        :grid-columns="gridColumns" 
-        :total-articles="totalArticles"
-        @search="handleSearch" 
-        @filter-change="handleFilterChange"
-        @category-change="handleCategoryChange"
-        @view-mode-change="handleViewModeChange"
-      />
+      <SearchFilterSection :search-keyword="searchKeyword" :active-filter="activeFilter"
+        :active-category="activeCategory" :view-mode="viewMode" :grid-columns="gridColumns"
+        :total-articles="totalArticles" @search="handleSearch" @filter-change="handleFilterChange"
+        @category-change="handleCategoryChange" @view-mode-change="handleViewModeChange" />
     </template>
-    
+
     <!-- 主体内容 -->
     <template #main-content>
       <!-- 文章列表组件 -->
-      <ArticleList 
-        :articles="allArticles" 
-        :search-keyword="searchKeyword" 
-        :active-filter="activeFilter"
-        :active-category="activeCategory"
-        :view-mode="viewMode"
-        :grid-columns="gridColumns"
-      />
+      <ArticleList :articles="allArticles" :search-keyword="searchKeyword" :active-filter="activeFilter"
+        :active-category="activeCategory" :view-mode="viewMode" :grid-columns="gridColumns" />
     </template>
-    
+
     <!-- 右侧边栏 -->
     <template #right-sidebar>
       <div class="right-sidebar-content">
         <!-- 网站公告 -->
-        <NoticeCard 
-          title="网站公告"
-          :notices="noticeList"
-          :loading="noticeLoading"
-          :page-size="3"
-          :show-pagination="true"
-          @notice-click="handleNoticeClick"
-        />
+        <NoticeCard title="网站公告" :notices="noticeList" :loading="noticeLoading" :page-size="3" :show-pagination="true"
+          @notice-click="handleNoticeClick" />
         <!-- 精选文章推荐 -->
-        <FeaturedArticlesCard 
-          title="热门推荐" 
-          header-icon="fas fa-fire" 
-          :articles="featuredArticles"
-          :page-size="2"
-          :show-pagination="true"
-          @article-click="handleArticleClick"
-          @load-more="handleLoadMore"
-        />
+        <FeaturedArticlesCard title="热门推荐" header-icon="fas fa-fire" :articles="featuredArticles" :page-size="2"
+          :show-pagination="true" @article-click="handleArticleClick" @load-more="handleLoadMore" />
         <!-- 精选推广卡片 -->
-        <PromotionCard 
-          type="standard" 
-          title="前端开发者必备工具集" 
-          description="包含50+精选开发工具，提升10倍工作效率，限时优惠中！"
-          image-url="https://picsum.photos/300/200" 
-          image-alt="推广图片" 
-          :radius="false" 
-          badge-text="精选"
-          badge-icon="fas fa-crown" 
-          button-text="立即购买" 
-          :show-overlay="true" 
-          overlay-text="立即查看"
-          :show-price="true" 
-          current-price="￥199" 
-          original-price="￥399" 
-          @click="handlePromotionClick" 
-        />
+        <PromotionCard type="standard" title="前端开发者必备工具集" description="包含50+精选开发工具，提升10倍工作效率，限时优惠中！"
+          image-url="https://picsum.photos/300/200" image-alt="推广图片" :radius="false" badge-text="精选"
+          badge-icon="fas fa-crown" button-text="立即购买" :show-overlay="true" overlay-text="立即查看" :show-price="true"
+          current-price="￥199" original-price="￥399" @click="handlePromotionClick" />
       </div>
     </template>
   </IndexLayout>
