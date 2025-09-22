@@ -392,6 +392,138 @@ const allArticles = ref([
     isRecommended: true,
     isOriginal: false,
     isHot: true
+  },
+  {
+    id: 7,
+    title: 'Docker 容器化部署完全指南：从开发到生产',
+    excerpt: '全面介绍 Docker 在前端项目中的应用，包括镜像构建、容器编排、CI/CD 集成等实战技巧。',
+    cover: 'https://picsum.photos/400/240?random=7',
+    author: {
+      id: 7,
+      name: 'DevOps 工程师',
+      avatar: 'https://picsum.photos/40/40?random=107',
+      isVip: true
+    },
+    publishTime: '2024-01-02',
+    views: 1654,
+    likes: 112,
+    comments: 14,
+    tags: ['Docker', '容器化', 'DevOps'],
+    category: 8,
+    isTop: false,
+    isRecommended: false,
+    isOriginal: true,
+    isHot: false
+  },
+  {
+    id: 8,
+    title: 'GraphQL 与 REST API 对比：选择最适合的数据获取方式',
+    excerpt: '深入对比 GraphQL 和 REST API 的优缺点，帮助开发者选择最适合的数据获取方案。',
+    cover: 'https://picsum.photos/400/240?random=8',
+    author: {
+      id: 8,
+      name: 'API 设计师',
+      avatar: 'https://picsum.photos/40/40?random=108',
+      isVip: false
+    },
+    publishTime: '2024-01-01',
+    views: 1342,
+    likes: 89,
+    comments: 11,
+    tags: ['GraphQL', 'REST API', '后端开发'],
+    category: 9,
+    isTop: false,
+    isRecommended: false,
+    isOriginal: true,
+    isHot: false
+  },
+  {
+    id: 9,
+    title: 'MongoDB 与 MySQL 选择指南：数据库架构设计实践',
+    excerpt: '全面分析 NoSQL 和关系型数据库的适用场景，帮助开发者做出明智的数据库选择。',
+    cover: 'https://picsum.photos/400/240?random=9',
+    author: {
+      id: 9,
+      name: '数据库架构师',
+      avatar: 'https://picsum.photos/40/40?random=109',
+      isVip: true
+    },
+    publishTime: '2023-12-30',
+    views: 987,
+    likes: 67,
+    comments: 9,
+    tags: ['MongoDB', 'MySQL', '数据库设计'],
+    category: 10,
+    isTop: false,
+    isRecommended: true,
+    isOriginal: false,
+    isHot: false
+  },
+  {
+    id: 10,
+    title: 'PWA 渐进式Web应用开发：构建类原生体验',
+    excerpt: '详细介绍 PWA 技术栈，包括 Service Worker、Web App Manifest、推送通知等关键技术。',
+    cover: 'https://picsum.photos/400/240?random=10',
+    author: {
+      id: 10,
+      name: 'PWA 专家',
+      avatar: 'https://picsum.photos/40/40?random=110',
+      isVip: false
+    },
+    publishTime: '2023-12-28',
+    views: 1876,
+    likes: 134,
+    comments: 18,
+    tags: ['PWA', 'Service Worker', '移动开发'],
+    category: 11,
+    isTop: false,
+    isRecommended: false,
+    isOriginal: true,
+    isHot: true
+  },
+  {
+    id: 11,
+    title: 'Vite 构建工具深度解析：下一代前端开发体验',
+    excerpt: '探索 Vite 的核心原理和高级用法，包括模块热更新、插件系统、构建优化等关键特性。',
+    cover: 'https://picsum.photos/400/240?random=11',
+    author: {
+      id: 11,
+      name: 'Vite 开发者',
+      avatar: 'https://picsum.photos/40/40?random=111',
+      isVip: true
+    },
+    publishTime: '2023-12-25',
+    views: 2341,
+    likes: 178,
+    comments: 24,
+    tags: ['Vite', '构建工具', '模块化'],
+    category: 12,
+    isTop: false,
+    isRecommended: true,
+    isOriginal: true,
+    isHot: true
+  },
+  {
+    id: 12,
+    title: 'Web 组件库设计最佳实践：从 API 设计到性能优化',
+    excerpt: '全面介绍 Web 组件库的设计原则和实现技巧，包括 API 设计、性能优化、文档维护等关键方面。',
+    cover: 'https://picsum.photos/400/240?random=12',
+    author: {
+      id: 12,
+      name: '组件库作者',
+      avatar: 'https://picsum.photos/40/40?random=112',
+      isVip: false
+    },
+    publishTime: '2023-12-22',
+    views: 1567,
+    likes: 95,
+    comments: 13,
+    tags: ['组件库', 'API 设计', '性能优化'],
+    category: 13,
+    isTop: false,
+    isRecommended: false,
+    isOriginal: false,
+    isHot: false
   }
 ])
 

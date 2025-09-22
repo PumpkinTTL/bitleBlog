@@ -24,34 +24,39 @@
     </div>
     
     <!-- 卡片视图 -->
-    <div v-if="viewMode === 'card'" class="articles-grid" :class="`grid-columns-${gridColumns}`">
-      <ArticleCard
-        v-for="(article, index) in displayArticles"
-        :key="article.id"
-        :article="article"
-        :view-mode="viewMode"
-        :animation-delay="0.3 + index * 0.05"
-      />
-    </div>
+    <Transition v-if="viewMode === 'card'" name="articles-transition" mode="out-in">
+      <div class="articles-grid" :class="`grid-columns-${gridColumns}`" :key="currentPage">
+        <ArticleCard
+          v-for="(article, index) in displayArticles"
+          :key="article.id"
+          :article="article"
+          :view-mode="viewMode"
+          class="article-animation-item"
+        />
+      </div>
+    </Transition>
     
     <!-- 列表视图 -->
-    <div v-else class="articles-list">
-      <ArticleCard
-        v-for="article in displayArticles"
-        :key="article.id"
-        :article="article"
-        :view-mode="viewMode"
-      />
-    </div>
+    <Transition v-else name="articles-transition" mode="out-in">
+      <div class="articles-list" :key="currentPage">
+        <ArticleCard
+          v-for="(article, index) in displayArticles"
+          :key="article.id"
+          :article="article"
+          :view-mode="viewMode"
+          class="article-animation-item"
+        />
+      </div>
+    </Transition>
     
     <!-- 分页 -->
-    <div v-if="totalArticles > pageSize" class="pagination-container">
+    <div v-if="totalArticles > currentPageSize" class="pagination-container">
       <el-pagination
         v-model:current-page="currentPage"
-        v-model:page-size="pageSize"
-        :page-sizes="[6, 12, 18, 24]"
+        v-model:page-size="currentPageSize"
+        :page-sizes="pageSizeOptions"
         :total="totalArticles"
-        layout="total, sizes, prev, pager, next, jumper"
+        :layout="paginationLayout"
         @size-change="handleSizeChange"
         @current-change="handlePageChange"
         background
@@ -107,8 +112,31 @@ const props = withDefaults(defineProps<Props>(), {
 const viewMode = ref<'card' | 'list'>('card')
 const gridColumns = ref(2) // 默认两列
 const currentPage = ref(1)
-const pageSize = ref(12) // 恢复为12
 const totalArticles = ref(0)
+const listPageSize = ref(5) // 列表模式页面大小
+
+// 动态页面大小：根据布局模式调整
+const currentPageSize = computed(() => {
+  if (viewMode.value === 'card') {
+    // 卡片模式：2列=6个，3列=9个（每页3行）
+    return gridColumns.value === 2 ? 6 : 9
+  } else {
+    // 列表模式：可选择5/10/20，默认5
+    return listPageSize.value
+  }
+})
+
+// 分页选项
+const pageSizeOptions = computed(() => {
+  return viewMode.value === 'list' ? [5, 10, 20] : []
+})
+
+// 分页布局
+const paginationLayout = computed(() => {
+  return viewMode.value === 'list' 
+    ? 'total, sizes, prev, pager, next, jumper'
+    : 'total, prev, pager, next, jumper'
+})
 
 // 计算属性 - 筛选和分页后的文章
 const displayArticles = computed(() => {
@@ -143,8 +171,8 @@ const displayArticles = computed(() => {
   }
   
   // 分页
-  const startIndex = (currentPage.value - 1) * pageSize.value
-  const endIndex = startIndex + pageSize.value
+  const startIndex = (currentPage.value - 1) * currentPageSize.value
+  const endIndex = startIndex + currentPageSize.value
   
   // 更新总数
   totalArticles.value = filtered.length
@@ -212,7 +240,9 @@ const handlePageChange = (page: number) => {
 }
 
 const handleSizeChange = (size: number) => {
-  pageSize.value = size
+  if (viewMode.value === 'list') {
+    listPageSize.value = size
+  }
   currentPage.value = 1
 }
 
@@ -445,6 +475,89 @@ watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () 
         }
       }
     }
+  }
+}
+
+/* 分页过渡动画 - 递进效果 */
+.articles-transition-enter-active {
+  transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+  
+  .article-animation-item {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideInStagger 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    
+    &:nth-child(1) { animation-delay: 0.05s; }
+    &:nth-child(2) { animation-delay: 0.1s; }
+    &:nth-child(3) { animation-delay: 0.15s; }
+    &:nth-child(4) { animation-delay: 0.2s; }
+    &:nth-child(5) { animation-delay: 0.25s; }
+    &:nth-child(6) { animation-delay: 0.3s; }
+    &:nth-child(7) { animation-delay: 0.35s; }
+    &:nth-child(8) { animation-delay: 0.4s; }
+    &:nth-child(9) { animation-delay: 0.45s; }
+    &:nth-child(10) { animation-delay: 0.5s; }
+    &:nth-child(11) { animation-delay: 0.55s; }
+    &:nth-child(12) { animation-delay: 0.6s; }
+    &:nth-child(13) { animation-delay: 0.65s; }
+    &:nth-child(14) { animation-delay: 0.7s; }
+    &:nth-child(15) { animation-delay: 0.75s; }
+    &:nth-child(16) { animation-delay: 0.8s; }
+    &:nth-child(17) { animation-delay: 0.85s; }
+    &:nth-child(18) { animation-delay: 0.9s; }
+    &:nth-child(19) { animation-delay: 0.95s; }
+    &:nth-child(20) { animation-delay: 1s; }
+  }
+}
+
+.articles-transition-leave-active {
+  transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+  
+  .article-animation-item {
+    animation: slideOutStagger 0.25s cubic-bezier(0.8, 0.2, 0.8, 1) forwards;
+    
+    &:nth-child(1) { animation-delay: 0s; }
+    &:nth-child(2) { animation-delay: 0.05s; }
+    &:nth-child(3) { animation-delay: 0.1s; }
+    &:nth-child(4) { animation-delay: 0.15s; }
+    &:nth-child(5) { animation-delay: 0.2s; }
+    &:nth-child(6) { animation-delay: 0.25s; }
+    &:nth-child(7) { animation-delay: 0.3s; }
+    &:nth-child(8) { animation-delay: 0.35s; }
+    &:nth-child(9) { animation-delay: 0.4s; }
+    &:nth-child(10) { animation-delay: 0.45s; }
+    &:nth-child(11) { animation-delay: 0.5s; }
+    &:nth-child(12) { animation-delay: 0.55s; }
+    &:nth-child(13) { animation-delay: 0.6s; }
+    &:nth-child(14) { animation-delay: 0.65s; }
+    &:nth-child(15) { animation-delay: 0.7s; }
+    &:nth-child(16) { animation-delay: 0.75s; }
+    &:nth-child(17) { animation-delay: 0.8s; }
+    &:nth-child(18) { animation-delay: 0.85s; }
+    &:nth-child(19) { animation-delay: 0.9s; }
+    &:nth-child(20) { animation-delay: 0.95s; }
+  }
+}
+
+@keyframes slideInStagger {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideOutStagger {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
   }
 }
 
