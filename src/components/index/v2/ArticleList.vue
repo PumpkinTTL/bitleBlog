@@ -193,14 +193,17 @@ const saveGridColumns = (columns: number) => {
 const handlePageChange = (page: number) => {
   currentPage.value = page
   
-  // 滚动到文章容器顶部（而不是页面顶部）
-  const mainContentBody = document.querySelector('.main-content-body')
-  if (mainContentBody) {
-    mainContentBody.scrollTo({ top: 0, behavior: 'smooth' })
-  } else {
-    // 如果找不到主内容容器，就滚动到整个页面顶部
+  // 同时滚动页面和容器到顶部
+  setTimeout(() => {
+    // 1. 滚动文章容器到顶部
+    const mainContentBody = document.querySelector('.main-content-body')
+    if (mainContentBody) {
+      mainContentBody.scrollTop = 0
+    }
+    
+    // 2. 同时滚动整个页面到顶部（保证在所有情况下都能回到顶部）
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+  }, 50) // 微小延时确保 DOM 更新完成
 }
 
 const handleSizeChange = (size: number) => {

@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import IndexLayout from '@/components/index/v2/layout/IndexLayout.vue'
 import AboutSiteCard from '@/components/index/v2/AboutSiteCard.vue'
 import NoticeCard from '@/components/index/v2/NoticeCard.vue'
@@ -57,12 +57,36 @@ import HotTagsCard from '@/components/index/v2/HotTagsCard.vue'
 import FeaturedArticlesCard from '@/components/index/v2/FeaturedArticlesCard.vue'
 import PromotionCard from '@/components/blog/BlogDetail/PromotionCard.vue'
 
-// 响应式数据
+// 本地存储相关常量
+const STORAGE_KEY_VIEW_MODE = 'article-view-mode'
+const STORAGE_KEY_GRID_COLUMNS = 'article-grid-columns'
+
+// 加载本地存储的设置
+const loadViewMode = (): 'card' | 'list' => {
+  const saved = localStorage.getItem(STORAGE_KEY_VIEW_MODE)
+  return (saved === 'list' || saved === 'card') ? saved : 'card'
+}
+
+const loadGridColumns = (): number => {
+  const saved = localStorage.getItem(STORAGE_KEY_GRID_COLUMNS)
+  return saved ? parseInt(saved, 10) : 2
+}
+
+// 保存到本地存储
+const saveViewMode = (mode: 'card' | 'list') => {
+  localStorage.setItem(STORAGE_KEY_VIEW_MODE, mode)
+}
+
+const saveGridColumns = (columns: number) => {
+  localStorage.setItem(STORAGE_KEY_GRID_COLUMNS, columns.toString())
+}
+
+// 响应式数据 - 从本地存储加载初始值
 const searchKeyword = ref('')
 const activeFilter = ref('all')
 const activeCategory = ref(0)
-const viewMode = ref<'card' | 'list'>('card')
-const gridColumns = ref(2)
+const viewMode = ref<'card' | 'list'>(loadViewMode())
+const gridColumns = ref(loadGridColumns())
 // 计算文章总数
 const totalArticles = computed(() => allArticles.value.length)
 
@@ -521,10 +545,14 @@ const handleCategoryChange = (categoryId: number) => {
 
 const handleViewModeChange = (mode: 'card' | 'list', columns?: number) => {
   viewMode.value = mode
+  saveViewMode(mode) // 保存视图模式
+  
   if (columns) {
     gridColumns.value = columns
+    saveGridColumns(columns) // 保存网格列数
   }
-  console.log('布局变更:', mode, columns)
+  
+  console.log('布局变更:', mode, columns, '已保存到本地')
 }
 
 // 精选文章点击处理
@@ -554,6 +582,15 @@ const handlePromotionClick = (event: MouseEvent) => {
   // 这里可以添加跳转逻辑或统计代码
   // 例如：window.open('https://example.com/promotion', '_blank')
 }
+
+// 组件挂载时的初始化
+onMounted(() => {
+  // 输出初始化信息，便于调试
+  console.log('初始化布局设置:', {
+    viewMode: viewMode.value,
+    gridColumns: gridColumns.value
+  })
+})
 </script>
 
 <style lang="less" scoped>
