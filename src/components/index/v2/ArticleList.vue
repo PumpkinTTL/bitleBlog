@@ -35,16 +35,18 @@
         :page-sizes="pageSizeOptions"
         :total="totalArticles"
         :layout="paginationLayout"
+        :pager-count="isMobile ? 5 : 7"
         @size-change="handleSizeChange"
         @current-change="handlePageChange"
         background
+        small
       />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { Grid, Menu } from '@element-plus/icons-vue'
 import ArticleCard from './ArticleCard.vue'
 
@@ -113,8 +115,17 @@ const pageSizeOptions = computed(() => {
   return viewMode.value === 'list' ? [5, 10, 20] : []
 })
 
-// 分页布局
+// 移动端检测
+const windowWidth = ref(window.innerWidth)
+const isMobile = computed(() => windowWidth.value <= 768)
+
+// 分页布局 - 响应式设计
 const paginationLayout = computed(() => {
+  if (isMobile.value) {
+    // 移动端精简布局
+    return 'prev, pager, next'
+  }
+  
   return viewMode.value === 'list' 
     ? 'total, sizes, prev, pager, next, jumper'
     : 'total, prev, pager, next, jumper'
@@ -197,6 +208,20 @@ const resetPagination = () => {
   currentPage.value = 1
 }
 
+// 窗口尺寸变化处理
+const handleResize = () => {
+  windowWidth.value = window.innerWidth
+}
+
+// 生命周期钩子
+onMounted(() => {
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
+
 // 监听筛选条件变化
 watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () => {
   resetPagination()
@@ -247,7 +272,7 @@ watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () 
     gap: 16px;
   }
   
-  // 分页器
+  // 分页器 - 响应式设计
   .pagination-container {
     display: flex;
     justify-content: center;
@@ -258,11 +283,32 @@ watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () 
     border-radius: 8px;
     border: 1px solid #f0f0f0;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    overflow-x: auto; // 防止水平溢出
+    
+    @media (max-width: 768px) {
+      margin-top: 24px;
+      padding: 12px 8px;
+      margin-left: -16px;
+      margin-right: -16px;
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+    }
     
     :deep(.el-pagination) {
       --el-pagination-bg-color: transparent;
       --el-pagination-text-color: var(--el-text-color-primary);
       --el-pagination-border-radius: 6px;
+      
+      // 移动端整体样式
+      @media (max-width: 768px) {
+        --el-pagination-font-size: 14px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: nowrap;
+        min-width: 0;
+      }
       
       .el-pager li {
         min-width: 32px;
@@ -271,6 +317,14 @@ watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () 
         border-radius: 6px;
         margin: 0 2px;
         transition: all 0.2s ease;
+        
+        @media (max-width: 768px) {
+          min-width: 28px;
+          height: 28px;
+          line-height: 26px;
+          margin: 0 1px;
+          font-size: 13px;
+        }
         
         &:hover {
           background: rgba(24, 144, 255, 0.1);
@@ -293,6 +347,13 @@ watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () 
         border-radius: 6px;
         margin: 0 4px;
         transition: all 0.2s ease;
+        
+        @media (max-width: 768px) {
+          width: 28px;
+          height: 28px;
+          margin: 0 2px;
+          font-size: 13px;
+        }
         
         &:hover {
           background: rgba(24, 144, 255, 0.1);
