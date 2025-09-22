@@ -354,20 +354,20 @@ watch(() => props.totalArticles, (newValue) => {
   border-bottom: 1px solid transparent;
 
   /* 默认就有阴影，表明固定性质 */
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10);
+  
   /* 滚动时增强视觉反馈 */
   &.scrolled {
     border-bottom-color: var(--el-border-color-light);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
   }
-
+  
   /* 移动端适配 */
   @media (max-width: 768px) {
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+    
     &.scrolled {
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.15);
     }
   }
 }
