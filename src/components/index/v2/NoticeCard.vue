@@ -3,64 +3,101 @@
     <!-- 统一的卡片头部样式 -->
     <div class="card-header">
       <i class="fas fa-bullhorn"></i>
-      <span>网站公告</span>
+      <span>{{ title }}</span>
     </div>
     
     <!-- 公告列表 -->
     <div class="card-body">
-      <div class="notice-list" v-if="notices.length > 0">
-        <div 
-          class="notice-item" 
-          v-for="(notice, index) in notices" 
-          :key="notice.id"
-          :class="notice.type"
-        >
-          <!-- 左上角角标 -->
-          <div class="notice-corner-badge" v-if="notice.isNew">
-            NEW
-          </div>
-          
-          <!-- 精美的左侧图标 -->
-          <div class="notice-icon-wrapper">
-            <div class="notice-icon" :class="notice.type">
-              <i :class="getNoticeIcon(notice.type)"></i>
-            </div>
-          </div>
-          
-          <!-- 主要内容 -->
-          <div class="notice-content">
-            <div class="notice-header">
-              <div class="notice-title">{{ notice.title }}</div>
-              <div class="notice-badges">
-                <span class="notice-type-badge" :class="notice.type">
-                  {{ getNoticeTypeText(notice.type) }}
-                </span>
-              </div>
-            </div>
-            <div class="notice-desc">{{ notice.content }}</div>
-            <div class="notice-footer">
-              <span class="notice-date">
-                <i class="fas fa-clock"></i>
-                {{ formatDate(notice.date) }}
-              </span>
-            </div>
+      <!-- 加载状态 -->
+      <div v-if="loading" class="loading-skeleton">
+        <div v-for="n in 3" :key="n" class="skeleton-item">
+          <div class="skeleton-icon"></div>
+          <div class="skeleton-content">
+            <div class="skeleton-line title"></div>
+            <div class="skeleton-line text"></div>
+            <div class="skeleton-line short"></div>
           </div>
         </div>
       </div>
       
       <!-- 空状态 -->
-      <div class="notice-empty" v-else>
+      <div v-else-if="!notices || notices.length === 0" class="notice-empty">
         <div class="empty-icon-wrapper">
           <i class="fas fa-bell-slash empty-icon"></i>
         </div>
-        <p class="empty-text">暂无公告</p>
+        <p class="empty-text">{{ emptyText }}</p>
+      </div>
+      
+      <!-- 公告列表 -->
+      <Transition v-else name="page-transition" mode="out-in">
+        <div class="notice-list" :key="currentPage">
+          <div 
+            class="notice-item" 
+            v-for="(notice, index) in displayedNotices" 
+            :key="notice.id"
+            :class="notice.type"
+            @click="handleNoticeClick(notice)"
+          >
+            <!-- 左上角角标 -->
+            <div class="notice-corner-badge" v-if="notice.isNew">
+              NEW
+            </div>
+            
+            <!-- 精美的左侧图标 -->
+            <div class="notice-icon-wrapper">
+              <div class="notice-icon" :class="notice.type">
+                <i :class="getNoticeIcon(notice.type)"></i>
+              </div>
+            </div>
+            
+            <!-- 主要内容 -->
+            <div class="notice-content">
+              <div class="notice-header">
+                <div class="notice-title">{{ notice.title }}</div>
+                <div class="notice-badges">
+                  <span class="notice-type-badge" :class="notice.type">
+                    {{ getNoticeTypeText(notice.type) }}
+                  </span>
+                </div>
+              </div>
+              <div class="notice-desc">{{ notice.content }}</div>
+              <div class="notice-footer">
+                <span class="notice-date">
+                  <i class="fas fa-clock"></i>
+                  {{ formatDate(notice.date) }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Transition>
+      
+      <!-- 分页控件 -->
+      <div v-if="showPagination && !loading && displayedNotices.length > 0" class="pagination-wrapper">
+        <div v-if="totalPages > 1" class="pagination-nav">
+          <button 
+            class="page-btn prev-btn" 
+            :disabled="currentPage === 1"
+            @click="prevPage"
+          >
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          
+          <button 
+            class="page-btn next-btn" 
+            :disabled="!hasMore"
+            @click="nextPage"
+          >
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, defineProps, defineEmits, withDefaults } from 'vue'
 
 // 公告类型枚举
 type NoticeType = 'important' | 'maintenance' | 'activity' | 'update' | 'info'
@@ -75,31 +112,49 @@ interface Notice {
   isNew?: boolean
 }
 
-// 公告数据 - 实际项目中这里会从API获取
-const notices = ref<Notice[]>([
-  {
-    id: 1,
-    type: 'important',
-    title: '网站升级完成',
-    content: '新增了搜索功能和评论系统，提升用户体验',
-    date: '2024-01-15',
-    isNew: true
-  },
-  {
-    id: 2,
-    type: 'activity',
-    title: '新年活动开启',
-    content: '参与评论互动，有机会获得精美礼品',
-    date: '2024-01-10'
-  },
-  {
-    id: 3,
-    type: 'maintenance',
-    title: '系统维护通知',
-    content: '1月20日凌晨2-4点进行系统维护，期间可能无法访问',
-    date: '2024-01-08'
-  }
-])
+// 组件Props
+interface Props {
+  title?: string
+  notices?: Notice[]
+  loading?: boolean
+  emptyText?: string
+  pageSize?: number
+  showPagination?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  title: '网站公告',
+  notices: () => [],
+  loading: false,
+  emptyText: '暂无公告',
+  pageSize: 3,
+  showPagination: true
+})
+
+// 事件定义
+const emit = defineEmits<{
+  noticeClick: [notice: Notice]
+}>()
+
+// 响应式数据
+const currentPage = ref(1)
+
+// 计算属性
+const totalPages = computed(() => {
+  if (!props.notices || props.notices.length === 0) return 0
+  return Math.ceil(props.notices.length / props.pageSize)
+})
+
+const displayedNotices = computed(() => {
+  if (!props.notices) return []
+  const startIndex = (currentPage.value - 1) * props.pageSize
+  const endIndex = startIndex + props.pageSize
+  return props.notices.slice(startIndex, endIndex)
+})
+
+const hasMore = computed(() => {
+  return currentPage.value < totalPages.value
+})
 
 // 获取公告图标
 const getNoticeIcon = (type: NoticeType): string => {
@@ -140,6 +195,24 @@ const formatDate = (dateStr: string): string => {
     month: 'numeric', 
     day: 'numeric' 
   })
+}
+
+// 公告点击事件
+const handleNoticeClick = (notice: Notice) => {
+  emit('noticeClick', notice)
+}
+
+// 分页方法
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+  }
+}
+
+const nextPage = () => {
+  if (hasMore.value) {
+    currentPage.value++
+  }
 }
 </script>
 
@@ -537,6 +610,196 @@ const formatDate = (dateStr: string): string => {
   50% {
     opacity: 0.7;
     transform: scale(1.2) rotate(180deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+// 页面切换动画
+.page-transition-enter-active {
+  transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+  
+  .notice-item {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideInStagger 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    
+    &:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+    
+    &:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+    
+    &:nth-child(3) {
+      animation-delay: 0.15s;
+    }
+  }
+}
+
+.page-transition-leave-active {
+  transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+  
+  .notice-item {
+    animation: slideOutStagger 0.25s cubic-bezier(0.8, 0.2, 0.8, 1) forwards;
+    
+    &:nth-child(1) {
+      animation-delay: 0s;
+    }
+    
+    &:nth-child(2) {
+      animation-delay: 0.05s;
+    }
+    
+    &:nth-child(3) {
+      animation-delay: 0.1s;
+    }
+  }
+}
+
+@keyframes slideInStagger {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideOutStagger {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+}
+
+// 骨架屏样式
+.loading-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  
+  .skeleton-item {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    background: var(--el-fill-color-extra-light);
+    border-radius: 8px;
+    animation: fadeIn 0.3s ease;
+    
+    .skeleton-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(
+        90deg,
+        var(--el-fill-color-light) 0%,
+        var(--el-fill-color) 50%,
+        var(--el-fill-color-light) 100%
+      );
+      background-size: 200px 100%;
+      animation: shimmer 1.5s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    
+    .skeleton-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      
+      .skeleton-line {
+        background: linear-gradient(
+          90deg,
+          var(--el-fill-color-light) 0%,
+          var(--el-fill-color) 50%,
+          var(--el-fill-color-light) 100%
+        );
+        background-size: 200px 100%;
+        border-radius: 4px;
+        animation: shimmer 1.5s ease-in-out infinite;
+        
+        &.title {
+          height: 16px;
+          width: 70%;
+        }
+        
+        &.text {
+          height: 12px;
+          width: 90%;
+          animation-delay: 0.2s;
+        }
+        
+        &.short {
+          height: 10px;
+          width: 40%;
+          animation-delay: 0.4s;
+        }
+      }
+    }
+  }
+}
+
+// 分页控件样式
+.pagination-wrapper {
+  padding: 12px 16px;
+  border-top: 1px solid var(--el-border-color-extra-light);
+  background: var(--el-fill-color-extra-light);
+  
+  .pagination-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    
+    .page-btn {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--el-border-color);
+      background: var(--el-bg-color);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--el-text-color-regular);
+      
+      &:not(:disabled):hover {
+        background: var(--el-color-primary);
+        color: white;
+        border-color: var(--el-color-primary);
+      }
+      
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        
+        &:hover {
+          background: var(--el-bg-color);
+          color: var(--el-text-color-regular);
+          border-color: var(--el-border-color);
+        }
+      }
+      
+      i {
+        font-size: 10px;
+      }
+    }
   }
 }
 

@@ -27,7 +27,14 @@
     <template #right-sidebar>
       <div class="right-sidebar-content">
         <!-- 网站公告 -->
-        <NoticeCard />
+        <NoticeCard 
+          title="网站公告"
+          :notices="noticeList"
+          :loading="noticeLoading"
+          :page-size="3"
+          :show-pagination="true"
+          @notice-click="handleNoticeClick"
+        />
         <!-- 精选文章推荐 -->
         <FeaturedArticlesCard 
           title="热门推荐" 
@@ -79,6 +86,54 @@ import PromotionCard from '@/components/blog/BlogDetail/PromotionCard.vue'
 const searchKeyword = ref('')
 const activeFilter = ref('all')
 const activeCategory = ref(0)
+
+// 公告数据
+const noticeLoading = ref(false)
+const noticeList = ref([
+  {
+    id: 1,
+    type: 'important',
+    title: '网站升级完成',
+    content: '新增了搜索功能和评论系统，提升用户体验',
+    date: '2024-01-15',
+    isNew: true
+  },
+  {
+    id: 2,
+    type: 'activity',
+    title: '新年活动开启',
+    content: '参与评论互动，有机会获得精美礼品',
+    date: '2024-01-10'
+  },
+  {
+    id: 3,
+    type: 'maintenance',
+    title: '系统维护通知',
+    content: '1月20日凌晨2-4点进行系统维护，期间可能无法访问',
+    date: '2024-01-08'
+  },
+  {
+    id: 4,
+    type: 'update',
+    title: '版本更新说明',
+    content: 'V2.1.0 版本新增了多个实用功能，优化了用户界面',
+    date: '2024-01-05'
+  },
+  {
+    id: 5,
+    type: 'info',
+    title: '用户手册更新',
+    content: '用户手册已更新，新增了更多使用技巧和案例',
+    date: '2024-01-03'
+  },
+  {
+    id: 6,
+    type: 'activity',
+    title: '年终总结活动',
+    content: '分享你的学习成果，参与年终总结活动赢大奖',
+    date: '2023-12-30'
+  }
+])
 
 // 精选文章数据
 const featuredArticles = ref([
@@ -365,6 +420,13 @@ const handleLoadMore = () => {
   console.log('加载更多文章')
   // 这里可以添加加载更多数据的逻辑
   // 例如：发起 API 请求加载更多数据
+}
+
+// 公告点击处理
+const handleNoticeClick = (notice: any) => {
+  console.log('公告被点击', notice)
+  // 这里可以添加跳转逻辑
+  // 例如：$router.push(`/notice/${notice.id}`)
 }
 
 // 推广卡片点击处理
