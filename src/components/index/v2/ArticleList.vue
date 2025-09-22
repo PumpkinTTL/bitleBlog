@@ -1,5 +1,5 @@
 <template>
-  <div class="articles-section animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+  <div class="articles-section">
     <div class="section-header">
       <h2 class="section-title">
         <i class="fas fa-newspaper"></i>
@@ -478,86 +478,60 @@ watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () 
   }
 }
 
-/* 分页过渡动画 - 递进效果 */
+/* 分页过渡动画 - 统一的流畅过渡 */
 .articles-transition-enter-active {
-  transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
-  
-  .article-animation-item {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: slideInStagger 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
-    
-    &:nth-child(1) { animation-delay: 0.05s; }
-    &:nth-child(2) { animation-delay: 0.1s; }
-    &:nth-child(3) { animation-delay: 0.15s; }
-    &:nth-child(4) { animation-delay: 0.2s; }
-    &:nth-child(5) { animation-delay: 0.25s; }
-    &:nth-child(6) { animation-delay: 0.3s; }
-    &:nth-child(7) { animation-delay: 0.35s; }
-    &:nth-child(8) { animation-delay: 0.4s; }
-    &:nth-child(9) { animation-delay: 0.45s; }
-    &:nth-child(10) { animation-delay: 0.5s; }
-    &:nth-child(11) { animation-delay: 0.55s; }
-    &:nth-child(12) { animation-delay: 0.6s; }
-    &:nth-child(13) { animation-delay: 0.65s; }
-    &:nth-child(14) { animation-delay: 0.7s; }
-    &:nth-child(15) { animation-delay: 0.75s; }
-    &:nth-child(16) { animation-delay: 0.8s; }
-    &:nth-child(17) { animation-delay: 0.85s; }
-    &:nth-child(18) { animation-delay: 0.9s; }
-    &:nth-child(19) { animation-delay: 0.95s; }
-    &:nth-child(20) { animation-delay: 1s; }
-  }
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .articles-transition-leave-active {
-  transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.3s cubic-bezier(0.8, 0.2, 0.8, 1);
+}
+
+.articles-transition-enter-from {
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+}
+
+.articles-transition-enter-to {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.articles-transition-leave-from {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.articles-transition-leave-to {
+  opacity: 0;
+  transform: translateY(-15px) scale(0.98);
+}
+
+// 为单个卡片添加递进动画效果
+.articles-grid .article-animation-item,
+.articles-list .article-animation-item {
+  animation: cardFadeIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  opacity: 0;
   
-  .article-animation-item {
-    animation: slideOutStagger 0.25s cubic-bezier(0.8, 0.2, 0.8, 1) forwards;
-    
-    &:nth-child(1) { animation-delay: 0s; }
-    &:nth-child(2) { animation-delay: 0.05s; }
-    &:nth-child(3) { animation-delay: 0.1s; }
-    &:nth-child(4) { animation-delay: 0.15s; }
-    &:nth-child(5) { animation-delay: 0.2s; }
-    &:nth-child(6) { animation-delay: 0.25s; }
-    &:nth-child(7) { animation-delay: 0.3s; }
-    &:nth-child(8) { animation-delay: 0.35s; }
-    &:nth-child(9) { animation-delay: 0.4s; }
-    &:nth-child(10) { animation-delay: 0.45s; }
-    &:nth-child(11) { animation-delay: 0.5s; }
-    &:nth-child(12) { animation-delay: 0.55s; }
-    &:nth-child(13) { animation-delay: 0.6s; }
-    &:nth-child(14) { animation-delay: 0.65s; }
-    &:nth-child(15) { animation-delay: 0.7s; }
-    &:nth-child(16) { animation-delay: 0.75s; }
-    &:nth-child(17) { animation-delay: 0.8s; }
-    &:nth-child(18) { animation-delay: 0.85s; }
-    &:nth-child(19) { animation-delay: 0.9s; }
-    &:nth-child(20) { animation-delay: 0.95s; }
-  }
+  &:nth-child(1) { animation-delay: 0.05s; }
+  &:nth-child(2) { animation-delay: 0.1s; }
+  &:nth-child(3) { animation-delay: 0.15s; }
+  &:nth-child(4) { animation-delay: 0.2s; }
+  &:nth-child(5) { animation-delay: 0.25s; }
+  &:nth-child(6) { animation-delay: 0.3s; }
+  &:nth-child(7) { animation-delay: 0.35s; }
+  &:nth-child(8) { animation-delay: 0.4s; }
+  &:nth-child(9) { animation-delay: 0.45s; }
 }
 
-@keyframes slideInStagger {
+@keyframes cardFadeIn {
   from {
     opacity: 0;
-    transform: translateY(30px) scale(0.95);
+    transform: translateY(15px) scale(0.98);
   }
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes slideOutStagger {
-  from {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-30px) scale(0.95);
   }
 }
 

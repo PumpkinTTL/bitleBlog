@@ -2,8 +2,7 @@
   <!-- 卡片视图 -->
   <div 
     v-if="viewMode === 'card'"
-    class="article-card animate__animated animate__fadeInUp animate__faster"
-    :style="`animation-delay: ${animationDelay}s`"
+    class="article-card"
     @click="handleClick"
   >
     <!-- 文章标签 -->
