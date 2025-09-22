@@ -11,7 +11,6 @@
       <!-- 加载状态 -->
       <div v-if="loading" class="loading-skeleton">
         <div v-for="n in 2" :key="n" class="skeleton-item">
-          <div class="skeleton-cover"></div>
           <div class="skeleton-content">
             <div class="skeleton-line short"></div>
             <div class="skeleton-line title"></div>
@@ -39,55 +38,42 @@
             class="article-item"
             @click="handleArticleClick(article)"
           >
-          <div class="article-cover">
-            <img :src="article.cover" :alt="article.title" />
-            <div class="cover-overlay">
-              <i class="fas fa-eye"></i>
+            <!-- 右上角吸附徽章 -->
+            <div v-if="article.isHot" class="corner-badge hot" :class="{ 'has-new': article.isNew }">
+              HOT
             </div>
-          </div>
-          
-          <div class="article-content">
-            <div v-if="article.isHot || article.isNew" class="article-badges">
-              <span v-if="article.isHot" class="badge hot">
-                HOT
-              </span>
-              <span v-if="article.isNew" class="badge new">
-                NEW
-              </span>
+            <div v-if="article.isNew" class="corner-badge new" :class="{ 'has-hot': article.isHot }">
+              NEW
             </div>
             
-            <div class="article-meta">
-              <span class="article-category">{{ article.category }}</span>
-              <span class="article-date">{{ formatDate(article.date) }}</span>
+            <div class="article-content">
+              <div class="article-meta">
+                <span class="article-category">{{ article.category }}</span>
+                <span class="article-date">{{ formatDate(article.date) }}</span>
+              </div>
+              
+              <h4 class="article-title">
+                {{ article.title }}
+              </h4>
+              <p class="article-excerpt">
+                {{ article.excerpt }}
+              </p>
+              
+              <div class="article-stats">
+                <span class="stat-item">
+                  <i class="fas fa-eye"></i>
+                  {{ formatNumber(article.views) }}
+                </span>
+                <span class="stat-item">
+                  <i class="fas fa-heart"></i>
+                  {{ formatNumber(article.likes) }}
+                </span>
+                <span v-if="article.comments" class="stat-item">
+                  <i class="fas fa-comment"></i>
+                  {{ formatNumber(article.comments) }}
+                </span>
+              </div>
             </div>
-            
-            <h4 class="article-title">
-              {{ article.title }}
-            </h4>
-            <p class="article-excerpt">
-              {{ article.excerpt }}
-            </p>
-            
-            <!-- 阅读进度条 -->
-            <div class="reading-progress">
-              <div class="progress-bar" :style="{ width: `${article.readProgress || Math.floor(Math.random() * 60 + 20)}%` }"></div>
-            </div>
-            
-            <div class="article-stats">
-              <span class="stat-item">
-                <i class="fas fa-eye"></i>
-                {{ formatNumber(article.views) }}
-              </span>
-              <span class="stat-item">
-                <i class="fas fa-heart"></i>
-                {{ formatNumber(article.likes) }}
-              </span>
-              <span v-if="article.comments" class="stat-item">
-                <i class="fas fa-comment"></i>
-                {{ formatNumber(article.comments) }}
-              </span>
-            </div>
-          </div>
           </div>
         </div>
       </Transition>
@@ -103,10 +89,6 @@
           >
             <i class="fas fa-chevron-left"></i>
           </button>
-          
-          <span class="page-info">
-            {{ currentPage }} / {{ totalPages }}
-          </span>
           
           <button 
             class="page-btn next-btn" 
@@ -160,7 +142,7 @@ const props = withDefaults(defineProps<Props>(), {
   articles: () => [],
   loading: false,
   emptyText: '暂无精选文章',
-  pageSize: 2,
+  pageSize: 2,  // 限制每页显示2条数据
   showPagination: true
 })
 
@@ -483,170 +465,125 @@ const goToPage = (page: number) => {
   padding: 0;
   overflow: hidden;
   
-  .article-item {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 16px;
-    background: var(--el-bg-color);
-    border-bottom: 1px solid var(--el-border-color-extra-light);
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    position: relative;
-    overflow: hidden;
-    transform: translateZ(0); // 启用硬件加速
-    backface-visibility: hidden; // 优化动画性能
-    
-    &:last-child {
-      border-bottom: none;
-    }
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, 
-        transparent, 
-        rgba(64, 158, 255, 0.05), 
-        transparent
-      );
-      transition: left 0.5s ease;
-      z-index: 0;
-    }
-    
-    &:hover {
-      background: var(--el-fill-color-extra-light);
+    .article-item {
+      display: block;
+      padding: 14px;
+      background: var(--el-bg-color);
+      border-bottom: 1px solid var(--el-border-color-extra-light);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+      transform: translateZ(0); // 启用硬件加速
+      backface-visibility: hidden; // 优化动画性能
       
-      &::before {
-        left: 100%;
+      &:last-child {
+        border-bottom: none;
       }
       
-      .article-title {
-        color: var(--el-color-primary);
-      }
-      
-      .article-cover {
-        img {
+      &:hover {
+        transform: translateY(-2px);
+        
+        .article-title {
+          color: var(--el-color-primary);
+        }
+        
+        .corner-badge {
           transform: scale(1.05);
         }
-        
-        .cover-overlay {
-          opacity: 1;
-        }
-      }
-    }
-    
-    > * {
-      position: relative;
-      z-index: 1;
-    }
-    
-    .article-cover {
-      width: 100%;
-      height: 100px;
-      border-radius: 8px;
-      overflow: hidden;
-      position: relative;
-      
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s ease;
       }
       
-      .rank-badge {
+      > * {
+        position: relative;
+        z-index: 1;
+      }
+      
+      // 右上角吸附徽章（参考NoticeCard样式）
+      .corner-badge {
         position: absolute;
-        top: 8px;
-        left: 8px;
-        width: 24px;
-        height: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        font-size: 12px;
+        top: -1px;
+        right: -1px;
+        font-size: 8px;
         font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 2px 6px;
         color: white;
-        background: linear-gradient(135deg, var(--el-color-primary), var(--el-color-primary-light-3));
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        border: 2px solid white;
-        z-index: 2;
-      }
-      
-      .cover-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(135deg, 
-          rgba(64, 158, 255, 0.8), 
-          rgba(103, 58, 183, 0.8)
-        );
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
+        line-height: 1.2;
+        z-index: 10;
+        border-radius: 0 0 0 8px;
         transition: all 0.3s ease;
-        backdrop-filter: blur(1px);
+        // 确保文字清晰
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         
-        i {
-          color: white;
-          font-size: 14px;
-          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        &.hot {
+          background: #ef4444;
+          
+          // 角标阴影效果
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-right: 4px solid #dc2626;
+            border-bottom: 4px solid transparent;
+          }
+          
+          &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -4px;
+            width: 0;
+            height: 0;
+            border-top: 4px solid #dc2626;
+            border-left: 4px solid transparent;
+          }
+        }
+        
+        &.new {
+          background: #10b981;
+          
+          // 如果同时有HOT标签，则在下方
+          &.has-hot {
+            top: 20px;
+          }
+          
+          // 角标阴影效果
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-right: 4px solid #059669;
+            border-bottom: 4px solid transparent;
+          }
+          
+          &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -4px;
+            width: 0;
+            height: 0;
+            border-top: 4px solid #059669;
+            border-left: 4px solid transparent;
+          }
         }
       }
-    }
-    
-    .article-content {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
       
-      .article-badges {
+      .article-content {
+        width: 100%;
         display: flex;
-        align-items: center;
-        gap: 6px;
-        margin-bottom: 6px;
-        
-        .badge {
-          padding: 2px 8px;
-          border-radius: 12px;
-          font-size: 9px;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.3px;
-          transition: all 0.3s ease;
-          
-          &.hot {
-            background: linear-gradient(135deg, #ff6b6b, #ff5252);
-            color: white;
-            box-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
-            
-            &:hover {
-              transform: scale(1.05);
-              box-shadow: 0 3px 8px rgba(255, 107, 107, 0.4);
-            }
-          }
-          
-          &.new {
-            background: linear-gradient(135deg, #4ecdc4, #26a69a);
-            color: white;
-            box-shadow: 0 2px 4px rgba(78, 205, 196, 0.3);
-            
-            &:hover {
-              transform: scale(1.05);
-              box-shadow: 0 3px 8px rgba(78, 205, 196, 0.4);
-            }
-          }
-        }
-      }
+        flex-direction: column;
+        gap: 8px;
       
       .article-meta {
         display: flex;
@@ -670,51 +607,35 @@ const goToPage = (page: number) => {
         }
       }
       
-      .article-title {
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--el-text-color-primary);
-        line-height: 1.4;
-        margin: 0 0 6px 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-family: 'OPPO Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        
-        &:hover {
-          color: var(--el-color-primary);
-          text-shadow: 0 1px 2px rgba(64, 158, 255, 0.1);
+        .article-title {
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--el-text-color-primary);
+          line-height: 1.4;
+          margin: 0 0 6px 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-family: 'OPPO Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          
+          &:hover {
+            color: var(--el-color-primary);
+            text-shadow: 0 1px 2px rgba(64, 158, 255, 0.1);
+          }
         }
-      }
       
-      .article-excerpt {
-        font-size: 11px;
-        color: var(--el-text-color-regular);
-        line-height: 1.4;
-        margin: 0 0 6px 0;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-      .reading-progress {
-        width: 100%;
-        height: 2px;
-        background: var(--el-border-color-extra-light);
-        border-radius: 1px;
-        overflow: hidden;
-        margin: 0 0 8px 0;
-        
-        .progress-bar {
-          height: 100%;
-          width: 0;
-          background: var(--el-color-primary);
-          border-radius: 1px;
-          transition: width 0.5s ease;
+        .article-excerpt {
+          font-size: 11px;
+          color: var(--el-text-color-regular);
+          line-height: 1.4;
+          margin: 0 0 10px 0;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
         }
-      }
       .article-stats {
         display: flex;
         align-items: center;
@@ -784,10 +705,8 @@ const goToPage = (page: number) => {
 
 // 骨架屏样式
 .skeleton-item {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px;
+  display: block;
+  padding: 14px;
   border-bottom: 1px solid var(--el-border-color-extra-light);
   animation: fadeIn 0.3s ease;
   
@@ -795,22 +714,8 @@ const goToPage = (page: number) => {
     border-bottom: none;
   }
   
-  .skeleton-cover {
-    width: 100%;
-    height: 100px;
-    background: linear-gradient(
-      90deg,
-      var(--el-fill-color-light) 0%,
-      var(--el-fill-color) 50%,
-      var(--el-fill-color-light) 100%
-    );
-    background-size: 200px 100%;
-    border-radius: 8px;
-    animation: shimmer 1.5s ease-in-out infinite;
-  }
-  
   .skeleton-content {
-    flex: 1;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -828,12 +733,12 @@ const goToPage = (page: number) => {
       
       &.title {
         height: 16px;
-        width: 80%;
+        width: 85%;
       }
       
       &.subtitle {
         height: 12px;
-        width: 60%;
+        width: 65%;
         animation-delay: 0.2s;
       }
       
@@ -845,7 +750,7 @@ const goToPage = (page: number) => {
       
       &.short {
         height: 8px;
-        width: 40%;
+        width: 45%;
         animation-delay: 0.6s;
       }
     }
@@ -900,13 +805,6 @@ const goToPage = (page: number) => {
       }
     }
     
-    .page-info {
-      font-size: 12px;
-      color: var(--el-text-color-regular);
-      font-weight: 500;
-      min-width: 40px;
-      text-align: center;
-    }
   }
 }
 
@@ -972,14 +870,32 @@ html.dark .featured-articles-card {
   .article-item {
     background: var(--el-fill-color-dark);
     
-    &:hover {
-      background: rgba(64, 158, 255, 0.08);
-      border-color: rgba(64, 158, 255, 0.4);
-      box-shadow: 0 6px 16px rgba(64, 158, 255, 0.25), 0 2px 6px rgba(64, 158, 255, 0.15);
-    }
     
-    &::before {
-      background: linear-gradient(90deg, transparent, rgba(64, 158, 255, 0.15), transparent);
+    // 暗色模式下的角标样式
+    .corner-badge {
+      &.hot {
+        background: #f87171; // 暗色模式下的红色
+        
+        &::after {
+          border-right-color: #dc2626;
+        }
+        
+        &::before {
+          border-top-color: #dc2626;
+        }
+      }
+      
+      &.new {
+        background: #34d399; // 暗色模式下的绿色
+        
+        &::after {
+          border-right-color: #059669;
+        }
+        
+        &::before {
+          border-top-color: #059669;
+        }
+      }
     }
   }
 }
