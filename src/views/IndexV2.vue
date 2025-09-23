@@ -4,8 +4,16 @@
       <div class="sidebar-content">
         <!-- 关于本站卡片组件 -->
         <AboutSiteCard />
-        <!-- 本月热门文章组件 -->
-        <MonthlyHotArticles />
+        <!-- 本月热门文章组件 - 使用FeaturedArticlesCard -->
+        <FeaturedArticlesCard 
+          title="本月热门" 
+          header-icon="fas fa-fire" 
+          :articles="monthlyHotArticles" 
+          :page-size="2"
+          :show-pagination="true" 
+          @article-click="handleArticleClick" 
+          @load-more="handleLoadMore" 
+        />
       </div>
     </template>
     <!-- 顶部固定区域 -->
@@ -49,7 +57,6 @@ import { ref, computed, onMounted } from 'vue'
 import IndexLayout from '@/components/index/v2/layout/IndexLayout.vue'
 import AboutSiteCard from '@/components/index/v2/AboutSiteCard.vue'
 import NoticeCard from '@/components/index/v2/NoticeCard.vue'
-import MonthlyHotArticles from '@/components/index/v2/MonthlyHotArticles.vue'
 import SearchFilterSection from '@/components/index/v2/SearchFilterSection.vue'
 import ArticleList from '@/components/index/v2/ArticleList.vue'
 // 右侧栏组件
@@ -259,6 +266,94 @@ const featuredArticles = ref([
     isNew: false,
     isTrending: false,
     readProgress: 41
+  }
+])
+
+// 本月热门文章数据
+const monthlyHotArticles = ref([
+  {
+    id: 101,
+    title: 'Vue 3 Composition API 完全指南：从入门到精通',
+    excerpt: '深入解析 Vue 3 的 Composition API，从基础到高级的实际应用技巧。',
+    cover: 'https://picsum.photos/300/180?random=201',
+    category: 'Vue.js',
+    date: '2024-01-20',
+    views: 18500,
+    likes: 1250,
+    comments: 285,
+    isHot: true,
+    isNew: false,
+    isTrending: true
+  },
+  {
+    id: 102,
+    title: 'TypeScript 高级类型实战技巧大全',
+    excerpt: '探索 TypeScript 的高级特性，提升代码的类型安全和开发效率。',
+    cover: 'https://picsum.photos/300/180?random=202',
+    category: 'TypeScript',
+    date: '2024-01-18',
+    views: 16200,
+    likes: 980,
+    comments: 156,
+    isHot: true,
+    isNew: true,
+    isTrending: false
+  },
+  {
+    id: 103,
+    title: '前端性能优化实战技巧大全',
+    excerpt: '从代码分割到懒加载，全面提升前端应用的性能表现。',
+    cover: 'https://picsum.photos/300/180?random=203',
+    category: '性能优化',
+    date: '2024-01-16',
+    views: 14800,
+    likes: 876,
+    comments: 198,
+    isHot: false,
+    isNew: false,
+    isTrending: true
+  },
+  {
+    id: 104,
+    title: 'Vite 构建工具深度解析与优化',
+    excerpt: '全面介绍 Vite 的核心原理和高级用法，包括模块热更新、插件系统等。',
+    cover: 'https://picsum.photos/300/180?random=204',
+    category: '构建工具',
+    date: '2024-01-14',
+    views: 12600,
+    likes: 654,
+    comments: 89,
+    isHot: false,
+    isNew: true,
+    isTrending: false
+  },
+  {
+    id: 105,
+    title: 'React 18 并发渲染原理剖析',
+    excerpt: '全面分析 React 18 的并发渲染机制，揭示其内部工作原理。',
+    cover: 'https://picsum.photos/300/180?random=205',
+    category: 'React',
+    date: '2024-01-12',
+    views: 11400,
+    likes: 589,
+    comments: 67,
+    isHot: false,
+    isNew: false,
+    isTrending: false
+  },
+  {
+    id: 106,
+    title: 'Webpack 5 构建优化实践',
+    excerpt: '深入分析 Webpack 5 的新特性和性能优化方法，提升构建速度。',
+    cover: 'https://picsum.photos/300/180?random=206',
+    category: '构建工具',
+    date: '2024-01-10',
+    views: 9800,
+    likes: 445,
+    comments: 52,
+    isHot: false,
+    isNew: false,
+    isTrending: false
   }
 ])
 
