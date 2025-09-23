@@ -126,6 +126,7 @@ declare module 'vue' {
     ProductGrid: typeof import('./src/components/shop/ProductGrid.vue')['default']
     ProductGrid_example: typeof import('./src/components/shop/ProductGrid_example.vue')['default']
     ProfileBanner: typeof import('./src/components/common/ProfileBanner.vue')['default']
+    ProfileCard: typeof import('./src/components/index/v2/ProfileCard.vue')['default']
     PromotionCard: typeof import('./src/components/blog/BlogDetail/PromotionCard.vue')['default']
     PythonDemo: typeof import('./src/components/PythonDemo.vue')['default']
     RankingBoard: typeof import('./src/components/index/RankingBoard.vue')['default']

@@ -5,7 +5,7 @@
         <!-- 关于本站卡片组件 -->
         <AboutSiteCard />
         <!-- 本月热门文章组件 - 使用FeaturedArticlesCard -->
-        <FeaturedArticlesCard 
+        <FeaturedArticlesCard
           title="本月热门" 
           header-icon="fas fa-fire" 
           :articles="monthlyHotArticles" 
@@ -41,13 +41,9 @@
         <!-- 精选文章推荐 -->
         <FeaturedArticlesCard title="热门推荐" header-icon="fas fa-fire" :articles="featuredArticles" :page-size="2"
           :show-pagination="true" @article-click="handleArticleClick" @load-more="handleLoadMore" />
-        <!-- 精选推广卡片 -->
-        <PromotionCard type="standard" title="前端开发者必备工具集" description="包含50+精选开发工具，提升10倍工作效率，限时优惠中！"
-          image-url="https://picsum.photos/300/200" image-alt="推广图片" :radius="false" badge-text="精选"
-          badge-icon="fas fa-crown" button-text="立即购买" :show-overlay="true" overlay-text="立即查看" :show-price="true"
-          current-price="￥199" original-price="￥399" @click="handlePromotionClick" />
       </div>
     </template>
+      开始货到付款几十块讲话稿科技
   </IndexLayout>
 
 </template>
