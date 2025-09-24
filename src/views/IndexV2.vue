@@ -43,7 +43,8 @@
           :show-pagination="true" @article-click="handleArticleClick" @load-more="handleLoadMore" />
       </div>
     </template>
-      开始货到付款几十块讲话稿科技
+      <!-- 中间区域 -->
+       
   </IndexLayout>
 
 </template>

@@ -61,6 +61,7 @@ declare module 'vue' {
     BlogSidebar: typeof import('./src/components/blog/BlogSidebar.vue')['default']
     CategoryDistribution: typeof import('./src/components/data/CategoryDistribution.vue')['default']
     CategoryNav: typeof import('./src/components/index/CategoryNav.vue')['default']
+    CenterContentSection: typeof import('./src/components/index/v2/center/CenterContentSection.vue')['default']
     DataDashboard: typeof import('./src/components/data/DataDashboard.vue')['default']
     DualTokenTest: typeof import('./src/components/DualTokenTest.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']

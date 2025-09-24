@@ -33,7 +33,21 @@
             </aside>
           </el-col>
         </el-row>
-          <!-- 下面行 -->
+        
+        <!-- 下方内容区域 - 使用栅格系统布局 -->
+        <el-row class="bottom-content-row" :gutter="16">
+          <!-- 中心内容区域 - 全宽占满 -->
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="center-content-col">
+            <div class="center-content-section">
+              <slot name="center-content" />
+            </div>
+          </el-col>
+        </el-row>
+        
+        <!-- 预留更多行的扩展位置 - 也使用栅格布局 -->
+        <div class="additional-sections">
+          <slot name="additional-sections" />
+        </div>
       </div>
          
     </div>
@@ -217,6 +231,83 @@ onUnmounted(() => {
     .el-col:last-child {
       padding-right: 0 !important;
     }
+  }
+}
+
+// 底部栅格行样式 - 与主栅格保持一致
+.bottom-content-row {
+  width: 100%;
+  margin: 0; // 移除Element Plus默认的margin
+  margin-top: 20px; // 与上方区域的间距
+
+  // 确保栅格列正确对齐
+  &.el-row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+
+    // 重写Element Plus栅格系统的默认样式
+    .el-col {
+      padding-left: 0 !important; // 底部区域通常全宽，不需要间距
+      padding-right: 0 !important;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    margin-top: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    margin-top: 12px;
+  }
+}
+
+// 底部中心内容栏样式
+.center-content-col {
+  // 栅格列样式，由上面的bottom-content-row统一管理padding
+  width: 100%;
+}
+
+// 额外的扩展区域容器
+.additional-sections {
+  margin-top: 20px;
+  width: 100%;
+  
+  @media (max-width: 768px) {
+    margin-top: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    margin-top: 12px;
+  }
+}
+
+// 中心内容区域
+.center-content-section {
+  width: 100%;
+  background: var(--el-bg-color);
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+  
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 16px;
+    margin-bottom: 12px;
   }
 }
 
@@ -490,6 +581,15 @@ html.dark & {
 
   .mobile-overlay {
     background: rgba(0, 0, 0, 0.7);
+  }
+  
+  .center-content-section {
+    background: var(--el-bg-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
   }
 }
 

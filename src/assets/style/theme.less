@@ -1,0 +1,160 @@
+// ================================================
+// BitlEBlog 主题色配置 - 橙色系
+// ================================================
+
+// 主题色定义 - 基于 #EF6310 橙色系
+:root {
+  // 基础主题色
+  --theme-primary: #EF6310;          // 橙色主题色
+  
+  // 浅色系列 - 用于背景、hover状态等
+  --theme-primary-light-1: #f2741f;  // 浅色1
+  --theme-primary-light-2: #f4832e;  // 浅色2  
+  --theme-primary-light-3: #f6923d;  // 浅色3
+  --theme-primary-light-4: #f8a14c;  // 浅色4
+  --theme-primary-light-5: #fab05b;  // 浅色5
+  --theme-primary-light-6: #fbbf6a;  // 浅色6
+  --theme-primary-light-7: #fdce79;  // 浅色7
+  --theme-primary-light-8: #fedd88;  // 浅色8
+  --theme-primary-light-9: #ffec97;  // 浅色9
+  
+  // 深色系列 - 用于边框、暗影、active状态等
+  --theme-primary-dark-1: #d7590e;   // 深色1
+  --theme-primary-dark-2: #bf500c;   // 深色2
+  --theme-primary-dark-3: #a6460a;   // 深色3
+  --theme-primary-dark-4: #8e3d09;   // 深色4
+  --theme-primary-dark-5: #763307;   // 深色5
+  
+  // 特殊用途的颜色
+  --theme-primary-bg-light: #fff7f0;  // 非常浅的背景色
+  --theme-primary-bg-soft: #fef2e8;   // 轻柔背景色
+  --theme-primary-text-light: #8e3d09; // 深色文本
+  --theme-primary-border-light: #fbbf6a; // 浅色边框
+  
+  // 渐变色
+  --theme-gradient-warm: linear-gradient(135deg, #EF6310 0%, #f4832e 50%, #f6923d 100%);
+  --theme-gradient-soft: linear-gradient(135deg, #fef2e8 0%, #fff7f0 100%);
+}
+
+// 暗色模式 - 橙色系调整
+html.dark {
+  // 暗色模式下稍微调亮橙色
+  --theme-primary: #FF7A28;          // 暗色模式主题色
+  
+  // 暗色模式下的浅色系列
+  --theme-primary-light-1: #ff8539;
+  --theme-primary-light-2: #ff904a;
+  --theme-primary-light-3: #ff9b5b;
+  --theme-primary-light-4: #ffa66c;
+  --theme-primary-light-5: #ffb17d;
+  --theme-primary-light-6: #ffbc8e;
+  --theme-primary-light-7: #ffc79f;
+  --theme-primary-light-8: #ffd2b0;
+  --theme-primary-light-9: #ffddc1;
+  
+  // 暗色模式下的深色系列  
+  --theme-primary-dark-1: #e66b1f;
+  --theme-primary-dark-2: #cc5d1a;
+  --theme-primary-dark-3: #b34f15;
+  --theme-primary-dark-4: #994010;
+  --theme-primary-dark-5: #80320b;
+  
+  // 暗色模式下的背景和边框色
+  --theme-primary-bg-light: #2a1a10;
+  --theme-primary-bg-soft: #3d2418;
+  --theme-primary-text-light: #ffbc8e;
+  --theme-primary-border-light: #cc5d1a;
+  
+  // 暗色模式渐变
+  --theme-gradient-warm: linear-gradient(135deg, #FF7A28 0%, #ff8539 50%, #ff904a 100%);
+  --theme-gradient-soft: linear-gradient(135deg, #3d2418 0%, #2a1a10 100%);
+}
+
+// ================================================
+// Less变量定义 - 兼容现有代码
+// ================================================
+
+// 基础主题色变量
+@primary-color: var(--theme-primary);
+@primary-light-1: var(--theme-primary-light-1);
+@primary-light-2: var(--theme-primary-light-2);
+@primary-light-3: var(--theme-primary-light-3);
+@primary-light-5: var(--theme-primary-light-5);
+@primary-light-7: var(--theme-primary-light-7);
+@primary-light-9: var(--theme-primary-light-9);
+@primary-dark-1: var(--theme-primary-dark-1);
+@primary-dark-2: var(--theme-primary-dark-2);
+
+// 背景和边框色变量
+@primary-bg-light: var(--theme-primary-bg-light);
+@primary-bg-soft: var(--theme-primary-bg-soft);
+@primary-border-light: var(--theme-primary-border-light);
+@primary-text-light: var(--theme-primary-text-light);
+
+// ================================================
+// Element UI Plus 主题色映射（可选）
+// ================================================
+
+:root {
+  // 如果需要覆盖 Element UI Plus 的默认主题色，取消下面的注释
+  // --el-color-primary: var(--theme-primary);
+  // --el-color-primary-light-3: var(--theme-primary-light-3);
+  // --el-color-primary-light-5: var(--theme-primary-light-5);
+  // --el-color-primary-light-7: var(--theme-primary-light-7);
+  // --el-color-primary-light-8: var(--theme-primary-light-8);
+  // --el-color-primary-light-9: var(--theme-primary-light-9);
+  // --el-color-primary-dark-2: var(--theme-primary-dark-2);
+}
+
+// ================================================
+// 实用工具类
+// ================================================
+
+// 主题色工具类
+.theme-primary {
+  color: var(--theme-primary) !important;
+}
+
+.theme-primary-bg {
+  background-color: var(--theme-primary) !important;
+}
+
+// 浅色系列工具类
+.theme-primary-light {
+  color: var(--theme-primary-light-3) !important;
+}
+
+.theme-primary-light-bg {
+  background-color: var(--theme-primary-bg-light) !important;
+}
+
+.theme-primary-soft-bg {
+  background-color: var(--theme-primary-bg-soft) !important;
+}
+
+// 深色系列工具类
+.theme-primary-dark {
+  color: var(--theme-primary-dark-2) !important;
+}
+
+.theme-primary-dark-bg {
+  background-color: var(--theme-primary-dark-2) !important;
+}
+
+// 边框工具类
+.theme-primary-border {
+  border-color: var(--theme-primary) !important;
+}
+
+.theme-primary-border-light {
+  border-color: var(--theme-primary-border-light) !important;
+}
+
+// 渐变背景工具类
+.theme-gradient-warm {
+  background: var(--theme-gradient-warm) !important;
+}
+
+.theme-gradient-soft {
+  background: var(--theme-gradient-soft) !important;
+}

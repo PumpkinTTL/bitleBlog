@@ -35,7 +35,7 @@ app.use(router).use(pinia).use(motionPlugin)
 
 // Import the animations CSS file
 import './components/index/style/animations.css'
-import './components/index/style/theme.css'
+import '@/assets/style/theme.less'
 
 app.mount('#app')
 
