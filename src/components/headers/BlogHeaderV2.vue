@@ -51,14 +51,14 @@
                 <el-avatar :size="32" :src="userAvatar" class="user-avatar">
                   {{ userInitial }}
                 </el-avatar>
-                <div class="user-name-container">
-                  <span class="user-name">{{ userName }}</span>
-                  <div class="premium-badge">
-                    <i class="fas fa-crown"></i>
-                    <span>Premium</span>
-                  </div>
-                </div>
+                <span class="user-name">{{ userName }}</span>
                 <i class="fas fa-chevron-down dropdown-icon"></i>
+                
+                <!-- Premium吸附标签（右上角） -->
+                <div class="premium-corner-badge">
+                  <i class="fas fa-crown"></i>
+                  <span>Premium</span>
+                </div>
               </div>
               <template #dropdown>
                 <el-dropdown-menu class="user-dropdown-menu">
@@ -127,14 +127,14 @@
             <div class="online-badge"></div>
           </div>
           <div class="user-info">
-            <div class="mobile-user-name-container">
-              <h4 class="user-name-text">{{ userName }}</h4>
-              <div class="mobile-premium-badge">
-                <i class="fas fa-crown"></i>
-                <span>Premium</span>
-              </div>
-            </div>
+            <h4 class="user-name-text">{{ userName }}</h4>
             <p class="user-status">在线</p>
+            
+            <!-- 移动端Premium吸附标签（右上角） -->
+            <div class="mobile-premium-corner-badge">
+              <i class="fas fa-crown"></i>
+              <span>Premium</span>
+            </div>
           </div>
           <button class="logout-icon-btn" @click="logout" title="退出登录">
             <i class="fas fa-sign-out-alt"></i>
@@ -658,19 +658,6 @@ onMounted(() => {
     border: 2px solid var(--el-border-color-lighter);
   }
   
-  .user-name-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
-    position: relative;
-    
-    @media (max-width: 768px) {
-      align-items: center;
-      gap: 1px;
-    }
-  }
-  
   .user-name {
     font-size: 13px;
     font-weight: 600;
@@ -680,7 +667,6 @@ onMounted(() => {
     max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
-    line-height: 1.2;
     
     @media (max-width: 1000px) {
       max-width: 80px;
@@ -693,38 +679,59 @@ onMounted(() => {
     }
   }
   
-  .premium-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
-    padding: 1px 4px;
+  // 右上角吸附Premium标签 - 参考FeaturedArticlesCard的corner-badge样式
+  .premium-corner-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding: 2px 6px;
     background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
     color: white;
-    border-radius: 6px;
-    font-size: 8px;
-    font-weight: 600;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(251, 191, 36, 0.3);
+    line-height: 1.2;
+    z-index: 15;
+    border-radius: 0 0 0 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(251, 191, 36, 0.3);
+    // 确保文字清晰 - 使用filter属性增强对比度
+    filter: contrast(1.2) brightness(1.1);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    
+    // 角标阴影效果 - 参考FeaturedArticlesCard
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      right: 0;
+      width: 0;
+      height: 0;
+      border-right: 4px solid #d97706;
+      border-bottom: 4px solid transparent;
+    }
     
     &::before {
       content: '';
       position: absolute;
       top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      transition: left 0.6s ease;
-    }
-    
-    &:hover::before {
-      left: 100%;
+      left: -4px;
+      width: 0;
+      height: 0;
+      border-top: 4px solid #d97706;
+      border-left: 4px solid transparent;
     }
     
     i {
       font-size: 7px;
-      margin: 0;
+      margin-right: 2px;
+      color: #ffd700;
+      filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
     }
     
     span {
@@ -733,11 +740,22 @@ onMounted(() => {
       letter-spacing: 0.2px;
     }
     
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 3px 8px rgba(251, 191, 36, 0.4);
+    }
+    
     @media (max-width: 768px) {
-      padding: 1px 3px;
-      border-radius: 4px;
+      top: -1px;
+      right: -1px;
+      padding: 1px 4px;
+      font-size: 7px;
       
-      i, span {
+      i {
+        font-size: 6px;
+      }
+      
+      span {
         font-size: 6px;
       }
     }
@@ -916,63 +934,80 @@ onMounted(() => {
     flex: 1;
     min-width: 0;
     
-    .mobile-user-name-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
+    .user-name-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--el-text-color-primary);
+      margin: 0 0 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    // 移动端右上角吸附Premium标签
+    .mobile-premium-corner-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      padding: 3px 7px;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: white;
+      line-height: 1.2;
+      z-index: 15;
+      border-radius: 0 0 0 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 8px rgba(251, 191, 36, 0.4);
+      // 移动端增强文字清晰度
+      filter: contrast(1.3) brightness(1.2);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
       
-      .user-name-text {
-        font-size: 16px;
-        font-weight: 700;
-        color: var(--el-text-color-primary);
-        margin: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        flex: 1;
+      // 移动端角标阴影效果
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        right: 0;
+        width: 0;
+        height: 0;
+        border-right: 5px solid #d97706;
+        border-bottom: 5px solid transparent;
       }
       
-      .mobile-premium-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 3px;
-        padding: 2px 6px;
-        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-        color: white;
-        border-radius: 8px;
-        font-size: 10px;
-        font-weight: 600;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 2px 6px rgba(251, 191, 36, 0.3);
-        flex-shrink: 0;
-        
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-          transition: left 0.6s ease;
-        }
-        
-        &:hover::before {
-          left: 100%;
-        }
-        
-        i {
-          font-size: 9px;
-          margin: 0;
-        }
-        
-        span {
-          font-size: 9px;
-          font-weight: 700;
-          letter-spacing: 0.2px;
-        }
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -5px;
+        width: 0;
+        height: 0;
+        border-top: 5px solid #d97706;
+        border-left: 5px solid transparent;
+      }
+      
+      i {
+        font-size: 8px;
+        margin-right: 3px;
+        color: #ffd700;
+        filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+      }
+      
+      span {
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+      
+      &:hover {
+        transform: scale(1.08);
+        box-shadow: 0 4px 12px rgba(251, 191, 36, 0.5);
       }
     }
     
