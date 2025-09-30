@@ -688,7 +688,7 @@ onMounted(() => {
   align-items: center;
   gap: 8px;
   padding: 4px 10px 4px 4px;
-  border-radius: 20px;
+  border-radius: 10px; // 与切换主题按钮圆角保持一致
   background: var(--el-bg-color);
   border: 1px solid var(--el-border-color-lighter);
   cursor: pointer;
@@ -718,26 +718,38 @@ onMounted(() => {
     color: var(--el-text-color-primary);
     transition: color 0.2s ease;
     white-space: nowrap;
-    max-width: 100px;
+    max-width: 120px; // 增加最大宽度
     overflow: hidden;
     text-overflow: ellipsis;
+    padding-right: 8px; // 给Premium标签预留空间
+    
+    @media (max-width: 1200px) {
+      max-width: 100px;
+    }
     
     @media (max-width: 1000px) {
-      max-width: 80px;
+      max-width: 85px;
       font-size: 12px;
     }
     
     @media (max-width: 768px) {
-      max-width: 60px;
+      max-width: 70px;
       font-size: 11px;
+      padding-right: 6px;
+    }
+    
+    @media (max-width: 480px) {
+      max-width: 55px;
+      font-size: 10px;
+      padding-right: 4px;
     }
   }
   
   // 右上角吸附Premium标签 - 参考FeaturedArticlesCard的corner-badge样式
   .premium-corner-badge {
     position: absolute;
-    top: -1px;
-    right: -3px; // 往左挪动，增强吸附效果
+    top: 0;
+    right: 0;
     font-size: 8px;
     font-weight: 700;
     text-transform: uppercase;
@@ -746,7 +758,7 @@ onMounted(() => {
     background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%); // 使用渐变色增强层次感
     color: #ffffff; // 白色文字更清晰
     line-height: 1.2;
-    z-index: 15;
+    z-index: 10; // 降低z-index避免遮挡昵称
     border-radius: 0 0 0 10px; // 与切换主题按钮保持一致的圆角
     transition: all 0.3s ease;
     box-shadow: 0 2px 6px rgba(251, 191, 36, 0.3);
@@ -758,7 +770,7 @@ onMounted(() => {
     font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     
-    // 角标阴影效果 - 使用协调的颜色，避免割裂感
+    // 角标阴影效果 - 匹配渐变色的两个角度
     &::after {
       content: '';
       position: absolute;
@@ -766,7 +778,7 @@ onMounted(() => {
       right: 0;
       width: 0;
       height: 0;
-      border-right: 4px solid rgba(217, 119, 6, 0.7); // 使用更协调的橙黄色阴影
+      border-right: 4px solid #d97706; // 右下角使用渐变色右侧颜色
       border-bottom: 4px solid transparent;
     }
     
@@ -777,7 +789,7 @@ onMounted(() => {
       left: -4px;
       width: 0;
       height: 0;
-      border-top: 4px solid rgba(217, 119, 6, 0.7); // 使用更协调的橙黄色阴影
+      border-top: 4px solid #fbbf24; // 左上角使用渐变色左侧颜色
       border-left: 4px solid transparent;
     }
     
@@ -800,8 +812,8 @@ onMounted(() => {
     }
     
     @media (max-width: 768px) {
-      top: -1px;
-      right: -2px; // 移动端也往左挪
+      top: 0;
+      right: 0;
       padding: 2px 5px;
       font-size: 7px;
       border-radius: 0 0 0 8px; // 移动端相应调整
@@ -1002,8 +1014,8 @@ onMounted(() => {
     // 移动端右上角吸附Premium标签
     .mobile-premium-corner-badge {
       position: absolute;
-      top: -2px;
-      right: -4px; // 往左挪动，增强吸附效果
+      top: 0;
+      right: 0;
       font-size: 9px;
       font-weight: 700;
       text-transform: uppercase;
@@ -1012,7 +1024,7 @@ onMounted(() => {
       background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%); // 移动端使用同样的渐变色
       color: #ffffff; // 白色文字更清晰
       line-height: 1.2;
-      z-index: 15;
+      z-index: 10; // 降低z-index避免遮挡昵称
       border-radius: 0 0 0 12px; // 移动端抽屉略大一些，与整体UI风格保持一致
       transition: all 0.3s ease;
       box-shadow: 0 3px 8px rgba(251, 191, 36, 0.4);
@@ -1024,7 +1036,7 @@ onMounted(() => {
       font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
       
-      // 移动端角标阴影效果 - 使用协调的颜色，避免割裂感
+      // 移动端角标阴影效果 - 匹配渐变色的两个角度
       &::after {
         content: '';
         position: absolute;
@@ -1032,7 +1044,7 @@ onMounted(() => {
         right: 0;
         width: 0;
         height: 0;
-        border-right: 5px solid rgba(217, 119, 6, 0.6); // 移动端使用轻微透明的橙黄色
+        border-right: 5px solid #d97706; // 右下角使用渐变色右侧颜色
         border-bottom: 5px solid transparent;
       }
       
@@ -1043,7 +1055,7 @@ onMounted(() => {
         left: -5px;
         width: 0;
         height: 0;
-        border-top: 5px solid rgba(217, 119, 6, 0.6); // 移动端使用轻微透明的橙黄色
+        border-top: 5px solid #fbbf24; // 左上角使用渐变色左侧颜色
         border-left: 5px solid transparent;
       }
       
