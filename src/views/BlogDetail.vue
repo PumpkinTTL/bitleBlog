@@ -977,6 +977,10 @@ onUnmounted(() => {
     padding: 18px 0;
     position: fixed;
     top: 60px;
+    
+    @media (max-width: 768px) {
+      top: 54px; // 移动端使用更小的头部高度
+    }
     left: 0;
     right: 0;
     width: 100%;
