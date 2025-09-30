@@ -736,18 +736,18 @@ onMounted(() => {
   // 右上角吸附Premium标签 - 参考FeaturedArticlesCard的corner-badge样式
   .premium-corner-badge {
     position: absolute;
-    top: -3px;
-    right: -8px; // 左移了一些
+    top: -1px;
+    right: -1px; // 完美贴合右上角
     font-size: 8px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.3px;
-    padding: 3px 8px;
+    padding: 2px 6px;
     background: var(--premium-bg);
     color: var(--premium-text);
     line-height: 1.2;
     z-index: 15;
-    border-radius: 0 0 0 12px; // 调整吸附角度
+    border-radius: 0 0 0 8px; // 完美的吸附角度
     transition: all 0.3s ease;
     box-shadow: 0 2px 6px rgba(251, 191, 36, 0.3);
     // 确保文字清晰 - 使用filter属性增强对比度
@@ -762,23 +762,23 @@ onMounted(() => {
     &::after {
       content: '';
       position: absolute;
-      bottom: -6px; // 调整吸附角度
+      bottom: -4px;
       right: 0;
       width: 0;
       height: 0;
-      border-right: 6px solid var(--premium-shadow);
-      border-bottom: 6px solid transparent;
+      border-right: 4px solid var(--premium-shadow);
+      border-bottom: 4px solid transparent;
     }
     
     &::before {
       content: '';
       position: absolute;
       top: 0;
-      left: -6px; // 调整吸附角度
+      left: -4px;
       width: 0;
       height: 0;
-      border-top: 6px solid var(--premium-shadow);
-      border-left: 6px solid transparent;
+      border-top: 4px solid var(--premium-shadow);
+      border-left: 4px solid transparent;
     }
     
     i {
@@ -800,10 +800,11 @@ onMounted(() => {
     }
     
     @media (max-width: 768px) {
-      top: -2px;
-      right: -6px;
-      padding: 2px 6px;
+      top: -1px;
+      right: -1px;
+      padding: 2px 5px;
       font-size: 7px;
+      border-radius: 0 0 0 6px;
       
       i {
         font-size: 6px;
@@ -1001,18 +1002,18 @@ onMounted(() => {
     // 移动端右上角吸附Premium标签
     .mobile-premium-corner-badge {
       position: absolute;
-      top: -3px;
-      right: -10px; // 左移更多一些
+      top: -2px;
+      right: -2px; // 完美贴合右上角
       font-size: 9px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.3px;
-      padding: 4px 9px;
+      padding: 3px 7px;
       background: var(--premium-bg);
       color: var(--premium-text);
       line-height: 1.2;
       z-index: 15;
-      border-radius: 0 0 0 14px; // 调整吸附角度
+      border-radius: 0 0 0 10px; // 完美的吸附角度
       transition: all 0.3s ease;
       box-shadow: 0 3px 8px rgba(251, 191, 36, 0.4);
       // 移动端增强文字清晰度
@@ -1027,23 +1028,23 @@ onMounted(() => {
       &::after {
         content: '';
         position: absolute;
-        bottom: -7px; // 调整吸附角度
+        bottom: -5px;
         right: 0;
         width: 0;
         height: 0;
-        border-right: 7px solid var(--premium-shadow);
-        border-bottom: 7px solid transparent;
+        border-right: 5px solid var(--premium-shadow);
+        border-bottom: 5px solid transparent;
       }
       
       &::before {
         content: '';
         position: absolute;
         top: 0;
-        left: -7px; // 调整吸附角度
+        left: -5px;
         width: 0;
         height: 0;
-        border-top: 7px solid var(--premium-shadow);
-        border-left: 7px solid transparent;
+        border-top: 5px solid var(--premium-shadow);
+        border-left: 5px solid transparent;
       }
       
       i {
