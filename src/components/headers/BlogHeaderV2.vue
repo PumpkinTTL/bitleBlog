@@ -747,7 +747,7 @@ onMounted(() => {
     color: var(--premium-text);
     line-height: 1.2;
     z-index: 15;
-    border-radius: 0 0 0 8px; // 完美的吸附角度
+    border-radius: 0 0 0 10px; // 与切换主题按钮保持一致的圆角
     transition: all 0.3s ease;
     box-shadow: 0 2px 6px rgba(251, 191, 36, 0.3);
     // 确保文字清晰 - 使用filter属性增强对比度
@@ -758,28 +758,28 @@ onMounted(() => {
     font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     
-    // 角标阴影效果 - 使用动态颜色
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      right: 0;
-      width: 0;
-      height: 0;
-      border-right: 4px solid var(--premium-shadow);
-      border-bottom: 4px solid transparent;
-    }
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -4px;
-      width: 0;
-      height: 0;
-      border-top: 4px solid var(--premium-shadow);
-      border-left: 4px solid transparent;
-    }
+      // 角标阴影效果 - 使用动态颜色，匹配10px圆角
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        right: 0;
+        width: 0;
+        height: 0;
+        border-right: 5px solid var(--premium-shadow);
+        border-bottom: 5px solid transparent;
+      }
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -5px;
+        width: 0;
+        height: 0;
+        border-top: 5px solid var(--premium-shadow);
+        border-left: 5px solid transparent;
+      }
     
     i {
       font-size: 7px;
@@ -804,7 +804,7 @@ onMounted(() => {
       right: -1px;
       padding: 2px 5px;
       font-size: 7px;
-      border-radius: 0 0 0 6px;
+      border-radius: 0 0 0 8px; // 移动端相应调整
       
       i {
         font-size: 6px;
@@ -1013,7 +1013,7 @@ onMounted(() => {
       color: var(--premium-text);
       line-height: 1.2;
       z-index: 15;
-      border-radius: 0 0 0 10px; // 完美的吸附角度
+      border-radius: 0 0 0 12px; // 移动端抽屉略大一些，与整体UI风格保持一致
       transition: all 0.3s ease;
       box-shadow: 0 3px 8px rgba(251, 191, 36, 0.4);
       // 移动端增强文字清晰度
@@ -1024,27 +1024,27 @@ onMounted(() => {
       font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
       
-      // 移动端角标阴影效果 - 使用动态颜色
+      // 移动端角标阴影效果 - 使用动态颜色，匹配12px圆角
       &::after {
         content: '';
         position: absolute;
-        bottom: -5px;
+        bottom: -6px;
         right: 0;
         width: 0;
         height: 0;
-        border-right: 5px solid var(--premium-shadow);
-        border-bottom: 5px solid transparent;
+        border-right: 6px solid var(--premium-shadow);
+        border-bottom: 6px solid transparent;
       }
       
       &::before {
         content: '';
         position: absolute;
         top: 0;
-        left: -5px;
+        left: -6px;
         width: 0;
         height: 0;
-        border-top: 5px solid var(--premium-shadow);
-        border-left: 5px solid transparent;
+        border-top: 6px solid var(--premium-shadow);
+        border-left: 6px solid transparent;
       }
       
       i {
