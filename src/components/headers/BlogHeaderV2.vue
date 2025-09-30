@@ -653,8 +653,14 @@ onMounted(() => {
     overflow: hidden;
     text-overflow: ellipsis;
     
-    @media (max-width: 1200px) {
-      display: none;
+    @media (max-width: 1000px) {
+      max-width: 80px;
+      font-size: 12px;
+    }
+    
+    @media (max-width: 768px) {
+      max-width: 60px;
+      font-size: 11px;
     }
   }
   
@@ -699,84 +705,38 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 16px;
-  border: 2px solid transparent;
-  background: linear-gradient(135deg, @primary-color, @secondary-color);
-  border-radius: 20px;
+  padding: 7px 16px;
+  border: 1px solid var(--el-color-primary);
+  background: var(--el-color-primary);
+  border-radius: 6px;
   color: white;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  box-shadow: 
-    0 4px 16px rgba(139, 92, 246, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  position: relative;
-  overflow: hidden;
+  transition: all 0.2s ease;
   
   @media (max-width: 992px) {
     display: none !important;
   }
   
-  // 添加光泽效果
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 50%;
-    background: linear-gradient(180deg,
-      rgba(255, 255, 255, 0.25) 0%,
-      transparent 100%);
-    pointer-events: none;
-  }
-  
-  // 添加动态光带效果
-  &::after {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -100%;
-    width: 100%;
-    height: calc(100% + 4px);
-    background: linear-gradient(90deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.3) 50%,
-      transparent 100%);
-    transition: left 0.6s ease;
-  }
-  
   i {
-    font-size: 13px;
-    transition: transform 0.3s ease;
+    font-size: 12px;
   }
   
   span {
-    font-weight: 600;
-    letter-spacing: 0.2px;
+    font-weight: 500;
   }
   
   &:hover {
-    background: linear-gradient(135deg, 
-      lighten(@primary-color, 5%), 
-      lighten(@secondary-color, 5%));
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 
-      0 8px 24px rgba(139, 92, 246, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.4);
-      
-    &::after {
-      left: 100%;
-    }
-    
-    i {
-      transform: scale(1.1) rotate(5deg);
-    }
+    background: var(--el-color-primary-light-3);
+    border-color: var(--el-color-primary-light-3);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
   
   &:active {
-    transform: translateY(-1px) scale(1.01);
+    transform: translateY(0);
+    background: var(--el-color-primary-dark-2);
   }
 }
 
@@ -828,68 +788,148 @@ onMounted(() => {
 .drawer-user-section {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px 20px;
-  background: var(--el-fill-color-extra-light);
-  border-radius: 12px;
+  gap: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, 
+    var(--el-color-primary-light-9) 0%, 
+    var(--el-fill-color-extra-light) 100%);
+  border-radius: 16px;
   margin: 0 20px;
+  border: 1px solid var(--el-border-color-extra-light);
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+      @primary-color, 
+      @secondary-color);
+    border-radius: 16px 16px 0 0;
+  }
   
   .user-avatar-wrapper {
     position: relative;
     
     .drawer-user-avatar {
-      border: 2px solid var(--el-color-primary-light-7);
+      border: 3px solid var(--el-color-primary-light-5);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
     }
     
     .online-badge {
       position: absolute;
-      bottom: 2px;
-      right: 2px;
-      width: 12px;
-      height: 12px;
-      background: #10b981;
-      border: 2px solid var(--el-bg-color);
+      bottom: 0px;
+      right: 0px;
+      width: 14px;
+      height: 14px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border: 3px solid var(--el-bg-color);
       border-radius: 50%;
-      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+      animation: pulse 2s infinite;
     }
   }
   
   .user-info {
     flex: 1;
+    min-width: 0;
     
     .user-name-text {
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 700;
       color: var(--el-text-color-primary);
-      margin: 0 0 4px;
+      margin: 0 0 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     
     .user-status {
-      font-size: 12px;
+      font-size: 13px;
       color: #10b981;
       margin: 0;
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      
+      &::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        background: #10b981;
+        border-radius: 50%;
+        display: inline-block;
+        animation: pulse 2s infinite;
+      }
     }
   }
   
   .logout-icon-btn {
-    width: 32px;
-    height: 32px;
-    border: 1px solid var(--el-color-error-light-7);
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--el-color-error-light-6);
     background: var(--el-color-error-light-9);
     color: var(--el-color-error);
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
-    transition: all 0.2s ease;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--el-color-error);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    i {
+      position: relative;
+      z-index: 1;
+      transition: color 0.3s ease;
+    }
     
     &:hover {
-      background: var(--el-color-error);
-      color: white;
+      border-color: var(--el-color-error);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(245, 101, 101, 0.3);
+      
+      &::before {
+        opacity: 1;
+      }
+      
+      i {
+        color: white;
+      }
     }
+    
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
   }
 }
 
