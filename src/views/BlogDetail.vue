@@ -45,15 +45,42 @@
               <p>加载文章中...</p>
             </div>
 
-            <!-- 错误状态 -->
-            <div v-else-if="hasError" class="error-container animate__animated animate__fadeIn">
-              <i class="fas fa-exclamation-circle error-icon"></i>
-              <p class="error-message">{{ errorMessage }}</p>
-              <p class="error-tip">别担心，我们已经派出救援队！</p>
-              <a-button type="primary" class="retry-button" @click="fetchArticleDetail">
-                <i class="fas fa-sync-alt"></i>
-                <span>重新加载</span>
-              </a-button>
+            <!-- 错误状态 - 现代化设计 -->
+            <div v-else-if="hasError" class="modern-error-container animate__animated animate__fadeIn">
+              <div class="error-content-wrapper">
+                <!-- 错误图标区域 -->
+                <div class="error-icon-section animate__animated animate__zoomIn">
+                  <i class="fas fa-exclamation-triangle error-main-icon"></i>
+                </div>
+                
+                <!-- 错误信息区域 -->
+                <div class="error-info-section">
+                  <h2 class="error-title animate__animated animate__zoomIn animate__delay-200ms">文章加载失败</h2>
+                  <div class="error-suggestions">
+                    <div 
+                      v-for="(suggestion, index) in getErrorSuggestions(errorMessage)" 
+                      :key="suggestion.id"
+                      class="suggestion-item animate__animated animate__fadeInUp"
+                      :style="`animation-delay: ${400 + index * 100}ms`"
+                    >
+                      <i :class="suggestion.icon"></i>
+                      <span>{{ suggestion.text }}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- 操作按钮区域 -->
+                <div class="error-actions-section animate__animated animate__fadeInUp" style="animation-delay: 800ms;">
+                  <button class="retry-btn" @click="fetchArticleDetail">
+                    <i class="fas fa-redo-alt"></i>
+                    <span>重新加载</span>
+                  </button>
+                  <button class="home-btn" @click="goHome">
+                    <i class="fas fa-home"></i>
+                    <span>返回首页</span>
+                  </button>
+                </div>
+              </div>
             </div>
 
             <!-- 正常内容 -->
@@ -678,6 +705,21 @@ const handlePremiumClick = (event: MouseEvent) => {
 // 返回上一页
 const goBack = () => {
   router.back();
+};
+
+// 返回首页
+const goHome = () => {
+  router.push('/');
+};
+
+// 获取错误建议
+const getErrorSuggestions = (message: string) => {
+  return [
+    { id: 1, icon: 'fas fa-exclamation-triangle', text: '文章不存在' },
+    { id: 2, icon: 'fas fa-wifi', text: '检查网络连接是否正常' },
+    { id: 3, icon: 'fas fa-sync-alt', text: '尝试重新加载页面' },
+    { id: 4, icon: 'fas fa-home', text: '返回首页浏览其他内容' }
+  ];
 };
 
 
@@ -1599,6 +1641,155 @@ onUnmounted(() => {
         position: relative;
         z-index: 1;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+
+  // 现代化错误界面样式
+  .modern-error-container {
+    padding: 60px 40px;
+    position: relative;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .error-content-wrapper {
+      max-width: 480px;
+      text-align: center;
+      z-index: 2;
+      position: relative;
+    }
+    
+    .error-icon-section {
+      margin-bottom: 40px;
+      
+      .error-main-icon {
+        font-size: 80px;
+        color: #fbbf24;
+        animation: errorIconPulse 3s ease-in-out infinite;
+        filter: drop-shadow(0 8px 16px rgba(251, 191, 36, 0.25));
+      }
+    }
+    
+    .error-info-section {
+      margin-bottom: 40px;
+      
+      .error-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #fbbf24;
+        margin-bottom: 16px;
+        line-height: 1.2;
+      }
+      
+      .error-description {
+        font-size: 16px;
+        color: #64748b;
+        margin-bottom: 24px;
+        line-height: 1.6;
+      }
+      
+      .error-suggestions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        
+        .suggestion-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 16px;
+          background: rgba(251, 191, 36, 0.05);
+          border: 1px solid rgba(251, 191, 36, 0.1);
+          border-radius: 10px;
+          color: #475569;
+          font-size: 14px;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            background: rgba(251, 191, 36, 0.08);
+            border-color: rgba(251, 191, 36, 0.2);
+            transform: translateX(4px);
+          }
+          
+          i {
+            color: #fbbf24;
+            font-size: 16px;
+            flex-shrink: 0;
+          }
+        }
+      }
+    }
+    
+    .error-actions-section {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      
+      .retry-btn, .home-btn {
+        padding: 14px 28px;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 140px;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, 
+            transparent, 
+            rgba(255, 255, 255, 0.3), 
+            transparent
+          );
+          transition: left 0.6s ease;
+        }
+        
+        &:hover::before {
+          left: 100%;
+        }
+      }
+      
+      .retry-btn {
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+        
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+          background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        &:active {
+          transform: translateY(0);
+        }
+      }
+      
+      .home-btn {
+        background: rgba(107, 114, 128, 0.1);
+        color: #374151;
+        border: 1px solid rgba(107, 114, 128, 0.2);
+        
+        &:hover {
+          background: rgba(107, 114, 128, 0.15);
+          border-color: rgba(107, 114, 128, 0.3);
+          transform: translateY(-1px);
+        }
       }
     }
   }
@@ -3246,6 +3437,18 @@ onUnmounted(() => {
 
   100% {
     transform: translateX(100%) rotate(45deg);
+  }
+}
+
+// 错误界面动画
+@keyframes errorIconPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 8px 16px rgba(251, 191, 36, 0.25));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 10px 20px rgba(251, 191, 36, 0.35));
   }
 }
 
