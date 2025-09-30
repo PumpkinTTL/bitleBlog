@@ -51,7 +51,13 @@
                 <el-avatar :size="32" :src="userAvatar" class="user-avatar">
                   {{ userInitial }}
                 </el-avatar>
-                <span class="user-name">{{ userName }}</span>
+                <div class="user-name-container">
+                  <span class="user-name">{{ userName }}</span>
+                  <div class="premium-badge">
+                    <i class="fas fa-crown"></i>
+                    <span>Premium</span>
+                  </div>
+                </div>
                 <i class="fas fa-chevron-down dropdown-icon"></i>
               </div>
               <template #dropdown>
@@ -121,7 +127,13 @@
             <div class="online-badge"></div>
           </div>
           <div class="user-info">
-            <h4 class="user-name-text">{{ userName }}</h4>
+            <div class="mobile-user-name-container">
+              <h4 class="user-name-text">{{ userName }}</h4>
+              <div class="mobile-premium-badge">
+                <i class="fas fa-crown"></i>
+                <span>Premium</span>
+              </div>
+            </div>
             <p class="user-status">在线</p>
           </div>
           <button class="logout-icon-btn" @click="logout" title="退出登录">
@@ -609,8 +621,11 @@ onMounted(() => {
 
 // ==================== 用户区域 ====================
 .user-area {
+  display: flex;
+  align-items: center;
+  
   @media (max-width: 992px) {
-    display: none !important;
+    // 移动端也显示用户区域，但要简化样式
   }
 }
 
@@ -643,6 +658,19 @@ onMounted(() => {
     border: 2px solid var(--el-border-color-lighter);
   }
   
+  .user-name-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    position: relative;
+    
+    @media (max-width: 768px) {
+      align-items: center;
+      gap: 1px;
+    }
+  }
+  
   .user-name {
     font-size: 13px;
     font-weight: 600;
@@ -652,6 +680,7 @@ onMounted(() => {
     max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.2;
     
     @media (max-width: 1000px) {
       max-width: 80px;
@@ -661,6 +690,56 @@ onMounted(() => {
     @media (max-width: 768px) {
       max-width: 60px;
       font-size: 11px;
+    }
+  }
+  
+  .premium-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 1px 4px;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: white;
+    border-radius: 6px;
+    font-size: 8px;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(251, 191, 36, 0.3);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.6s ease;
+    }
+    
+    &:hover::before {
+      left: 100%;
+    }
+    
+    i {
+      font-size: 7px;
+      margin: 0;
+    }
+    
+    span {
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    
+    @media (max-width: 768px) {
+      padding: 1px 3px;
+      border-radius: 4px;
+      
+      i, span {
+        font-size: 6px;
+      }
     }
   }
   
@@ -837,14 +916,64 @@ onMounted(() => {
     flex: 1;
     min-width: 0;
     
-    .user-name-text {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--el-text-color-primary);
-      margin: 0 0 6px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .mobile-user-name-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      
+      .user-name-text {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--el-text-color-primary);
+        margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
+      }
+      
+      .mobile-premium-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        padding: 2px 6px;
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        color: white;
+        border-radius: 8px;
+        font-size: 10px;
+        font-weight: 600;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(251, 191, 36, 0.3);
+        flex-shrink: 0;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+          transition: left 0.6s ease;
+        }
+        
+        &:hover::before {
+          left: 100%;
+        }
+        
+        i {
+          font-size: 9px;
+          margin: 0;
+        }
+        
+        span {
+          font-size: 9px;
+          font-weight: 700;
+          letter-spacing: 0.2px;
+        }
+      }
     }
     
     .user-status {
