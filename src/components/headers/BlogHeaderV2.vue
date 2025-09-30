@@ -55,9 +55,18 @@
                 <i class="fas fa-chevron-down dropdown-icon"></i>
                 
                 <!-- Premium吸附标签（右上角） -->
-                <div class="premium-corner-badge">
-                  <i class="fas fa-crown"></i>
-                  <span>Premium</span>
+                <div 
+                  v-if="premiumConfig.show"
+                  class="premium-corner-badge"
+                  :style="{
+                    '--premium-bg': premiumConfig.backgroundColor,
+                    '--premium-text': premiumConfig.textColor,
+                    '--premium-icon': premiumConfig.iconColor,
+                    '--premium-shadow': premiumShadowColor
+                  }"
+                >
+                  <i :class="premiumConfig.icon"></i>
+                  <span>{{ premiumConfig.text }}</span>
                 </div>
               </div>
               <template #dropdown>
@@ -131,9 +140,18 @@
             <p class="user-status">在线</p>
             
             <!-- 移动端Premium吸附标签（右上角） -->
-            <div class="mobile-premium-corner-badge">
-              <i class="fas fa-crown"></i>
-              <span>Premium</span>
+            <div 
+              v-if="premiumConfig.show"
+              class="mobile-premium-corner-badge"
+              :style="{
+                '--premium-bg': premiumConfig.backgroundColor,
+                '--premium-text': premiumConfig.textColor,
+                '--premium-icon': premiumConfig.iconColor,
+                '--premium-shadow': premiumShadowColor
+              }"
+            >
+              <i :class="premiumConfig.icon"></i>
+              <span>{{ premiumConfig.text }}</span>
             </div>
           </div>
           <button class="logout-icon-btn" @click="logout" title="退出登录">
@@ -222,6 +240,30 @@ const router = useRouter()
 const store = useStore()
 const themeStore = useThemeStore()
 
+// 定义Props
+interface Props {
+  // Premium标签配置
+  premiumConfig?: {
+    show: boolean
+    text: string
+    icon: string
+    backgroundColor: string
+    textColor: string
+    iconColor: string
+  }
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  premiumConfig: () => ({
+    show: true,
+    text: 'Premium',
+    icon: 'fas fa-crown',
+    backgroundColor: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
+    textColor: 'white',
+    iconColor: '#ffd700'
+  })
+})
+
 // 响应式数据
 const mobileMenuOpen = ref(false)
 const isDarkMode = computed(() => themeStore.isDark)
@@ -249,6 +291,18 @@ const userAvatar = computed(() => {
   return userInfo?.avatar || userInfo?.headImg || ''
 })
 const userInitial = computed(() => userName.value.charAt(0))
+
+// 获取角标阴影颜色（从背景色中提取）
+const premiumShadowColor = computed(() => {
+  const bgColor = props.premiumConfig.backgroundColor
+  // 如果是渐变色，提取第一个颜色作为阴影色
+  if (bgColor.includes('linear-gradient')) {
+    const match = bgColor.match(/#[a-fA-F0-9]{6}|#[a-fA-F0-9]{3}/)
+    return match ? match[0] : '#d97706'
+  }
+  // 如果是单色，直接使用
+  return bgColor
+})
 
 // 方法
 const toggleTheme = () => {
@@ -682,18 +736,18 @@ onMounted(() => {
   // 右上角吸附Premium标签 - 参考FeaturedArticlesCard的corner-badge样式
   .premium-corner-badge {
     position: absolute;
-    top: -2px;
-    right: -2px;
+    top: -3px;
+    right: -8px; // 左移了一些
     font-size: 8px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.3px;
-    padding: 2px 6px;
-    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-    color: white;
+    padding: 3px 8px;
+    background: var(--premium-bg);
+    color: var(--premium-text);
     line-height: 1.2;
     z-index: 15;
-    border-radius: 0 0 0 8px;
+    border-radius: 0 0 0 12px; // 调整吸附角度
     transition: all 0.3s ease;
     box-shadow: 0 2px 6px rgba(251, 191, 36, 0.3);
     // 确保文字清晰 - 使用filter属性增强对比度
@@ -704,33 +758,33 @@ onMounted(() => {
     font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     
-    // 角标阴影效果 - 参考FeaturedArticlesCard
+    // 角标阴影效果 - 使用动态颜色
     &::after {
       content: '';
       position: absolute;
-      bottom: -4px;
+      bottom: -6px; // 调整吸附角度
       right: 0;
       width: 0;
       height: 0;
-      border-right: 4px solid #d97706;
-      border-bottom: 4px solid transparent;
+      border-right: 6px solid var(--premium-shadow);
+      border-bottom: 6px solid transparent;
     }
     
     &::before {
       content: '';
       position: absolute;
       top: 0;
-      left: -4px;
+      left: -6px; // 调整吸附角度
       width: 0;
       height: 0;
-      border-top: 4px solid #d97706;
-      border-left: 4px solid transparent;
+      border-top: 6px solid var(--premium-shadow);
+      border-left: 6px solid transparent;
     }
     
     i {
       font-size: 7px;
       margin-right: 2px;
-      color: #ffd700;
+      color: var(--premium-icon);
       filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
     }
     
@@ -746,9 +800,9 @@ onMounted(() => {
     }
     
     @media (max-width: 768px) {
-      top: -1px;
-      right: -1px;
-      padding: 1px 4px;
+      top: -2px;
+      right: -6px;
+      padding: 2px 6px;
       font-size: 7px;
       
       i {
@@ -947,18 +1001,18 @@ onMounted(() => {
     // 移动端右上角吸附Premium标签
     .mobile-premium-corner-badge {
       position: absolute;
-      top: -2px;
-      right: -2px;
+      top: -3px;
+      right: -10px; // 左移更多一些
       font-size: 9px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.3px;
-      padding: 3px 7px;
-      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-      color: white;
+      padding: 4px 9px;
+      background: var(--premium-bg);
+      color: var(--premium-text);
       line-height: 1.2;
       z-index: 15;
-      border-radius: 0 0 0 10px;
+      border-radius: 0 0 0 14px; // 调整吸附角度
       transition: all 0.3s ease;
       box-shadow: 0 3px 8px rgba(251, 191, 36, 0.4);
       // 移动端增强文字清晰度
@@ -969,33 +1023,33 @@ onMounted(() => {
       font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
       
-      // 移动端角标阴影效果
+      // 移动端角标阴影效果 - 使用动态颜色
       &::after {
         content: '';
         position: absolute;
-        bottom: -5px;
+        bottom: -7px; // 调整吸附角度
         right: 0;
         width: 0;
         height: 0;
-        border-right: 5px solid #d97706;
-        border-bottom: 5px solid transparent;
+        border-right: 7px solid var(--premium-shadow);
+        border-bottom: 7px solid transparent;
       }
       
       &::before {
         content: '';
         position: absolute;
         top: 0;
-        left: -5px;
+        left: -7px; // 调整吸附角度
         width: 0;
         height: 0;
-        border-top: 5px solid #d97706;
-        border-left: 5px solid transparent;
+        border-top: 7px solid var(--premium-shadow);
+        border-left: 7px solid transparent;
       }
       
       i {
         font-size: 8px;
         margin-right: 3px;
-        color: #ffd700;
+        color: var(--premium-icon);
         filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
       }
       
