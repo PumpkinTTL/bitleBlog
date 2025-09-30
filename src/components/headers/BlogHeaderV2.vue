@@ -737,14 +737,14 @@ onMounted(() => {
   .premium-corner-badge {
     position: absolute;
     top: -1px;
-    right: -1px; // 完美贴合右上角
+    right: -3px; // 往左挪动，增强吸附效果
     font-size: 8px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.3px;
     padding: 2px 6px;
-    background: var(--premium-bg);
-    color: var(--premium-text);
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%); // 使用渐变色增强层次感
+    color: #ffffff; // 白色文字更清晰
     line-height: 1.2;
     z-index: 15;
     border-radius: 0 0 0 10px; // 与切换主题按钮保持一致的圆角
@@ -758,33 +758,33 @@ onMounted(() => {
     font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     
-      // 角标阴影效果 - 使用动态颜色，匹配10px圆角
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        right: 0;
-        width: 0;
-        height: 0;
-        border-right: 5px solid var(--premium-shadow);
-        border-bottom: 5px solid transparent;
-      }
-      
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -5px;
-        width: 0;
-        height: 0;
-        border-top: 5px solid var(--premium-shadow);
-        border-left: 5px solid transparent;
-      }
+    // 角标阴影效果 - 使用协调的颜色，避免割裂感
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      right: 0;
+      width: 0;
+      height: 0;
+      border-right: 4px solid rgba(217, 119, 6, 0.7); // 使用更协调的橙黄色阴影
+      border-bottom: 4px solid transparent;
+    }
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -4px;
+      width: 0;
+      height: 0;
+      border-top: 4px solid rgba(217, 119, 6, 0.7); // 使用更协调的橙黄色阴影
+      border-left: 4px solid transparent;
+    }
     
     i {
       font-size: 7px;
       margin-right: 2px;
-      color: var(--premium-icon);
+      color: #ffffff; // 与文字颜色保持一致
       filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
     }
     
@@ -801,7 +801,7 @@ onMounted(() => {
     
     @media (max-width: 768px) {
       top: -1px;
-      right: -1px;
+      right: -2px; // 移动端也往左挪
       padding: 2px 5px;
       font-size: 7px;
       border-radius: 0 0 0 8px; // 移动端相应调整
@@ -1003,14 +1003,14 @@ onMounted(() => {
     .mobile-premium-corner-badge {
       position: absolute;
       top: -2px;
-      right: -2px; // 完美贴合右上角
+      right: -4px; // 往左挪动，增强吸附效果
       font-size: 9px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.3px;
       padding: 3px 7px;
-      background: var(--premium-bg);
-      color: var(--premium-text);
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%); // 移动端使用同样的渐变色
+      color: #ffffff; // 白色文字更清晰
       line-height: 1.2;
       z-index: 15;
       border-radius: 0 0 0 12px; // 移动端抽屉略大一些，与整体UI风格保持一致
@@ -1024,33 +1024,33 @@ onMounted(() => {
       font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
       
-      // 移动端角标阴影效果 - 使用动态颜色，匹配12px圆角
+      // 移动端角标阴影效果 - 使用协调的颜色，避免割裂感
       &::after {
         content: '';
         position: absolute;
-        bottom: -6px;
+        bottom: -5px;
         right: 0;
         width: 0;
         height: 0;
-        border-right: 6px solid var(--premium-shadow);
-        border-bottom: 6px solid transparent;
+        border-right: 5px solid rgba(217, 119, 6, 0.6); // 移动端使用轻微透明的橙黄色
+        border-bottom: 5px solid transparent;
       }
       
       &::before {
         content: '';
         position: absolute;
         top: 0;
-        left: -6px;
+        left: -5px;
         width: 0;
         height: 0;
-        border-top: 6px solid var(--premium-shadow);
-        border-left: 6px solid transparent;
+        border-top: 5px solid rgba(217, 119, 6, 0.6); // 移动端使用轻微透明的橙黄色
+        border-left: 5px solid transparent;
       }
       
       i {
         font-size: 8px;
         margin-right: 3px;
-        color: var(--premium-icon);
+        color: #ffffff; // 与文字颜色保持一致
         filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
       }
       
