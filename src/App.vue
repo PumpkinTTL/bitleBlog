@@ -3,7 +3,7 @@
     <div class="app-container">
       <!-- 应用内容 -->
       <div class="app-content">
-        <BlogHeader></BlogHeader>
+        <BlogHeaderV2></BlogHeaderV2>
         <LoginModal></LoginModal>
         
         <!-- 主题切换器 -->
@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import MusicContent from '@/components/MusicContent.vue';
 import BlogFooter from '@/components/BlogFooter.vue';
-import BlogHeader from '@/components/BlogHeader.vue';
+import BlogHeaderV2 from '@/components/headers/BlogHeaderV2.vue';
 import UserLogin from '@/components/UserLogin.vue';
 import { useStore } from '@/store';
 import { onMounted, ref, watch } from 'vue';
