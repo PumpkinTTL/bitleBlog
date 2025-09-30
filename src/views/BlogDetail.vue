@@ -1,7 +1,7 @@
 <template>
   <div class="blog-detail-page">
     <!-- 页面顶部导航栏 -->
-    <div class="page-header animate__animated animate__fadeInDown">
+    <div class="page-header">
       <div class="container">
         <div class="nav-container">
           <div class="nav-left">
@@ -755,6 +755,17 @@ onUnmounted(() => {
 <style lang="less" scoped>
 .blog-detail-page {
   min-height: 100vh;
+  
+  // 页面级别初始化，确保page-header立即定位正确
+  .page-header {
+    // 确保SSR和初始渲染时位置正确
+    position: fixed !important;
+    top: 60px !important;
+    
+    @media (max-width: 768px) {
+      top: 54px !important;
+    }
+  }
 
   // 开发者控制面板样式
   .developer-controls {
@@ -990,7 +1001,12 @@ onUnmounted(() => {
       0 8px 32px rgba(0, 0, 0, 0.04),
       0 1px 0 rgba(255, 255, 255, 0.8),
       inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    // 移除过渡动画，避免跳动
+    // transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    // 初始状态优化，避免跳动
+    opacity: 1;
+    transform: translateZ(0); // 强制硬件加速，保证平滑显示
     
     &::before {
       content: '';
