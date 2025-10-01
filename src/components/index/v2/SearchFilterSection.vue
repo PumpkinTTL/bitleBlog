@@ -110,7 +110,7 @@
               <button v-for="category in categories.slice(0, isMobile ? 6 : 8)" :key="category.id"
                 :class="['category-tag', { 'active': activeCategory === category.id }]"
                 @click="handleCategoryChange(category.id)">
-                <i :class="category.icon" class="tag-icon"></i>
+                <i :class="getCategoryIcon(category)" class="tag-icon"></i>
                 <span>{{ category.name }}</span>
                 <em v-if="category.count" class="tag-count">{{ category.count }}</em>
               </button>
@@ -139,6 +139,19 @@
 import { ref, nextTick, computed, onMounted, onUnmounted, watch } from 'vue'
 import { Search, Star, Clock, TrendCharts, Grid, Filter, Collection, Close, RefreshLeft, Check, ArrowDown, Menu, Operation } from '@element-plus/icons-vue'
 
+// 定义分类类型
+interface Category {
+  id: number
+  name: string
+  slug?: string
+  description?: string
+  parent_id?: number
+  icon?: string
+  count?: number
+  created_at?: string
+  updated_at?: string
+}
+
 // Props
 interface Props {
   searchKeyword?: string
@@ -147,6 +160,8 @@ interface Props {
   viewMode?: 'card' | 'list'
   gridColumns?: number
   totalArticles?: number
+  categories?: Category[]
+  isLoading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -155,7 +170,9 @@ const props = withDefaults(defineProps<Props>(), {
   activeCategory: 0,
   viewMode: 'card',
   gridColumns: 2,
-  totalArticles: 0
+  totalArticles: 0,
+  categories: () => [],
+  isLoading: false
 })
 
 // Emits
@@ -187,17 +204,30 @@ const filterOptions = [
   { value: 'popular', label: '热门', icon: TrendCharts }
 ]
 
-// 分类数据
-const categories = ref([
-  { id: 0, name: '全部', icon: 'fas fa-th-large', count: null },
-  { id: 1, name: '前端开发', icon: 'fab fa-js-square', count: 45 },
-  { id: 2, name: '后端技术', icon: 'fas fa-server', count: 32 },
-  { id: 3, name: '数据库', icon: 'fas fa-database', count: 18 },
-  { id: 4, name: '开发工具', icon: 'fas fa-tools', count: 24 },
-  { id: 5, name: '算法', icon: 'fas fa-code', count: 15 },
-  { id: 6, name: '架构设计', icon: 'fas fa-sitemap', count: 12 },
-  { id: 7, name: '性能优化', icon: 'fas fa-rocket', count: 8 }
-])
+// 分类数据 - 使用从父组件传入的真实数据
+const categories = computed(() => props.categories)
+
+// 获取分类图标
+const getCategoryIcon = (category: Category): string => {
+  if (category.icon) {
+    return category.icon
+  }
+  
+  // 如果没有图标，根据分类ID使用默认图标
+  const defaultIcons = [
+    'fas fa-th-large',
+    'fas fa-code',
+    'fas fa-server',
+    'fas fa-database',
+    'fas fa-tools',
+    'fas fa-sitemap',
+    'fas fa-rocket',
+    'fas fa-laptop-code',
+    'fas fa-project-diagram'
+  ]
+  
+  return defaultIcons[(category.id || 0) % defaultIcons.length]
+}
 
 // 面板控制函数
 const togglePanel = async () => {

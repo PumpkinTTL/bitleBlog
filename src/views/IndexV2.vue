@@ -21,7 +21,8 @@
       <!-- 搜索和过滤区域组件 -->
       <SearchFilterSection :search-keyword="searchKeyword" :active-filter="activeFilter"
         :active-category="activeCategory" :view-mode="viewMode" :grid-columns="gridColumns"
-        :total-articles="totalArticles" @search="handleSearch" @filter-change="handleFilterChange"
+        :total-articles="totalArticles" :categories="categoryList" :is-loading="isLoading"
+        @search="handleSearch" @filter-change="handleFilterChange"
         @category-change="handleCategoryChange" @view-mode-change="handleViewModeChange" />
     </template>
 
@@ -29,7 +30,7 @@
     <template #main-content>
       <!-- 文章列表组件 -->
       <ArticleList :articles="allArticles" :search-keyword="searchKeyword" :active-filter="activeFilter"
-        :active-category="activeCategory" :view-mode="viewMode" :grid-columns="gridColumns" />
+        :active-category="activeCategory" :view-mode="viewMode" :grid-columns="gridColumns" :is-loading="isLoading" />
     </template>
 
     <!-- 右侧边栏 -->
@@ -51,6 +52,76 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { message } from 'ant-design-vue'
+import { getArticleListR } from '@/request/article'
+import { getCategoryListR } from '@/request/category'
+
+// 定义类型接口
+interface Article {
+  id: number
+  title: string
+  subtitle?: string
+  content?: string
+  cover_image?: string
+  author_id?: number
+  category_id?: number
+  is_top?: number
+  is_recommend?: number
+  is_original?: number
+  favorites_count?: number
+  likes_count?: number
+  comments_count?: number
+  read_time?: number
+  word_count?: number
+  publish_time?: string
+  description?: string
+  category?: {
+    id: number
+    name: string
+    slug: string
+  }
+  author?: {
+    id: number
+    username: string
+    nickname?: string
+    avatar?: string
+    signature?: string
+    memberClass?: string
+    roles?: any[]
+  }
+  tags?: Array<{
+    id: number
+    name: string
+  }>
+}
+
+interface Category {
+  id: number
+  name: string
+  slug?: string
+  description?: string
+  parent_id?: number
+  icon?: string
+  count?: number
+  created_at?: string
+  updated_at?: string
+}
+
+interface ArticleParams {
+  page: number
+  page_size: number
+  category_id?: number
+  author_id?: number
+  title?: string
+  start_date?: string
+  end_date?: string
+  sort?: string
+  order?: string
+  is_recommend?: number
+  is_top?: number
+}
+
 import IndexLayout from '@/components/index/v2/layout/IndexLayout.vue'
 import AboutSiteCard from '@/components/index/v2/AboutSiteCard.vue'
 import NoticeCard from '@/components/index/v2/NoticeCard.vue'
@@ -85,6 +156,29 @@ const saveGridColumns = (columns: number) => {
   localStorage.setItem(STORAGE_KEY_GRID_COLUMNS, columns.toString())
 }
 
+// 路由
+const router = useRouter()
+
+// API 相关的响应式数据
+const isLoading = ref(false)
+const isCategoryLoading = ref(false)
+const categoryList = ref<Category[]>([])
+const serverArticles = ref<Article[]>([])
+const totalServerArticles = ref(0)
+
+// 文章请求参数
+const articleParams = ref<ArticleParams>({
+  page: 1,
+  page_size: 20,
+  category_id: undefined,
+  author_id: undefined,
+  title: undefined,
+  start_date: undefined,
+  end_date: undefined,
+  sort: undefined,
+  order: undefined
+})
+
 // 响应式数据 - 从本地存储加载初始值
 const searchKeyword = ref('')
 const activeFilter = ref('all')
@@ -92,7 +186,7 @@ const activeCategory = ref(0)
 const viewMode = ref<'card' | 'list'>(loadViewMode())
 const gridColumns = ref(loadGridColumns())
 // 计算文章总数
-const totalArticles = computed(() => allArticles.value.length)
+const totalArticles = computed(() => totalServerArticles.value || allArticles.value.length)
 
 // 公告数据
 const noticeLoading = ref(false)
@@ -354,285 +448,188 @@ const monthlyHotArticles = ref([
   }
 ])
 
-// 丰富的文章数据
-const allArticles = ref([
-  {
-    id: 1,
-    title: 'Vue 3 + TypeScript 项目实战指南：从零到一构建现代化前端应用',
-    excerpt: '深入探索 Vue 3 的 Composition API、TypeScript 集成、Vite 构建工具，以及现代化的项目架构设计最佳实践。',
-    cover: 'https://picsum.photos/400/240?random=1',
-    author: {
-      id: 1,
-      name: 'Vue 大师',
-      avatar: 'https://picsum.photos/40/40?random=101',
-      isVip: true
-    },
-    publishTime: '2024-01-15',
-    views: 2456,
-    likes: 189,
-    comments: 23,
-    tags: ['Vue3', 'TypeScript', '前端工程化'],
-    category: 1,
-    isTop: true,
-    isRecommended: true,
-    isOriginal: true,
-    isHot: true
-  },
-  {
-    id: 2,
-    title: 'React 18 新特性全面解析：Concurrent 模式和 Suspense',
-    excerpt: '详细介绍 React 18 的革命性新特性，包括并发渲染、自动批处理、Suspense 改进等。',
-    cover: 'https://picsum.photos/400/240?random=2',
-    author: {
-      id: 2,
-      name: 'React 专家',
-      avatar: 'https://picsum.photos/40/40?random=102',
-      isVip: false
-    },
-    publishTime: '2024-01-12',
-    views: 1876,
-    likes: 156,
-    comments: 19,
-    tags: ['React', '性能优化', '并发渲染'],
-    category: 2,
-    isTop: false,
-    isRecommended: true,
-    isOriginal: true,
-    isHot: false
-  },
-  {
-    id: 3,
-    title: 'JavaScript 性能优化终极指南：从内存管理到网络优化',
-    excerpt: '全面讲解 JavaScript 性能优化的各个方面，包括内存管理、事件循环、DOM 操作等。',
-    cover: 'https://picsum.photos/400/240?random=3',
-    author: {
-      id: 3,
-      name: 'JS 高手',
-      avatar: 'https://picsum.photos/40/40?random=103',
-      isVip: true
-    },
-    publishTime: '2024-01-10',
-    views: 3241,
-    likes: 287,
-    comments: 45,
-    tags: ['JavaScript', '性能优化', '最佳实践'],
-    category: 3,
-    isTop: false,
-    isRecommended: true,
-    isOriginal: true,
-    isHot: true
-  },
-  {
-    id: 4,
-    title: 'CSS Grid 布局完全指南：构建响应式网格系统',
-    excerpt: '从基础语法到高级技巧，全面掌握 CSS Grid 布局。包括网格线定义、区域命名等。',
-    cover: 'https://picsum.photos/400/240?random=4',
-    author: {
-      id: 4,
-      name: 'CSS 大神',
-      avatar: 'https://picsum.photos/40/40?random=104',
-      isVip: false
-    },
-    publishTime: '2024-01-08',
-    views: 1543,
-    likes: 98,
-    comments: 12,
-    tags: ['CSS', '布局', '响应式设计'],
-    category: 5,
-    isTop: false,
-    isRecommended: false,
-    isOriginal: true,
-    isHot: false
-  },
-  {
-    id: 5,
-    title: 'Node.js 微服务架构实践：从单体到分布式',
-    excerpt: '详细介绍如何使用 Node.js 构建微服务架构，包括服务切分、API 网关等关键技术。',
-    cover: 'https://picsum.photos/400/240?random=5',
-    author: {
-      id: 5,
-      name: 'Node 架构师',
-      avatar: 'https://picsum.photos/40/40?random=105',
-      isVip: true
-    },
-    publishTime: '2024-01-05',
-    views: 987,
-    likes: 76,
-    comments: 8,
-    tags: ['Node.js', '微服务', '架构设计'],
-    category: 6,
-    isTop: false,
-    isRecommended: false,
-    isOriginal: true,
-    isHot: false
-  },
-  {
-    id: 6,
-    title: 'Webpack 5 构建优化实践：提升构建速度 10 倍',
-    excerpt: '深入分析 Webpack 5 的新特性和性能优化方法，包括模块联邦、持久化缓存等高级技巧。',
-    cover: 'https://picsum.photos/400/240?random=6',
-    author: {
-      id: 6,
-      name: '构建工具专家',
-      avatar: 'https://picsum.photos/40/40?random=106',
-      isVip: false
-    },
-    publishTime: '2024-01-03',
-    views: 2187,
-    likes: 143,
-    comments: 16,
-    tags: ['Webpack', '构建优化', '性能调优'],
-    category: 7,
-    isTop: false,
-    isRecommended: true,
-    isOriginal: false,
-    isHot: true
-  },
-  {
-    id: 7,
-    title: 'Docker 容器化部署完全指南：从开发到生产',
-    excerpt: '全面介绍 Docker 在前端项目中的应用，包括镜像构建、容器编排、CI/CD 集成等实战技巧。',
-    cover: 'https://picsum.photos/400/240?random=7',
-    author: {
-      id: 7,
-      name: 'DevOps 工程师',
-      avatar: 'https://picsum.photos/40/40?random=107',
-      isVip: true
-    },
-    publishTime: '2024-01-02',
-    views: 1654,
-    likes: 112,
-    comments: 14,
-    tags: ['Docker', '容器化', 'DevOps'],
-    category: 8,
-    isTop: false,
-    isRecommended: false,
-    isOriginal: true,
-    isHot: false
-  },
-  {
-    id: 8,
-    title: 'GraphQL 与 REST API 对比：选择最适合的数据获取方式',
-    excerpt: '深入对比 GraphQL 和 REST API 的优缺点，帮助开发者选择最适合的数据获取方案。',
-    cover: 'https://picsum.photos/400/240?random=8',
-    author: {
-      id: 8,
-      name: 'API 设计师',
-      avatar: 'https://picsum.photos/40/40?random=108',
-      isVip: false
-    },
-    publishTime: '2024-01-01',
-    views: 1342,
-    likes: 89,
-    comments: 11,
-    tags: ['GraphQL', 'REST API', '后端开发'],
-    category: 9,
-    isTop: false,
-    isRecommended: false,
-    isOriginal: true,
-    isHot: false
-  },
-  {
-    id: 9,
-    title: 'MongoDB 与 MySQL 选择指南：数据库架构设计实践',
-    excerpt: '全面分析 NoSQL 和关系型数据库的适用场景，帮助开发者做出明智的数据库选择。',
-    cover: 'https://picsum.photos/400/240?random=9',
-    author: {
-      id: 9,
-      name: '数据库架构师',
-      avatar: 'https://picsum.photos/40/40?random=109',
-      isVip: true
-    },
-    publishTime: '2023-12-30',
-    views: 987,
-    likes: 67,
-    comments: 9,
-    tags: ['MongoDB', 'MySQL', '数据库设计'],
-    category: 10,
-    isTop: false,
-    isRecommended: true,
-    isOriginal: false,
-    isHot: false
-  },
-  {
-    id: 10,
-    title: 'PWA 渐进式Web应用开发：构建类原生体验',
-    excerpt: '详细介绍 PWA 技术栈，包括 Service Worker、Web App Manifest、推送通知等关键技术。',
-    cover: 'https://picsum.photos/400/240?random=10',
-    author: {
-      id: 10,
-      name: 'PWA 专家',
-      avatar: 'https://picsum.photos/40/40?random=110',
-      isVip: false
-    },
-    publishTime: '2023-12-28',
-    views: 1876,
-    likes: 134,
-    comments: 18,
-    tags: ['PWA', 'Service Worker', '移动开发'],
-    category: 11,
-    isTop: false,
-    isRecommended: false,
-    isOriginal: true,
-    isHot: true
-  },
-  {
-    id: 11,
-    title: 'Vite 构建工具深度解析：下一代前端开发体验',
-    excerpt: '探索 Vite 的核心原理和高级用法，包括模块热更新、插件系统、构建优化等关键特性。',
-    cover: 'https://picsum.photos/400/240?random=11',
-    author: {
-      id: 11,
-      name: 'Vite 开发者',
-      avatar: 'https://picsum.photos/40/40?random=111',
-      isVip: true
-    },
-    publishTime: '2023-12-25',
-    views: 2341,
-    likes: 178,
-    comments: 24,
-    tags: ['Vite', '构建工具', '模块化'],
-    category: 12,
-    isTop: false,
-    isRecommended: true,
-    isOriginal: true,
-    isHot: true
-  },
-  {
-    id: 12,
-    title: 'Web 组件库设计最佳实践：从 API 设计到性能优化',
-    excerpt: '全面介绍 Web 组件库的设计原则和实现技巧，包括 API 设计、性能优化、文档维护等关键方面。',
-    cover: 'https://picsum.photos/400/240?random=12',
-    author: {
-      id: 12,
-      name: '组件库作者',
-      avatar: 'https://picsum.photos/40/40?random=112',
-      isVip: false
-    },
-    publishTime: '2023-12-22',
-    views: 1567,
-    likes: 95,
-    comments: 13,
-    tags: ['组件库', 'API 设计', '性能优化'],
-    category: 13,
-    isTop: false,
-    isRecommended: false,
-    isOriginal: false,
-    isHot: false
+// 真实文章数据 - 从 API 获取
+const allArticles = ref<Article[]>([])
+
+// API 调用函数
+// 获取文章数据
+const initArticleData = async (params: ArticleParams): Promise<void> => {
+  try {
+    isLoading.value = true
+
+    const res = await getArticleListR(params)
+
+    // 根据新的API响应格式解析数据
+    const apiRes = res as unknown as {
+      code: number
+      msg: string
+      data: {
+        list: any[]
+        pagination: {
+          total: number
+          current: number
+          page_size: number
+          pages: number
+        }
+      }
+    }
+
+    if (apiRes && apiRes.code === 200) {
+      // 将后台数据转换为前端格式
+      const transformedArticles = apiRes.data.list.map(article => {
+        return {
+          ...article,
+          // 保持原有的前端格式，同时映射后台字段
+          excerpt: article.content || article.description || article.subtitle || '',
+          cover: article.cover_image || '',
+          author: {
+            id: article.author?.id || 0,
+            name: article.author?.username || article.author?.nickname || '匿名用户',
+            avatar: article.author?.avatar || '',
+            isVip: article.author?.roles?.some((role: any) => role.name.includes('会员')) || false
+          },
+          publishTime: article.publish_time || '',
+          views: article.word_count || 0,
+          likes: article.likes_count || 0,
+          comments: article.comments_count || 0,
+          tags: article.tags?.map((tag: any) => tag.name) || [],
+          category: article.category_id || 0,
+          isTop: article.is_top === 1,
+          isRecommended: article.is_recommend === 1,
+          isOriginal: article.is_original === 1,
+          isHot: (article.likes_count > 100) || (article.favorites_count > 10)
+        }
+      })
+      
+      allArticles.value = transformedArticles
+      serverArticles.value = apiRes.data.list
+      totalServerArticles.value = apiRes.data.pagination.total || 0
+    } else {
+      message.error(apiRes?.msg || '获取文章列表失败')
+      allArticles.value = []
+    }
+  } catch (error) {
+    console.error('获取文章列表出错:', error)
+    message.error('获取文章列表出错')
+    allArticles.value = []
+  } finally {
+    isLoading.value = false
   }
-])
+}
+
+// 获取分类数据
+const initCategoryData = async (): Promise<void> => {
+  try {
+    isCategoryLoading.value = true
+    const res = await getCategoryListR({})
+
+    // 根据新的API响应格式解析数据
+    const apiRes = res as unknown as {
+      code: number
+      msg: string
+      data: {
+        list: any[]
+        pagination: {
+          total: number
+          current: number
+          page_size: number
+        }
+      }
+    }
+
+    if (apiRes && apiRes.code === 200) {
+      // 添加"全部文章"选项
+      const allCategory: Category = {
+        id: 0,
+        name: '全部文章',
+        icon: 'fas fa-th-large',
+        count: apiRes.data.pagination.total || 0
+      }
+
+      // 确保每个分类有图标，如果没有则设置默认图标
+      const processedCategories = apiRes.data.list.map(category => {
+        if (!category.icon) {
+          // 根据分类ID选择一个图标
+          const icons = [
+            'fas fa-code',
+            'fas fa-server',
+            'fas fa-mobile-alt',
+            'fas fa-database',
+            'fas fa-wrench',
+            'fas fa-sitemap',
+            'fas fa-robot',
+            'fas fa-laptop-code',
+            'fas fa-project-diagram'
+          ]
+          category.icon = icons[category.id % icons.length]
+        }
+        return category
+      })
+
+      // 将全部分类选项放在最前面
+      categoryList.value = [allCategory, ...processedCategories]
+    } else {
+      message.error(apiRes?.msg || '获取分类列表失败')
+    }
+  } catch (error) {
+    console.error('获取分类列表出错:', error)
+    message.error('获取分类列表出错')
+  } finally {
+    isCategoryLoading.value = false
+  }
+}
 
 // 事件处理函数
 const handleSearch = (query: string) => {
   searchKeyword.value = query
+  // 更新API参数
+  articleParams.value.title = query || undefined
+  articleParams.value.page = 1
+  initArticleData(articleParams.value)
+  if (query) {
+    message.info(`搜索: ${query}`)
+  }
 }
 
 const handleFilterChange = (filterValue: string) => {
   activeFilter.value = filterValue
+  // 根据筛选类型设置参数
+  articleParams.value.page = 1
+  
+  switch (filterValue) {
+    case 'all':
+      delete articleParams.value.is_recommend
+      delete articleParams.value.is_top
+      break
+    case 'recommended':
+      articleParams.value.is_recommend = 1
+      delete articleParams.value.is_top
+      break
+    case 'latest':
+      delete articleParams.value.is_recommend
+      delete articleParams.value.is_top
+      articleParams.value.sort = 'publish_time'
+      articleParams.value.order = 'desc'
+      break
+    case 'popular':
+      delete articleParams.value.is_recommend
+      articleParams.value.is_top = 1
+      break
+  }
+  
+  initArticleData(articleParams.value)
+  console.log(`筛选: ${filterValue}`)
 }
 
 const handleCategoryChange = (categoryId: number) => {
   activeCategory.value = categoryId
+  // 设置分类ID参数
+  articleParams.value.category_id = categoryId === 0 ? undefined : categoryId
+  articleParams.value.page = 1
+  initArticleData(articleParams.value)
+  
+  const categoryName = categoryList.value.find(cat => cat.id === categoryId)?.name || '全部'
+  console.log(`分类切换: ${categoryName}`)
 }
 
 const handleViewModeChange = (mode: 'card' | 'list', columns?: number) => {
@@ -650,8 +647,11 @@ const handleViewModeChange = (mode: 'card' | 'list', columns?: number) => {
 // 精选文章点击处理
 const handleArticleClick = (article: any) => {
   console.log('精选文章被点击', article)
-  // 这里可以添加跳转逻辑
-  // 例如：$router.push(`/article/${article.id}`)
+  // 跳转到文章详情页
+  router.push({
+    path: `/blogDetail/${article.id}`,
+    query: { transition: 'slide-fade' }
+  })
 }
 
 // 加载更多处理
@@ -676,12 +676,24 @@ const handlePromotionClick = (event: MouseEvent) => {
 }
 
 // 组件挂载时的初始化
-onMounted(() => {
+onMounted(async () => {
   // 输出初始化信息，便于调试
   console.log('初始化布局设置:', {
     viewMode: viewMode.value,
     gridColumns: gridColumns.value
   })
+  
+  // 初始化数据
+  try {
+    // 先获取分类数据
+    await initCategoryData()
+    // 再获取文章数据
+    await initArticleData(articleParams.value)
+    
+    console.log('数据初始化完成')
+  } catch (error) {
+    console.error('数据初始化失败:', error)
+  }
 })
 </script>
 

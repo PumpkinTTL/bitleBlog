@@ -1,31 +1,48 @@
 <template>
   <div class="articles-section">
     
-    <!-- 卡片视图 -->
-    <Transition v-if="viewMode === 'card'" name="articles-transition" mode="out-in">
-      <div class="articles-grid" :class="`grid-columns-${gridColumns}`" :key="currentPage">
-        <ArticleCard
-          v-for="(article, index) in displayArticles"
-          :key="article.id"
-          :article="article"
-          :view-mode="viewMode"
-          class="article-animation-item"
-        />
+    <!-- 加载状态 -->
+    <div v-if="isLoading" class="loading-container">
+      <div class="loading-spinner">
+        <i class="fas fa-circle-notch fa-spin"></i>
       </div>
-    </Transition>
+      <p>加载中...</p>
+    </div>
     
-    <!-- 列表视图 -->
-    <Transition v-else name="articles-transition" mode="out-in">
-      <div class="articles-list" :key="currentPage">
-        <ArticleCard
-          v-for="(article, index) in displayArticles"
-          :key="article.id"
-          :article="article"
-          :view-mode="viewMode"
-          class="article-animation-item"
-        />
-      </div>
-    </Transition>
+    <!-- 空状态 -->
+    <div v-else-if="displayArticles.length === 0" class="empty-container">
+      <i class="fas fa-inbox"></i>
+      <p>暂无相关文章</p>
+    </div>
+    
+    <!-- 文章内容 -->
+    <template v-else>
+      <!-- 卡片视图 -->
+      <Transition v-if="viewMode === 'card'" name="articles-transition" mode="out-in">
+        <div class="articles-grid" :class="`grid-columns-${gridColumns}`" :key="currentPage">
+          <ArticleCard
+            v-for="(article, index) in displayArticles"
+            :key="article.id"
+            :article="article"
+            :view-mode="viewMode"
+            class="article-animation-item"
+          />
+        </div>
+      </Transition>
+    
+      <!-- 列表视图 -->
+      <Transition v-else name="articles-transition" mode="out-in">
+        <div class="articles-list" :key="currentPage">
+          <ArticleCard
+            v-for="(article, index) in displayArticles"
+            :key="article.id"
+            :article="article"
+            :view-mode="viewMode"
+            class="article-animation-item"
+          />
+        </div>
+      </Transition>
+    </template>
     
     <!-- 分页 -->
     <div v-if="totalArticles > currentPageSize" class="pagination-container">
@@ -82,6 +99,7 @@ interface Props {
   activeCategory?: number
   viewMode?: 'card' | 'list'
   gridColumns?: number
+  isLoading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -89,7 +107,8 @@ const props = withDefaults(defineProps<Props>(), {
   activeFilter: 'all',
   activeCategory: 0,
   viewMode: 'card',
-  gridColumns: 2
+  gridColumns: 2,
+  isLoading: false
 })
 
 // 响应式数据 - 使用外部传入的状态
@@ -243,6 +262,59 @@ watch(() => [props.searchKeyword, props.activeFilter, props.activeCategory], () 
 .articles-section {
   position: relative; /* 为搜索栏提供定位参考 */
   margin-bottom: 60px;
+  
+  // 加载状态
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 0;
+    width: 100%;
+
+    .loading-spinner {
+      font-size: 32px;
+      color: #1677FF;
+      margin-bottom: 16px;
+      animation: rotate 1.5s linear infinite;
+    }
+
+    p {
+      font-size: 14px;
+      color: #666;
+      margin: 0;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  }
+  
+  // 空状态
+  .empty-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 0;
+    background: #f9fbfd;
+    border-radius: 12px;
+    border: 1px dashed #e0e0e0;
+    width: 100%;
+
+    i {
+      font-size: 42px;
+      color: #d0d0d0;
+      margin-bottom: 16px;
+    }
+
+    p {
+      font-size: 15px;
+      color: #999;
+      margin: 0;
+    }
+  }
   
   
   // 卡片网格布局 - 动态列数
