@@ -18,11 +18,11 @@
         >
           <div class="header-content">
             <div class="header-left">
-              <div class="ai-icon animate-icon">
+              <div class="ai-icon">
                 <i class="fas fa-robot"></i>
-                <span class="pulse-dot animate-pulse-dot"></span>
+                <span class="pulse-dot"></span>
               </div>
-              <div v-show="!isCollapsed" class="header-info animate-header-info">
+              <div v-show="!isCollapsed" class="header-info">
                 <h4 class="header-title">AI 助理</h4>
                 <span class="header-status">
                   <span class="status-dot"></span>
@@ -31,16 +31,16 @@
               </div>
             </div>
             
-            <div v-show="!isCollapsed" class="header-actions animate-header-actions">
+            <div v-show="!isCollapsed" class="header-actions">
               <button 
-                class="action-icon-btn animate-btn-1"
+                class="action-icon-btn"
                 @click.stop="toggleCollapse"
                 :title="isCollapsed ? '展开' : '折叠'"
               >
                 <i :class="isCollapsed ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
               </button>
               <button 
-                class="action-icon-btn close-btn animate-btn-2"
+                class="action-icon-btn close-btn"
                 @click.stop="closeAssistant"
                 title="关闭"
               >
@@ -58,11 +58,10 @@
               <div 
                 v-for="(msg, index) in messages" 
                 :key="index"
-                class="message-item animate-message"
+                class="message-item"
                 :class="msg.type"
-                :style="{ animationDelay: `${index * 0.08}s` }"
               >
-                <div class="message-avatar animate-avatar" :style="{ animationDelay: `${index * 0.08 + 0.1}s` }">
+                <div class="message-avatar">
                   <i :class="msg.type === 'user' ? 'fas fa-user' : 'fas fa-robot'"></i>
                 </div>
                 <div class="message-content">
@@ -72,15 +71,15 @@
               </div>
               
               <!-- 加载中状态 -->
-              <div v-if="isTyping" class="message-item ai typing-indicator animate-typing">
+              <div v-if="isTyping" class="message-item ai typing-indicator">
                 <div class="message-avatar">
                   <i class="fas fa-robot"></i>
                 </div>
                 <div class="message-content">
                   <div class="typing-dots">
-                    <span class="dot-1"></span>
-                    <span class="dot-2"></span>
-                    <span class="dot-3"></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
                   </div>
                 </div>
               </div>
@@ -89,10 +88,9 @@
             <!-- 快捷操作 -->
             <div class="quick-actions">
               <button 
-                v-for="(action, idx) in quickActions" 
+                v-for="action in quickActions" 
                 :key="action.id"
-                class="quick-action-btn animate-quick-btn"
-                :style="{ animationDelay: `${0.7 + idx * 0.05}s` }"
+                class="quick-action-btn"
                 @click="handleQuickAction(action)"
               >
                 <i :class="action.icon"></i>
@@ -101,7 +99,7 @@
             </div>
 
             <!-- 输入区域 -->
-            <div class="input-area animate-input-area">
+            <div class="input-area">
               <div class="input-wrapper">
                 <textarea
                   v-model="inputText"
@@ -1401,285 +1399,49 @@ html.dark .is-collapsed .ai-assistant-panel {
 }
 
 .animate-panel {
-  animation: panelPulse 3s ease-in-out infinite;
+  // 移除面板脉冲动画
 }
-
-// 图标动画 - 旋转缩放入场
-@keyframes iconEntrance {
-  0% {
-    opacity: 0;
-    transform: rotate(-180deg) scale(0);
-  }
-  60% {
-    opacity: 1;
-    transform: rotate(10deg) scale(1.1);
-  }
-  100% {
-    opacity: 1;
-    transform: rotate(0deg) scale(1);
-  }
-}
-
-.animate-icon {
-  animation: iconEntrance 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.4s both;
-}
-
-// 脉冲点动画
-@keyframes pulseDotEntrance {
-  0% {
-    opacity: 0;
-    transform: scale(0);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.animate-pulse-dot {
-  animation: pulseDotEntrance 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s both;
-}
-
-// 头部信息动画 - 左侧滑入
-@keyframes headerInfoSlide {
-  0% {
-    opacity: 0;
-    transform: translateX(-20px) scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-}
-
-.animate-header-info {
-  animation: headerInfoSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
-}
-
-// 头部操作按钮 - 右侧滑入
-@keyframes headerActionsSlide {
-  0% {
-    opacity: 0;
-    transform: translateX(20px) scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-}
-
-.animate-header-actions {
-  animation: headerActionsSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
-}
-
-// 按钮分别入场
-@keyframes btnEntrance {
-  0% {
-    opacity: 0;
-    transform: rotate(-90deg) scale(0);
-  }
-  70% {
-    transform: rotate(5deg) scale(1.1);
-  }
-  100% {
-    opacity: 1;
-    transform: rotate(0deg) scale(1);
-  }
-}
-
-.animate-btn-1 {
-  animation: btnEntrance 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.5s both;
-}
-
-.animate-btn-2 {
-  animation: btnEntrance 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.55s both;
-}
-
-// 消息动画 - 滑入（用户从右、AI从左）
-@keyframes messageSlideIn {
-  0% {
-    opacity: 0;
-    transform: translateX(var(--slide-x, -30px)) translateY(10px) scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0) translateY(0) scale(1);
-  }
-}
-
-.animate-message {
-  animation: messageSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  
-  &.user {
-    --slide-x: 30px;
-  }
-  
-  &.ai {
-    --slide-x: -30px;
-  }
-}
-
-// 头像动画 - 旋转出现
-@keyframes avatarSpin {
-  0% {
-    opacity: 0;
-    transform: rotate(-180deg) scale(0);
-  }
-  70% {
-    transform: rotate(10deg) scale(1.1);
-  }
-  100% {
-    opacity: 1;
-    transform: rotate(0deg) scale(1);
-  }
-}
-
-.animate-avatar {
-  animation: avatarSpin 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
-}
-
-// 打字指示器动画
-@keyframes typingSlide {
-  0% {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.animate-typing {
-  animation: typingSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
 // 打字点动画 - 三个点依次跳动
-@keyframes dotBounce {
+@keyframes typingDot {
   0%, 60%, 100% {
     transform: translateY(0);
     opacity: 0.4;
   }
   30% {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
     opacity: 1;
   }
 }
 
 .typing-dots {
-  .dot-1 {
-    animation: dotBounce 1.4s ease-in-out infinite;
-    animation-delay: 0s;
-  }
-  
-  .dot-2 {
-    animation: dotBounce 1.4s ease-in-out infinite;
-    animation-delay: 0.2s;
-  }
-  
-  .dot-3 {
-    animation: dotBounce 1.4s ease-in-out infinite;
-    animation-delay: 0.4s;
-  }
-}
-
-// 快捷按钮动画 - 从下弹起
-@keyframes quickBtnBounce {
-  0% {
-    opacity: 0;
-    transform: translateY(20px) scale(0.8);
-  }
-  60% {
-    transform: translateY(-5px) scale(1.05);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+  span {
+    animation: typingDot 1.4s ease-in-out infinite;
+    
+    &:nth-child(1) {
+      animation-delay: 0s;
+    }
+    
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    &:nth-child(3) {
+      animation-delay: 0.4s;
+    }
   }
 }
 
-.animate-quick-btn {
-  animation: quickBtnBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  
-  // 悬停效果 - 弹跳
-  &:hover {
-    animation: btnHover 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  }
-  
-  &:active {
-    animation: btnPress 0.1s ease forwards;
-  }
-}
-
-@keyframes btnHover {
-  0% {
-    transform: translateY(0) scale(1);
-  }
-  100% {
-    transform: translateY(-3px) scale(1.05);
-  }
-}
-
-@keyframes btnPress {
-  0% {
-    transform: translateY(-3px) scale(1.05);
-  }
-  100% {
-    transform: translateY(0) scale(0.95);
-  }
-}
-
-// 输入区域动画 - 从下滑入
-@keyframes inputAreaSlide {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-input-area {
-  animation: inputAreaSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.9s both;
-}
-
-// 发送按钮特效 - 悬停和点击
+// 快捷按钮与发送按钮悬停效果
+.quick-action-btn,
 .send-btn {
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   
   &:hover:not(:disabled) {
-    animation: sendBtnHover 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    transform: translateY(-2px) scale(1.05);
   }
   
   &:active:not(:disabled) {
-    animation: sendBtnPress 0.15s ease forwards;
-  }
-}
-
-@keyframes sendBtnHover {
-  0% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-4px) scale(1.15) rotate(-5deg);
-  }
-  100% {
-    transform: translateY(-3px) scale(1.1) rotate(0deg);
-  }
-}
-
-@keyframes sendBtnPress {
-  0% {
-    transform: translateY(-3px) scale(1.1);
-  }
-  100% {
-    transform: translateY(0) scale(0.9);
+    transform: translateY(0) scale(0.95);
   }
 }
 
@@ -1705,19 +1467,6 @@ html.dark .is-collapsed .ai-assistant-panel {
   max-height: 500px;
 }
 
-// 消息内容渐变动画
-.message-text {
-  animation: textFade 0.3s ease 0.2s both;
-}
-
-@keyframes textFade {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
 
 // 折叠状态下的图标微动
 .is-collapsed .ai-icon i {
