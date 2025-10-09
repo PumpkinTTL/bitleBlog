@@ -525,14 +525,40 @@
           
           if (res.code === 200) {
             const userInfo = res.data
-            // 更新store
-            store.isLogin = true
-            store.userInfo = userInfo
-            // 保存到localStorage
-            saveUserToLocalStorage(userInfo)
-            closeDialog()
+            
+            // 保存Token到localStorage（优先保存，确保后续请求有权限）
             localStorage.setItem('refreshToken', res.refreshToken)
             localStorage.setItem('accessToken', res.accessToken)
+            
+            // 登录成功后，主动获取完整的用户信息（包括premium等字段）
+            try {
+              const { selectUserInfoByIdR } = await import('@/request/user')
+              const fullUserInfoRes = await selectUserInfoByIdR({ targetUid: userInfo.id })
+              
+              if (fullUserInfoRes.code === 200) {
+                const fullUserInfo = fullUserInfoRes.data
+                // 更新store with complete user info
+                store.isLogin = true
+                store.userInfo = fullUserInfo
+                // 保存完整用户信息到localStorage
+                saveUserToLocalStorage(fullUserInfo)
+                console.log('登录成功，已获取完整用户信息，premium状态:', fullUserInfo.premium)
+              } else {
+                // 如果获取完整信息失败，使用登录返回的基本信息
+                store.isLogin = true
+                store.userInfo = userInfo
+                saveUserToLocalStorage(userInfo)
+                console.warn('获取完整用户信息失败，使用基本信息')
+              }
+            } catch (error) {
+              // 如果获取完整信息出错，使用登录返回的基本信息
+              console.error('获取完整用户信息出错:', error)
+              store.isLogin = true
+              store.userInfo = userInfo
+              saveUserToLocalStorage(userInfo)
+            }
+            
+            closeDialog()
 
           } else {
             message.error(res.msg || '登录失败，请检查用户名和密码')

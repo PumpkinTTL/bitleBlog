@@ -83,14 +83,48 @@ const onFinish = async (values: any) => {
     if (res.code != 200) return message.warning(res.msg)
     
     const { token, accessToken } = res
-    store.$patch((state: any) => {
-        state.showLoginModal = false
-        state.userInfo = res.data
-    })
+    const userInfo = res.data
+    
+    // 保存Token到localStorage（优先保存，确保后续请求有权限）
     setLocalStorage('Authorization', token)
     setLocalStorage('accessToken', accessToken)
-    const { data: userinfo } = res
-    saveUserInfo(userinfo)
+    
+    // 登录成功后，主动获取完整的用户信息（包括premium等字段）
+    try {
+        const { selectUserInfoByIdR } = await import('@/request/user')
+        const fullUserInfoRes = await selectUserInfoByIdR({ targetUid: userInfo.id })
+        
+        if (fullUserInfoRes.code === 200) {
+            const fullUserInfo = fullUserInfoRes.data
+            // 更新store with complete user info
+            store.$patch((state: any) => {
+                state.showLoginModal = false
+                state.userInfo = fullUserInfo
+                state.isLogin = true
+            })
+            // 保存完整用户信息到localStorage
+            saveUserInfo(fullUserInfo)
+            console.log('登录成功，已获取完整用户信息，premium状态:', fullUserInfo.premium)
+        } else {
+            // 如果获取完整信息失败，使用登录返回的基本信息
+            store.$patch((state: any) => {
+                state.showLoginModal = false
+                state.userInfo = userInfo
+                state.isLogin = true
+            })
+            saveUserInfo(userInfo)
+            console.warn('获取完整用户信息失败，使用基本信息')
+        }
+    } catch (error) {
+        // 如果获取完整信息出错，使用登录返回的基本信息
+        console.error('获取完整用户信息出错:', error)
+        store.$patch((state: any) => {
+            state.showLoginModal = false
+            state.userInfo = userInfo
+            state.isLogin = true
+        })
+        saveUserInfo(userInfo)
+    }
 };
 
 const onFinishFailed = (errorInfo: any) => {
