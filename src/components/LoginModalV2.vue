@@ -714,7 +714,8 @@ const openPrivacyPolicy = () => {
 .form-item-modern {
   .input-wrapper {
     position: relative;
-    display: block;
+    display: flex;
+    align-items: center;
     width: 100%;
     
     .input-icon {
@@ -729,6 +730,7 @@ const openPrivacyPolicy = () => {
       font-size: 14px;
       z-index: 2;
       transition: color 0.3s ease;
+      pointer-events: none;
     }
     
     &:focus-within .input-icon {
@@ -767,11 +769,27 @@ const openPrivacyPolicy = () => {
     }
     
     &.code-wrapper {
+      border: 2px solid transparent;
+      border-radius: 10px;
+      background: var(--el-fill-color-light);
+      transition: all 0.3s ease;
+      overflow: hidden;
+      
+      &:hover {
+        background: var(--el-fill-color);
+      }
+      
+      &:focus-within {
+        background: white;
+        border-color: @primary-color;
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+      }
+      
       :deep(.el-input-group__append) {
         background: transparent;
         border: none;
         padding: 0;
-        margin-left: 0;
+        margin: 0;
         box-shadow: none;
         
         .code-btn {
@@ -779,14 +797,13 @@ const openPrivacyPolicy = () => {
           padding: 0 16px;
           background: @primary-gradient;
           border: none;
-          border-radius: 0 8px 8px 0;
+          border-radius: 0;
           color: white;
           font-size: 12px;
           font-weight: 500;
           cursor: pointer;
           transition: all 0.3s ease;
           white-space: nowrap;
-          margin-left: -2px;
           
           &:hover:not(:disabled) {
             opacity: 0.9;
@@ -800,8 +817,12 @@ const openPrivacyPolicy = () => {
       }
       
       :deep(.el-input__wrapper) {
-        border-radius: 10px 0 0 10px;
-        border-right: none;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 0;
+        padding-left: 42px;
+        padding-right: 8px;
       }
       
       :deep(.el-input-group) {
