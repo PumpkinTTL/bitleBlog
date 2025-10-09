@@ -572,19 +572,22 @@ onUnmounted(() => {
   
   // 折叠状态下AI图标特殊样式
   .is-collapsed & {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    width: auto;
+    height: auto;
     
     &::before {
-      opacity: 1;
+      display: none;
     }
     
     i {
-      font-size: 20px;
+      font-size: 24px;
       animation: none;
       transform: scale(1);
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
     }
     
     .pulse-dot {
