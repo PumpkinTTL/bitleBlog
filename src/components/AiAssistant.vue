@@ -2,13 +2,13 @@
   <Teleport to="body">
     <div 
       v-if="isVisible"
-      class="ai-assistant-wrapper"
+      class="ai-assistant-wrapper animate-entrance"
       :class="{ 'is-collapsed': isCollapsed, 'is-dragging': isDragging }"
       :style="assistantStyle"
       ref="assistantRef"
     >
       <!-- 助理面板 -->
-      <div class="ai-assistant-panel">
+      <div class="ai-assistant-panel animate-panel">
         <!-- 头部 -->
         <div 
           class="assistant-header"
@@ -18,11 +18,11 @@
         >
           <div class="header-content">
             <div class="header-left">
-              <div class="ai-icon">
+              <div class="ai-icon animate-icon">
                 <i class="fas fa-robot"></i>
-                <span class="pulse-dot"></span>
+                <span class="pulse-dot animate-pulse-dot"></span>
               </div>
-              <div v-show="!isCollapsed" class="header-info">
+              <div v-show="!isCollapsed" class="header-info animate-header-info">
                 <h4 class="header-title">AI 助理</h4>
                 <span class="header-status">
                   <span class="status-dot"></span>
@@ -31,16 +31,16 @@
               </div>
             </div>
             
-            <div v-show="!isCollapsed" class="header-actions">
+            <div v-show="!isCollapsed" class="header-actions animate-header-actions">
               <button 
-                class="action-icon-btn"
+                class="action-icon-btn animate-btn-1"
                 @click.stop="toggleCollapse"
                 :title="isCollapsed ? '展开' : '折叠'"
               >
                 <i :class="isCollapsed ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
               </button>
               <button 
-                class="action-icon-btn close-btn"
+                class="action-icon-btn close-btn animate-btn-2"
                 @click.stop="closeAssistant"
                 title="关闭"
               >
@@ -58,10 +58,11 @@
               <div 
                 v-for="(msg, index) in messages" 
                 :key="index"
-                class="message-item"
+                class="message-item animate-message"
                 :class="msg.type"
+                :style="{ animationDelay: `${index * 0.08}s` }"
               >
-                <div class="message-avatar">
+                <div class="message-avatar animate-avatar" :style="{ animationDelay: `${index * 0.08 + 0.1}s` }">
                   <i :class="msg.type === 'user' ? 'fas fa-user' : 'fas fa-robot'"></i>
                 </div>
                 <div class="message-content">
@@ -71,15 +72,15 @@
               </div>
               
               <!-- 加载中状态 -->
-              <div v-if="isTyping" class="message-item ai typing-indicator">
+              <div v-if="isTyping" class="message-item ai typing-indicator animate-typing">
                 <div class="message-avatar">
                   <i class="fas fa-robot"></i>
                 </div>
                 <div class="message-content">
                   <div class="typing-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                    <span class="dot-1"></span>
+                    <span class="dot-2"></span>
+                    <span class="dot-3"></span>
                   </div>
                 </div>
               </div>
@@ -88,9 +89,10 @@
             <!-- 快捷操作 -->
             <div class="quick-actions">
               <button 
-                v-for="action in quickActions" 
+                v-for="(action, idx) in quickActions" 
                 :key="action.id"
-                class="quick-action-btn"
+                class="quick-action-btn animate-quick-btn"
+                :style="{ animationDelay: `${0.7 + idx * 0.05}s` }"
                 @click="handleQuickAction(action)"
               >
                 <i :class="action.icon"></i>
@@ -99,7 +101,7 @@
             </div>
 
             <!-- 输入区域 -->
-            <div class="input-area">
+            <div class="input-area animate-input-area">
               <div class="input-wrapper">
                 <textarea
                   v-model="inputText"
@@ -431,13 +433,142 @@ onUnmounted(() => {
   }
 }
 
-// 折叠状态
+// 折叠状态 - 真正的液态玻璃（几乎完全透明，能看清文字）
 .is-collapsed .ai-assistant-panel {
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
-  will-change: transform, box-shadow;
+  position: relative;
+  overflow: visible;
+  
+  // 折叠动画 - 分步执行
+  transition: 
+    width 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.15s,
+    height 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.15s,
+    border-radius 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.15s,
+    background 0.3s ease-out 0.1s,
+    backdrop-filter 0.3s ease-out 0.1s,
+    box-shadow 0.3s ease-out 0.1s;
+  
+  // 几乎完全透明
+  background: rgba(255, 255, 255, 0.01);
+  
+  // 放大镜效果 - 轻微模糊+强对比+提亮
+  backdrop-filter: 
+    blur(3px)            /* 极轻模糊创造景深 */
+    saturate(180%)       /* 增强饱和度 */
+    brightness(1.15)     /* 明显提亮 */
+    contrast(1.1);       /* 增强对比度 - 关键！*/
+  -webkit-backdrop-filter: 
+    blur(3px) 
+    saturate(180%) 
+    brightness(1.15)
+    contrast(1.1);
+  
+  // 超细边框 - 几乎看不见
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  
+  // 极简阴影
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.04),
+    0 1px 2px 0 rgba(0, 0, 0, 0.02),
+    inset 0 0.5px 0 0 rgba(255, 255, 255, 0.3);
+  
+  will-change: transform;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  // 微妙高光
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 30% 20%,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(255, 255, 255, 0.05) 40%,
+      rgba(255, 255, 255, 0) 70%
+    );
+    pointer-events: none;
+  }
+  
+  // 悬停增强 - 放大镜效果更强
+  &:hover {
+    transform: translateY(-3px) scale(1.06);
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: 
+      blur(4px) 
+      saturate(200%) 
+      brightness(1.2)
+      contrast(1.15);
+    -webkit-backdrop-filter: 
+      blur(4px) 
+      saturate(200%) 
+      brightness(1.2)
+      contrast(1.15);
+    box-shadow: 
+      0 12px 48px 0 rgba(139, 92, 246, 0.08),
+      0 2px 8px 0 rgba(0, 0, 0, 0.04),
+      inset 0 0.5px 0 0 rgba(255, 255, 255, 0.4);
+  }
+  
+  // 点击反馈
+  &:active {
+    transform: translateY(-1px) scale(1.02);
+    transition: all 0.15s ease;
+  }
+}
+
+// 暗色模式 - 同样的放大镜效果
+html.dark .is-collapsed .ai-assistant-panel {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: 
+    blur(3px) 
+    saturate(180%) 
+    brightness(1.12)
+    contrast(1.1);
+  -webkit-backdrop-filter: 
+    blur(3px) 
+    saturate(180%) 
+    brightness(1.12)
+    contrast(1.1);
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.2),
+    0 1px 2px 0 rgba(0, 0, 0, 0.1),
+    inset 0 0.5px 0 0 rgba(255, 255, 255, 0.12);
+  
+  &::before {
+    background: radial-gradient(
+      circle at 30% 20%,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0.03) 40%,
+      rgba(255, 255, 255, 0) 70%
+    );
+  }
+  
+  &:hover {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(255, 255, 255, 0.12);
+    backdrop-filter: 
+      blur(4px) 
+      saturate(200%) 
+      brightness(1.18)
+      contrast(1.15);
+    -webkit-backdrop-filter: 
+      blur(4px) 
+      saturate(200%) 
+      brightness(1.18)
+      contrast(1.15);
+    box-shadow: 
+      0 12px 48px 0 rgba(139, 92, 246, 0.1),
+      0 2px 8px 0 rgba(0, 0, 0, 0.2),
+      inset 0 0.5px 0 0 rgba(255, 255, 255, 0.15);
+  }
 }
 
 // ==================== 头部 ====================
@@ -466,35 +597,101 @@ onUnmounted(() => {
     cursor: grabbing;
   }
   
-  // 折叠状态头部样式
+  // 折叠状态头部样式 - iOS液态玻璃
   .is-collapsed & {
-    width: 56px;
-    height: 56px;
+    width: 52px;
+    height: 52px;
     padding: 0;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    will-change: transform;
+    background: transparent;
     
-    &:hover {
-      transform: scale(1.08) translateY(-2px);
-      
-      &::before {
-        opacity: 0.8;
-      }
-    }
+    // 折叠时头部动画
+    transition: 
+      width 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.15s,
+      height 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.15s,
+      border-radius 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.15s,
+      padding 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.15s,
+      background 0.3s ease-out 0.1s;
     
-    &:active {
-      transform: scale(1.02);
-      transition: transform 0.1s ease;
+    &::before {
+      display: none;
     }
     
     .header-content {
       justify-content: center;
-      transition: none;
+    }
+    
+    .ai-icon {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      backdrop-filter: none;
+      width: auto;
+      height: auto;
+      position: relative;
+      display: flex !important;
+      opacity: 1 !important;
+      
+      // icon容器动画 - 延迟缩放
+      transition: 
+        width 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.15s,
+        height 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.15s,
+        background 0.3s ease-out 0.1s,
+        transform 0.25s ease-out;
+      
+      &::before {
+        display: none;
+      }
+      
+      i {
+        font-size: 24px;
+        animation: none;
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        // 紫粉渐变
+        background: linear-gradient(
+          135deg,
+          #8b5cf6 0%,   /* 紫色 */
+          #d946ef 50%,  /* 粉色 */
+          #ec4899 100%  /* 桃红色 */
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.3))
+                drop-shadow(0 1px 2px rgba(217, 70, 239, 0.2));
+        // icon文字动画 - 延迟放大
+        transition: 
+          font-size 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.15s,
+          transform 0.25s ease-out,
+          filter 0.25s ease-out;
+      }
+      
+      .pulse-dot {
+        width: 9px;
+        height: 9px;
+        top: -2px;
+        right: -2px;
+        border: 2px solid white;
+        background: #10b981;
+        box-shadow: 
+          0 0 0 0 rgba(16, 185, 129, 0.7),
+          0 1px 4px rgba(0, 0, 0, 0.2),
+          0 0 12px rgba(16, 185, 129, 0.6);
+        transition: all 0.3s ease;
+      }
+    }
+    
+    // 悬停时图标效果
+    &:hover .ai-icon i {
+      transform: scale(1.08);
+      filter: drop-shadow(0 3px 8px rgba(139, 92, 246, 0.4))
+              drop-shadow(0 2px 4px rgba(217, 70, 239, 0.3));
     }
   }
 }
@@ -570,34 +767,6 @@ onUnmounted(() => {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
-  // 折叠状态下AI图标特殊样式
-  .is-collapsed & {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    backdrop-filter: none;
-    width: auto;
-    height: auto;
-    
-    &::before {
-      display: none;
-    }
-    
-    i {
-      font-size: 24px;
-      animation: none;
-      transform: scale(1);
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-    }
-    
-    .pulse-dot {
-      width: 10px;
-      height: 10px;
-      top: -2px;
-      right: -2px;
-      border: 2px solid white;
-    }
-  }
 }
 
 .header-info {
@@ -1193,6 +1362,403 @@ onUnmounted(() => {
     font-size: 10px;
   }
   
+}
+</style>
+
+<style lang="less">
+// ==================== CSS 动画关键帧 ====================
+// 整体入场 - 弹性飞入
+@keyframes entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-entrance {
+  animation: entrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+
+// 面板动画
+@keyframes panelPulse {
+  0% {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
+  }
+  100% {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.animate-panel {
+  animation: panelPulse 3s ease-in-out infinite;
+}
+
+// 图标动画 - 旋转缩放入场
+@keyframes iconEntrance {
+  0% {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0);
+  }
+  60% {
+    opacity: 1;
+    transform: rotate(10deg) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+.animate-icon {
+  animation: iconEntrance 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.4s both;
+}
+
+// 脉冲点动画
+@keyframes pulseDotEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-pulse-dot {
+  animation: pulseDotEntrance 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s both;
+}
+
+// 头部信息动画 - 左侧滑入
+@keyframes headerInfoSlide {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.animate-header-info {
+  animation: headerInfoSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+// 头部操作按钮 - 右侧滑入
+@keyframes headerActionsSlide {
+  0% {
+    opacity: 0;
+    transform: translateX(20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.animate-header-actions {
+  animation: headerActionsSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+// 按钮分别入场
+@keyframes btnEntrance {
+  0% {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0);
+  }
+  70% {
+    transform: rotate(5deg) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+.animate-btn-1 {
+  animation: btnEntrance 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.5s both;
+}
+
+.animate-btn-2 {
+  animation: btnEntrance 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.55s both;
+}
+
+// 消息动画 - 滑入（用户从右、AI从左）
+@keyframes messageSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(var(--slide-x, -30px)) translateY(10px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scale(1);
+  }
+}
+
+.animate-message {
+  animation: messageSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  
+  &.user {
+    --slide-x: 30px;
+  }
+  
+  &.ai {
+    --slide-x: -30px;
+  }
+}
+
+// 头像动画 - 旋转出现
+@keyframes avatarSpin {
+  0% {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0);
+  }
+  70% {
+    transform: rotate(10deg) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+.animate-avatar {
+  animation: avatarSpin 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
+}
+
+// 打字指示器动画
+@keyframes typingSlide {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-typing {
+  animation: typingSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+// 打字点动画 - 三个点依次跳动
+@keyframes dotBounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+}
+
+.typing-dots {
+  .dot-1 {
+    animation: dotBounce 1.4s ease-in-out infinite;
+    animation-delay: 0s;
+  }
+  
+  .dot-2 {
+    animation: dotBounce 1.4s ease-in-out infinite;
+    animation-delay: 0.2s;
+  }
+  
+  .dot-3 {
+    animation: dotBounce 1.4s ease-in-out infinite;
+    animation-delay: 0.4s;
+  }
+}
+
+// 快捷按钮动画 - 从下弹起
+@keyframes quickBtnBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  60% {
+    transform: translateY(-5px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-quick-btn {
+  animation: quickBtnBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  
+  // 悬停效果 - 弹跳
+  &:hover {
+    animation: btnHover 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  
+  &:active {
+    animation: btnPress 0.1s ease forwards;
+  }
+}
+
+@keyframes btnHover {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(-3px) scale(1.05);
+  }
+}
+
+@keyframes btnPress {
+  0% {
+    transform: translateY(-3px) scale(1.05);
+  }
+  100% {
+    transform: translateY(0) scale(0.95);
+  }
+}
+
+// 输入区域动画 - 从下滑入
+@keyframes inputAreaSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-input-area {
+  animation: inputAreaSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.9s both;
+}
+
+// 发送按钮特效 - 悬停和点击
+.send-btn {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  &:hover:not(:disabled) {
+    animation: sendBtnHover 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  
+  &:active:not(:disabled) {
+    animation: sendBtnPress 0.15s ease forwards;
+  }
+}
+
+@keyframes sendBtnHover {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.15) rotate(-5deg);
+  }
+  100% {
+    transform: translateY(-3px) scale(1.1) rotate(0deg);
+  }
+}
+
+@keyframes sendBtnPress {
+  0% {
+    transform: translateY(-3px) scale(1.1);
+  }
+  100% {
+    transform: translateY(0) scale(0.9);
+  }
+}
+
+// 展开/折叠过渡增强
+.expand-enter-active,
+.expand-leave-active {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: top;
+  overflow: hidden;
+}
+
+.expand-enter-from,
+.expand-leave-to {
+  opacity: 0;
+  transform: scaleY(0.8) translateY(-20px);
+  max-height: 0;
+}
+
+.expand-enter-to,
+.expand-leave-from {
+  opacity: 1;
+  transform: scaleY(1) translateY(0);
+  max-height: 500px;
+}
+
+// 消息内容渐变动画
+.message-text {
+  animation: textFade 0.3s ease 0.2s both;
+}
+
+@keyframes textFade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+// 折叠状态下的图标微动
+.is-collapsed .ai-icon i {
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-3px) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(0) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-3px) rotate(5deg);
+  }
+}
+
+// 脉冲点永久动画
+@keyframes pulseContinuous {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.pulse-dot {
+  animation: pulseContinuous 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+// 状态点动画
+.status-dot {
+  animation: pulseContinuous 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 </style>
 
