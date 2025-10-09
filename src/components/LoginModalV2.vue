@@ -547,6 +547,7 @@ const openPrivacyPolicy = () => {
 // 登录容器
 .login-container-v2 {
   position: relative;
+  padding: 12px;
   background: var(--el-bg-color);
   min-height: 420px;
 }
@@ -713,8 +714,8 @@ const openPrivacyPolicy = () => {
 .form-item-modern {
   .input-wrapper {
     position: relative;
-    display: flex;
-    align-items: center;
+    display: block;
+    width: 100%;
     
     .input-icon {
       position: absolute;
@@ -770,6 +771,8 @@ const openPrivacyPolicy = () => {
         background: transparent;
         border: none;
         padding: 0;
+        margin-left: 0;
+        box-shadow: none;
         
         .code-btn {
           height: 40px;
@@ -783,10 +786,10 @@ const openPrivacyPolicy = () => {
           cursor: pointer;
           transition: all 0.3s ease;
           white-space: nowrap;
+          margin-left: -2px;
           
           &:hover:not(:disabled) {
             opacity: 0.9;
-            transform: translateX(-2px);
           }
           
           &:disabled {
@@ -798,6 +801,12 @@ const openPrivacyPolicy = () => {
       
       :deep(.el-input__wrapper) {
         border-radius: 10px 0 0 10px;
+        border-right: none;
+      }
+      
+      :deep(.el-input-group) {
+        display: flex;
+        align-items: stretch;
       }
     }
   }
