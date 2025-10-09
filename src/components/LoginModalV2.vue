@@ -774,6 +774,7 @@ const openPrivacyPolicy = () => {
       background: var(--el-fill-color-light);
       transition: all 0.3s ease;
       overflow: hidden;
+      display: flex;
       
       &:hover {
         background: var(--el-fill-color);
@@ -791,9 +792,10 @@ const openPrivacyPolicy = () => {
         padding: 0;
         margin: 0;
         box-shadow: none;
+        align-self: stretch;
         
         .code-btn {
-          height: 40px;
+          height: 100%;
           padding: 0 16px;
           background: @primary-gradient;
           border: none;
@@ -823,11 +825,13 @@ const openPrivacyPolicy = () => {
         border-radius: 0;
         padding-left: 42px;
         padding-right: 8px;
+        height: 40px;
       }
       
       :deep(.el-input-group) {
         display: flex;
         align-items: stretch;
+        height: 100%;
       }
     }
   }
