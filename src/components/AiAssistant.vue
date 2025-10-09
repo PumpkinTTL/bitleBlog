@@ -434,8 +434,10 @@ onUnmounted(() => {
 // 折叠状态
 .is-collapsed .ai-assistant-panel {
   width: 56px;
+  height: 56px;
   border-radius: 50%;
   box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+  will-change: transform, box-shadow;
 }
 
 // ==================== 头部 ====================
@@ -457,6 +459,7 @@ onUnmounted(() => {
     height: 50%;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 100%);
     pointer-events: none;
+    transition: opacity 0.3s ease;
   }
   
   &:active {
@@ -473,14 +476,25 @@ onUnmounted(() => {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
     
     &:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+      transform: scale(1.08) translateY(-2px);
+      
+      &::before {
+        opacity: 0.8;
+      }
+    }
+    
+    &:active {
+      transform: scale(1.02);
+      transition: transform 0.1s ease;
     }
     
     .header-content {
       justify-content: center;
+      transition: none;
     }
   }
 }
@@ -515,6 +529,7 @@ onUnmounted(() => {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
   &::before {
     content: '';
@@ -527,6 +542,7 @@ onUnmounted(() => {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, transparent 100%);
     border-radius: 10px 10px 0 0;
     pointer-events: none;
+    transition: opacity 0.3s ease;
   }
   
   i {
@@ -536,6 +552,7 @@ onUnmounted(() => {
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
     position: relative;
     z-index: 1;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .pulse-dot {
@@ -550,6 +567,33 @@ onUnmounted(() => {
     box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
     animation: pulse 2s infinite;
     z-index: 2;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  // 折叠状态下AI图标特殊样式
+  .is-collapsed & {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    
+    &::before {
+      opacity: 1;
+    }
+    
+    i {
+      font-size: 20px;
+      animation: none;
+      transform: scale(1);
+    }
+    
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      top: -2px;
+      right: -2px;
+      border: 2px solid white;
+    }
   }
 }
 
