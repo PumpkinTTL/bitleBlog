@@ -40,17 +40,18 @@
       </div>
       
       <div class="article-meta">
-        <div class="author-info">
-          <img :src="article.author.avatar" :alt="article.author.name" class="author-avatar">
-          <div class="author-details">
+        <div class="meta-left">
+          <div class="author-info">
+            <img :src="article.author.avatar" :alt="article.author.name" class="author-avatar">
             <span class="author-name" :class="getAuthorClass(article.author)">
               {{ article.author.name }}
               <i v-if="article.author.isVip" class="fas fa-crown vip-icon"></i>
             </span>
-            <div class="publish-time">
-              <i class="fas fa-clock"></i>
-              {{ formatDate(article.publishTime) }}
-            </div>
+          </div>
+          <span class="meta-dot">·</span>
+          <div class="publish-time">
+            <i class="far fa-calendar-alt"></i>
+            {{ formatDate(article.publishTime) }}
           </div>
         </div>
       </div>
@@ -396,48 +397,76 @@ const getTagStyle = (index: number) => {
     .article-meta {
       margin-bottom: 12px;
       
-      .author-info {
+      .meta-left {
         display: flex;
         align-items: center;
         gap: 8px;
+        flex-wrap: wrap;
         
-        .author-avatar {
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          object-fit: cover;
-        }
-        
-        .author-details {
-          .author-name {
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--el-text-color-primary);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-bottom: 2px;
+        .author-info {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          
+          .author-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid rgba(24, 144, 255, 0.15);
+            transition: all 0.2s ease;
             
-            &.author-vip {
-              color: #f5a623;
-            }
-            
-            .vip-icon {
-              color: #f5a623;
-              font-size: 9px;
+            &:hover {
+              border-color: rgba(24, 144, 255, 0.4);
+              transform: scale(1.1);
             }
           }
           
-          .publish-time {
-            font-size: 10px;
-            color: var(--el-text-color-secondary);
-            display: flex;
+          .author-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: #595959;
+            display: inline-flex;
             align-items: center;
-            gap: 2px;
+            gap: 3px;
+            transition: color 0.2s ease;
             
-            i {
-              font-size: 9px;
+            &:hover {
+              color: #1890ff;
             }
+            
+            &.author-vip {
+              background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+              font-weight: 600;
+            }
+            
+            .vip-icon {
+              color: #FFD700;
+              font-size: 11px;
+              filter: drop-shadow(0 1px 2px rgba(255, 215, 0, 0.3));
+            }
+          }
+        }
+        
+        .meta-dot {
+          color: #d9d9d9;
+          font-size: 12px;
+          line-height: 1;
+        }
+        
+        .publish-time {
+          font-size: 12px;
+          color: #8c8c8c;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          
+          i {
+            font-size: 11px;
+            color: #bfbfbf;
           }
         }
       }
@@ -451,28 +480,58 @@ const getTagStyle = (index: number) => {
       // 统计信息区域
       .article-stats {
         display: flex;
-        gap: 12px;
-        margin-bottom: 8px;
+        gap: 14px;
+        margin-bottom: 10px;
         
         .stat-item {
-          font-size: 11px;
-          color: #8c8c8c;
+          font-size: 12px;
+          color: #595959;
           display: flex;
           align-items: center;
-          gap: 3px;
+          gap: 4px;
+          padding: 3px 8px;
+          border-radius: 4px;
+          background: rgba(0, 0, 0, 0.02);
           transition: all 0.2s ease;
+          font-weight: 500;
           
           &:hover {
             color: #1890ff;
+            background: rgba(24, 144, 255, 0.06);
+            transform: translateY(-1px);
           }
           
           i {
-            font-size: 10px;
-            color: #bfbfbf;
+            font-size: 12px;
+            color: #8c8c8c;
+            transition: color 0.2s ease;
           }
           
-          &:hover i {
+          // 浏览量图标
+          &:nth-child(1) i {
             color: #1890ff;
+          }
+          
+          &:nth-child(1):hover i {
+            color: #40a9ff;
+          }
+          
+          // 点赞图标
+          &:nth-child(2) i {
+            color: #ff4d4f;
+          }
+          
+          &:nth-child(2):hover i {
+            color: #ff7875;
+          }
+          
+          // 评论图标
+          &:nth-child(3) i {
+            color: #52c41a;
+          }
+          
+          &:nth-child(3):hover i {
+            color: #73d13d;
           }
         }
       }
