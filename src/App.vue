@@ -31,6 +31,9 @@
         <!-- 返回顶部按钮 -->
         <BackToTop :visibility-height="300" :duration="400" :offset="80" />
         
+        <!-- AI 助理 -->
+        <AiAssistant />
+        
         <!-- 底部 -->
         <!-- <BlogFooter></BlogFooter> -->
       </div>
@@ -52,6 +55,7 @@ import LoginModal from '@/components/LoginModalV2.vue';
 import Notification from '@/components/Notification.vue';
 import BackToTop from '@/components/BackToTop.vue';
 import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
+import AiAssistant from '@/components/AiAssistant.vue';
 import { checkUserLoginR } from '@/request/user';
 import { message } from 'ant-design-vue';
 import { clearUserInfo } from '@/util/Auth';
