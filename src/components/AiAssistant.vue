@@ -1445,26 +1445,55 @@ html.dark .is-collapsed .ai-assistant-panel {
   }
 }
 
-// 展开/折叠过渡增强
-.expand-enter-active,
-.expand-leave-active {
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  transform-origin: top;
+// 展开/折叠过渡 - 优化版
+.expand-enter-active {
+  animation: expandIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   overflow: hidden;
 }
 
-.expand-enter-from,
-.expand-leave-to {
-  opacity: 0;
-  transform: scaleY(0.8) translateY(-20px);
-  max-height: 0;
+.expand-leave-active {
+  animation: expandOut 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
 }
 
-.expand-enter-to,
-.expand-leave-from {
-  opacity: 1;
-  transform: scaleY(1) translateY(0);
-  max-height: 500px;
+// 展开动画 - 从上到下展开，带弹性
+@keyframes expandIn {
+  0% {
+    opacity: 0;
+    max-height: 0;
+    transform: scaleY(0.3) translateY(-10px);
+    transform-origin: top;
+  }
+  40% {
+    opacity: 0.6;
+    max-height: 250px;
+    transform: scaleY(1.02) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    max-height: 500px;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+// 折叠动画 - 从下到上收起，快速流畅
+@keyframes expandOut {
+  0% {
+    opacity: 1;
+    max-height: 500px;
+    transform: scaleY(1) translateY(0);
+    transform-origin: top;
+  }
+  60% {
+    opacity: 0.3;
+    max-height: 100px;
+    transform: scaleY(0.6) translateY(-5px);
+  }
+  100% {
+    opacity: 0;
+    max-height: 0;
+    transform: scaleY(0) translateY(-10px);
+  }
 }
 
 
