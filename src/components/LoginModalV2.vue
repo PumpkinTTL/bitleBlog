@@ -5,22 +5,10 @@
       :width="dialogWidth"
       center
       destroy-on-close
-      :show-close="false"
+      :show-close="true"
       class="login-dialog-v2"
     >
       <div class="login-container-v2">
-        <!-- 背景装饰 -->
-        <div class="background-decoration">
-          <div class="decoration-circle circle-1"></div>
-          <div class="decoration-circle circle-2"></div>
-          <div class="decoration-circle circle-3"></div>
-        </div>
-        
-        <!-- 关闭按钮 -->
-        <button class="close-btn" @click="closeDialog">
-          <i class="fas fa-times"></i>
-        </button>
-        
         <!-- 登录头部 -->
         <div class="login-header">
           <div class="logo-section">
@@ -208,7 +196,7 @@
           </div>
           
           <!-- 第三方登录 -->
-          <div class="social-login">
+          <!-- <div class="social-login">
             <div class="divider-line">
               <span>其他登录方式</span>
             </div>
@@ -223,7 +211,7 @@
                 <i class="fab fa-github"></i>
               </button>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </el-dialog>
@@ -514,7 +502,7 @@ const openPrivacyPolicy = () => {
 // 对话框全局样式
 .login-dialog-v2 {
   :deep(.el-dialog) {
-    border-radius: 20px;
+    border-radius: 16px;
     overflow: hidden;
     background: var(--el-bg-color);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
@@ -522,110 +510,45 @@ const openPrivacyPolicy = () => {
   }
   
   :deep(.el-dialog__header) {
-    display: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    margin: 0;
+    border-bottom: 1px solid var(--el-border-color-lighter);
+  }
+  
+  :deep(.el-dialog__title) {
+    font-size: 0;
+  }
+  
+  :deep(.el-dialog__headerbtn) {
+    top: 24px;
+    right: 24px;
+    width: 32px;
+    height: 32px;
+    
+    .el-dialog__close {
+      color: var(--el-text-color-regular);
+      font-size: 16px;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        color: @primary-color;
+      }
+    }
   }
   
   :deep(.el-dialog__body) {
-    padding: 0;
+    padding: 24px;
   }
 }
 
 // 登录容器
 .login-container-v2 {
   position: relative;
-  padding: 32px 36px;
   background: var(--el-bg-color);
-  min-height: 480px;
-  
-  @media (max-width: 768px) {
-    padding: 24px 20px;
-  }
-}
-
-// 背景装饰
-.background-decoration {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 0;
-  
-  .decoration-circle {
-    position: absolute;
-    border-radius: 50%;
-    background: @primary-gradient;
-    opacity: 0.05;
-    animation: float 20s infinite ease-in-out;
-    
-    &.circle-1 {
-      width: 300px;
-      height: 300px;
-      top: -100px;
-      right: -100px;
-      animation-delay: 0s;
-    }
-    
-    &.circle-2 {
-      width: 200px;
-      height: 200px;
-      bottom: -50px;
-      left: -50px;
-      animation-delay: 5s;
-    }
-    
-    &.circle-3 {
-      width: 150px;
-      height: 150px;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      animation-delay: 10s;
-    }
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-20px) scale(1.05);
-  }
-}
-
-// 所有内容相对定位
-.login-container-v2 > *:not(.background-decoration) {
-  position: relative;
-  z-index: 1;
-}
-
-// 关闭按钮
-.close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 36px;
-  height: 36px;
-  border: none;
-  background: var(--el-fill-color-light);
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--el-text-color-regular);
-  font-size: 16px;
-  transition: all 0.3s ease;
-  z-index: 10;
-  
-  &:hover {
-    background: @primary-color;
-    color: white;
-    transform: rotate(90deg);
-  }
+  min-height: 420px;
 }
 
 // 登录头部
@@ -1213,8 +1136,19 @@ html.dark {
 
 // 响应式设计
 @media (max-width: 768px) {
-  .login-container-v2 {
-    padding: 24px 20px;
+  .login-dialog-v2 {
+    :deep(.el-dialog__body) {
+      padding: 20px;
+    }
+    
+    :deep(.el-dialog__header) {
+      padding: 16px 20px;
+    }
+    
+    :deep(.el-dialog__headerbtn) {
+      top: 20px;
+      right: 20px;
+    }
   }
   
   .login-header .logo-section {
