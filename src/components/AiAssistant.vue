@@ -14,6 +14,7 @@
           class="assistant-header"
           @mousedown="startDrag"
           @touchstart="startDragTouch"
+          @click="isCollapsed && toggleCollapse()"
         >
           <div class="header-content">
             <div class="header-left">
@@ -21,7 +22,7 @@
                 <i class="fas fa-robot"></i>
                 <span class="pulse-dot"></span>
               </div>
-              <div class="header-info">
+              <div v-show="!isCollapsed" class="header-info">
                 <h4 class="header-title">AI 助理</h4>
                 <span class="header-status">
                   <span class="status-dot"></span>
@@ -30,7 +31,7 @@
               </div>
             </div>
             
-            <div class="header-actions">
+            <div v-show="!isCollapsed" class="header-actions">
               <button 
                 class="action-icon-btn"
                 @click.stop="toggleCollapse"
@@ -144,7 +145,7 @@ interface QuickAction {
 
 // 响应式数据
 const isVisible = ref(true)
-const isCollapsed = ref(false)
+const isCollapsed = ref(true)  // 默认折叠
 const isDragging = ref(false)
 
 // 根据屏幕宽度判断是否为移动端
@@ -430,6 +431,13 @@ onUnmounted(() => {
   }
 }
 
+// 折叠状态
+.is-collapsed .ai-assistant-panel {
+  width: 56px;
+  border-radius: 50%;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+}
+
 // ==================== 头部 ====================
 .assistant-header {
   padding: 10px 14px;
@@ -438,6 +446,7 @@ onUnmounted(() => {
   user-select: none;
   position: relative;
   overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
   &::before {
     content: '';
@@ -452,6 +461,27 @@ onUnmounted(() => {
   
   &:active {
     cursor: grabbing;
+  }
+  
+  // 折叠状态头部样式
+  .is-collapsed & {
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    }
+    
+    .header-content {
+      justify-content: center;
+    }
   }
 }
 
