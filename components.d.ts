@@ -92,6 +92,7 @@ declare module 'vue' {
     LiveStatsCard: typeof import('./src/components/index/v2/LiveStatsCard.vue')['default']
     Login: typeof import('./src/components/login/index.vue')['default']
     LoginModal: typeof import('./src/components/LoginModal.vue')['default']
+    LoginModalV2: typeof import('./src/components/LoginModalV2.vue')['default']
     Logo: typeof import('./src/components/Logo.vue')['default']
     MonthlyHotArticles: typeof import('./src/components/index/MonthlyHotArticles.vue')['default']
     Music: typeof import('./src/components/Music.vue')['default']

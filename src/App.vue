@@ -48,7 +48,7 @@ import { onMounted, ref, watch } from 'vue';
 import { ElConfigProvider } from 'element-plus';
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
 import Agreement from '@/components/Agreement.vue';
-import LoginModal from '@/components/LoginModal.vue';
+import LoginModal from '@/components/LoginModalV2.vue';
 import Notification from '@/components/Notification.vue';
 import BackToTop from '@/components/BackToTop.vue';
 import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
