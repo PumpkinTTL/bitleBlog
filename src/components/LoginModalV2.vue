@@ -506,11 +506,10 @@ const openPrivacyPolicy = () => {
 </script>
 
 <style scoped lang="less">
-// 橙色主题色
-@primary-color: var(--theme-primary);
-@primary-light: var(--theme-primary-light-3);
-@primary-dark: var(--theme-primary-dark-2);
-@primary-gradient: var(--theme-gradient-warm);
+// 紫色主题色（与头部组件统一）
+@primary-color: #8b5cf6;
+@secondary-color: #d946ef;
+@primary-gradient: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
 
 // 对话框全局样式
 .login-dialog-v2 {
@@ -534,12 +533,12 @@ const openPrivacyPolicy = () => {
 // 登录容器
 .login-container-v2 {
   position: relative;
-  padding: 40px;
+  padding: 32px 36px;
   background: var(--el-bg-color);
-  min-height: 500px;
+  min-height: 480px;
   
   @media (max-width: 768px) {
-    padding: 30px 20px;
+    padding: 24px 20px;
   }
 }
 
@@ -631,33 +630,33 @@ const openPrivacyPolicy = () => {
 
 // 登录头部
 .login-header {
-  margin-bottom: 30px;
+  margin-bottom: 24px;
   
   .logo-section {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     
     .logo-icon {
-      width: 56px;
-      height: 56px;
+      width: 44px;
+      height: 44px;
       background: @primary-gradient;
-      border-radius: 16px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 28px;
-      box-shadow: 0 8px 20px rgba(239, 99, 16, 0.3);
-      animation: pulse 2s infinite;
+      font-size: 22px;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+      flex-shrink: 0;
     }
     
     .logo-text {
       flex: 1;
       
       h2 {
-        margin: 0 0 4px 0;
-        font-size: 26px;
+        margin: 0 0 2px 0;
+        font-size: 20px;
         font-weight: 700;
         background: @primary-gradient;
         -webkit-background-clip: text;
@@ -667,19 +666,10 @@ const openPrivacyPolicy = () => {
       
       p {
         margin: 0;
-        font-size: 14px;
+        font-size: 13px;
         color: var(--el-text-color-secondary);
       }
     }
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
   }
 }
 
@@ -687,29 +677,29 @@ const openPrivacyPolicy = () => {
 .login-tabs {
   position: relative;
   display: flex;
-  gap: 12px;
-  margin-bottom: 30px;
+  gap: 8px;
+  margin-bottom: 20px;
   background: var(--el-fill-color-extra-light);
-  padding: 6px;
-  border-radius: 12px;
+  padding: 4px;
+  border-radius: 10px;
   
   .tab-item {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 12px 16px;
+    gap: 6px;
+    padding: 10px 12px;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     color: var(--el-text-color-regular);
     transition: all 0.3s ease;
     z-index: 2;
     
     i {
-      font-size: 16px;
+      font-size: 14px;
     }
     
     &.active {
@@ -723,18 +713,18 @@ const openPrivacyPolicy = () => {
   
   .tab-indicator {
     position: absolute;
-    top: 6px;
-    left: 6px;
-    width: calc(50% - 6px);
-    height: calc(100% - 12px);
+    top: 4px;
+    left: 4px;
+    width: calc(50% - 4px);
+    height: calc(100% - 8px);
     background: white;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1;
     
     &.move-right {
-      transform: translateX(calc(100% + 12px));
+      transform: translateX(calc(100% + 8px));
     }
   }
 }
@@ -743,11 +733,12 @@ const openPrivacyPolicy = () => {
 .login-form-wrapper {
   .modern-form {
     :deep(.el-form-item) {
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     
     :deep(.el-form-item__error) {
-      padding-left: 48px;
+      padding-left: 44px;
+      font-size: 12px;
     }
   }
 }
@@ -756,23 +747,23 @@ const openPrivacyPolicy = () => {
 .security-notice {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  padding: 16px;
+  gap: 10px;
+  padding: 12px;
   background: linear-gradient(135deg, rgba(255, 193, 7, 0.08) 0%, rgba(255, 152, 0, 0.05) 100%);
   border-left: 3px solid #ffc107;
   border-radius: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   
   .notice-icon {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     background: #ffc107;
-    border-radius: 8px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 16px;
+    font-size: 14px;
     flex-shrink: 0;
   }
   
@@ -781,16 +772,16 @@ const openPrivacyPolicy = () => {
     
     strong {
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
       color: #ff9800;
-      font-size: 14px;
+      font-size: 13px;
     }
     
     p {
       margin: 0;
-      font-size: 13px;
+      font-size: 12px;
       color: var(--el-text-color-secondary);
-      line-height: 1.5;
+      line-height: 1.4;
     }
   }
 }
@@ -804,14 +795,14 @@ const openPrivacyPolicy = () => {
     
     .input-icon {
       position: absolute;
-      left: 16px;
-      width: 20px;
-      height: 20px;
+      left: 14px;
+      width: 18px;
+      height: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--el-text-color-placeholder);
-      font-size: 16px;
+      font-size: 14px;
       z-index: 2;
       transition: color 0.3s ease;
     }
@@ -824,12 +815,12 @@ const openPrivacyPolicy = () => {
       width: 100%;
       
       .el-input__wrapper {
-        padding-left: 48px;
-        padding-right: 16px;
-        height: 48px;
+        padding-left: 42px;
+        padding-right: 14px;
+        height: 44px;
         background: var(--el-fill-color-light);
         border: 2px solid transparent;
-        border-radius: 12px;
+        border-radius: 10px;
         box-shadow: none;
         transition: all 0.3s ease;
         
@@ -840,13 +831,13 @@ const openPrivacyPolicy = () => {
         &.is-focus {
           background: white;
           border-color: @primary-color;
-          box-shadow: 0 0 0 3px rgba(239, 99, 16, 0.1);
+          box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
         }
       }
       
       .el-input__inner {
         height: 100%;
-        line-height: 48px;
+        line-height: 44px;
         font-size: 14px;
       }
     }
@@ -858,13 +849,13 @@ const openPrivacyPolicy = () => {
         padding: 0;
         
         .code-btn {
-          height: 44px;
-          padding: 0 20px;
+          height: 40px;
+          padding: 0 16px;
           background: @primary-gradient;
           border: none;
-          border-radius: 0 10px 10px 0;
+          border-radius: 0 8px 8px 0;
           color: white;
-          font-size: 13px;
+          font-size: 12px;
           font-weight: 500;
           cursor: pointer;
           transition: all 0.3s ease;
@@ -883,7 +874,7 @@ const openPrivacyPolicy = () => {
       }
       
       :deep(.el-input__wrapper) {
-        border-radius: 12px 0 0 12px;
+        border-radius: 10px 0 0 10px;
       }
     }
   }
@@ -894,17 +885,17 @@ const openPrivacyPolicy = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
   
   .remember-checkbox {
     :deep(.el-checkbox__label) {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--el-text-color-regular);
     }
   }
   
   .forgot-link {
-    font-size: 14px;
+    font-size: 13px;
     color: @primary-color;
     text-decoration: none;
     font-weight: 500;
@@ -919,16 +910,16 @@ const openPrivacyPolicy = () => {
 
 // 提交按钮
 .form-actions {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   
   .modern-btn {
     width: 100%;
-    height: 52px;
+    height: 46px;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     background: @primary-gradient;
     color: white;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     position: relative;
@@ -964,7 +955,7 @@ const openPrivacyPolicy = () => {
     
     &:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(239, 99, 16, 0.4);
+      box-shadow: 0 6px 16px rgba(139, 92, 246, 0.35);
       
       .btn-effect {
         left: 100%;
@@ -989,8 +980,8 @@ const openPrivacyPolicy = () => {
 // 模式切换
 .mode-switch {
   text-align: center;
-  margin-bottom: 16px;
-  font-size: 14px;
+  margin-bottom: 12px;
+  font-size: 13px;
   color: var(--el-text-color-secondary);
   
   a {
@@ -1010,10 +1001,10 @@ const openPrivacyPolicy = () => {
 // 协议文本
 .agreement-text {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
   font-size: 12px;
   color: var(--el-text-color-placeholder);
-  line-height: 1.8;
+  line-height: 1.6;
   
   a {
     color: @primary-color;
@@ -1032,7 +1023,7 @@ const openPrivacyPolicy = () => {
   .divider-line {
     position: relative;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
     
     &::before,
     &::after {
@@ -1053,9 +1044,9 @@ const openPrivacyPolicy = () => {
     }
     
     span {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--el-text-color-placeholder);
-      padding: 0 10px;
+      padding: 0 8px;
       background: var(--el-bg-color);
     }
   }
@@ -1063,19 +1054,19 @@ const openPrivacyPolicy = () => {
   .social-buttons {
     display: flex;
     justify-content: center;
-    gap: 16px;
+    gap: 12px;
     
     .social-btn {
-      width: 48px;
-      height: 48px;
-      border: 2px solid var(--el-border-color-light);
+      width: 44px;
+      height: 44px;
+      border: 1.5px solid var(--el-border-color-light);
       background: white;
-      border-radius: 12px;
+      border-radius: 10px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 20px;
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
@@ -1223,44 +1214,54 @@ html.dark {
 // 响应式设计
 @media (max-width: 768px) {
   .login-container-v2 {
-    padding: 30px 20px;
+    padding: 24px 20px;
   }
   
   .login-header .logo-section {
     .logo-icon {
-      width: 48px;
-      height: 48px;
-      font-size: 24px;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
     }
     
     .logo-text h2 {
-      font-size: 22px;
+      font-size: 18px;
+    }
+    
+    .logo-text p {
+      font-size: 12px;
     }
   }
   
   .login-tabs .tab-item {
-    padding: 10px 12px;
-    font-size: 13px;
+    padding: 9px 10px;
+    font-size: 12px;
     
     span {
       display: none;
     }
     
     i {
-      font-size: 18px;
+      font-size: 16px;
     }
   }
   
   .form-item-modern .input-wrapper {
     :deep(.modern-input .el-input__wrapper) {
-      height: 44px;
-      padding-left: 44px;
+      height: 42px;
+      padding-left: 40px;
     }
   }
   
   .form-actions .modern-btn {
-    height: 48px;
-    font-size: 15px;
+    height: 44px;
+    font-size: 14px;
+  }
+  
+  .social-login .social-buttons .social-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
   }
 }
 </style>
