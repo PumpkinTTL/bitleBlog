@@ -14,14 +14,16 @@
             <span class="title"> {{ item.title }}</span>
             <!-- 时间访客浏览量 -->
             <div class="auth-info-time">
-                <UserOutlined /> {{ item.author }}
-                <span class="time" style="margin: 0 20px;">
+                <span class="author-name">
+                    <UserOutlined /> {{ item.author }}
+                </span>
+                <span class="time">
                     <FieldTimeOutlined /> {{ item.date }}
                 </span>
                 <span class="view-count">
                     <EyeOutlined /> {{ item.views }}
                 </span>
-                <span style="margin-left: 10px;" class="comment-count">
+                <span class="comment-count">
                     <CommentOutlined /> {{ item.comments }}
                 </span>
             </div>
@@ -56,49 +58,158 @@ onMounted(()=>{
 </script>
 <style lang="less" scoped>
     .list-item-container{
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                /* 阴影效果 */
-        cursor: pointer;
-        padding: 10px;
-        &:not(:first-child){
-            margin-top: 15px;
-        }
-        border-bottom: 1px solid #eee;
         background-color: #fff;
-        padding: 10px;
+        border-radius: 8px;
+        padding: 16px;
+        border: 1px solid #f0f0f0;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        
+        &:not(:first-child){
+            margin-top: 12px;
+        }
+        
+        &:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 4px 16px rgba(24, 144, 255, 0.12);
+            border-color: rgba(24, 144, 255, 0.3);
+            
+            .title {
+                color: #1890ff;
+            }
+            
+            .list-item-cover img {
+                transform: scale(1.05);
+            }
+        }
         // 封面
         .list-item-cover{
             transition: all .3s;
-            min-height: 100%;
+            width: 180px;
+            height: 120px;
+            flex-shrink: 0;
+            border-radius: 6px;
+            overflow: hidden;
             
         }
         img{
             transition: all .3s;
-            // height: 100%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             
         }
                                 // 内容
         .list-item-content{
             flex: 1;
+            min-width: 0;
             margin-left: 20px;
-            .auth-info-time{
-                margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            
+            :deep(.ant-tag) {
+                border: none !important;
+                font-weight: 500;
+                
+                &.ant-tag-error {
+                    background-color: #f5222d !important;
+                    color: #ffffff !important;
+                }
             }
+            
                         // 标题
             .title{
-                font-size: 16px;
-                color: #353535;
+                font-size: 18px;
+                font-weight: 600;
+                color: #262626;
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                max-width: 100%;
+                transition: color 0.25s ease;
+                line-height: 1.4;
+                margin-top: 4px;
             }
             // 作者信息等
             .auth-info-time{
-                font-size: 14px;
+                font-size: 12px;
                 color: rgb(136, 138, 138);
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 12px;
+                
+                .author-name {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-weight: 500;
+                    color: #595959;
+                    transition: color 0.2s ease;
+                    
+                    &:hover {
+                        color: #1890ff;
+                    }
+                }
+                
+                .time {
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    color: #8c8c8c;
+                    
+                    :deep(.anticon) {
+                        font-size: 11px;
+                        color: #bfbfbf;
+                    }
+                }
+                
+                .view-count,
+                .comment-count {
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    padding: 3px 8px;
+                    border-radius: 4px;
+                    background: rgba(0, 0, 0, 0.02);
+                    transition: all 0.2s ease;
+                    font-weight: 500;
+                    
+                    &:hover {
+                        background: rgba(24, 144, 255, 0.06);
+                        color: #1890ff;
+                        transform: translateY(-1px);
+                    }
+                }
+                
+                .view-count {
+                    :deep(.anticon) {
+                        color: #1890ff;
+                        font-size: 12px;
+                    }
+                }
+                
+                .comment-count {
+                    :deep(.anticon) {
+                        color: #52c41a;
+                        font-size: 12px;
+                    }
+                }
             }
             // 简介
             .list-item-intro{
                 font-size: 14px;
-                margin-top: 15px;
-                color: rgb(136, 138, 138);
+                color: #8c8c8c;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                line-height: 1.6;
+                margin-bottom: 8px;
             }
                 }
 

@@ -120,7 +120,10 @@
               {{ article.author.name }}
               <i v-if="article.author.isVip" class="fas fa-crown vip-icon"></i>
             </span>
-            <span class="publish-time">{{ formatDate(article.publishTime) }}</span>
+            <span class="publish-time">
+              <i class="far fa-calendar-alt"></i>
+              {{ formatDate(article.publishTime) }}
+            </span>
           </div>
           
           <div class="item-stats">
@@ -596,12 +599,13 @@ const getTagStyle = (index: number) => {
 // 列表视图样式
 .article-item {
   background: #ffffff;
-  border-radius: 6px;
-  padding: 16px;
+  border-radius: 8px;
+  padding: 20px;
   border: 1px solid #f0f0f0;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  margin-bottom: 16px;
   
   &:hover {
     transform: translateY(-3px) scale(1.01);
@@ -668,6 +672,8 @@ const getTagStyle = (index: number) => {
     
     .item-main {
       flex: 1;
+      min-width: 0;
+      overflow: hidden;
       
       .item-title {
         font-size: 1.1rem;
@@ -676,6 +682,12 @@ const getTagStyle = (index: number) => {
         margin-bottom: 8px;
         line-height: 1.4;
         transition: color 0.25s ease;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        word-break: break-word;
       }
       
       .item-excerpt {
@@ -687,6 +699,7 @@ const getTagStyle = (index: number) => {
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
+        word-break: break-word;
       }
       
       .item-meta {
@@ -699,50 +712,123 @@ const getTagStyle = (index: number) => {
         .author-info {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 6px;
+          flex-wrap: wrap;
           
           .author-avatar {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             object-fit: cover;
+            border: 1.5px solid rgba(24, 144, 255, 0.15);
+            transition: all 0.2s ease;
+            
+            &:hover {
+              border-color: rgba(24, 144, 255, 0.4);
+              transform: scale(1.1);
+            }
           }
           
           .author-name {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 500;
-            color: var(--el-text-color-primary);
+            color: #595959;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            transition: color 0.2s ease;
+            
+            &:hover {
+              color: #1890ff;
+            }
             
             &.author-vip {
-              color: #f5a623;
+              background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+              font-weight: 600;
             }
             
             .vip-icon {
-              color: #f5a623;
-              font-size: 9px;
-              margin-left: 4px;
+              color: #FFD700;
+              font-size: 11px;
+              filter: drop-shadow(0 1px 2px rgba(255, 215, 0, 0.3));
             }
           }
           
           .publish-time {
             font-size: 12px;
-            color: var(--el-text-color-secondary);
+            color: #8c8c8c;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            
+            &::before {
+              content: '·';
+              color: #d9d9d9;
+              margin: 0 4px;
+            }
+            
+            i {
+              font-size: 11px;
+              color: #bfbfbf;
+            }
           }
         }
         
         .item-stats {
           display: flex;
-          gap: 12px;
+          gap: 10px;
           
           .stat-item {
             font-size: 12px;
-            color: var(--el-text-color-secondary);
+            color: #595959;
             display: flex;
             align-items: center;
             gap: 4px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.02);
+            transition: all 0.2s ease;
+            font-weight: 500;
+            
+            &:hover {
+              color: #1890ff;
+              background: rgba(24, 144, 255, 0.06);
+              transform: translateY(-1px);
+            }
             
             i {
+              font-size: 12px;
+              transition: color 0.2s ease;
+            }
+            
+            // 浏览量图标
+            &:nth-child(1) i {
               color: #1890ff;
+            }
+            
+            &:nth-child(1):hover i {
+              color: #40a9ff;
+            }
+            
+            // 点赞图标
+            &:nth-child(2) i {
+              color: #ff4d4f;
+            }
+            
+            &:nth-child(2):hover i {
+              color: #ff7875;
+            }
+            
+            // 评论图标
+            &:nth-child(3) i {
+              color: #52c41a;
+            }
+            
+            &:nth-child(3):hover i {
+              color: #73d13d;
             }
           }
         }
