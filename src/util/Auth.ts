@@ -1,9 +1,121 @@
 import { useStore } from "@/store";
 import Cookies from "js-cookie";
-// const store = useStore();
+
+// ==================== 新的单Token管理函数 ====================
+
+/**
+ * Token数据结构
+ */
+export interface TokenData {
+  token: string;        // JWT Token
+  expires: number;      // 过期时间戳（毫秒）
+  id?: number;          // 用户ID
+  username?: string;    // 用户名
+  nickname?: string;    // 昵称
+  avatar?: string;      // 头像
+  email?: string;       // 邮箱
+  roles?: string[];     // 角色标识符数组
+  permissions?: string[]; // 权限数组
+  [key: string]: any;   // 其他用户信息
+}
+
+/**
+ * 获取Token数据（优先从Cookie读取，其次从localStorage）
+ * @returns TokenData | null
+ */
+export const getToken = (): TokenData | null => {
+  try {
+    // 1. 尝试从Cookie读取
+    const cookieToken = Cookies.get('authorized-token');
+    if (cookieToken) {
+      const tokenData = JSON.parse(cookieToken);
+      // Cookie中只有token和expires，需要从localStorage获取完整用户信息
+      const userInfo = localStorage.getItem('userInfo');
+      if (userInfo) {
+        const fullData = JSON.parse(userInfo);
+        // 合并Cookie中的token和localStorage中的用户信息
+        return {
+          ...fullData,
+          token: tokenData.token,
+          expires: tokenData.expires
+        };
+      }
+      // 如果没有userInfo，只返回token数据
+      return tokenData;
+    }
+
+    // 2. Cookie不存在，尝试从localStorage读取
+    const localToken = localStorage.getItem('userInfo');
+    if (localToken) {
+      const tokenData = JSON.parse(localToken);
+      if (tokenData?.token && tokenData?.expires) {
+        return tokenData;
+      }
+    }
+
+    return null;
+  } catch (error) {
+    console.error('[Auth] 获取Token失败:', error);
+    return null;
+  }
+};
+
+/**
+ * 保存Token数据（同时保存到Cookie和localStorage）
+ * @param tokenData Token数据
+ */
+export const setToken = (tokenData: TokenData): void => {
+  try {
+    // 1. 保存到Cookie（只保存token和expires，过期自动销毁）
+    const cookieData = {
+      token: tokenData.token,
+      expires: tokenData.expires
+    };
+    
+    // 计算Cookie过期天数（毫秒转天）
+    const expiresInDays = (tokenData.expires - Date.now()) / (24 * 60 * 60 * 1000);
+    
+    Cookies.set('authorized-token', JSON.stringify(cookieData), {
+      expires: expiresInDays > 0 ? expiresInDays : 1/48, // 最少保存30分钟
+      path: '/',
+      sameSite: 'Lax'
+    });
+
+    // 2. 保存完整用户信息到localStorage（保持项目原有习惯：userInfo）
+    localStorage.setItem('userInfo', JSON.stringify(tokenData));
+    
+    console.log('[Auth] Token已保存，过期时间:', new Date(tokenData.expires));
+  } catch (error) {
+    console.error('[Auth] 保存Token失败:', error);
+  }
+};
+
+/**
+ * 清除Token数据（Cookie + localStorage）
+ */
+export const removeToken = (): void => {
+  try {
+    // 清除Cookie
+    Cookies.remove('authorized-token', { path: '/' });
+    
+    // 清除localStorage（保持项目原有习惯：userInfo）
+    localStorage.removeItem('userInfo');
+    
+    console.log('[Auth] Token已清除');
+  } catch (error) {
+    console.error('[Auth] 清除Token失败:', error);
+  }
+};
+
+// ==================== 旧的Cookie管理函数（兼容保留） ====================
+
 // 设置cookie
 export const setCookie = (key: string, value: string, timeOUt: any) => {
-  Cookies.set(key, value, { expires: timeOUt });
+  Cookies.set(key, value, { 
+    expires: timeOUt,
+    path: '/',
+    sameSite: 'Lax'
+  });
 }
 
 // 获取cookie
@@ -35,16 +147,22 @@ export const clearLocalStorage = () => {
   localStorage.clear();
 }
 
-// 清除清除用户登录信息
+// 清除清除用户登录信息（旧方式，兼容保留）
 export const clearUserInfo = () => {
+  // 调用新的removeToken函数
+  removeToken()
+  
+  // 清除旧的localStorage字段
   localStorage.removeItem('refreshToken')
   localStorage.removeItem('accessToken')
-  localStorage.removeItem('userInfo')
+  localStorage.removeItem('Authorization')
+  localStorage.removeItem('token')
+  localStorage.removeItem('isLogin')
+  localStorage.removeItem('loginCredentials')
+  
+  // 清除旧的cookie
+  removeCookie('Authorization')
+  
+  console.log('已清除所有登录信息（localStorage + cookie）')
 }
 
-// 清楚store中的用户信息
-// export const clearStoreUserInfo = () => {
-//   store.$dispatch((state:any) => {
-//     state.userInfo = undefined
-//   })
-// }

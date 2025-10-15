@@ -195,6 +195,7 @@ import { ElMessage } from 'element-plus'
 import { User, Setting, SwitchButton } from '@element-plus/icons-vue'
 import { useStore } from '../store'
 import { useThemeStore } from '@/stores/theme'
+import { removeToken } from '@/util/Auth'
 import Logo from './Logo.vue'
 
 const router = useRouter()
@@ -256,10 +257,24 @@ const goToSettings = () => {
 }
 
 const logout = () => {
-  localStorage.removeItem('token')
-  localStorage.removeItem('userInfo')
+  // 清除Token（authorized-token cookie + user-info localStorage）
+  removeToken()
+  
+  // 清除旧的localStorage字段（兼容）
+  localStorage.removeItem('isLogin')
+  localStorage.removeItem('loginCredentials')
+  
+  // 清除store中的用户状态
+  store.$patch((state: any) => {
+    state.isLogin = false
+    state.userInfo = null
+  })
+  
   ElMessage.success('已退出登录')
+  mobileMenuOpen.value = false
   router.push('/')
+  // 重新加载页面确保状态清除
+  setTimeout(() => window.location.reload(), 100)
 }
 
 // 初始化

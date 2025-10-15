@@ -58,7 +58,7 @@ import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
 import AiAssistant from '@/components/AiAssistant.vue';
 import { checkUserLoginR } from '@/request/user';
 import { message } from 'ant-design-vue';
-import { clearUserInfo } from '@/util/Auth';
+import { getToken, removeToken } from '@/util/Auth';
 import { useRoute } from 'vue-router';
 
 const store = useStore()
@@ -104,41 +104,86 @@ const handleThemeChange = (theme: string) => {
 
 const showAgreement = ref(false)
 
-// 验证用户登录状态
+// 验证用户登录状态（使用新的单Token系统）
 const validateLoginStatus = async () => {
-  const refreshToken = localStorage.getItem('refreshToken')
-  const accessToken = localStorage.getItem('accessToken')
-  
-  if (refreshToken && accessToken) {
-    try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-      const targetUid = userInfo.id
+  try {
+    // 使用新的getToken函数获取Token数据
+    const tokenData = getToken()
+    
+    if (tokenData && tokenData.token) {
+      // 有Token，检查是否过期
+      const now = Date.now()
+      const expiresTime = typeof tokenData.expires === 'number' 
+        ? tokenData.expires 
+        : new Date(tokenData.expires).getTime()
       
-      if (!targetUid) {
-        console.error('用户ID不存在')
-        return
+      if (expiresTime > now) {
+        // Token未过期，先恢复登录状态
+        store.$patch(state => {
+          state.isLogin = true
+          state.userInfo = tokenData  // 先使用localStorage中的数据
+        })
+        
+        const timeLeft = Math.floor((expiresTime - now) / 1000 / 60)
+        console.log(`[App] 登录状态恢复成功，用户: ${tokenData.username || tokenData.account}, Token还有${timeLeft}分钟过期`)
+        
+        // 请求最新的用户信息（同步后端数据）
+        if (tokenData.id) {
+          try {
+            console.log('[App] 请求最新用户信息...')
+            const res: any = await checkUserLoginR(tokenData.id)
+            
+            if (res.code === 200) {
+              // 合并localStorage和后端返回的最新数据
+              const updatedUserInfo = {
+                ...tokenData,      // localStorage中的token、expires等
+                ...res.data        // 后端返回的最新用户信息
+              }
+              
+              store.$patch(state => {
+                state.userInfo = updatedUserInfo
+              })
+              
+              console.log('[App] 用户信息已更新:', updatedUserInfo)
+            } else {
+              // 用户被禁用或其他错误
+              console.warn('[App] 用户验证失败:', res.msg)
+              removeToken()
+              store.$patch(state => {
+                state.isLogin = false
+                state.userInfo = null
+              })
+              message.warning(res.msg || '用户状态异常，请重新登录')
+            }
+          } catch (error) {
+            console.warn('[App] 用户信息请求失败:', error)
+            // 接口请求失败不清除Token，保持localStorage中的登录状态
+            console.log('[App] 使用本地缓存的用户信息')
+          }
+        }
+      } else {
+        // Token已过期
+        console.warn('[App] Token已过期，清除登录状态')
+        removeToken()
+        store.$patch(state => {
+          state.isLogin = false
+          state.userInfo = null
+        })
       }
-      const res:any = await checkUserLoginR(targetUid)
-      if (res.code !== 200) {
-        message.error(res.msg)
-        // 登录失效，清除状态
-        clearUserInfo()
-        return
-      }
-      
-      // 更新store数据
+    } else {
+      console.log('[App] 用户未登录')
       store.$patch(state => {
-        state.userInfo = res.data
-        state.isLogin = true
+        state.isLogin = false
+        state.userInfo = null
       })
-
-      console.log('用户登录状态验证成功')
-    } catch (error) {
-     
-      clearUserInfo()
     }
-  } else {
-    console.log('用户未登录')
+  } catch (error) {
+    console.error('[App] 登录状态恢复失败:', error)
+    removeToken()
+    store.$patch(state => {
+      state.isLogin = false
+      state.userInfo = null
+    })
   }
 }
 
