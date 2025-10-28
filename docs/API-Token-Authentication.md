@@ -113,8 +113,8 @@ sequenceDiagram
 
 | 存储位置 | 键名 | 内容 | 说明 |
 |---------|------|------|------|
-| **Cookie** | `authorized-token` | `{token, expires}` | 过期自动销毁 |
-| **localStorage** | `user-info` | 完整用户信息 | 持久化存储 |
+| **Cookie** | `Authorization` | Token字符串 | 过期自动销毁 |
+| **localStorage** | `userInfo` | 完整用户信息 | 持久化存储 |
 | **Redis** | `lt_{userId}` | 当前有效Token | 用于验证和强制失效 |
 
 ---
@@ -325,7 +325,7 @@ request()->currentUserRoles = $userRoles;
 function saveToken(response) {
   const tokenData = {
     token: response.token,
-    expires: new Date(response.expireTime * 1000), // 秒转毫秒
+    expires: response.expireTime * 1000, // 秒转毫秒
     id: response.data.id,
     username: response.data.username,
     nickname: response.data.nickname,
@@ -334,31 +334,31 @@ function saveToken(response) {
     permissions: extractPermissions(response.data.roles)
   };
   
-  // Cookie存储（过期自动销毁）
-  Cookies.set('authorized-token', JSON.stringify({
-    token: tokenData.token,
-    expires: tokenData.expires.getTime()
-  }), {
-    expires: (tokenData.expires.getTime() - Date.now()) / 86400000
+  // Cookie存储（直接存token字符串，过期自动销毁）
+  const expiresInDays = (tokenData.expires - Date.now()) / 86400000;
+  Cookies.set('Authorization', tokenData.token, {
+    expires: expiresInDays > 0 ? expiresInDays : 1/48
   });
   
   // localStorage存储（持久化）
-  localStorage.setItem('user-info', JSON.stringify(tokenData));
+  localStorage.setItem('userInfo', JSON.stringify(tokenData));
 }
 
 // 获取Token
 function getToken() {
-  const cookieToken = Cookies.get('authorized-token');
+  const cookieToken = Cookies.get('Authorization');
   if (cookieToken) {
-    return JSON.parse(cookieToken);
+    // Cookie中是纯净的token字符串
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    return { ...userInfo, token: cookieToken };
   }
-  return JSON.parse(localStorage.getItem('user-info'));
+  return JSON.parse(localStorage.getItem('userInfo'));
 }
 
 // 清除Token
 function clearToken() {
-  Cookies.remove('authorized-token');
-  localStorage.removeItem('user-info');
+  Cookies.remove('Authorization');
+  localStorage.removeItem('userInfo');
 }
 ```
 

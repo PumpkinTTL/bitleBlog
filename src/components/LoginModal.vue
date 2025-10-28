@@ -261,12 +261,12 @@
   import { ref, computed, reactive, onMounted, onUnmounted } from 'vue'
   import { useStore } from '../store'
   import { message } from 'ant-design-vue'
-  import { 
-    User, 
-    Lock, 
-    Close, 
-    ChatDotSquare, 
-    Connection, 
+  import {
+    User,
+    Lock,
+    Close,
+    ChatDotSquare,
+    Connection,
     Platform,
     ArrowRight,
     Message,
@@ -274,6 +274,7 @@
     Warning
   } from '@element-plus/icons-vue'
   import { loginR } from '../request/user'
+  import { setToken } from '../util/Auth'
   import SecurityGuide from './platform/SecurityGuide.vue'
   import UserAgreement from './platform/UserAgreement.vue'
   import PrivacyPolicy from './platform/PrivacyPolicy.vue'
@@ -520,26 +521,61 @@
             password: formState.password,
             action: 'pwd'
           }
-          
+
           const res = await loginR(params)
-          
+
           if (res.code === 200) {
             const userInfo = res.data
-            
+
             // 更新store（后端已返回包含premium等字段的完整用户信息）
             store.isLogin = true
             store.userInfo = userInfo
-            
-            // 保存用户信息到localStorage
+
+            // 提取角色和权限
+            const roles = userInfo.roles?.map((r) => r.iden) || []
+            const permissions = []
+            userInfo.roles?.forEach((role) => {
+              role.permissions?.forEach((perm) => {
+                if (perm.name && !permissions.includes(perm.name)) {
+                  permissions.push(perm.name)
+                }
+              })
+            })
+
+            // 构建Token数据结构
+            const tokenData = {
+              token: res.token,
+              expires: res.expireTime * 1000, // 后端返回秒级时间戳，转换为毫秒
+              id: userInfo.id,
+              username: userInfo.username,
+              nickname: userInfo.nickname,
+              avatar: userInfo.avatar,
+              email: userInfo.email,
+              roles: roles,
+              permissions: permissions,
+              // 保存完整的用户信息
+              ...userInfo
+            }
+
+            // 使用新的单Token管理：同时保存到Authorization cookie和userInfo localStorage
+            setToken(tokenData)
+
+            // 保存用户信息到localStorage（兼容旧代码）
             saveUserToLocalStorage(userInfo)
-            
-            // 保存Token到localStorage
-            localStorage.setItem('refreshToken', res.refreshToken)
-            localStorage.setItem('accessToken', res.accessToken)
-            
+
+            // 兼容旧的localStorage字段
+            if (formState.remember && userInfo.username) {
+              localStorage.setItem('loginCredentials', JSON.stringify({
+                username: userInfo.username
+              }))
+            }
+            localStorage.setItem('isLogin', 'true')
+
             // 调试日志：显示premium状态
-            console.log('登录成功，用户premium状态:', userInfo.premium)
-            
+            console.log('[Login] 登录成功，用户premium状态:', userInfo.premium)
+            console.log('[Login] Token过期时间:', new Date(tokenData.expires))
+
+            message.success('登录成功')
             closeDialog()
 
           } else {

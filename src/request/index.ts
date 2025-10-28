@@ -3,6 +3,7 @@ import axios from "axios";
 import { message } from 'ant-design-vue';
 import { getToken } from "@/util/Auth";
 import { tokenManager } from "@/util/tokenManager";
+import { isWhitelisted, requiresAuth } from "@/config/requestConfig";
 import { createPinia } from 'pinia';
 import { useStore } from "@/store";
 const pinia = createPinia();
@@ -24,30 +25,17 @@ let messageHint: any = undefined;
 //请求拦截器
 let loading: any = undefined;
 
-// 白名单 - 不需要检查Token的接口（登录和续签）
-const whiteList = ['/api/v1/user/login', '/api/v1/auth/refresh'];
-
-// 必须登录才能访问的接口模式（可根据项目调整）
-const requireAuthPatterns = [
-    '/api/v1/article/add',
-    '/api/v1/article/update',
-    '/api/v1/article/delete',
-    '/api/v1/user/update',
-    '/api/v1/comment/add'
-    // 添加其他需要登录的接口模式
-];
-
 Axios.interceptors.request.use(
     async (config) => {
         // 配置请求头信息
         config.headers.appid = 202410051
         
-        // 检查是否是白名单接口（登录、续签）
-        const isWhiteListed = whiteList.some(url => config.url?.includes(url));
+        // 检查是否是白名单接口（使用配置文件）
+        const isWhiteListed = isWhitelisted(config.url || '');
         
         if (!isWhiteListed) {
-            // 检查是否是必须登录的接口
-            const requiresAuth = requireAuthPatterns.some(pattern => config.url?.includes(pattern));
+            // 检查是否是必须登录的接口（使用配置文件）
+            const needsAuth = requiresAuth(config.url || '');
             
             // 尝试获取Token
             const tokenData = getToken();
@@ -59,7 +47,7 @@ Axios.interceptors.request.use(
                     if (!isTokenValid) {
                         console.warn('[Request] Token已过期');
                         // 如果是必须登录的接口，阻止请求
-                        if (requiresAuth) {
+                        if (needsAuth) {
                             return Promise.reject(new Error('Token invalid, login required'));
                         }
                         // 否则继续请求（公开接口）
@@ -70,14 +58,14 @@ Axios.interceptors.request.use(
                 } catch (error) {
                     console.error('[Request] Token检查失败:', error);
                     // 如果是必须登录的接口，阻止请求
-                    if (requiresAuth) {
+                    if (needsAuth) {
                         return Promise.reject(error);
                     }
                     // 否则继续请求（公开接口）
                 }
             } else {
                 // 没有Token
-                if (requiresAuth) {
+                if (needsAuth) {
                     // 必须登录的接口，阻止请求
                     console.warn('[Request] 访问受保护的接口需要登录');
                     return Promise.reject(new Error('Login required'));

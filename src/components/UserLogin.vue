@@ -60,7 +60,7 @@ import {
     UnlockOutlined ,
     AppstoreAddOutlined
 } from '@ant-design/icons-vue';
-import { saveUserInfo, setLocalStorage } from '@/util/Auth';
+import { saveUserInfo, setLocalStorage, setToken } from '@/util/Auth';
 
 interface FormState {
   account: string;
@@ -81,26 +81,56 @@ const onFinish = async (values: any) => {
     const res = await loginR(values) as any
     // setTimeout(loading, 0)
     if (res.code != 200) return message.warning(res.msg)
-    
-    const { token, accessToken } = res
+
     const userInfo = res.data
-    
+
     // 更新store（后端已返回包含premium等字段的完整用户信息）
     store.$patch((state: any) => {
         state.showLoginModal = false
         state.userInfo = userInfo
         state.isLogin = true
     })
-    
-    // 保存Token到localStorage
-    setLocalStorage('Authorization', token)
-    setLocalStorage('accessToken', accessToken)
-    
-    // 保存用户信息到localStorage
+
+    // 提取角色和权限
+    const roles = userInfo.roles?.map((r: any) => r.iden) || []
+    const permissions: string[] = []
+    userInfo.roles?.forEach((role: any) => {
+      role.permissions?.forEach((perm: any) => {
+        if (perm.name && !permissions.includes(perm.name)) {
+          permissions.push(perm.name)
+        }
+      })
+    })
+
+    // 构建Token数据结构
+    const tokenData = {
+      token: res.token,
+      expires: res.expireTime * 1000, // 后端返回秒级时间戳，转换为毫秒
+      id: userInfo.id,
+      username: userInfo.username,
+      nickname: userInfo.nickname,
+      avatar: userInfo.avatar,
+      email: userInfo.email,
+      roles: roles,
+      permissions: permissions,
+      // 保存完整的用户信息
+      ...userInfo
+    }
+
+    // 使用新的单Token管理：同时保存到Authorization cookie和userInfo localStorage
+    setToken(tokenData)
+
+    // 保存用户信息到localStorage（兼容旧代码）
     saveUserInfo(userInfo)
-    
+
+    // 兼容旧的localStorage字段
+    setLocalStorage('isLogin', 'true')
+
     // 调试日志：显示premium状态
-    console.log('登录成功，用户premium状态:', userInfo.premium)
+    console.log('[Login] 登录成功，用户premium状态:', userInfo.premium)
+    console.log('[Login] Token过期时间:', new Date(tokenData.expires))
+
+    message.success('登录成功')
 };
 
 const onFinishFailed = (errorInfo: any) => {

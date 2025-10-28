@@ -167,7 +167,7 @@ class TokenManager {
       const newTokenData = {
         ...currentToken,
         token: newToken,
-        expires: new Date(expireTime * 1000) // 后端返回秒级时间戳，转换为毫秒
+        expires: expireTime * 1000 // 后端返回秒级时间戳，转换为毫秒
       };
 
       // 保存新token
