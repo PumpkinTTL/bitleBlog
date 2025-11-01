@@ -29,6 +29,12 @@
 
         <!-- 右侧操作 -->
         <div class="actions">
+          <!-- 捐赠按钮 -->
+          <router-link to="/donation" class="btn-donation">
+            <i class="fas fa-heart"></i>
+            <span class="donation-text">捐赠本站</span>
+          </router-link>
+
           <button class="btn-icon theme-toggle" :class="{ 'dark-mode': isDarkMode }" @click="toggleTheme">
             <i :class="isDarkMode ? 'fas fa-sun' : 'fas fa-moon'"></i>
           </button>

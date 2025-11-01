@@ -34,10 +34,16 @@
 
         <!-- 右侧操作区域 -->
         <div class="header-actions">
+          <!-- 捐赠按钮 -->
+          <router-link to="/donation" class="donation-link">
+            <i class="fas fa-heart"></i>
+            <span class="donation-text">捐赠本站</span>
+          </router-link>
+
           <!-- 主题切换按钮 -->
-          <button 
-            class="action-btn theme-btn" 
-            :class="{ 'dark-mode': isDarkMode }" 
+          <button
+            class="action-btn theme-btn"
+            :class="{ 'dark-mode': isDarkMode }"
             @click="toggleTheme"
             :title="isDarkMode ? '切换到浅色模式' : '切换到深色模式'"
           >
@@ -200,6 +206,22 @@
               <i class="fas fa-chevron-right nav-arrow"></i>
             </router-link>
           </div>
+        </div>
+
+        <div class="drawer-divider"></div>
+
+        <!-- 捐赠支持 -->
+        <div class="drawer-donation-section">
+          <router-link to="/donation" class="drawer-donation-card" @click="mobileMenuOpen = false">
+            <div class="donation-card-icon">
+              <i class="fas fa-heart"></i>
+            </div>
+            <div class="donation-card-content">
+              <h4 class="donation-card-title">💝 捐赠本站</h4>
+              <p class="donation-card-desc">您的支持是我们前进的动力</p>
+            </div>
+            <i class="fas fa-chevron-right donation-arrow"></i>
+          </router-link>
         </div>
 
         <div class="drawer-divider"></div>
@@ -573,10 +595,98 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 10px;
-  
+
   @media (max-width: 768px) {
     gap: 8px;
     margin-left: auto;
+  }
+}
+
+// 捐赠按钮样式
+.donation-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: linear-gradient(135deg,
+    rgba(239, 68, 68, 0.1) 0%,
+    rgba(220, 38, 38, 0.15) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+
+  // 内部光泽
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      transparent 100%);
+    pointer-events: none;
+  }
+
+  // 心跳动画
+  i {
+    font-size: 14px;
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+
+  .donation-text {
+    white-space: nowrap;
+
+    @media (max-width: 1100px) {
+      display: none;
+    }
+  }
+
+  &:hover {
+    background: linear-gradient(135deg,
+      rgba(239, 68, 68, 0.2) 0%,
+      rgba(220, 38, 38, 0.25) 100%);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+
+    i {
+      animation: heartbeat 0.8s ease-in-out infinite;
+      transform: scale(1.1);
+    }
+  }
+
+  &:active {
+    transform: translateY(0px);
+  }
+
+  // 移动端样式
+  @media (max-width: 1100px) {
+    padding: 8px 10px;
+    min-width: 36px;
+    justify-content: center;
+  }
+}
+
+// 心跳动画
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  10%, 30% {
+    transform: scale(1.1);
+  }
+  20%, 40% {
+    transform: scale(1);
   }
 }
 
@@ -1333,6 +1443,107 @@ onMounted(() => {
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+// 抽屉捐赠区
+.drawer-donation-section {
+  padding: 0 20px;
+  margin-bottom: 8px;
+}
+
+.drawer-donation-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg,
+    rgba(239, 68, 68, 0.08) 0%,
+    rgba(220, 38, 38, 0.12) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  // 内部光泽
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      transparent 100%);
+    pointer-events: none;
+  }
+
+  .donation-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg,
+      rgba(239, 68, 68, 0.2) 0%,
+      rgba(220, 38, 38, 0.3) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    i {
+      font-size: 22px;
+      color: #ef4444;
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+  }
+
+  .donation-card-content {
+    flex: 1;
+
+    .donation-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ef4444;
+      margin: 0 0 4px;
+    }
+
+    .donation-card-desc {
+      font-size: 12px;
+      color: rgba(239, 68, 68, 0.8);
+      margin: 0;
+    }
+  }
+
+  .donation-arrow {
+    font-size: 14px;
+    color: rgba(239, 68, 68, 0.6);
+    transition: all 0.3s ease;
+  }
+
+  &:hover {
+    background: linear-gradient(135deg,
+      rgba(239, 68, 68, 0.15) 0%,
+      rgba(220, 38, 38, 0.2) 100%);
+    border-color: rgba(239, 68, 68, 0.4);
+    transform: translateX(4px);
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2);
+
+    .donation-card-icon i {
+      animation: heartbeat 0.8s ease-in-out infinite;
+      transform: scale(1.1);
+    }
+
+    .donation-arrow {
+      color: #ef4444;
+      transform: translateX(4px);
+    }
+  }
+
+  &:active {
+    transform: translateX(2px);
   }
 }
 

@@ -203,6 +203,17 @@ const routes: RouteRecordRaw[] = [
             header: false,
             footer: true
         }
+    },
+    {
+        path: '/donation',
+        name: 'donation',
+        component: () => import('@/views/Donation.vue'),
+        meta: {
+            title: '捐赠支持',
+            header: false,
+            footer: true,
+            requiresAuth: false
+        }
     }
 ];
 
