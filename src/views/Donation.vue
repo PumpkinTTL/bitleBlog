@@ -14,40 +14,35 @@
               </div>
             </div>
 
-            <div class="channel-selection">
-              <div v-for="channel in channels" :key="channel.key" class="channel-item" :class="{ active: selectedChannel === channel.key, disabled: channel.disabled }" @click="!channel.disabled && selectChannel(channel.key)">
-                <div class="channel-icon" :style="{ color: channel.color }">
-                  <i :class="channel.icon"></i>
-                </div>
-                <div class="channel-info">
-                  <div class="channel-name">
-                    {{ channel.label }}
-                    <span v-if="channel.badge" class="channel-badge" :class="channel.badge.type">{{ channel.badge.text }}</span>
-                  </div>
-                  <div class="channel-desc">{{ channel.description }}</div>
-                </div>
-                <div class="channel-check">
-                  <i class="fas fa-check-circle"></i>
-                </div>
-              </div>
-            </div>
-
             <div class="donation-form">
               <el-form ref="formRef" :model="formData" :rules="formRules" label-position="top">
-                <!-- 二维码选择区域 - 常驻显示 -->
-                <div class="qrcode-section">
+                <!-- 步骤条 -->
+                <div class="steps-section">
+                  <el-steps :active="currentStep" finish-status="success" align-center>
+                    <el-step title="选择方式" :description="stepDescriptions[0]" />
+                    <el-step title="必填信息" :description="stepDescriptions[1]" />
+                    <el-step title="可选信息" :description="stepDescriptions[2]" />
+                  </el-steps>
+                </div>
+
+                <!-- 步骤1: 选择捐赠方式 -->
+                <div v-show="currentStep === 0" class="qrcode-section">
                   <div class="qrcode-title">
                     <i class="fas fa-hand-holding-heart"></i>
                     <span>选择捐赠方式</span>
                   </div>
-                  <el-row :gutter="12" class="qrcode-grid">
+                  <el-row :gutter="16" class="qrcode-grid">
                     <el-col :xs="12" :sm="6" :md="6">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'cardkey' }" @click="selectChannel('cardkey')">
                         <div class="qrcode-container">
                           <div class="qrcode-image-wrapper">
-                            <img :src="collectionCarkey" alt="卡密兑换" />
+                            <img :src="collectionCarkey" alt="购买卡密" />
                           </div>
-                          <div class="qrcode-tip">卡密兑换</div>
+                          <div class="qrcode-tip">
+                            <a href="https://www.qianxun1688.com/links/1C9EDE0B" target="_blank" class="card-link" @click.stop>
+                              购买卡密
+                            </a>
+                          </div>
                           <span class="channel-badge recommend">推荐</span>
                         </div>
                       </div>
@@ -55,10 +50,14 @@
                     <el-col :xs="12" :sm="6" :md="6">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'crypto' }" @click="selectChannel('crypto')">
                         <div class="qrcode-container">
+                          <span class="channel-badge-left crypto-badge">
+                            <i class="fab fa-bitcoin"></i>
+                            <span>加密货币</span>
+                          </span>
                           <div class="qrcode-image-wrapper">
                             <img :src="collectionTp" alt="USDT收款码" />
                           </div>
-                          <div class="qrcode-tip">USDT (TRC20)</div>
+                          <div class="qrcode-tip">USDT TRC-20</div>
                           <span class="channel-badge recommend">推荐</span>
                         </div>
                       </div>
@@ -69,7 +68,7 @@
                           <div class="qrcode-image-wrapper">
                             <img :src="collectionAlipay" alt="支付宝收款码" />
                           </div>
-                          <div class="qrcode-tip">支付宝</div>
+                          <div class="qrcode-tip">支付宝支付</div>
                         </div>
                       </div>
                     </el-col>
@@ -79,14 +78,20 @@
                           <div class="qrcode-image-wrapper">
                             <img :src="collectionWechat" alt="微信收款码" />
                           </div>
-                          <div class="qrcode-tip">微信支付</div>
+                          <div class="qrcode-tip">微信扫码支付</div>
                         </div>
                       </div>
                     </el-col>
                   </el-row>
+                  <div class="step-actions">
+                    <el-button type="primary" :disabled="!selectedChannel" @click="nextStep" style="width: 100%">
+                      下一步
+                    </el-button>
+                  </div>
                 </div>
 
-                <!-- 表单区域 - 根据选择显示不同内容 -->
+                <!-- 步骤2: 必填信息 -->
+                <div v-show="currentStep === 1" class="form-step-section">
                 <template v-if="selectedChannel === 'cardkey'">
                   <el-form-item label="卡密码" prop="card_key_code">
                     <el-input v-model="formData.card_key_code" placeholder="请输入卡密码，格式：ABCD-1234-EFGH-5678" clearable>
@@ -113,7 +118,8 @@
                     </div>
                   </div>
                   <el-form-item label="捐赠金额" prop="amount">
-                    <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2" placeholder="请输入USDT金额" style="width: 100%" controls-position="right" />
+                    <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
+                      placeholder="请输入USDT金额" style="width: 100%" controls-position="right" />
                   </el-form-item>
                   <el-form-item label="交易哈希" prop="transaction_hash">
                     <el-input v-model="formData.transaction_hash" placeholder="请输入交易哈希值" clearable>
@@ -124,7 +130,8 @@
 
                 <template v-if="selectedChannel === 'wechat' || selectedChannel === 'alipay'">
                   <el-form-item label="捐赠金额" prop="amount">
-                    <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2" placeholder="请输入捐赠金额" style="width: 100%" controls-position="right" />
+                    <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
+                      placeholder="请输入捐赠金额" style="width: 100%" controls-position="right" />
                   </el-form-item>
                   <el-form-item label="订单号" prop="order_no">
                     <el-input v-model="formData.order_no" placeholder="请输入支付订单号" clearable>
@@ -133,50 +140,63 @@
                   </el-form-item>
                 </template>
 
-                <div class="optional-section">
-                  <div class="section-header" @click="showOptional = !showOptional">
-                    <div class="header-left">
-                      <i class="fas fa-shield-alt"></i>
-                      <span>选填信息（我们尊重您的隐私）</span>
-                    </div>
-                    <i :class="showOptional ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+                  <div class="step-actions">
+                    <el-button @click="prevStep">上一步</el-button>
+                    <el-button type="primary" @click="nextStep" style="flex: 1">
+                      下一步
+                    </el-button>
                   </div>
-                  
-                  <el-collapse-transition>
-                    <div v-show="showOptional" class="optional-content">
-                      <el-form-item label="您的昵称" prop="donor_name">
-                        <el-input v-model="formData.donor_name" placeholder="留下您的网名或昵称" clearable>
-                          <template #prefix><i class="fas fa-user"></i></template>
-                        </el-input>
-                      </el-form-item>
+                </div>
 
-                      <el-form-item label="邮箱地址" prop="email">
-                        <el-input v-model="formData.email" placeholder="用于接收捐赠记录" clearable>
-                          <template #prefix><i class="fas fa-envelope"></i></template>
-                        </el-input>
-                      </el-form-item>
-
-                      <el-form-item label="留言" prop="remark">
-                        <el-input v-model="formData.remark" type="textarea" placeholder="留下您的祝福或建议" :rows="4" :maxlength="200" show-word-limit />
-                      </el-form-item>
+                <!-- 步骤3: 可选信息 -->
+                <div v-show="currentStep === 2" class="form-step-section">
+                  <div class="optional-section">
+                    <div class="section-header" @click="showOptional = !showOptional">
+                      <div class="header-left">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>选填信息（我们尊重您的隐私）</span>
+                      </div>
+                      <i :class="showOptional ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
                     </div>
-                  </el-collapse-transition>
-                </div>
 
-                <div class="privacy-options">
-                  <el-checkbox v-model="formData.is_anonymous" :true-label="1" :false-label="0">
-                    <span class="option-label"><i class="fas fa-user-secret"></i>匿名捐赠</span>
-                  </el-checkbox>
-                  <el-checkbox v-model="formData.is_public" :true-label="1" :false-label="0">
-                    <span class="option-label"><i class="fas fa-globe"></i>公开展示</span>
-                  </el-checkbox>
-                </div>
+                    <el-collapse-transition>
+                      <div v-show="showOptional" class="optional-content">
+                        <el-form-item label="您的昵称" prop="donor_name">
+                          <el-input v-model="formData.donor_name" placeholder="留下您的网名或昵称" clearable>
+                            <template #prefix><i class="fas fa-user"></i></template>
+                          </el-input>
+                        </el-form-item>
 
-                <div class="form-actions">
-                  <el-button type="primary" :loading="submitting" @click="handleSubmit" style="width: 100%">
-                    <i class="fas fa-heart"></i>
-                    <span>{{ submitting ? '提交中...' : '提交捐赠' }}</span>
-                  </el-button>
+                        <el-form-item label="邮箱地址" prop="email">
+                          <el-input v-model="formData.email" placeholder="用于接收捐赠记录" clearable>
+                            <template #prefix><i class="fas fa-envelope"></i></template>
+                          </el-input>
+                        </el-form-item>
+
+                        <el-form-item label="留言" prop="remark">
+                          <el-input v-model="formData.remark" type="textarea" placeholder="留下您的祝福或建议" :rows="4"
+                            :maxlength="200" show-word-limit />
+                        </el-form-item>
+                      </div>
+                    </el-collapse-transition>
+                  </div>
+
+                  <div class="privacy-options">
+                    <el-checkbox v-model="formData.is_anonymous" :true-label="1" :false-label="0">
+                      <span class="option-label"><i class="fas fa-user-secret"></i>匿名捐赠</span>
+                    </el-checkbox>
+                    <el-checkbox v-model="formData.is_public" :true-label="1" :false-label="0">
+                      <span class="option-label"><i class="fas fa-globe"></i>公开展示</span>
+                    </el-checkbox>
+                  </div>
+
+                  <div class="step-actions">
+                    <el-button @click="prevStep">上一步</el-button>
+                    <el-button type="primary" :loading="submitting" @click="handleSubmit" style="flex: 1">
+                      <i class="fas fa-heart"></i>
+                      <span>{{ submitting ? '提交中...' : '提交捐赠' }}</span>
+                    </el-button>
+                  </div>
                 </div>
               </el-form>
             </div>
@@ -254,13 +274,15 @@
       </div>
     </div>
 
-    <CelebrationModal v-model:visible="showCelebration" :title="celebrationData.title" :message="celebrationData.message" :sub-message="celebrationData.subMessage" :details="celebrationData.details" :actions="celebrationData.actions" type="celebration" :show-confetti="true" @close="handleCelebrationClose" />
+    <CelebrationModal v-model:visible="showCelebration" :title="celebrationData.title"
+      :message="celebrationData.message" :sub-message="celebrationData.subMessage" :details="celebrationData.details"
+      :actions="celebrationData.actions" type="celebration" :show-confetti="true" @close="handleCelebrationClose" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
-import { ElMessage } from 'element-plus'
+import { message } from 'ant-design-vue'
 import type { FormInstance } from 'element-plus'
 import { addDonationR } from '@/request/donation'
 import type { DonationChannel, DonationFormData, CelebrationDetail, CelebrationAction } from '@/types/donation'
@@ -274,13 +296,27 @@ const channels = [
   { key: 'cardkey' as DonationChannel, label: '卡密兑换', icon: 'fas fa-key', color: '#FF6B6B', description: '使用卡密快速兑换', badge: { text: '推荐', type: 'recommend' } },
   { key: 'crypto' as DonationChannel, label: '加密货币', icon: 'fab fa-bitcoin', color: '#26A17B', description: '支持USDT(TRC20)', badge: { text: '推荐', type: 'recommend' } },
   { key: 'wechat' as DonationChannel, label: '微信支付', icon: 'fab fa-weixin', color: '#07C160', description: '使用微信扫码支付' },
-  { key: 'alipay' as DonationChannel, label: '支付宝', icon: 'fab fa-alipay', color: '#1677FF', description: '使用支付宝扫码支付' }
+  { key: 'alipay' as DonationChannel, label: '支付宝', icon: 'fab fa-alipay', color: '#8b5cf6', description: '使用支付宝扫码支付' }
 ]
 
 const formRef = ref<FormInstance>()
 const selectedChannel = ref<DonationChannel>('cardkey')
 const submitting = ref(false)
 const showOptional = ref(false)
+const currentStep = ref(0)
+
+const channelLabels: Record<string, string> = {
+  cardkey: '卡密兑换',
+  crypto: 'USDT(TRC20)',
+  wechat: '微信支付',
+  alipay: '支付宝'
+}
+
+const stepDescriptions = computed(() => [
+  selectedChannel.value ? `当前选择：${channelLabels[selectedChannel.value]}` : '请选择一种捐赠方式',
+  selectedChannel.value ? '填写必要的支付信息' : '等待选择方式',
+  '填写个人信息（可选）'
+])
 
 const formData = reactive<Partial<DonationFormData>>({
   channel: 'cardkey' as DonationChannel,
@@ -342,6 +378,18 @@ const selectChannel = (channel: DonationChannel) => {
   formData.channel = channel
 }
 
+const nextStep = () => {
+  if (currentStep.value < 2) {
+    currentStep.value++
+  }
+}
+
+const prevStep = () => {
+  if (currentStep.value > 0) {
+    currentStep.value--
+  }
+}
+
 const handleSubmit = async () => {
   try {
     await formRef.value?.validate()
@@ -380,22 +428,26 @@ const handleSubmit = async () => {
         { label: '捐赠状态', value: response.data.status === 0 ? '待确认' : '已确认', icon: 'fas fa-check-circle' }
       ]
       celebrationData.actions = [
-        { text: '查看记录', type: 'primary', icon: 'fas fa-list', handler: () => { showCelebration.value = false; ElMessage.info('捐赠记录功能开发中') } },
+        { text: '查看记录', type: 'primary', icon: 'fas fa-list', handler: () => { showCelebration.value = false; message.info('捐赠记录功能开发中') } },
         { text: '继续捐赠', icon: 'fas fa-redo', handler: () => { showCelebration.value = false; formRef.value?.resetFields() } }
       ]
 
       showCelebration.value = true
       formRef.value?.resetFields()
       formData.channel = selectedChannel.value
+      // 重置步骤
+      setTimeout(() => {
+        currentStep.value = 0
+      }, 2000)
     } else {
-      ElMessage.error(response.message || '捐赠失败，请重试')
+      message.error(response.message || '捐赠失败，请重试')
     }
   } catch (error: any) {
     console.error('捐赠提交失败:', error)
     if (error.errorFields) {
-      ElMessage.warning('请完善表单信息')
+      message.warning('请完善表单信息')
     } else {
-      ElMessage.error(error.message || '捐赠失败，请重试')
+      message.error(error.message || '捐赠失败，请重试')
     }
   } finally {
     submitting.value = false
@@ -409,6 +461,22 @@ const handleCelebrationClose = () => {
 
 <style scoped lang="less">
 .donation-page {
+  --theme-color: #8b5cf6;
+  --theme-color-light-3: #a78bfa;
+  --theme-color-light-5: #c4b5fd;
+  --theme-color-light-7: #ddd6fe;
+  --theme-color-light-9: #ede9fe;
+  --theme-secondary: #d946ef;
+  --theme-accent: #3b82f6;
+  
+  // 覆盖 Element Plus 全局主题色
+  --el-color-primary: #8b5cf6;
+  --el-color-primary-light-3: #a78bfa;
+  --el-color-primary-light-5: #c4b5fd;
+  --el-color-primary-light-7: #ddd6fe;
+  --el-color-primary-light-8: #e9d5ff;
+  --el-color-primary-light-9: #ede9fe;
+  --el-color-primary-dark-2: #7c3aed;
   min-height: 100vh;
   padding: 25px 0;
   background: var(--el-bg-color-page);
@@ -489,21 +557,30 @@ const handleCelebrationClose = () => {
     }
   }
 
-  .animate-item {
-    animation: smoothIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    opacity: 0;
-
-    &:nth-child(2) { animation-delay: 0.1s; }
-    &:nth-child(3) { animation-delay: 0.2s; }
-    &:nth-child(4) { animation-delay: 0.3s; }
-  }
-
   @keyframes smoothIn {
     0% { opacity: 0; transform: translateY(20px); }
     100% { opacity: 1; transform: translateY(0); }
   }
 
-  .form-card, .info-card {
+  .animate-item {
+    animation: smoothIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    opacity: 0;
+
+    &:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    &:nth-child(4) {
+      animation-delay: 0.3s;
+    }
+  }
+
+  .form-card,
+  .info-card {
     border-radius: 8px;
     box-shadow: var(--el-box-shadow-light);
     overflow: hidden;
@@ -530,7 +607,7 @@ const handleCelebrationClose = () => {
 
         i {
           font-size: 18px;
-          color: var(--el-color-primary);
+          color: var(--theme-color);
         }
       }
     }
@@ -540,123 +617,39 @@ const handleCelebrationClose = () => {
     }
   }
 
-  .channel-selection {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+  .steps-section {
     margin-bottom: 24px;
+    padding: 16px 20px;
+    background: var(--el-fill-color-light);
+    border-radius: 8px;
 
-    @media (max-width: 640px) {
-      grid-template-columns: 1fr;
-    }
+    :deep(.el-steps) {
+      .el-step__head {
+        .el-step__icon {
+          width: 28px;
+          height: 28px;
+          font-size: 13px;
+        }
 
-    .channel-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px;
-      border: 1.5px solid var(--el-border-color);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      background: var(--el-fill-color-light);
-
-      &:hover {
-        border-color: var(--el-color-primary);
-        background: var(--el-bg-color);
-        box-shadow: 0 2px 8px var(--el-color-primary-light-7);
-      }
-
-      &.active {
-        border-color: var(--el-color-primary);
-        background: var(--el-color-primary-light-9);
-        box-shadow: 0 2px 8px var(--el-color-primary-light-7);
-
-        .channel-check { opacity: 1; }
-      }
-
-      &.disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        
-        &:hover {
-          border-color: var(--el-border-color);
-          background: var(--el-fill-color-light);
-          box-shadow: none;
-          transform: none;
+        .el-step__line {
+          top: 14px;
         }
       }
 
-      .channel-icon {
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        background: var(--el-bg-color);
-        flex-shrink: 0;
-
-        i { font-size: 20px; }
+      .el-step__title {
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 28px;
       }
 
-      .channel-info {
-        flex: 1;
-        min-width: 0;
-
-        .channel-name {
-          font-size: 14px;
-          font-weight: 600;
-          color: var(--el-text-color-primary);
-          margin-bottom: 2px;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-
-          .channel-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 500;
-            line-height: 1;
-            white-space: nowrap;
-
-            &.recommend {
-              background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
-              color: #fff;
-              box-shadow: 0 1px 3px rgba(255, 107, 107, 0.3);
-            }
-
-            &.disabled {
-              background: var(--el-fill-color);
-              color: var(--el-text-color-secondary);
-              border: 1px solid var(--el-border-color);
-            }
-          }
-        }
-
-        .channel-desc {
-          font-size: 12px;
-          color: var(--el-text-color-secondary);
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-      }
-
-      .channel-check {
-        color: var(--el-color-primary);
-        font-size: 18px;
-        opacity: 0;
-        transition: opacity 0.2s ease;
+      .el-step__description {
+        font-size: 12px;
       }
     }
   }
 
   .qrcode-section {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 
     .qrcode-title {
       display: flex;
@@ -668,7 +661,7 @@ const handleCelebrationClose = () => {
       margin-bottom: 12px;
 
       i {
-        color: var(--el-color-primary);
+        color: var(--theme-color);
         font-size: 15px;
       }
     }
@@ -694,8 +687,8 @@ const handleCelebrationClose = () => {
       position: relative;
 
       &.active .qrcode-container {
-        border-color: var(--el-color-primary);
-        box-shadow: 0 2px 12px var(--el-color-primary-light-7);
+        border-color: var(--theme-color);
+        box-shadow: 0 2px 12px var(--theme-color-light-7);
       }
     }
 
@@ -713,7 +706,7 @@ const handleCelebrationClose = () => {
 
       &:hover {
         transform: translateY(-2px);
-        border-color: var(--el-color-primary-light-5);
+        border-color: var(--theme-color-light-5);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       }
 
@@ -742,6 +735,35 @@ const handleCelebrationClose = () => {
         font-weight: 500;
         color: var(--el-text-color-regular);
         text-align: center;
+
+        .card-link {
+          color: var(--theme-color);
+          text-decoration: none;
+          transition: all 0.2s ease;
+
+          &:hover {
+            color: var(--theme-color-light-3);
+            text-decoration: underline;
+          }
+        }
+
+        &.crypto-tip {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
+
+          i {
+            font-size: 12px;
+            color: var(--el-color-success);
+          }
+
+          span {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--el-text-color-regular);
+          }
+        }
       }
 
       .channel-badge {
@@ -760,6 +782,41 @@ const handleCelebrationClose = () => {
           color: #fff;
           box-shadow: 0 1px 3px rgba(255, 107, 107, 0.3);
         }
+      }
+
+      .channel-badge-left {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        padding: 3px 6px;
+        border-radius: 4px;
+        font-size: 10px;
+        font-weight: 500;
+        line-height: 1;
+        white-space: nowrap;
+        z-index: 2;
+
+        &.crypto-badge {
+          background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+          color: #fff;
+          box-shadow: 0 1px 4px rgba(139, 92, 246, 0.3);
+
+          i {
+            font-size: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  .qrcode-item {
+    &.active {
+      .qrcode-container {
+        border-color: var(--theme-color);
+        box-shadow: 0 2px 12px var(--theme-color-light-7);
       }
     }
   }
@@ -802,15 +859,15 @@ const handleCelebrationClose = () => {
       }
 
       &.network {
-        background: linear-gradient(135deg, rgba(64, 158, 255, 0.08) 0%, rgba(64, 158, 255, 0.12) 100%);
-        border-color: rgba(64, 158, 255, 0.25);
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(139, 92, 246, 0.12) 100%);
+        border-color: rgba(139, 92, 246, 0.25);
 
         i {
-          color: #409eff;
+          color: #8b5cf6;
         }
 
         .badge-text .badge-value {
-          color: #409eff;
+          color: #8b5cf6;
         }
       }
     }
@@ -847,7 +904,7 @@ const handleCelebrationClose = () => {
         }
       }
 
-      > i {
+      >i {
         color: var(--el-text-color-secondary);
         font-size: 12px;
         transition: transform 0.2s ease;
@@ -880,7 +937,7 @@ const handleCelebrationClose = () => {
   .donation-form {
     :deep(.el-form-item) {
       margin-bottom: 18px;
-      
+
       .el-form-item__error {
         position: relative;
         z-index: 1;
@@ -894,7 +951,8 @@ const handleCelebrationClose = () => {
       padding-bottom: 8px;
     }
 
-    :deep(.el-input__inner), :deep(.el-textarea__inner) {
+    :deep(.el-input__inner),
+    :deep(.el-textarea__inner) {
       border-radius: 6px;
       font-size: 14px;
     }
@@ -905,7 +963,7 @@ const handleCelebrationClose = () => {
 
     :deep(.el-input-number) {
       width: 100%;
-      
+
       .el-input__inner {
         text-align: left;
       }
@@ -926,7 +984,47 @@ const handleCelebrationClose = () => {
         font-size: 13px;
         color: var(--el-text-color-regular);
 
-        i { color: var(--el-color-primary); }
+        i {
+          color: var(--theme-color);
+        }
+      }
+    }
+
+    .step-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+
+      :deep(.el-button) {
+        height: 40px;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-1px);
+        }
+
+        i {
+          margin-right: 6px;
+        }
+
+        &.el-button--primary {
+          background-color: var(--theme-color);
+          border-color: var(--theme-color);
+
+          &:hover,
+          &:focus {
+            background-color: var(--theme-color-light-3);
+            border-color: var(--theme-color-light-3);
+          }
+
+          &:active {
+            background-color: var(--theme-color);
+            border-color: var(--theme-color);
+          }
+        }
       }
     }
 
@@ -939,16 +1037,39 @@ const handleCelebrationClose = () => {
         font-weight: 600;
         border-radius: 6px;
         transition: all 0.3s ease;
+        background-color: var(--theme-color);
+        border-color: var(--theme-color);
 
         &:hover {
           transform: translateY(-1px);
+          background-color: var(--theme-color-light-3);
+          border-color: var(--theme-color-light-3);
         }
 
-        i { 
+        &:focus {
+          background-color: var(--theme-color);
+          border-color: var(--theme-color);
+        }
+
+        &:active {
+          background-color: var(--theme-color);
+          border-color: var(--theme-color);
+        }
+
+        i {
           margin-right: 6px;
         }
       }
     }
+  }
+
+  .form-step-section {
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .donation-info-section {
@@ -1113,7 +1234,7 @@ const handleCelebrationClose = () => {
         .recent-amount {
           font-size: 15px;
           font-weight: 700;
-          color: var(--el-color-primary);
+          color: var(--theme-color);
         }
       }
     }
