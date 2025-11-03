@@ -33,15 +33,13 @@
                   </div>
                   <el-row :gutter="16" class="qrcode-grid">
                     <el-col :xs="12" :sm="6" :md="6">
-                      <div class="qrcode-item" :class="{ active: selectedChannel === 'cardkey' }"
-                        @click="selectChannel('cardkey')">
+                      <div class="qrcode-item" :class="{ active: selectedChannel === 'cardkey' }" @click="selectChannel('cardkey')">
                         <div class="qrcode-container">
                           <div class="qrcode-image-wrapper">
                             <img :src="collectionCarkey" alt="购买卡密" />
                           </div>
                           <div class="qrcode-tip">
-                            <a href="https://www.qianxun1688.com/links/1C9EDE0B" target="_blank" class="card-link"
-                              @click.stop>
+                            <a href="https://www.qianxun1688.com/links/1C9EDE0B" target="_blank" class="card-link" @click.stop>
                               购买卡密
                             </a>
                           </div>
@@ -50,8 +48,7 @@
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="6" :md="6">
-                      <div class="qrcode-item" :class="{ active: selectedChannel === 'crypto' }"
-                        @click="selectChannel('crypto')">
+                      <div class="qrcode-item" :class="{ active: selectedChannel === 'crypto' }" @click="selectChannel('crypto')">
                         <div class="qrcode-container">
                           <span class="channel-badge-left crypto-badge">
                             <i class="fab fa-bitcoin"></i>
@@ -66,8 +63,7 @@
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="6" :md="6">
-                      <div class="qrcode-item" :class="{ active: selectedChannel === 'alipay' }"
-                        @click="selectChannel('alipay')">
+                      <div class="qrcode-item" :class="{ active: selectedChannel === 'alipay' }" @click="selectChannel('alipay')">
                         <div class="qrcode-container">
                           <div class="qrcode-image-wrapper">
                             <img :src="collectionAlipay" alt="支付宝收款码" />
@@ -77,8 +73,7 @@
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="6" :md="6">
-                      <div class="qrcode-item" :class="{ active: selectedChannel === 'wechat' }"
-                        @click="selectChannel('wechat')">
+                      <div class="qrcode-item" :class="{ active: selectedChannel === 'wechat' }" @click="selectChannel('wechat')">
                         <div class="qrcode-container">
                           <div class="qrcode-image-wrapper">
                             <img :src="collectionWechat" alt="微信收款码" />
@@ -97,53 +92,53 @@
 
                 <!-- 步骤2: 必填信息 -->
                 <div v-show="currentStep === 1" class="form-step-section">
-                  <template v-if="selectedChannel === 'cardkey'">
-                    <el-form-item label="卡密码" prop="card_key_code">
-                      <el-input v-model="formData.card_key_code" placeholder="请输入卡密码，格式：ABCD-1234-EFGH-5678" clearable>
-                        <template #prefix><i class="fas fa-key"></i></template>
-                      </el-input>
-                    </el-form-item>
-                  </template>
+                <template v-if="selectedChannel === 'cardkey'">
+                  <el-form-item label="卡密码" prop="card_key_code">
+                    <el-input v-model="formData.card_key_code" placeholder="请输入卡密码，格式：ABCD-1234-EFGH-5678" clearable>
+                      <template #prefix><i class="fas fa-key"></i></template>
+                    </el-input>
+                  </el-form-item>
+                </template>
 
-                  <template v-else-if="selectedChannel === 'crypto'">
-                    <div class="crypto-info-tips">
-                      <div class="crypto-badge">
-                        <i class="fas fa-coins"></i>
-                        <div class="badge-text">
-                          <span class="badge-label">币种</span>
-                          <span class="badge-value">USDT</span>
-                        </div>
-                      </div>
-                      <div class="crypto-badge network">
-                        <i class="fas fa-network-wired"></i>
-                        <div class="badge-text">
-                          <span class="badge-label">区块网络</span>
-                          <span class="badge-value">TRC20</span>
-                        </div>
+                <template v-else-if="selectedChannel === 'crypto'">
+                  <div class="crypto-info-tips">
+                    <div class="crypto-badge">
+                      <i class="fas fa-coins"></i>
+                      <div class="badge-text">
+                        <span class="badge-label">币种</span>
+                        <span class="badge-value">USDT</span>
                       </div>
                     </div>
-                    <el-form-item label="捐赠金额" prop="amount">
-                      <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
-                        placeholder="请输入USDT金额" style="width: 100%" controls-position="right" />
-                    </el-form-item>
-                    <el-form-item label="交易哈希" prop="transaction_hash">
-                      <el-input v-model="formData.transaction_hash" placeholder="请输入交易哈希值" clearable>
-                        <template #prefix><i class="fas fa-hashtag"></i></template>
-                      </el-input>
-                    </el-form-item>
-                  </template>
+                    <div class="crypto-badge network">
+                      <i class="fas fa-network-wired"></i>
+                      <div class="badge-text">
+                        <span class="badge-label">区块网络</span>
+                        <span class="badge-value">TRC20</span>
+                      </div>
+                    </div>
+                  </div>
+                  <el-form-item label="捐赠金额" prop="amount">
+                    <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
+                      placeholder="请输入USDT金额" style="width: 100%" controls-position="right" />
+                  </el-form-item>
+                  <el-form-item label="交易哈希" prop="transaction_hash">
+                    <el-input v-model="formData.transaction_hash" placeholder="请输入交易哈希值" clearable>
+                      <template #prefix><i class="fas fa-hashtag"></i></template>
+                    </el-input>
+                  </el-form-item>
+                </template>
 
-                  <template v-if="selectedChannel === 'wechat' || selectedChannel === 'alipay'">
-                    <el-form-item label="捐赠金额" prop="amount">
-                      <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
-                        placeholder="请输入捐赠金额" style="width: 100%" controls-position="right" />
-                    </el-form-item>
-                    <el-form-item label="订单号" prop="order_no">
-                      <el-input v-model="formData.order_no" placeholder="请输入支付订单号" clearable>
-                        <template #prefix><i class="fas fa-receipt"></i></template>
-                      </el-input>
-                    </el-form-item>
-                  </template>
+                <template v-if="selectedChannel === 'wechat' || selectedChannel === 'alipay'">
+                  <el-form-item label="捐赠金额" prop="amount">
+                    <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
+                      placeholder="请输入捐赠金额" style="width: 100%" controls-position="right" />
+                  </el-form-item>
+                  <el-form-item label="订单号" prop="order_no">
+                    <el-input v-model="formData.order_no" placeholder="请输入支付订单号" clearable>
+                      <template #prefix><i class="fas fa-receipt"></i></template>
+                    </el-input>
+                  </el-form-item>
+                </template>
 
                   <div class="step-actions">
                     <el-button @click="prevStep">上一步</el-button>
@@ -473,7 +468,7 @@ const handleCelebrationClose = () => {
   --theme-color-light-9: #ede9fe;
   --theme-secondary: #d946ef;
   --theme-accent: #3b82f6;
-
+  
   // 覆盖 Element Plus 全局主题色
   --el-color-primary: #8b5cf6;
   --el-color-primary-light-3: #a78bfa;
@@ -484,29 +479,12 @@ const handleCelebrationClose = () => {
   --el-color-primary-dark-2: #7c3aed;
   min-height: 100vh;
   padding: 25px 0;
-  background: linear-gradient(135deg, #f5f3ff 0%, #faf5ff 50%, #f3f4f6 100%);
-  position: relative;
-
-  &::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background:
-      radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-      radial-gradient(circle at 80% 70%, rgba(217, 70, 239, 0.06) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: 0;
-  }
+  background: var(--el-bg-color-page);
 
   .donation-content {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 16px;
-    position: relative;
-    z-index: 1;
 
     .content-wrapper {
       display: grid;
@@ -523,93 +501,65 @@ const handleCelebrationClose = () => {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 16px 20px;
-    margin-bottom: 24px;
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(217, 70, 239, 0.05) 100%);
-    border-radius: 12px;
-    border: 1px solid rgba(139, 92, 246, 0.1);
-    position: relative;
-    overflow: hidden;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
-      pointer-events: none;
-    }
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    background: var(--el-fill-color-light);
+    border-radius: 8px;
 
     .header-icon {
-      width: 48px;
-      height: 48px;
+      width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-      border-radius: 12px;
+      border-radius: 8px;
       flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(250, 112, 154, 0.3), 0 0 0 4px rgba(250, 112, 154, 0.1);
+      box-shadow: 0 2px 8px rgba(250, 112, 154, 0.3);
       position: relative;
 
       &::after {
         content: '';
         position: absolute;
-        top: -3px;
-        right: -3px;
-        width: 10px;
-        height: 10px;
+        top: -2px;
+        right: -2px;
+        width: 8px;
+        height: 8px;
         background: #fee140;
         border-radius: 50%;
-        box-shadow: 0 0 8px rgba(254, 225, 64, 0.8);
+        box-shadow: 0 0 4px rgba(254, 225, 64, 0.6);
       }
 
       i {
         color: #fff;
-        font-size: 22px;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        font-size: 18px;
       }
     }
-  }
 
     .header-content {
       flex: 1;
       min-width: 0;
-      position: relative;
-      z-index: 1;
 
       .header-title {
-        font-size: 17px;
-        font-weight: 700;
-        background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin: 0 0 4px 0;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--el-text-color-primary);
+        margin: 0 0 2px 0;
         line-height: 1.3;
       }
 
       .header-subtitle {
-        font-size: 13px;
-        color: var(--el-text-color-regular);
+        font-size: 12px;
+        color: var(--el-text-color-secondary);
         margin: 0;
-        line-height: 1.5;
+        line-height: 1.4;
       }
     }
   }
 
   @keyframes smoothIn {
-    0% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
   }
 
   .animate-item {
@@ -631,16 +581,14 @@ const handleCelebrationClose = () => {
 
   .form-card,
   .info-card {
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.08), 0 0 0 1px rgba(139, 92, 246, 0.05);
+    border-radius: 8px;
+    box-shadow: var(--el-box-shadow-light);
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--el-bg-color);
+    transition: box-shadow 0.3s ease;
 
     &:hover {
-      box-shadow: 0 8px 30px rgba(139, 92, 246, 0.12), 0 0 0 1px rgba(139, 92, 246, 0.1);
-      transform: translateY(-2px);
+      box-shadow: var(--el-box-shadow);
     }
 
     :deep(.ant-card-head) {
@@ -670,42 +618,32 @@ const handleCelebrationClose = () => {
   }
 
   .steps-section {
-    margin-bottom: 28px;
-    padding: 20px 24px;
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.03) 0%, rgba(217, 70, 239, 0.03) 100%);
-    border-radius: 12px;
-    border: 1px solid rgba(139, 92, 246, 0.08);
+    margin-bottom: 24px;
+    padding: 16px 20px;
+    background: var(--el-fill-color-light);
+    border-radius: 8px;
 
     :deep(.el-steps) {
       .el-step__head {
         .el-step__icon {
-          width: 32px;
-          height: 32px;
-          font-size: 14px;
-          border-width: 2px;
-          transition: all 0.3s ease;
+          width: 28px;
+          height: 28px;
+          font-size: 13px;
         }
 
         .el-step__line {
-          top: 16px;
+          top: 14px;
         }
       }
 
       .el-step__title {
-        font-size: 14px;
-        font-weight: 600;
-        line-height: 32px;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 28px;
       }
 
       .el-step__description {
         font-size: 12px;
-        margin-top: 2px;
-      }
-
-      .el-step.is-process {
-        .el-step__icon {
-          box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
-        }
       }
     }
   }
@@ -743,51 +681,33 @@ const handleCelebrationClose = () => {
         }
       }
     }
-  }
 
-  .qrcode-item {
-    cursor: pointer;
-    position: relative;
+    .qrcode-item {
+      cursor: pointer;
+      position: relative;
 
-    &.active .qrcode-container {
-      border-color: var(--theme-color);
-      box-shadow: 0 2px 12px var(--theme-color-light-7);
+      &.active .qrcode-container {
+        border-color: var(--theme-color);
+        box-shadow: 0 2px 12px var(--theme-color-light-7);
+      }
     }
 
     .qrcode-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 16px;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(249, 250, 251, 0.9) 100%);
-      border: 2px solid rgba(139, 92, 246, 0.1);
-      border-radius: 12px;
+      padding: 12px;
+      background: var(--el-fill-color-light);
+      border: 2px solid var(--el-border-color);
+      border-radius: 8px;
       height: 100%;
       position: relative;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow: visible;
-
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, transparent 100%);
-        opacity: 0;
-        transition: opacity 0.4s ease;
-        pointer-events: none;
-      }
+      transition: all 0.3s ease;
 
       &:hover {
-        transform: translateY(-4px) scale(1.02);
-        border-color: var(--theme-color);
-        box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15), 0 0 0 1px rgba(139, 92, 246, 0.1);
-
-        &::before {
-          opacity: 1;
-        }
+        transform: translateY(-2px);
+        border-color: var(--theme-color-light-5);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       }
 
       .qrcode-image-wrapper {
@@ -797,26 +717,9 @@ const handleCelebrationClose = () => {
         align-items: center;
         justify-content: center;
         overflow: hidden;
-        border-radius: 10px;
-        margin-bottom: 12px;
-        background: #fff;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        position: relative;
-        transition: all 0.3s ease;
-
-        &::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          border-radius: 10px;
-          padding: 2px;
-          background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(217, 70, 239, 0.2));
-          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-          -webkit-mask-composite: xor;
-          mask-composite: exclude;
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
+        border-radius: 6px;
+        margin-bottom: 8px;
+        background: var(--el-bg-color);
 
         img {
           max-width: 100%;
@@ -824,17 +727,6 @@ const handleCelebrationClose = () => {
           width: auto;
           height: auto;
           object-fit: contain;
-          transition: transform 0.3s ease;
-        }
-      }
-
-      &:hover .qrcode-image-wrapper {
-        &::after {
-          opacity: 1;
-        }
-
-        img {
-          transform: scale(1.05);
         }
       }
 
@@ -843,16 +735,11 @@ const handleCelebrationClose = () => {
         font-weight: 500;
         color: var(--el-text-color-regular);
         text-align: center;
-        position: relative;
-        z-index: 10;
 
         .card-link {
           color: var(--theme-color);
           text-decoration: none;
           transition: all 0.2s ease;
-          position: relative;
-          z-index: 10;
-          pointer-events: auto;
 
           &:hover {
             color: var(--theme-color-light-3);
@@ -881,34 +768,33 @@ const handleCelebrationClose = () => {
 
       .channel-badge {
         position: absolute;
-        top: 10px;
-        right: 10px;
-        padding: 4px 10px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 600;
+        top: 8px;
+        right: 8px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 10px;
+        font-weight: 500;
         line-height: 1;
         white-space: nowrap;
-        z-index: 2;
 
         &.recommend {
           background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
           color: #fff;
-          box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4), 0 0 0 2px rgba(255, 107, 107, 0.1);
+          box-shadow: 0 1px 3px rgba(255, 107, 107, 0.3);
         }
       }
 
       .channel-badge-left {
         position: absolute;
-        top: 10px;
-        left: 10px;
+        top: 8px;
+        left: 8px;
         display: flex;
         align-items: center;
-        gap: 4px;
-        padding: 5px 10px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 600;
+        gap: 3px;
+        padding: 3px 6px;
+        border-radius: 4px;
+        font-size: 10px;
+        font-weight: 500;
         line-height: 1;
         white-space: nowrap;
         z-index: 2;
@@ -916,10 +802,10 @@ const handleCelebrationClose = () => {
         &.crypto-badge {
           background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
           color: #fff;
-          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4), 0 0 0 2px rgba(139, 92, 246, 0.1);
+          box-shadow: 0 1px 4px rgba(139, 92, 246, 0.3);
 
           i {
-            font-size: 11px;
+            font-size: 10px;
           }
         }
       }
@@ -930,13 +816,7 @@ const handleCelebrationClose = () => {
     &.active {
       .qrcode-container {
         border-color: var(--theme-color);
-        border-width: 3px;
-        box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2), 0 0 0 4px rgba(139, 92, 246, 0.1);
-        background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(217, 70, 239, 0.05) 100%);
-
-        &::before {
-          opacity: 1;
-        }
+        box-shadow: 0 2px 12px var(--theme-color-light-7);
       }
     }
   }
@@ -1024,7 +904,7 @@ const handleCelebrationClose = () => {
         }
       }
 
-      & > i {
+      >i {
         color: var(--el-text-color-secondary);
         font-size: 12px;
         transition: transform 0.2s ease;
@@ -1113,21 +993,17 @@ const handleCelebrationClose = () => {
     .step-actions {
       display: flex;
       gap: 12px;
-      margin-top: 28px;
+      margin-top: 24px;
 
       :deep(.el-button) {
-        height: 44px;
-        font-size: 15px;
-        font-weight: 600;
-        border-radius: 10px;
-        transition: all 0.2s ease;
+        height: 40px;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 6px;
+        transition: all 0.3s ease;
 
         &:hover {
           transform: translateY(-1px);
-        }
-
-        &:active {
-          transform: translateY(0);
         }
 
         i {
@@ -1135,18 +1011,18 @@ const handleCelebrationClose = () => {
         }
 
         &.el-button--primary {
-          background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
-          border: none;
-          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+          background-color: var(--theme-color);
+          border-color: var(--theme-color);
 
           &:hover,
           &:focus {
-            background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35);
+            background-color: var(--theme-color-light-3);
+            border-color: var(--theme-color-light-3);
           }
 
           &:active {
-            background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
+            background-color: var(--theme-color);
+            border-color: var(--theme-color);
           }
         }
       }
@@ -1192,15 +1068,8 @@ const handleCelebrationClose = () => {
   }
 
   @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .donation-info-section {
@@ -1213,81 +1082,47 @@ const handleCelebrationClose = () => {
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
+      gap: 12px;
 
       .stat-item {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 16px;
-        background: linear-gradient(135deg, rgba(139, 92, 246, 0.03) 0%, rgba(217, 70, 239, 0.03) 100%);
-        border: 1px solid rgba(139, 92, 246, 0.08);
-        border-radius: 12px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(217, 70, 239, 0.05) 100%);
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
+        gap: 10px;
+        padding: 14px;
+        background: var(--el-fill-color-light);
+        border-radius: 8px;
+        transition: all 0.2s ease;
 
         &:hover {
-          border-color: rgba(139, 92, 246, 0.2);
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
-
-          &::before {
-            opacity: 1;
-          }
-
-          .stat-icon {
-            transform: scale(1.1) rotate(5deg);
-          }
+          background: var(--el-fill-color);
+          transform: translateY(-1px);
         }
 
         .stat-icon {
-          width: 48px;
-          height: 48px;
+          width: 42px;
+          height: 42px;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: 12px;
-          background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+          border-radius: 8px;
+          background: var(--el-color-primary);
           color: #fff;
-          font-size: 22px;
-          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-          transition: all 0.3s ease;
-          position: relative;
-          z-index: 1;
+          font-size: 20px;
         }
 
         .stat-info {
           flex: 1;
-          position: relative;
-          z-index: 1;
 
           .stat-value {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
-            background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 4px;
+            color: var(--el-text-color-primary);
+            margin-bottom: 2px;
           }
 
           .stat-label {
-            font-size: 13px;
-            color: var(--el-text-color-regular);
-            font-weight: 500;
+            font-size: 12px;
+            color: var(--el-text-color-secondary);
           }
         }
       }
@@ -1298,75 +1133,48 @@ const handleCelebrationClose = () => {
     .guide-content {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
 
       .guide-item {
         display: flex;
-        gap: 12px;
-        padding: 14px;
-        background: linear-gradient(135deg, rgba(139, 92, 246, 0.02) 0%, rgba(217, 70, 239, 0.02) 100%);
-        border: 1px solid rgba(139, 92, 246, 0.06);
-        border-radius: 10px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-
-        &::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 0;
-          bottom: 0;
-          width: 3px;
-          background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
-          transform: scaleY(0);
-          transition: transform 0.3s ease;
-        }
+        gap: 10px;
+        padding: 10px;
+        background: var(--el-fill-color-light);
+        border-radius: 6px;
+        transition: all 0.2s ease;
 
         &:hover {
-          background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(217, 70, 239, 0.05) 100%);
-          border-color: rgba(139, 92, 246, 0.15);
-          transform: translateX(4px);
-          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
-
-          &::before {
-            transform: scaleY(1);
-          }
-
-          .guide-icon {
-            transform: scale(1.1) rotate(5deg);
-          }
+          background: var(--el-fill-color);
+          transform: translateX(2px);
         }
 
         .guide-icon {
-          width: 40px;
-          height: 40px;
+          width: 36px;
+          height: 36px;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: 10px;
-          background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+          border-radius: 6px;
+          background: var(--el-color-primary);
           color: #fff;
-          font-size: 18px;
+          font-size: 16px;
           flex-shrink: 0;
-          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
-          transition: all 0.3s ease;
         }
 
         .guide-text {
           flex: 1;
 
           .guide-title {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             color: var(--el-text-color-primary);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
           }
 
           .guide-desc {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--el-text-color-regular);
-            line-height: 1.5;
+            line-height: 1.4;
           }
         }
       }
@@ -1377,64 +1185,33 @@ const handleCelebrationClose = () => {
     .recent-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
 
       .recent-item {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 12px;
-        background: linear-gradient(135deg, rgba(139, 92, 246, 0.02) 0%, rgba(217, 70, 239, 0.02) 100%);
-        border: 1px solid rgba(139, 92, 246, 0.06);
-        border-radius: 10px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-
-        &::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 0;
-          bottom: 0;
-          width: 3px;
-          background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
-          transform: scaleY(0);
-          transition: transform 0.3s ease;
-        }
+        gap: 10px;
+        padding: 10px;
+        background: var(--el-fill-color-light);
+        border-radius: 6px;
+        transition: all 0.2s ease;
 
         &:hover {
-          background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(217, 70, 239, 0.05) 100%);
-          border-color: rgba(139, 92, 246, 0.15);
-          transform: translateX(4px);
-          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
-
-          &::before {
-            transform: scaleY(1);
-          }
-
-          .recent-avatar {
-            transform: scale(1.1);
-          }
-
-          .recent-amount {
-            transform: scale(1.05);
-          }
+          background: var(--el-fill-color);
+          transform: translateX(2px);
         }
 
         .recent-avatar {
-          width: 42px;
-          height: 42px;
+          width: 36px;
+          height: 36px;
           display: flex;
           align-items: center;
           justify-content: center;
           border-radius: 50%;
-          background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+          background: var(--el-color-primary);
           color: #fff;
-          font-size: 20px;
+          font-size: 18px;
           flex-shrink: 0;
-          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
-          transition: all 0.3s ease;
         }
 
         .recent-info {
@@ -1442,10 +1219,10 @@ const handleCelebrationClose = () => {
           min-width: 0;
 
           .recent-name {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--el-text-color-primary);
-            margin-bottom: 3px;
+            margin-bottom: 2px;
           }
 
           .recent-time {
@@ -1455,16 +1232,12 @@ const handleCelebrationClose = () => {
         }
 
         .recent-amount {
-          font-size: 16px;
+          font-size: 15px;
           font-weight: 700;
-          background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          transition: all 0.3s ease;
+          color: var(--theme-color);
         }
       }
     }
-  
+  }
 }
 </style>
