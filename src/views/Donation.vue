@@ -33,13 +33,15 @@
                   </div>
                   <el-row :gutter="16" class="qrcode-grid">
                     <el-col :xs="12" :sm="6" :md="6">
-                      <div class="qrcode-item" :class="{ active: selectedChannel === 'cardkey' }" @click="selectChannel('cardkey')">
+                      <div class="qrcode-item" :class="{ active: selectedChannel === 'cardkey' }"
+                        @click="selectChannel('cardkey')">
                         <div class="qrcode-container">
                           <div class="qrcode-image-wrapper">
                             <img :src="collectionCarkey" alt="购买卡密" />
                           </div>
                           <div class="qrcode-tip">
-                            <a href="https://www.qianxun1688.com/links/1C9EDE0B" target="_blank" class="card-link" @click.stop>
+                            <a href="https://www.qianxun1688.com/links/1C9EDE0B" target="_blank" class="card-link"
+                              @click.stop>
                               购买卡密
                             </a>
                           </div>
@@ -48,7 +50,8 @@
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="6" :md="6">
-                      <div class="qrcode-item" :class="{ active: selectedChannel === 'crypto' }" @click="selectChannel('crypto')">
+                      <div class="qrcode-item" :class="{ active: selectedChannel === 'crypto' }"
+                        @click="selectChannel('crypto')">
                         <div class="qrcode-container">
                           <span class="channel-badge-left crypto-badge">
                             <i class="fab fa-bitcoin"></i>
@@ -63,7 +66,8 @@
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="6" :md="6">
-                      <div class="qrcode-item" :class="{ active: selectedChannel === 'alipay' }" @click="selectChannel('alipay')">
+                      <div class="qrcode-item" :class="{ active: selectedChannel === 'alipay' }"
+                        @click="selectChannel('alipay')">
                         <div class="qrcode-container">
                           <div class="qrcode-image-wrapper">
                             <img :src="collectionAlipay" alt="支付宝收款码" />
@@ -73,7 +77,8 @@
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="6" :md="6">
-                      <div class="qrcode-item" :class="{ active: selectedChannel === 'wechat' }" @click="selectChannel('wechat')">
+                      <div class="qrcode-item" :class="{ active: selectedChannel === 'wechat' }"
+                        @click="selectChannel('wechat')">
                         <div class="qrcode-container">
                           <div class="qrcode-image-wrapper">
                             <img :src="collectionWechat" alt="微信收款码" />
@@ -92,53 +97,53 @@
 
                 <!-- 步骤2: 必填信息 -->
                 <div v-show="currentStep === 1" class="form-step-section">
-                <template v-if="selectedChannel === 'cardkey'">
-                  <el-form-item label="卡密码" prop="card_key_code">
-                    <el-input v-model="formData.card_key_code" placeholder="请输入卡密码，格式：ABCD-1234-EFGH-5678" clearable>
-                      <template #prefix><i class="fas fa-key"></i></template>
-                    </el-input>
-                  </el-form-item>
-                </template>
+                  <template v-if="selectedChannel === 'cardkey'">
+                    <el-form-item label="卡密码" prop="card_key_code">
+                      <el-input v-model="formData.card_key_code" placeholder="请输入卡密码，格式：ABCD-1234-EFGH-5678" clearable>
+                        <template #prefix><i class="fas fa-key"></i></template>
+                      </el-input>
+                    </el-form-item>
+                  </template>
 
-                <template v-else-if="selectedChannel === 'crypto'">
-                  <div class="crypto-info-tips">
-                    <div class="crypto-badge">
-                      <i class="fas fa-coins"></i>
-                      <div class="badge-text">
-                        <span class="badge-label">币种</span>
-                        <span class="badge-value">USDT</span>
+                  <template v-else-if="selectedChannel === 'crypto'">
+                    <div class="crypto-info-tips">
+                      <div class="crypto-badge">
+                        <i class="fas fa-coins"></i>
+                        <div class="badge-text">
+                          <span class="badge-label">币种</span>
+                          <span class="badge-value">USDT</span>
+                        </div>
+                      </div>
+                      <div class="crypto-badge network">
+                        <i class="fas fa-network-wired"></i>
+                        <div class="badge-text">
+                          <span class="badge-label">区块网络</span>
+                          <span class="badge-value">TRC20</span>
+                        </div>
                       </div>
                     </div>
-                    <div class="crypto-badge network">
-                      <i class="fas fa-network-wired"></i>
-                      <div class="badge-text">
-                        <span class="badge-label">区块网络</span>
-                        <span class="badge-value">TRC20</span>
-                      </div>
-                    </div>
-                  </div>
-                  <el-form-item label="捐赠金额" prop="amount">
-                    <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
-                      placeholder="请输入USDT金额" style="width: 100%" controls-position="right" />
-                  </el-form-item>
-                  <el-form-item label="交易哈希" prop="transaction_hash">
-                    <el-input v-model="formData.transaction_hash" placeholder="请输入交易哈希值" clearable>
-                      <template #prefix><i class="fas fa-hashtag"></i></template>
-                    </el-input>
-                  </el-form-item>
-                </template>
+                    <el-form-item label="捐赠金额" prop="amount">
+                      <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
+                        placeholder="请输入USDT金额" style="width: 100%" controls-position="right" />
+                    </el-form-item>
+                    <el-form-item label="交易哈希" prop="transaction_hash">
+                      <el-input v-model="formData.transaction_hash" placeholder="请输入交易哈希值" clearable>
+                        <template #prefix><i class="fas fa-hashtag"></i></template>
+                      </el-input>
+                    </el-form-item>
+                  </template>
 
-                <template v-if="selectedChannel === 'wechat' || selectedChannel === 'alipay'">
-                  <el-form-item label="捐赠金额" prop="amount">
-                    <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
-                      placeholder="请输入捐赠金额" style="width: 100%" controls-position="right" />
-                  </el-form-item>
-                  <el-form-item label="订单号" prop="order_no">
-                    <el-input v-model="formData.order_no" placeholder="请输入支付订单号" clearable>
-                      <template #prefix><i class="fas fa-receipt"></i></template>
-                    </el-input>
-                  </el-form-item>
-                </template>
+                  <template v-if="selectedChannel === 'wechat' || selectedChannel === 'alipay'">
+                    <el-form-item label="捐赠金额" prop="amount">
+                      <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
+                        placeholder="请输入捐赠金额" style="width: 100%" controls-position="right" />
+                    </el-form-item>
+                    <el-form-item label="订单号" prop="order_no">
+                      <el-input v-model="formData.order_no" placeholder="请输入支付订单号" clearable>
+                        <template #prefix><i class="fas fa-receipt"></i></template>
+                      </el-input>
+                    </el-form-item>
+                  </template>
 
                   <div class="step-actions">
                     <el-button @click="prevStep">上一步</el-button>
@@ -461,6 +466,7 @@ const handleCelebrationClose = () => {
 
 <style scoped lang="less">
 .donation-page {
+  // 统一设计变量
   --theme-color: #8b5cf6;
   --theme-color-light-3: #a78bfa;
   --theme-color-light-5: #c4b5fd;
@@ -468,7 +474,25 @@ const handleCelebrationClose = () => {
   --theme-color-light-9: #ede9fe;
   --theme-secondary: #d946ef;
   --theme-accent: #3b82f6;
-  
+
+  // 统一间距
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+
+  // 统一圆角
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  // 统一字号
+  --font-xs: 12px;
+  --font-sm: 13px;
+  --font-md: 14px;
+  --font-lg: 16px;
+  --font-xl: 18px;
+
   // 覆盖 Element Plus 全局主题色
   --el-color-primary: #8b5cf6;
   --el-color-primary-light-3: #a78bfa;
@@ -477,19 +501,37 @@ const handleCelebrationClose = () => {
   --el-color-primary-light-8: #e9d5ff;
   --el-color-primary-light-9: #ede9fe;
   --el-color-primary-dark-2: #7c3aed;
+
   min-height: 100vh;
-  padding: 25px 0;
-  background: var(--el-bg-color-page);
+  padding: var(--spacing-lg) 0;
+  background: linear-gradient(135deg, #f5f3ff 0%, #faf5ff 50%, #f3f4f6 100%);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(217, 70, 239, 0.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
 
   .donation-content {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 0 var(--spacing-md);
+    position: relative;
+    z-index: 1;
 
     .content-wrapper {
       display: grid;
       grid-template-columns: 1fr 360px;
-      gap: 20px;
+      gap: var(--spacing-lg);
 
       @media (max-width: 1024px) {
         grid-template-columns: 1fr;
@@ -500,66 +542,94 @@ const handleCelebrationClose = () => {
   .card-header-custom {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    margin-bottom: 20px;
-    background: var(--el-fill-color-light);
-    border-radius: 8px;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(217, 70, 239, 0.05) 100%);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(139, 92, 246, 0.1);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
+      pointer-events: none;
+    }
 
     .header-icon {
-      width: 36px;
-      height: 36px;
+      width: 48px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-      border-radius: 8px;
+      border-radius: var(--radius-md);
       flex-shrink: 0;
-      box-shadow: 0 2px 8px rgba(250, 112, 154, 0.3);
+      box-shadow: 0 4px 12px rgba(250, 112, 154, 0.3), 0 0 0 4px rgba(250, 112, 154, 0.1);
       position: relative;
+      z-index: 1;
 
       &::after {
         content: '';
         position: absolute;
-        top: -2px;
-        right: -2px;
-        width: 8px;
-        height: 8px;
+        top: -3px;
+        right: -3px;
+        width: 10px;
+        height: 10px;
         background: #fee140;
         border-radius: 50%;
-        box-shadow: 0 0 4px rgba(254, 225, 64, 0.6);
+        box-shadow: 0 0 8px rgba(254, 225, 64, 0.8);
       }
 
       i {
         color: #fff;
-        font-size: 18px;
+        font-size: 22px;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
       }
     }
 
     .header-content {
       flex: 1;
       min-width: 0;
+      position: relative;
+      z-index: 1;
 
       .header-title {
-        font-size: 15px;
-        font-weight: 600;
-        color: var(--el-text-color-primary);
-        margin: 0 0 2px 0;
+        font-size: 17px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0 0 4px 0;
         line-height: 1.3;
       }
 
       .header-subtitle {
-        font-size: 12px;
-        color: var(--el-text-color-secondary);
+        font-size: var(--font-sm);
+        color: var(--el-text-color-regular);
         margin: 0;
-        line-height: 1.4;
+        line-height: 1.5;
       }
     }
   }
 
   @keyframes smoothIn {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .animate-item {
@@ -581,54 +651,59 @@ const handleCelebrationClose = () => {
 
   .form-card,
   .info-card {
-    border-radius: 8px;
-    box-shadow: var(--el-box-shadow-light);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.08), 0 0 0 1px rgba(139, 92, 246, 0.05);
     overflow: hidden;
-    background: var(--el-bg-color);
-    transition: box-shadow 0.3s ease;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
 
     &:hover {
-      box-shadow: var(--el-box-shadow);
+      box-shadow: 0 8px 30px rgba(139, 92, 246, 0.12), 0 0 0 1px rgba(139, 92, 246, 0.1);
+      transform: translateY(-2px);
     }
 
     :deep(.ant-card-head) {
       background: var(--el-bg-color);
       border-bottom: 1px solid var(--el-border-color);
-      padding: 16px 20px;
+      padding: var(--spacing-md) var(--spacing-lg);
       min-height: auto;
 
       .card-title {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: var(--spacing-xs);
         color: var(--el-text-color-primary);
-        font-size: 16px;
+        font-size: var(--font-lg);
         font-weight: 600;
 
         i {
-          font-size: 18px;
+          font-size: var(--font-xl);
           color: var(--theme-color);
         }
       }
     }
 
     :deep(.ant-card-body) {
-      padding: 20px;
+      padding: var(--spacing-lg);
     }
   }
 
   .steps-section {
-    margin-bottom: 24px;
-    padding: 16px 20px;
-    background: var(--el-fill-color-light);
-    border-radius: 8px;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.03) 0%, rgba(217, 70, 239, 0.03) 100%);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(139, 92, 246, 0.08);
 
     :deep(.el-steps) {
       .el-step__head {
         .el-step__icon {
           width: 28px;
           height: 28px;
-          font-size: 13px;
+          font-size: var(--font-sm);
+          border-width: 2px;
+          transition: all 0.3s ease;
         }
 
         .el-step__line {
@@ -637,32 +712,40 @@ const handleCelebrationClose = () => {
       }
 
       .el-step__title {
-        font-size: 13px;
-        font-weight: 500;
+        font-size: var(--font-sm);
+        font-weight: 600;
         line-height: 28px;
       }
 
       .el-step__description {
-        font-size: 12px;
+        font-size: var(--font-xs);
+        margin-top: 0;
+        padding-top: 2px;
+      }
+
+      .el-step.is-process {
+        .el-step__icon {
+          box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
       }
     }
   }
 
   .qrcode-section {
-    margin-bottom: 24px;
+    margin-bottom: var(--spacing-lg);
 
     .qrcode-title {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 14px;
+      gap: var(--spacing-sm);
+      font-size: var(--font-md);
       font-weight: 500;
       color: var(--el-text-color-primary);
-      margin-bottom: 12px;
+      margin-bottom: var(--spacing-md);
 
       i {
         color: var(--theme-color);
-        font-size: 15px;
+        font-size: var(--font-lg);
       }
     }
 
@@ -696,18 +779,40 @@ const handleCelebrationClose = () => {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 12px;
-      background: var(--el-fill-color-light);
-      border: 2px solid var(--el-border-color);
-      border-radius: 8px;
+      padding: var(--spacing-md);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(249, 250, 251, 0.9) 100%);
+      border: 2px solid rgba(139, 92, 246, 0.1);
+      border-radius: var(--radius-md);
       height: 100%;
       position: relative;
       transition: all 0.3s ease;
+      overflow: visible;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, transparent 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+      }
 
       &:hover {
-        transform: translateY(-2px);
-        border-color: var(--theme-color-light-5);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transform: translateY(-4px) scale(1.02);
+        border-color: var(--theme-color);
+        box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15), 0 0 0 1px rgba(139, 92, 246, 0.1);
+
+        &::before {
+          opacity: 1;
+        }
+
+        .qrcode-image-wrapper img {
+          transform: scale(1.05);
+        }
       }
 
       .qrcode-image-wrapper {
@@ -717,9 +822,12 @@ const handleCelebrationClose = () => {
         align-items: center;
         justify-content: center;
         overflow: hidden;
-        border-radius: 6px;
-        margin-bottom: 8px;
-        background: var(--el-bg-color);
+        border-radius: var(--radius-sm);
+        margin-bottom: var(--spacing-sm);
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        position: relative;
+        padding: 8px;
 
         img {
           max-width: 100%;
@@ -727,19 +835,26 @@ const handleCelebrationClose = () => {
           width: auto;
           height: auto;
           object-fit: contain;
+          transition: transform 0.3s ease;
+          border-radius: 6px;
         }
       }
 
       .qrcode-tip {
-        font-size: 12px;
+        font-size: var(--font-xs);
         font-weight: 500;
         color: var(--el-text-color-regular);
         text-align: center;
+        position: relative;
+        z-index: 10;
 
         .card-link {
           color: var(--theme-color);
           text-decoration: none;
           transition: all 0.2s ease;
+          position: relative;
+          z-index: 10;
+          pointer-events: auto;
 
           &:hover {
             color: var(--theme-color-light-3);
@@ -754,12 +869,12 @@ const handleCelebrationClose = () => {
           gap: 4px;
 
           i {
-            font-size: 12px;
+            font-size: var(--font-xs);
             color: var(--el-color-success);
           }
 
           span {
-            font-size: 12px;
+            font-size: var(--font-xs);
             font-weight: 500;
             color: var(--el-text-color-regular);
           }
@@ -768,33 +883,34 @@ const handleCelebrationClose = () => {
 
       .channel-badge {
         position: absolute;
-        top: 8px;
-        right: 8px;
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 10px;
-        font-weight: 500;
+        top: var(--spacing-sm);
+        right: var(--spacing-sm);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: var(--font-xs);
+        font-weight: 600;
         line-height: 1;
         white-space: nowrap;
+        z-index: 2;
 
         &.recommend {
           background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
           color: #fff;
-          box-shadow: 0 1px 3px rgba(255, 107, 107, 0.3);
+          box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4), 0 0 0 2px rgba(255, 107, 107, 0.1);
         }
       }
 
       .channel-badge-left {
         position: absolute;
-        top: 8px;
-        left: 8px;
+        top: var(--spacing-sm);
+        left: var(--spacing-sm);
         display: flex;
         align-items: center;
-        gap: 3px;
-        padding: 3px 6px;
-        border-radius: 4px;
-        font-size: 10px;
-        font-weight: 500;
+        gap: 4px;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: var(--font-xs);
+        font-weight: 600;
         line-height: 1;
         white-space: nowrap;
         z-index: 2;
@@ -802,10 +918,10 @@ const handleCelebrationClose = () => {
         &.crypto-badge {
           background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
           color: #fff;
-          box-shadow: 0 1px 4px rgba(139, 92, 246, 0.3);
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4), 0 0 0 2px rgba(139, 92, 246, 0.1);
 
           i {
-            font-size: 10px;
+            font-size: var(--font-xs);
           }
         }
       }
@@ -816,27 +932,39 @@ const handleCelebrationClose = () => {
     &.active {
       .qrcode-container {
         border-color: var(--theme-color);
-        box-shadow: 0 2px 12px var(--theme-color-light-7);
+        border-width: 2px;
+        box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2), 0 0 0 4px rgba(139, 92, 246, 0.1);
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(217, 70, 239, 0.05) 100%);
+
+        &::before {
+          opacity: 1;
+        }
       }
     }
   }
 
   .crypto-info-tips {
     display: inline-flex;
-    gap: 8px;
-    margin-bottom: 16px;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
 
     .crypto-badge {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 4px 8px;
+      gap: 6px;
+      padding: 6px 12px;
       background: linear-gradient(135deg, rgba(103, 194, 58, 0.08) 0%, rgba(103, 194, 58, 0.12) 100%);
       border: 1px solid rgba(103, 194, 58, 0.25);
-      border-radius: 4px;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(103, 194, 58, 0.2);
+      }
 
       i {
-        font-size: 12px;
+        font-size: var(--font-sm);
         color: #67c23a;
         flex-shrink: 0;
       }
@@ -844,15 +972,15 @@ const handleCelebrationClose = () => {
       .badge-text {
         display: flex;
         align-items: center;
-        gap: 3px;
+        gap: 4px;
 
         .badge-label {
-          font-size: 11px;
+          font-size: var(--font-xs);
           color: var(--el-text-color-secondary);
         }
 
         .badge-value {
-          font-size: 12px;
+          font-size: var(--font-sm);
           font-weight: 600;
           color: #67c23a;
         }
@@ -874,28 +1002,30 @@ const handleCelebrationClose = () => {
   }
 
   .optional-section {
-    margin-bottom: 18px;
+    margin-bottom: var(--spacing-md);
 
     .section-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 12px;
-      background: var(--el-fill-color-light);
-      border-radius: 6px;
+      padding: var(--spacing-sm) var(--spacing-md);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.03) 0%, rgba(217, 70, 239, 0.03) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.08);
+      border-radius: var(--radius-sm);
       cursor: pointer;
       transition: all 0.2s ease;
       user-select: none;
 
       &:hover {
-        background: var(--el-fill-color);
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(217, 70, 239, 0.05) 100%);
+        border-color: rgba(139, 92, 246, 0.15);
       }
 
       .header-left {
         display: flex;
         align-items: center;
-        gap: 8px;
-        font-size: 13px;
+        gap: var(--spacing-xs);
+        font-size: var(--font-sm);
         color: var(--el-text-color-regular);
 
         i {
@@ -953,8 +1083,13 @@ const handleCelebrationClose = () => {
 
     :deep(.el-input__inner),
     :deep(.el-textarea__inner) {
-      border-radius: 6px;
-      font-size: 14px;
+      border-radius: var(--radius-sm);
+      font-size: var(--font-md);
+      transition: all 0.2s ease;
+
+      &:focus {
+        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
+      }
     }
 
     :deep(.el-input__prefix) {
@@ -971,17 +1106,18 @@ const handleCelebrationClose = () => {
 
     .privacy-options {
       display: flex;
-      gap: 20px;
-      margin-bottom: 20px;
-      padding: 12px 14px;
-      background: var(--el-fill-color-light);
-      border-radius: 6px;
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+      padding: var(--spacing-md);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.03) 0%, rgba(217, 70, 239, 0.03) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.08);
+      border-radius: var(--radius-sm);
 
       .option-label {
         display: flex;
         align-items: center;
-        gap: 6px;
-        font-size: 13px;
+        gap: var(--spacing-xs);
+        font-size: var(--font-sm);
         color: var(--el-text-color-regular);
 
         i {
@@ -992,22 +1128,18 @@ const handleCelebrationClose = () => {
 
     .step-actions {
       display: flex;
-      gap: 12px;
-      margin-top: 24px;
+      gap: var(--spacing-sm);
+      margin-top: var(--spacing-lg);
 
       :deep(.el-button) {
         height: 40px;
-        font-size: 14px;
+        font-size: var(--font-md);
         font-weight: 500;
-        border-radius: 6px;
-        transition: all 0.3s ease;
-
-        &:hover {
-          transform: translateY(-1px);
-        }
+        border-radius: var(--radius-sm);
+        transition: all 0.2s ease;
 
         i {
-          margin-right: 6px;
+          margin-right: var(--spacing-xs);
         }
 
         &.el-button--primary {
@@ -1068,8 +1200,15 @@ const handleCelebrationClose = () => {
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .donation-info-section {
