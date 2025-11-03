@@ -1049,51 +1049,128 @@ const handleCelebrationClose = () => {
   .privacy-notice {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 12px;
-    background: var(--el-color-info-light-9);
-    border-left: 3px solid var(--el-color-info);
-    border-radius: 4px;
-    margin-bottom: 18px;
-    font-size: 13px;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    border-left: 3px solid #3b82f6;
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-sm);
     color: var(--el-text-color-regular);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, transparent 100%);
+      pointer-events: none;
+    }
 
     i {
-      color: var(--el-color-info);
-      font-size: 14px;
+      color: #3b82f6;
+      font-size: var(--font-lg);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    span {
+      position: relative;
+      z-index: 1;
+      line-height: 1.6;
     }
   }
 
   .donation-form {
     :deep(.el-form-item) {
-      margin-bottom: 18px;
+      margin-bottom: 20px;
 
       .el-form-item__error {
         position: relative;
         z-index: 1;
+        font-size: var(--font-xs);
+        padding-top: 6px;
+        line-height: 1.5;
+      }
+
+      .el-form-item__content {
+        line-height: normal;
       }
     }
 
     :deep(.el-form-item__label) {
-      font-weight: 500;
-      font-size: 14px;
+      font-weight: 600;
+      font-size: var(--font-md);
       color: var(--el-text-color-primary);
-      padding-bottom: 8px;
+      padding-bottom: var(--spacing-xs);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1.5;
+
+      &::before {
+        content: '';
+        width: 3px;
+        height: 14px;
+        background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+        border-radius: 2px;
+      }
+    }
+
+    :deep(.el-input__wrapper) {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(249, 250, 251, 0.9) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.1);
+      border-radius: var(--radius-sm);
+      box-shadow: 0 2px 4px rgba(139, 92, 246, 0.04);
+      transition: all 0.3s ease;
+
+      &:hover {
+        border-color: rgba(139, 92, 246, 0.2);
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
+      }
+
+      &.is-focus {
+        border-color: var(--theme-color);
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1), 0 2px 8px rgba(139, 92, 246, 0.15);
+        background: #fff;
+      }
     }
 
     :deep(.el-input__inner),
     :deep(.el-textarea__inner) {
-      border-radius: var(--radius-sm);
       font-size: var(--font-md);
-      transition: all 0.2s ease;
+      color: var(--el-text-color-primary);
+    }
 
-      &:focus {
-        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
+    :deep(.el-textarea__wrapper) {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(249, 250, 251, 0.9) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.1);
+      border-radius: var(--radius-sm);
+      box-shadow: 0 2px 4px rgba(139, 92, 246, 0.04);
+      transition: all 0.3s ease;
+      padding: var(--spacing-sm);
+
+      &:hover {
+        border-color: rgba(139, 92, 246, 0.2);
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
+      }
+
+      &.is-focus {
+        border-color: var(--theme-color);
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1), 0 2px 8px rgba(139, 92, 246, 0.15);
+        background: #fff;
       }
     }
 
     :deep(.el-input__prefix) {
-      color: var(--el-text-color-placeholder);
+      color: var(--theme-color);
     }
 
     :deep(.el-input-number) {
@@ -1106,22 +1183,58 @@ const handleCelebrationClose = () => {
 
     .privacy-options {
       display: flex;
-      gap: var(--spacing-lg);
-      margin-bottom: var(--spacing-lg);
+      gap: var(--spacing-md);
+      margin-bottom: 20px;
       padding: var(--spacing-md);
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.03) 0%, rgba(217, 70, 239, 0.03) 100%);
-      border: 1px solid rgba(139, 92, 246, 0.08);
-      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.04) 0%, rgba(217, 70, 239, 0.04) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.12);
+      border-radius: var(--radius-md);
+      position: relative;
+      overflow: hidden;
 
-      .option-label {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-xs);
-        font-size: var(--font-sm);
-        color: var(--el-text-color-regular);
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, transparent 100%);
+        pointer-events: none;
+      }
 
-        i {
-          color: var(--theme-color);
+      :deep(.el-checkbox) {
+        position: relative;
+        z-index: 1;
+
+        .el-checkbox__label {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-xs);
+          font-size: var(--font-sm);
+          color: var(--el-text-color-regular);
+          font-weight: 500;
+
+          i {
+            color: var(--theme-color);
+            font-size: var(--font-md);
+          }
+        }
+
+        .el-checkbox__inner {
+          border-color: rgba(139, 92, 246, 0.3);
+          transition: all 0.2s ease;
+
+          &:hover {
+            border-color: var(--theme-color);
+          }
+        }
+
+        &.is-checked {
+          .el-checkbox__inner {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            border-color: var(--theme-color);
+          }
         }
       }
     }
@@ -1129,7 +1242,7 @@ const handleCelebrationClose = () => {
     .step-actions {
       display: flex;
       gap: var(--spacing-sm);
-      margin-top: var(--spacing-lg);
+      margin-top: 20px;
 
       :deep(.el-button) {
         height: 40px;
