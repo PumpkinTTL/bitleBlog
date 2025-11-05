@@ -67,7 +67,7 @@
       <div class="content-wrapper">
         <div class="donation-form-section animate__animated animate__fadeInUp animate__fast">
           <a-card :bordered="false" class="form-card">
-            <div class="card-header-custom">
+            <div class="card-header-custom animate__animated animate__fadeIn animate__fast" style="animation-delay: 0.1s;">
               <div class="header-main">
                 <div class="header-icon">
                   <i class="fas fa-hand-holding-heart"></i>
@@ -99,7 +99,7 @@
             <div class="donation-form">
               <el-form ref="formRef" :model="formData" :rules="formRules" label-position="top">
                 <!-- 步骤条 -->
-                <StepForm 
+                <StepForm class="animate__animated animate__fadeIn animate__fast" style="animation-delay: 0.2s;"
                   :active="currentStep" 
                   :steps="[
                     { title: '选择方式', description: stepDescriptions[0] },
@@ -112,7 +112,7 @@
                 <!-- 步骤1: 选择捐赠方式 -->
                 <div v-show="currentStep === 0" class="qrcode-section">
                     <el-row :gutter="16" class="qrcode-grid">
-                    <el-col :xs="12" :sm="6" :md="6">
+                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast" style="animation-delay: 0.3s;">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'cardkey' }"
                         @click="selectChannel('cardkey')">
                         <img :src="collectionCarkey" alt="购买卡密" />
@@ -125,7 +125,7 @@
                         <span class="channel-badge recommend">推荐</span>
                       </div>
                     </el-col>
-                    <el-col :xs="12" :sm="6" :md="6">
+                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast" style="animation-delay: 0.4s;">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'crypto' }"
                         @click="selectChannel('crypto')">
                         <span class="channel-badge-left crypto-badge">
@@ -137,14 +137,14 @@
                         <span class="channel-badge recommend">推荐</span>
                       </div>
                     </el-col>
-                    <el-col :xs="12" :sm="6" :md="6">
+                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast" style="animation-delay: 0.5s;">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'alipay' }"
                         @click="selectChannel('alipay')">
                         <img :src="collectionAlipay" alt="支付宝收款码" />
                         <div class="qrcode-tip">支付宝支付</div>
                       </div>
                     </el-col>
-                    <el-col :xs="12" :sm="6" :md="6">
+                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast" style="animation-delay: 0.6s;">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'wechat' }"
                         @click="selectChannel('wechat')">
                         <img :src="collectionWechat" alt="微信收款码" />
@@ -310,7 +310,7 @@
               <span>捐赠数据</span>
             </div>
             <div class="stats-grid">
-              <div class="stat-item">
+              <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.25s;">
                 <div class="stat-icon" style="background: linear-gradient(135deg, rgba(22, 119, 255, 0.1), rgba(22, 119, 255, 0.2)); color: #1677ff;">
                   <i class="fas fa-users"></i>
                 </div>
@@ -319,7 +319,7 @@
                   <div class="stat-label">支持者</div>
                 </div>
               </div>
-              <div class="stat-item">
+              <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.35s;">
                 <div class="stat-icon" style="background: linear-gradient(135deg, rgba(82, 196, 26, 0.1), rgba(82, 196, 26, 0.2)); color: #52c41a;">
                   <i class="fas fa-coins"></i>
                 </div>
@@ -328,7 +328,7 @@
                   <div class="stat-label">累计金额</div>
                 </div>
               </div>
-              <div class="stat-item">
+              <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.45s;">
                 <div class="stat-icon" style="background: linear-gradient(135deg, rgba(250, 140, 22, 0.1), rgba(250, 140, 22, 0.2)); color: #fa8c16;">
                   <i class="fas fa-calendar-check"></i>
                 </div>
@@ -337,7 +337,7 @@
                   <div class="stat-label">本月捐赠</div>
                 </div>
               </div>
-              <div class="stat-item">
+              <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.55s;">
                 <div class="stat-icon" style="background: linear-gradient(135deg, rgba(114, 46, 209, 0.1), rgba(114, 46, 209, 0.2)); color: #722ed1;">
                   <i class="fas fa-trophy"></i>
                 </div>
@@ -373,7 +373,7 @@
             <div class="activity-content">
               <!-- 捐赠榜 -->
               <div v-show="activeTab === 'ranking'" class="ranking-list">
-                <div v-for="(item, index) in topDonors" :key="item.id" class="ranking-item">
+              <div v-for="(item, index) in topDonors" :key="item.id" class="ranking-item animate__animated animate__fadeInLeft animate__fast" :style="`animation-delay: ${0.4 + index * 0.1}s;`">
                   <div class="ranking-badge" :class="`rank-${index + 1}`">
                     <span v-if="index < 3">
                       <i v-if="index === 0" class="fas fa-crown"></i>
@@ -393,7 +393,7 @@
 
               <!-- 最近捐赠 -->
               <div v-show="activeTab === 'recent'" class="recent-list">
-                <div v-for="item in recentDonations" :key="item.id" class="recent-item">
+                <div v-for="item in recentDonations" :key="item.id" class="recent-item animate__animated animate__fadeInLeft animate__fast" :style="`animation-delay: ${0.4 + recentDonations.indexOf(item) * 0.1}s;`">
                   <div class="recent-dot"></div>
                   <div class="recent-avatar">{{ item.name.charAt(0) }}</div>
                   <div class="recent-info">
