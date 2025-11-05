@@ -1,9 +1,23 @@
 <template>
   <div class="donation-page">
-    <!-- 简单的背景装饰 -->
-    <div class="bg-pattern bg-pattern-1"></div>
-    <div class="bg-pattern bg-pattern-2"></div>
-    <div class="bg-pattern bg-pattern-3"></div>
+    <!-- 背景装饰 -->
+    <div class="bg-decorations">
+      <!-- 渐变光晕 -->
+      <div class="bg-orb bg-orb-1"></div>
+      <div class="bg-orb bg-orb-2"></div>
+      <div class="bg-orb bg-orb-3"></div>
+      
+      <!-- 几何图形 -->
+      <div class="bg-shape bg-circle-1"></div>
+      <div class="bg-shape bg-circle-2"></div>
+      <div class="bg-shape bg-square-1"></div>
+      <div class="bg-shape bg-square-2"></div>
+      
+      <!-- 线条装饰 -->
+      <div class="bg-line bg-line-1"></div>
+      <div class="bg-line bg-line-2"></div>
+      <div class="bg-line bg-line-3"></div>
+    </div>
     
     <div class="donation-content">
       <div class="content-wrapper">
@@ -631,53 +645,136 @@ const handleCelebrationClose = () => {
     z-index: 0;
   }
 
-  // 简洁的背景装饰 - 不使用filter
-  .bg-pattern {
+  // 背景装饰容器
+  .bg-decorations {
     position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.6;
+    overflow: hidden;
+  }
+  
+  // 渐变光晕 - 不使用filter
+  .bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.5;
     
-    &.bg-pattern-1 {
+    &.bg-orb-1 {
       top: 10%;
       left: 10%;
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, rgba(139, 92, 246, 0.04) 40%, transparent 70%);
+    }
+    
+    &.bg-orb-2 {
+      bottom: 15%;
+      right: 10%;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(217, 70, 239, 0.1) 0%, rgba(217, 70, 239, 0.03) 40%, transparent 70%);
+    }
+    
+    &.bg-orb-3 {
+      top: 45%;
+      left: 50%;
       width: 300px;
       height: 300px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
-      animation: floatSlow 25s ease-in-out infinite;
-    }
-    
-    &.bg-pattern-2 {
-      bottom: 15%;
-      right: 15%;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(217, 70, 239, 0.06) 0%, transparent 70%);
-      animation: floatSlow 30s ease-in-out infinite reverse;
-    }
-    
-    &.bg-pattern-3 {
-      top: 50%;
-      left: 50%;
-      width: 250px;
-      height: 250px;
-      background: radial-gradient(circle, rgba(167, 139, 250, 0.07) 0%, transparent 70%);
-      animation: floatSlow 20s ease-in-out infinite;
-      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(167, 139, 250, 0.1) 0%, rgba(167, 139, 250, 0.03) 40%, transparent 70%);
+      transform: translateX(-50%);
     }
     
     @media (max-width: 768px) {
-      opacity: 0.4;
-      animation: none !important;
+      opacity: 0.3;
     }
   }
   
-  @keyframes floatSlow {
-    0%, 100% {
-      transform: translate(0, 0);
+  // 几何图形
+  .bg-shape {
+    position: absolute;
+    opacity: 0.08;
+    
+    &.bg-circle-1 {
+      top: 20%;
+      right: 20%;
+      width: 120px;
+      height: 120px;
+      border: 2px solid rgba(139, 92, 246, 0.3);
+      border-radius: 50%;
     }
-    50% {
-      transform: translate(30px, -30px);
+    
+    &.bg-circle-2 {
+      bottom: 25%;
+      left: 15%;
+      width: 80px;
+      height: 80px;
+      border: 2px solid rgba(217, 70, 239, 0.3);
+      border-radius: 50%;
+    }
+    
+    &.bg-square-1 {
+      top: 60%;
+      left: 8%;
+      width: 100px;
+      height: 100px;
+      border: 2px solid rgba(167, 139, 250, 0.3);
+      border-radius: 12px;
+      transform: rotate(25deg);
+    }
+    
+    &.bg-square-2 {
+      bottom: 30%;
+      right: 12%;
+      width: 60px;
+      height: 60px;
+      border: 2px solid rgba(139, 92, 246, 0.3);
+      border-radius: 8px;
+      transform: rotate(-15deg);
+    }
+    
+    @media (max-width: 768px) {
+      opacity: 0.04;
+    }
+  }
+  
+  // 线条装饰
+  .bg-line {
+    position: absolute;
+    opacity: 0.1;
+    
+    &.bg-line-1 {
+      top: 30%;
+      left: 5%;
+      width: 180px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.4), transparent);
+      transform: rotate(30deg);
+    }
+    
+    &.bg-line-2 {
+      bottom: 35%;
+      right: 8%;
+      width: 150px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(217, 70, 239, 0.4), transparent);
+      transform: rotate(-25deg);
+    }
+    
+    &.bg-line-3 {
+      top: 55%;
+      left: 25%;
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.4), transparent);
+      transform: rotate(45deg);
+    }
+    
+    @media (max-width: 768px) {
+      display: none;
     }
   }
 

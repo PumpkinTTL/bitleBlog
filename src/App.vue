@@ -31,8 +31,8 @@
         <!-- 返回顶部按钮 -->
         <BackToTop :visibility-height="300" :duration="400" :offset="80" />
         
-        <!-- AI 助理 -->
-        <AiAssistant />
+        <!-- AI 助理 - 暂时禁用 -->
+        <!-- <AiAssistant /> -->
         
         <!-- 底部 -->
         <!-- <BlogFooter></BlogFooter> -->
