@@ -2,21 +2,43 @@
   <div class="donation-page">
     <!-- 背景装饰 -->
     <div class="bg-decorations">
-      <!-- 渐变光晕 -->
-      <div class="bg-orb bg-orb-1"></div>
-      <div class="bg-orb bg-orb-2"></div>
-      <div class="bg-orb bg-orb-3"></div>
+      <!-- 左侧装饰 -->
+      <div class="decoration-left">
+        <!-- 星星 -->
+        <div class="star-icon" style="top: 15%; left: 8%;">★</div>
+        <div class="star-icon" style="top: 35%; left: 5%;">★</div>
+        <div class="star-icon" style="top: 55%; left: 10%;">★</div>
+        <div class="star-icon" style="top: 75%; left: 7%;">★</div>
+        <div class="star-icon" style="top: 25%; left: 3%;">✦</div>
+        <div class="star-icon" style="top: 65%; left: 4%;">✦</div>
+        
+        <!-- FontAwesome图标 -->
+        <div class="fa-icon" style="top: 20%; left: 6%;"><i class="fas fa-heart"></i></div>
+        <div class="fa-icon" style="top: 45%; left: 8%;"><i class="fas fa-gift"></i></div>
+        <div class="fa-icon" style="top: 70%; left: 5%;"><i class="fas fa-gem"></i></div>
+        <div class="fa-icon" style="top: 85%; left: 9%;"><i class="fas fa-star"></i></div>
+      </div>
       
-      <!-- 几何图形 -->
-      <div class="bg-shape bg-circle-1"></div>
-      <div class="bg-shape bg-circle-2"></div>
-      <div class="bg-shape bg-square-1"></div>
-      <div class="bg-shape bg-square-2"></div>
+      <!-- 右侧装饰 -->
+      <div class="decoration-right">
+        <!-- 星星 -->
+        <div class="star-icon" style="top: 18%; right: 7%;">★</div>
+        <div class="star-icon" style="top: 40%; right: 10%;">★</div>
+        <div class="star-icon" style="top: 60%; right: 6%;">★</div>
+        <div class="star-icon" style="top: 80%; right: 9%;">★</div>
+        <div class="star-icon" style="top: 30%; right: 4%;">✦</div>
+        <div class="star-icon" style="top: 50%; right: 3%;">✦</div>
+        
+        <!-- FontAwesome图标 -->
+        <div class="fa-icon" style="top: 25%; right: 8%;"><i class="fas fa-coins"></i></div>
+        <div class="fa-icon" style="top: 48%; right: 5%;"><i class="fas fa-hand-holding-heart"></i></div>
+        <div class="fa-icon" style="top: 68%; right: 9%;"><i class="fas fa-certificate"></i></div>
+        <div class="fa-icon" style="top: 88%; right: 6%;"><i class="fas fa-sparkles"></i></div>
+      </div>
       
-      <!-- 线条装饰 -->
-      <div class="bg-line bg-line-1"></div>
-      <div class="bg-line bg-line-2"></div>
-      <div class="bg-line bg-line-3"></div>
+      <!-- 背景光晕 -->
+      <div class="bg-glow bg-glow-left"></div>
+      <div class="bg-glow bg-glow-right"></div>
     </div>
     
     <div class="donation-content">
@@ -657,124 +679,84 @@ const handleCelebrationClose = () => {
     overflow: hidden;
   }
   
-  // 渐变光晕 - 不使用filter
-  .bg-orb {
+  // 左右侧装饰容器
+  .decoration-left,
+  .decoration-right {
     position: absolute;
+    top: 0;
+    width: 15%;
+    height: 100%;
+    
+    @media (max-width: 1024px) {
+      width: 10%;
+    }
+    
+    @media (max-width: 768px) {
+      width: 8%;
+    }
+  }
+  
+  .decoration-left {
+    left: 0;
+  }
+  
+  .decoration-right {
+    right: 0;
+  }
+  
+  // 星星装饰
+  .star-icon {
+    position: absolute;
+    font-size: 20px;
+    color: #fbbf24;
+    opacity: 0.3;
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+    
+    @media (max-width: 768px) {
+      font-size: 14px;
+      opacity: 0.2;
+    }
+  }
+  
+  // FontAwesome图标装饰
+  .fa-icon {
+    position: absolute;
+    font-size: 22px;
+    opacity: 0.15;
+    
+    i {
+      color: var(--el-color-primary);
+      text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+    }
+    
+    @media (max-width: 768px) {
+      font-size: 16px;
+      opacity: 0.1;
+    }
+  }
+  
+  // 背景光晕
+  .bg-glow {
+    position: absolute;
+    width: 400px;
+    height: 600px;
     border-radius: 50%;
-    opacity: 0.5;
+    opacity: 0.4;
     
-    &.bg-orb-1 {
-      top: 10%;
-      left: 10%;
-      width: 350px;
-      height: 350px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, rgba(139, 92, 246, 0.04) 40%, transparent 70%);
-    }
-    
-    &.bg-orb-2 {
-      bottom: 15%;
-      right: 10%;
-      width: 450px;
-      height: 450px;
-      background: radial-gradient(circle, rgba(217, 70, 239, 0.1) 0%, rgba(217, 70, 239, 0.03) 40%, transparent 70%);
-    }
-    
-    &.bg-orb-3 {
-      top: 45%;
-      left: 50%;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(167, 139, 250, 0.1) 0%, rgba(167, 139, 250, 0.03) 40%, transparent 70%);
-      transform: translateX(-50%);
-    }
-    
-    @media (max-width: 768px) {
-      opacity: 0.3;
-    }
-  }
-  
-  // 几何图形
-  .bg-shape {
-    position: absolute;
-    opacity: 0.08;
-    
-    &.bg-circle-1 {
+    &.bg-glow-left {
       top: 20%;
-      right: 20%;
-      width: 120px;
-      height: 120px;
-      border: 2px solid rgba(139, 92, 246, 0.3);
-      border-radius: 50%;
+      left: -100px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 60%);
     }
     
-    &.bg-circle-2 {
-      bottom: 25%;
-      left: 15%;
-      width: 80px;
-      height: 80px;
-      border: 2px solid rgba(217, 70, 239, 0.3);
-      border-radius: 50%;
-    }
-    
-    &.bg-square-1 {
-      top: 60%;
-      left: 8%;
-      width: 100px;
-      height: 100px;
-      border: 2px solid rgba(167, 139, 250, 0.3);
-      border-radius: 12px;
-      transform: rotate(25deg);
-    }
-    
-    &.bg-square-2 {
-      bottom: 30%;
-      right: 12%;
-      width: 60px;
-      height: 60px;
-      border: 2px solid rgba(139, 92, 246, 0.3);
-      border-radius: 8px;
-      transform: rotate(-15deg);
+    &.bg-glow-right {
+      bottom: 20%;
+      right: -100px;
+      background: radial-gradient(circle, rgba(217, 70, 239, 0.06) 0%, transparent 60%);
     }
     
     @media (max-width: 768px) {
-      opacity: 0.04;
-    }
-  }
-  
-  // 线条装饰
-  .bg-line {
-    position: absolute;
-    opacity: 0.1;
-    
-    &.bg-line-1 {
-      top: 30%;
-      left: 5%;
-      width: 180px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.4), transparent);
-      transform: rotate(30deg);
-    }
-    
-    &.bg-line-2 {
-      bottom: 35%;
-      right: 8%;
-      width: 150px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(217, 70, 239, 0.4), transparent);
-      transform: rotate(-25deg);
-    }
-    
-    &.bg-line-3 {
-      top: 55%;
-      left: 25%;
-      width: 120px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.4), transparent);
-      transform: rotate(45deg);
-    }
-    
-    @media (max-width: 768px) {
-      display: none;
+      opacity: 0.2;
     }
   }
 
