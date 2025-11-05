@@ -805,32 +805,52 @@ const handleCelebrationClose = () => {
   }
 
   .card-header-custom {
-    padding: 14px 16px;
+    padding: 20px;
     margin-bottom: var(--spacing-md);
-    background: var(--el-bg-color);
+    background: linear-gradient(135deg, 
+      rgba(139, 92, 246, 0.05) 0%, 
+      rgba(217, 70, 239, 0.03) 100%);
     border: 1px solid var(--el-border-color-lighter);
-    border-radius: var(--radius-sm);
+    border-radius: 12px;
     position: relative;
+    overflow: hidden;
 
     .header-main {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 14px;
+      margin-bottom: 16px;
 
       .header-icon {
-        width: 36px;
-        height: 36px;
+        width: 48px;
+        height: 48px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: var(--el-color-primary);
-        border-radius: 6px;
+        background: linear-gradient(135deg, 
+          var(--el-color-primary) 0%, 
+          var(--theme-secondary) 100%);
+        border-radius: 12px;
         flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        position: relative;
+        animation: iconPulse 3s ease-in-out infinite;
+
+        &::after {
+          content: '';
+          position: absolute;
+          inset: -2px;
+          background: inherit;
+          border-radius: inherit;
+          opacity: 0.3;
+          filter: blur(8px);
+          z-index: -1;
+        }
 
         i {
           color: #fff;
-          font-size: 16px;
+          font-size: 22px;
+          animation: heartBeat 2s ease-in-out infinite;
         }
       }
 
@@ -839,57 +859,167 @@ const handleCelebrationClose = () => {
         min-width: 0;
 
         .header-title {
-          font-size: 14px;
-          font-weight: 600;
-          color: var(--el-text-color-primary);
-          margin: 0 0 2px 0;
+          font-size: 18px;
+          font-weight: 700;
+          background: linear-gradient(135deg, 
+            var(--el-color-primary) 0%, 
+            var(--theme-secondary) 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          margin: 0 0 4px 0;
           line-height: 1.3;
+          letter-spacing: 0.5px;
         }
 
         .header-subtitle {
-          font-size: 11px;
+          font-size: 12px;
           color: var(--el-text-color-secondary);
           margin: 0;
           line-height: 1.4;
+          font-weight: 500;
         }
       }
     }
 
     .header-tips {
       display: flex;
-      gap: 6px;
+      align-items: center;
+      gap: 10px;
       flex-wrap: wrap;
 
       .tip-item {
-        flex: 1 1 auto;
-        min-width: 0;
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        justify-content: center;
-        gap: 4px;
-        padding: 5px 6px;
-        background: var(--el-fill-color-light);
-        border-radius: 4px;
-        transition: all 0.2s ease;
+        gap: 6px;
+        padding: 6px 14px;
+        background: linear-gradient(135deg, 
+          rgba(139, 92, 246, 0.08) 0%, 
+          rgba(217, 70, 239, 0.05) 100%);
+        border: 1.5px solid transparent;
+        border-radius: 20px;
+        position: relative;
+        opacity: 0;
+        animation: tipSlideIn 0.5s ease forwards;
+        cursor: default;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
 
-        &:hover {
-          background: var(--el-color-primary-light-9);
+        &:nth-child(1) {
+          animation-delay: 0.2s;
+        }
+        &:nth-child(2) {
+          animation-delay: 0.35s;
+        }
+        &:nth-child(3) {
+          animation-delay: 0.5s;
+        }
+
+        &::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          padding: 1.5px;
+          background: linear-gradient(135deg, 
+            var(--el-color-primary-light-3), 
+            var(--theme-secondary));
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          opacity: 0;
+          transition: opacity 0.35s ease;
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, 
+            rgba(139, 92, 246, 0.15) 0%, 
+            rgba(217, 70, 239, 0.1) 100%);
+          opacity: 0;
+          transition: opacity 0.35s ease;
+          z-index: 0;
         }
 
         i {
           color: var(--el-color-primary);
-          font-size: 11px;
+          font-size: 13px;
           flex-shrink: 0;
-          opacity: 0.8;
+          transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          z-index: 1;
         }
 
         span {
-          font-size: 10px;
+          font-size: 11px;
+          font-weight: 600;
           color: var(--el-text-color-regular);
           line-height: 1.3;
           white-space: nowrap;
+          transition: all 0.35s ease;
+          position: relative;
+          z-index: 1;
+        }
+
+        &:hover {
+          transform: translateY(-2px) scale(1.03);
+          box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+
+          &::before {
+            opacity: 1;
+          }
+
+          &::after {
+            opacity: 1;
+          }
+
+          i {
+            transform: scale(1.15) rotate(-10deg);
+            color: var(--theme-secondary);
+          }
+
+          span {
+            color: var(--el-color-primary);
+            letter-spacing: 0.3px;
+          }
         }
       }
+    }
+  }
+
+  @keyframes tipSlideIn {
+    0% {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes iconPulse {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    }
+  }
+
+  @keyframes heartBeat {
+    0%, 100% {
+      transform: scale(1);
+    }
+    10%, 30% {
+      transform: scale(1.1);
+    }
+    20%, 40% {
+      transform: scale(1);
     }
   }
 
