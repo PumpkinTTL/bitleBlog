@@ -65,7 +65,7 @@
     
     <div class="donation-content">
       <div class="content-wrapper">
-        <div class="donation-form-section animate__animated animate__fadeInUp">
+        <div class="donation-form-section animate__animated animate__fadeInUp animate__fast">
           <a-card :bordered="false" class="form-card">
             <div class="card-header-custom">
               <div class="header-main">
@@ -304,7 +304,7 @@
 
         <div class="donation-info-section">
           <!-- 统计卡片 -->
-          <div class="sidebar-widget stats-widget animate__animated animate__fadeInUp animate__delay-1s">
+          <div class="sidebar-widget stats-widget animate__animated animate__fadeInUp animate__fast" style="animation-delay: 0.15s;">
             <div class="widget-header">
               <i class="fas fa-chart-line"></i>
               <span>捐赠数据</span>
@@ -350,7 +350,7 @@
           </div>
 
           <!-- 捐赠榜/最近捐赠 - Tab切换 -->
-          <div class="sidebar-widget activity-widget animate__animated animate__fadeInUp animate__delay-2s">
+          <div class="sidebar-widget activity-widget animate__animated animate__fadeInUp animate__fast" style="animation-delay: 0.3s;">
             <div class="activity-tabs">
               <div 
                 class="tab-item" 
@@ -1040,9 +1040,9 @@ const handleCelebrationClose = () => {
 
   // 已删除所有不再使用的装饰动画关键帧
 
-  // 使用animate.css统一动画
+  // 使用animate.css统一动画 - 快速流畅
   .animate__animated {
-    --animate-duration: 0.8s;
+    --animate-duration: 0.5s;
   }
 
 
