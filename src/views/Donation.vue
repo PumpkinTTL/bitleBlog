@@ -5,35 +5,57 @@
       <!-- 左侧装饰 -->
       <div class="decoration-left">
         <!-- 星星 -->
-        <div class="star-icon" style="top: 15%; left: 8%;">★</div>
-        <div class="star-icon" style="top: 35%; left: 5%;">★</div>
-        <div class="star-icon" style="top: 55%; left: 10%;">★</div>
+        <div class="star-icon" style="top: 8%; left: 8%;">★</div>
+        <div class="star-icon" style="top: 15%; left: 5%;">★</div>
+        <div class="star-icon" style="top: 28%; left: 10%;">★</div>
+        <div class="star-icon" style="top: 38%; left: 4%;">★</div>
+        <div class="star-icon" style="top: 52%; left: 9%;">★</div>
+        <div class="star-icon" style="top: 63%; left: 6%;">★</div>
         <div class="star-icon" style="top: 75%; left: 7%;">★</div>
-        <div class="star-icon" style="top: 25%; left: 3%;">✦</div>
-        <div class="star-icon" style="top: 65%; left: 4%;">✦</div>
+        <div class="star-icon" style="top: 88%; left: 5%;">★</div>
+        <div class="star-icon" style="top: 12%; left: 3%;">✦</div>
+        <div class="star-icon" style="top: 22%; left: 11%;">✦</div>
+        <div class="star-icon" style="top: 45%; left: 3%;">✦</div>
+        <div class="star-icon" style="top: 68%; left: 11%;">✦</div>
+        <div class="star-icon" style="top: 82%; left: 10%;">✦</div>
+        <div class="star-icon" style="top: 92%; left: 8%;">✦</div>
         
         <!-- FontAwesome图标 -->
-        <div class="fa-icon" style="top: 20%; left: 6%;"><i class="fas fa-heart"></i></div>
-        <div class="fa-icon" style="top: 45%; left: 8%;"><i class="fas fa-gift"></i></div>
-        <div class="fa-icon" style="top: 70%; left: 5%;"><i class="fas fa-gem"></i></div>
-        <div class="fa-icon" style="top: 85%; left: 9%;"><i class="fas fa-star"></i></div>
+        <div class="fa-icon" style="top: 10%; left: 6%;"><i class="fas fa-heart"></i></div>
+        <div class="fa-icon" style="top: 25%; left: 7%;"><i class="fas fa-gift"></i></div>
+        <div class="fa-icon" style="top: 40%; left: 8%;"><i class="fas fa-gem"></i></div>
+        <div class="fa-icon" style="top: 55%; left: 5%;"><i class="fas fa-star"></i></div>
+        <div class="fa-icon" style="top: 70%; left: 9%;"><i class="fas fa-hand-holding-usd"></i></div>
+        <div class="fa-icon" style="top: 85%; left: 7%;"><i class="fas fa-trophy"></i></div>
+        <div class="fa-icon" style="top: 95%; left: 4%;"><i class="fas fa-crown"></i></div>
       </div>
       
       <!-- 右侧装饰 -->
       <div class="decoration-right">
         <!-- 星星 -->
-        <div class="star-icon" style="top: 18%; right: 7%;">★</div>
-        <div class="star-icon" style="top: 40%; right: 10%;">★</div>
-        <div class="star-icon" style="top: 60%; right: 6%;">★</div>
-        <div class="star-icon" style="top: 80%; right: 9%;">★</div>
-        <div class="star-icon" style="top: 30%; right: 4%;">✦</div>
-        <div class="star-icon" style="top: 50%; right: 3%;">✦</div>
+        <div class="star-icon" style="top: 6%; right: 7%;">★</div>
+        <div class="star-icon" style="top: 18%; right: 10%;">★</div>
+        <div class="star-icon" style="top: 32%; right: 5%;">★</div>
+        <div class="star-icon" style="top: 43%; right: 9%;">★</div>
+        <div class="star-icon" style="top: 58%; right: 6%;">★</div>
+        <div class="star-icon" style="top: 70%; right: 11%;">★</div>
+        <div class="star-icon" style="top: 80%; right: 7%;">★</div>
+        <div class="star-icon" style="top: 91%; right: 9%;">★</div>
+        <div class="star-icon" style="top: 10%; right: 4%;">✦</div>
+        <div class="star-icon" style="top: 25%; right: 3%;">✦</div>
+        <div class="star-icon" style="top: 48%; right: 12%;">✦</div>
+        <div class="star-icon" style="top: 64%; right: 4%;">✦</div>
+        <div class="star-icon" style="top: 76%; right: 3%;">✦</div>
+        <div class="star-icon" style="top: 95%; right: 6%;">✦</div>
         
         <!-- FontAwesome图标 -->
-        <div class="fa-icon" style="top: 25%; right: 8%;"><i class="fas fa-coins"></i></div>
-        <div class="fa-icon" style="top: 48%; right: 5%;"><i class="fas fa-hand-holding-heart"></i></div>
-        <div class="fa-icon" style="top: 68%; right: 9%;"><i class="fas fa-certificate"></i></div>
-        <div class="fa-icon" style="top: 88%; right: 6%;"><i class="fas fa-sparkles"></i></div>
+        <div class="fa-icon" style="top: 8%; right: 8%;"><i class="fas fa-coins"></i></div>
+        <div class="fa-icon" style="top: 22%; right: 6%;"><i class="fas fa-hand-holding-heart"></i></div>
+        <div class="fa-icon" style="top: 38%; right: 7%;"><i class="fas fa-certificate"></i></div>
+        <div class="fa-icon" style="top: 53%; right: 8%;"><i class="fas fa-sparkles"></i></div>
+        <div class="fa-icon" style="top: 68%; right: 5%;"><i class="fas fa-donate"></i></div>
+        <div class="fa-icon" style="top: 83%; right: 10%;"><i class="fas fa-medal"></i></div>
+        <div class="fa-icon" style="top: 97%; right: 7%;"><i class="fas fa-award"></i></div>
       </div>
       
       <!-- 背景光晕 -->
