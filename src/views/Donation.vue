@@ -65,7 +65,7 @@
     
     <div class="donation-content">
       <div class="content-wrapper">
-        <div class="donation-form-section animate-item">
+        <div class="donation-form-section animate__animated animate__fadeInUp">
           <a-card :bordered="false" class="form-card">
             <div class="card-header-custom">
               <div class="header-main">
@@ -304,7 +304,7 @@
 
         <div class="donation-info-section">
           <!-- 统计卡片 -->
-          <div class="sidebar-widget stats-widget animate-item">
+          <div class="sidebar-widget stats-widget animate__animated animate__fadeInUp animate__delay-1s">
             <div class="widget-header">
               <i class="fas fa-chart-line"></i>
               <span>捐赠数据</span>
@@ -350,7 +350,7 @@
           </div>
 
           <!-- 捐赠榜/最近捐赠 - Tab切换 -->
-          <div class="sidebar-widget activity-widget animate-item">
+          <div class="sidebar-widget activity-widget animate__animated animate__fadeInUp animate__delay-2s">
             <div class="activity-tabs">
               <div 
                 class="tab-item" 
@@ -1040,39 +1040,9 @@ const handleCelebrationClose = () => {
 
   // 已删除所有不再使用的装饰动画关键帧
 
-  @keyframes smoothIn {
-    0% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-item {
-    animation: smoothIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    opacity: 0;
-    will-change: transform, opacity;
-
-    &:nth-child(2) {
-      animation-delay: 0.1s;
-    }
-
-    &:nth-child(3) {
-      animation-delay: 0.2s;
-    }
-
-    &:nth-child(4) {
-      animation-delay: 0.3s;
-    }
-    
-    @media (max-width: 768px) {
-      animation: none;
-      opacity: 1;
-    }
+  // 使用animate.css统一动画
+  .animate__animated {
+    --animate-duration: 0.8s;
   }
 
 
