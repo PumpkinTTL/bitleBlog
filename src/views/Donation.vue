@@ -711,6 +711,12 @@ const handleCelebrationClose = () => {
     pointer-events: none;
     z-index: 0;
     filter: blur(40px);
+    
+    @media (max-width: 768px) {
+      animation: none;
+      filter: blur(20px);
+      opacity: 0.5;
+    }
   }
 
   // 粒子效果容器
@@ -723,6 +729,10 @@ const handleCelebrationClose = () => {
     pointer-events: none;
     z-index: 0;
     overflow: hidden;
+    
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 
   .particle {
@@ -743,6 +753,10 @@ const handleCelebrationClose = () => {
     z-index: 0;
     filter: blur(60px);
     opacity: 0.6;
+    
+    @media (max-width: 768px) {
+      display: none;
+    }
 
     &.orb-1 {
       top: 10%;
@@ -777,6 +791,10 @@ const handleCelebrationClose = () => {
     position: fixed;
     pointer-events: none;
     z-index: 0;
+    
+    @media (max-width: 768px) {
+      display: none;
+    }
 
     &.shape-1 {
       top: 15%;
@@ -864,6 +882,10 @@ const handleCelebrationClose = () => {
     pointer-events: none;
     z-index: 0;
     opacity: 0.4;
+    
+    @media (max-width: 768px) {
+      display: none;
+    }
 
     &.wave-1 {
       top: 20%;
@@ -909,6 +931,10 @@ const handleCelebrationClose = () => {
     z-index: 1;
     animation: starTwinkle 3s ease-in-out infinite;
     box-shadow: 0 0 10px #fbbf24, 0 0 20px rgba(251, 191, 36, 0.5);
+    
+    @media (max-width: 768px) {
+      display: none;
+    }
 
     &::before {
       content: '';
@@ -932,6 +958,10 @@ const handleCelebrationClose = () => {
     opacity: 0.15;
     color: var(--theme-color);
     text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+    
+    @media (max-width: 768px) {
+      display: none;
+    }
 
     &.icon-1 {
       top: 15%;
@@ -996,6 +1026,10 @@ const handleCelebrationClose = () => {
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
+    
+    @media (max-width: 768px) {
+      display: none;
+    }
 
     &.ring-1 {
       top: 10%;
@@ -1033,6 +1067,10 @@ const handleCelebrationClose = () => {
     pointer-events: none;
     z-index: 0;
     opacity: 0.15;
+    
+    @media (max-width: 768px) {
+      display: none;
+    }
 
     &.ray-1 {
       top: 20%;
@@ -1084,6 +1122,10 @@ const handleCelebrationClose = () => {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     border: 1px solid rgba(139, 92, 246, 0.15);
     backdrop-filter: blur(5px);
+    
+    @media (max-width: 768px) {
+      display: none;
+    }
 
     &.card-1 {
       top: 25%;
@@ -1678,6 +1720,7 @@ const handleCelebrationClose = () => {
   .animate-item {
     animation: smoothIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     opacity: 0;
+    will-change: transform, opacity;
 
     &:nth-child(2) {
       animation-delay: 0.1s;
@@ -1689,6 +1732,11 @@ const handleCelebrationClose = () => {
 
     &:nth-child(4) {
       animation-delay: 0.3s;
+    }
+    
+    @media (max-width: 768px) {
+      animation: none;
+      opacity: 1;
     }
   }
 
@@ -1755,6 +1803,11 @@ const handleCelebrationClose = () => {
         height: 100%;
         transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        will-change: transform;
+        
+        @media (max-width: 768px) {
+          transition: all 0.2s ease;
+        }
 
       &:hover {
         border-color: var(--el-color-primary-light-3);
@@ -1767,6 +1820,11 @@ const handleCelebrationClose = () => {
 
         .channel-badge-left.crypto-badge {
           animation: badgeShake 0.6s ease-in-out;
+        }
+        
+        @media (max-width: 768px) {
+          transform: translateY(-2px);
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
         }
       }
 
@@ -1819,6 +1877,11 @@ const handleCelebrationClose = () => {
         color: #fff;
         box-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
         animation: badgePulse 2s ease-in-out infinite;
+        will-change: transform;
+        
+        @media (max-width: 768px) {
+          animation: none;
+        }
       }
 
       .channel-badge-left {
@@ -1837,6 +1900,11 @@ const handleCelebrationClose = () => {
         z-index: 2;
         box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
         animation: badgeFloat 3s ease-in-out infinite;
+        will-change: transform;
+        
+        @media (max-width: 768px) {
+          animation: none;
+        }
 
         &.crypto-badge {
           background: var(--el-color-primary);
@@ -1845,6 +1913,10 @@ const handleCelebrationClose = () => {
           i {
             font-size: 10px;
             animation: coinSpin 4s linear infinite;
+            
+            @media (max-width: 768px) {
+              animation: none;
+            }
           }
         }
       }
