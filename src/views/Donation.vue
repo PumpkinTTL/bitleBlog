@@ -77,21 +77,31 @@
         <div class="donation-form-section animate-item">
           <a-card :bordered="false" class="form-card">
             <div class="card-header-custom">
-              <div class="header-icon">
-                <i class="fas fa-hand-holding-heart"></i>
+              <div class="header-main">
+                <div class="header-icon">
+                  <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <div class="header-content">
+                  <h2 class="header-title">
+                    <span>支持我们</span>
+                  </h2>
+                  <p class="header-subtitle">您的支持是我们前进的动力</p>
+                </div>
               </div>
-              <div class="header-content">
-                <h2 class="header-title">
-                  <i class="fas fa-sparkles sparkle-icon"></i>
-                  支持我们
-                  <i class="fas fa-sparkles sparkle-icon"></i>
-                </h2>
-                <p class="header-subtitle">您的支持是我们前进的动力</p>
-              </div>
-              <div class="header-decoration">
-                <i class="fas fa-star star-deco"></i>
-                <i class="fas fa-star star-deco"></i>
-                <i class="fas fa-star star-deco"></i>
+              
+              <div class="header-tips">
+                <div class="tip-item">
+                  <i class="fas fa-check-circle"></i>
+                  <span>捐赠记录实时同步</span>
+                </div>
+                <div class="tip-item">
+                  <i class="fas fa-shield-alt"></i>
+                  <span>信息加密存储</span>
+                </div>
+                <div class="tip-item">
+                  <i class="fas fa-heart"></i>
+                  <span>用于项目发展</span>
+                </div>
               </div>
             </div>
 
@@ -103,10 +113,9 @@
                   :steps="[
                     { title: '选择方式', description: stepDescriptions[0] },
                     { title: '必填信息', description: stepDescriptions[1] },
-                    { title: '可选信息', description: stepDescriptions[2] }
+                    { title: '可选信息', description: stepDescriptions[2] },
+                    { title: '完成', description: stepDescriptions[3] || '提交成功' }
                   ]"
-                  theme-color="#8b5cf6"
-                  finish-color="#7c3aed"
                 />
 
                 <!-- 步骤1: 选择捐赠方式 -->
@@ -152,9 +161,10 @@
                       </div>
                     </el-col>
                     </el-row>
-                  <div class="step-actions">
-                    <el-button type="primary" :disabled="!selectedChannel" @click="nextStep" style="width: 100%">
-                      下一步
+                  <div class="step-actions step-1">
+                    <el-button type="primary" :disabled="!selectedChannel" @click="nextStep">
+                      <span>下一步</span>
+                      <i class="fas fa-chevron-right"></i>
                     </el-button>
                   </div>
                 </div>
@@ -210,9 +220,13 @@
                     </div>
 
                   <div class="step-actions">
-                    <el-button @click="prevStep">上一步</el-button>
-                    <el-button type="primary" @click="nextStep" style="flex: 1">
-                      下一步
+                    <el-button @click="prevStep">
+                      <i class="fas fa-chevron-left"></i>
+                      <span>上一步</span>
+                    </el-button>
+                    <el-button type="primary" @click="nextStep">
+                      <span>下一步</span>
+                      <i class="fas fa-chevron-right"></i>
                     </el-button>
                   </div>
                 </div>
@@ -220,31 +234,53 @@
                 <!-- 步骤3: 可选信息 -->
                 <div v-show="currentStep === 2" class="form-step-section">
                   <div class="optional-section">
-                    <div class="section-header" @click="showOptional = !showOptional">
-                      <div class="header-left">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>选填信息（我们尊重您的隐私）</span>
-                      </div>
-                      <i :class="showOptional ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
-                    </div>
-
                     <el-collapse-transition>
                       <div v-show="showOptional" class="optional-content">
-                        <el-form-item label="您的昵称" prop="donor_name">
-                          <el-input v-model="formData.donor_name" placeholder="留下您的网名或昵称" clearable>
+                        <el-form-item prop="donor_name">
+                          <template #label>
+                            <span class="label-with-badge">
+                              您的昵称
+                              <span class="optional-badge">可选</span>
+                            </span>
+                          </template>
+                          <el-input v-model="formData.donor_name" placeholder="如：小明、张三" clearable>
                             <template #prefix><i class="fas fa-user"></i></template>
                           </el-input>
+                          <div class="field-tip">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>填写后将在捐赠榜上显示您的昵称</span>
+                          </div>
                         </el-form-item>
 
-                        <el-form-item label="邮箱地址" prop="email">
+                        <el-form-item prop="email">
+                          <template #label>
+                            <span class="label-with-badge">
+                              邮箱地址
+                              <span class="optional-badge">可选</span>
+                            </span>
+                          </template>
                           <el-input v-model="formData.email" placeholder="用于接收捐赠记录" clearable>
                             <template #prefix><i class="fas fa-envelope"></i></template>
                           </el-input>
+                          <div class="field-tip">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>我们将发送捐赠凭证到您的邮箱</span>
+                          </div>
                         </el-form-item>
 
-                        <el-form-item label="留言" prop="remark">
-                          <el-input v-model="formData.remark" type="textarea" placeholder="留下您的祝福或建议" :rows="4"
+                        <el-form-item prop="remark">
+                          <template #label>
+                            <span class="label-with-badge">
+                              留言
+                              <span class="optional-badge">可选</span>
+                            </span>
+                          </template>
+                          <el-input v-model="formData.remark" type="textarea" placeholder="分享您的想法或祝福" :rows="3"
                             :maxlength="200" show-word-limit />
+                          <div class="field-tip">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>您的留言可能会在捐赠列表中展示</span>
+                          </div>
                         </el-form-item>
                       </div>
                     </el-collapse-transition>
@@ -260,36 +296,17 @@
                   </div>
 
                   <div class="step-actions">
-                    <el-button @click="prevStep">上一步</el-button>
-                    <el-button type="primary" :loading="submitting" @click="handleSubmit" style="flex: 1">
-                      <i class="fas fa-heart"></i>
+                    <el-button @click="prevStep">
+                      <i class="fas fa-chevron-left"></i>
+                      <span>上一步</span>
+                    </el-button>
+                    <el-button type="primary" :loading="submitting" @click="handleSubmit">
                       <span>{{ submitting ? '提交中...' : '提交捐赠' }}</span>
+                      <i v-if="!submitting" class="fas fa-paper-plane"></i>
                     </el-button>
                   </div>
                 </div>
               </el-form>
-
-              <!-- 支持说明 -->
-              <div class="support-tips">
-                <div class="tips-header">
-                  <i class="fas fa-lightbulb"></i>
-                  <span>温馨提示</span>
-                </div>
-                <div class="tips-content">
-                  <div class="tip-item">
-                    <i class="fas fa-check-circle"></i>
-                    <span>捐赠记录实时同步，可随时查询</span>
-                  </div>
-                  <div class="tip-item">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>个人信息加密存储，严格保密</span>
-                  </div>
-                  <div class="tip-item">
-                    <i class="fas fa-heart"></i>
-                    <span>您的支持将用于项目持续发展</span>
-                  </div>
-                </div>
-              </div>
             </div>
           </a-card>
         </div>
@@ -426,7 +443,7 @@ import collectionCarkey from '@/assets/images/collection_carkey.png'
 const formRef = ref<FormInstance>()
 const selectedChannel = ref<DonationChannel>('cardkey')
 const submitting = ref(false)
-const showOptional = ref(false)
+const showOptional = ref(true)
 const currentStep = ref(0)
 
 const channelLabels: Record<string, string> = {
@@ -513,9 +530,38 @@ const selectChannel = (channel: DonationChannel) => {
   formData.channel = channel
 }
 
-const nextStep = () => {
-  if (currentStep.value < 2) {
+const nextStep = async () => {
+  // 步骤0：只需要选择支付方式
+  if (currentStep.value === 0) {
+    if (!selectedChannel.value) {
+      message.warning('请选择支付方式')
+      return
+    }
     currentStep.value++
+    return
+  }
+  
+  // 步骤1：验证必填字段
+  if (currentStep.value === 1) {
+    try {
+      // 根据支付方式验证对应的必填字段
+      const fieldsToValidate: string[] = []
+      
+      if (selectedChannel.value === 'cardkey') {
+        fieldsToValidate.push('card_key_code')
+      } else if (selectedChannel.value === 'crypto') {
+        fieldsToValidate.push('amount', 'transaction_hash')
+      } else if (selectedChannel.value === 'wechat' || selectedChannel.value === 'alipay') {
+        fieldsToValidate.push('amount', 'order_no')
+      }
+      
+      // 只验证必填字段
+      await formRef.value?.validateField(fieldsToValidate)
+      currentStep.value++
+    } catch (error) {
+      message.warning('请完善必填信息')
+    }
+    return
   }
 }
 
@@ -613,7 +659,7 @@ const handleCelebrationClose = () => {
 
   // 统一圆角
   --radius-sm: 6px;
-  --radius-md: 8px;
+  --radius-md: 10px;
   --radius-lg: 12px;
 
   // 统一字号 - 缩小
@@ -634,9 +680,9 @@ const handleCelebrationClose = () => {
 
   min-height: 100vh;
   padding: var(--spacing-md) 0;
-  background: linear-gradient(135deg, #faf8ff 0%, #f9fafb 100%);
+  background: var(--el-bg-color-page);
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
 
   &::before {
     content: '';
@@ -1087,139 +1133,87 @@ const handleCelebrationClose = () => {
   }
 
   .card-header-custom {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px;
+    padding: 14px 16px;
     margin-bottom: var(--spacing-md);
-    background: linear-gradient(135deg, 
-                  rgba(250, 245, 255, 0.95) 0%, 
-                  rgba(243, 232, 255, 0.92) 100%);
-    backdrop-filter: blur(15px) saturate(150%);
-    -webkit-backdrop-filter: blur(15px) saturate(150%);
-    border: 1px solid rgba(233, 213, 255, 0.6);
-    border-radius: var(--radius-md);
+    background: var(--el-bg-color);
+    border: 1px solid var(--el-border-color-lighter);
+    border-radius: var(--radius-sm);
     position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.7);
 
-    &::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -20%;
-      width: 200px;
-      height: 200px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -30%;
-      left: -10%;
-      width: 150px;
-      height: 150px;
-      background: radial-gradient(circle, rgba(217, 70, 239, 0.06) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .header-icon {
-      width: 48px;
-      height: 48px;
+    .header-main {
       display: flex;
       align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #8b5cf6, #a78bfa);
-      border-radius: var(--radius-md);
-      flex-shrink: 0;
-      position: relative;
-      z-index: 1;
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3), 0 0 0 3px rgba(139, 92, 246, 0.15);
+      gap: 10px;
+      margin-bottom: 10px;
 
-      i {
-        color: #fff;
-        font-size: 22px;
-      }
-    }
-
-    .header-content {
-      flex: 1;
-      min-width: 0;
-      position: relative;
-      z-index: 1;
-
-      .header-title {
-        font-size: 16px;
-        font-weight: 700;
-        color: #6b21a8;
-        margin: 0 0 4px 0;
-        line-height: 1.3;
-        letter-spacing: 0.3px;
-        background: linear-gradient(135deg, #7c3aed, #a855f7);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+      .header-icon {
+        width: 36px;
+        height: 36px;
         display: flex;
         align-items: center;
-        gap: 6px;
+        justify-content: center;
+        background: var(--el-color-primary);
+        border-radius: 6px;
+        flex-shrink: 0;
 
-        .sparkle-icon {
-          font-size: 12px;
-          color: #a855f7;
-          animation: sparkle 2s ease-in-out infinite;
-          
-          &:first-child {
-            animation-delay: 0s;
-          }
-          
-          &:last-child {
-            animation-delay: 1s;
-          }
+        i {
+          color: #fff;
+          font-size: 16px;
         }
       }
 
-      .header-subtitle {
-        font-size: 12px;
-        color: #9333ea;
-        margin: 0;
-        line-height: 1.4;
-        font-weight: 400;
-        opacity: 0.8;
+      .header-content {
+        flex: 1;
+        min-width: 0;
+
+        .header-title {
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--el-text-color-primary);
+          margin: 0 0 2px 0;
+          line-height: 1.3;
+        }
+
+        .header-subtitle {
+          font-size: 11px;
+          color: var(--el-text-color-secondary);
+          margin: 0;
+          line-height: 1.4;
+        }
       }
     }
 
-    .header-decoration {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
+    .header-tips {
       display: flex;
       gap: 8px;
-      z-index: 1;
 
-      .star-deco {
-        font-size: 12px;
-        color: #fbbf24;
-        animation: twinkle 2s ease-in-out infinite;
-        filter: drop-shadow(0 0 3px rgba(251, 191, 36, 0.5));
+      .tip-item {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        padding: 5px 8px;
+        background: var(--el-fill-color-light);
+        border-radius: 4px;
+        transition: all 0.2s ease;
 
-        &:nth-child(1) {
-          animation-delay: 0s;
+        &:hover {
+          background: var(--el-color-primary-light-9);
         }
 
-        &:nth-child(2) {
-          animation-delay: 0.4s;
+        i {
+          color: var(--el-color-primary);
+          font-size: 11px;
+          flex-shrink: 0;
+          opacity: 0.8;
+        }
+
+        span {
           font-size: 10px;
-        }
-
-        &:nth-child(3) {
-          animation-delay: 0.8s;
-          font-size: 14px;
+          color: var(--el-text-color-regular);
+          line-height: 1.3;
+          white-space: nowrap;
         }
       }
     }
@@ -1697,33 +1691,11 @@ const handleCelebrationClose = () => {
   .form-card,
   .info-card {
     border-radius: var(--radius-lg);
-    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.12), 
-                0 4px 16px rgba(0, 0, 0, 0.08),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
     overflow: hidden;
-    background: linear-gradient(135deg, 
-                  rgba(255, 255, 255, 0.9) 0%, 
-                  rgba(255, 255, 255, 0.85) 100%);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    position: relative;
-
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: var(--radius-lg);
-      padding: 1px;
-      background: linear-gradient(135deg, 
-                    rgba(139, 92, 246, 0.2), 
-                    rgba(217, 70, 239, 0.1),
-                    rgba(167, 139, 250, 0.15));
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-    }
+    background: var(--el-bg-color);
+    border: 1px solid var(--el-border-color-lighter);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03), 
+                0 0 1px rgba(0, 0, 0, 0.02);
 
     :deep(.ant-card-head) {
       background: var(--el-bg-color);
@@ -1765,24 +1737,24 @@ const handleCelebrationClose = () => {
       }
     }
 
-    .qrcode-item {
-      cursor: pointer;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: var(--spacing-sm);
-      background: rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(10px);
-      border: 1.5px solid rgba(255, 255, 255, 0.8);
-      border-radius: var(--radius-md);
-      height: 100%;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      .qrcode-item {
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 16px;
+        background: var(--el-fill-color-blank);
+        border: 1.5px solid var(--el-border-color);
+        border-radius: var(--radius-md);
+        height: 100%;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 
       &:hover {
-        border-color: var(--theme-color);
-        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
-        transform: translateY(-2px);
+        border-color: var(--el-color-primary-light-3);
+        box-shadow: 0 4px 16px rgba(139, 92, 246, 0.15);
+        transform: translateY(-3px) scale(1.02);
 
         .channel-badge.recommend {
           animation: badgeBounce 0.6s ease-in-out;
@@ -1794,35 +1766,36 @@ const handleCelebrationClose = () => {
       }
 
       &.active {
-        border-color: var(--theme-color);
-        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
-        background: linear-gradient(135deg, rgba(139, 92, 246, 0.02), rgba(167, 139, 250, 0.02));
+        border-color: var(--el-color-primary);
+        border-width: 2px;
+        box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25), 0 0 0 3px var(--el-color-primary-light-9);
+        transform: translateY(-2px);
       }
 
       img {
         width: 100%;
         aspect-ratio: 1;
         object-fit: contain;
-        border-radius: var(--radius-sm);
-        margin-bottom: var(--spacing-xs);
-        background: #f9fafb;
-        padding: 6px;
+        border-radius: 4px;
+        margin-bottom: 6px;
+        background: var(--el-fill-color-light);
+        padding: 4px;
       }
 
       .qrcode-tip {
         font-size: 10px;
         font-weight: 500;
-        color: #666;
+        color: var(--el-text-color-regular);
         text-align: center;
         line-height: 1.3;
 
         .card-link {
-          color: var(--theme-color);
+          color: var(--el-color-primary);
           text-decoration: none;
           transition: all 0.2s ease;
 
           &:hover {
-            color: var(--theme-color-light-3);
+            color: var(--el-color-primary-light-3);
             text-decoration: underline;
           }
         }
@@ -1832,17 +1805,15 @@ const handleCelebrationClose = () => {
         position: absolute;
         top: 6px;
         right: 6px;
-        padding: 3px 8px;
-        border-radius: 12px;
+        padding: 2px 6px;
+        border-radius: 10px;
         font-size: 9px;
-        font-weight: 700;
+        font-weight: 600;
         line-height: 1;
         background: linear-gradient(135deg, #ff6b6b, #ff8787);
         color: #fff;
-        box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+        box-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
         animation: badgePulse 2s ease-in-out infinite;
-        letter-spacing: 0.5px;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
       }
 
       .channel-badge-left {
@@ -1852,20 +1823,19 @@ const handleCelebrationClose = () => {
         display: flex;
         align-items: center;
         gap: 4px;
-        padding: 3px 8px;
-        border-radius: 12px;
+        padding: 2px 6px;
+        border-radius: 10px;
         font-size: 9px;
-        font-weight: 700;
+        font-weight: 600;
         line-height: 1;
         white-space: nowrap;
         z-index: 2;
-        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+        box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
         animation: badgeFloat 3s ease-in-out infinite;
 
         &.crypto-badge {
-          background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+          background: var(--el-color-primary);
           color: #fff;
-          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 
           i {
             font-size: 10px;
@@ -1920,15 +1890,15 @@ const handleCelebrationClose = () => {
       }
 
       &.network {
-        background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(139, 92, 246, 0.12) 100%);
-        border-color: rgba(139, 92, 246, 0.25);
+        background: var(--el-color-primary-light-9);
+        border-color: var(--el-color-primary-light-5);
 
         i {
-          color: #8b5cf6;
+          color: var(--el-color-primary);
         }
 
         .badge-text .badge-value {
-          color: #8b5cf6;
+          color: var(--el-color-primary);
         }
       }
     }
@@ -1942,15 +1912,15 @@ const handleCelebrationClose = () => {
       align-items: center;
       justify-content: space-between;
       padding: 8px 10px;
-      background: #fafafa;
-      border: 1px solid #f0f0f0;
+      background: var(--el-fill-color-light);
+      border: 1px solid var(--el-border-color-lighter);
       border-radius: var(--radius-sm);
       cursor: pointer;
       transition: all 0.2s ease;
       user-select: none;
 
       &:hover {
-        background: #f5f5f5;
+        background: var(--el-fill-color);
       }
 
       .header-left {
@@ -1977,22 +1947,60 @@ const handleCelebrationClose = () => {
       padding-top: 10px;
     }
   }
+  
+  .label-with-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    
+    .optional-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 6px;
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--el-color-info);
+      background: var(--el-color-info-light-9);
+      border: 1px solid var(--el-color-info-light-7);
+      border-radius: 3px;
+      line-height: 1;
+    }
+  }
+  
+  .field-tip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    padding: 6px 8px;
+    background: var(--el-color-primary-light-9);
+    border-radius: 4px;
+    font-size: 10px;
+    color: var(--el-text-color-secondary);
+    line-height: 1.4;
+    
+    i {
+      color: var(--el-color-primary-light-5);
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+  }
 
   .privacy-notice {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-md);
-    background: #eff6ff;
-    border: 1.5px solid #bfdbfe;
-    border-left: 3px solid #3b82f6;
+    background: var(--el-color-info-light-9);
+    border: 1.5px solid var(--el-color-info-light-5);
+    border-left: 3px solid var(--el-color-info);
     border-radius: var(--radius-sm);
     margin-bottom: var(--spacing-md);
     font-size: var(--font-sm);
     color: var(--el-text-color-regular);
 
     i {
-      color: #3b82f6;
+      color: var(--el-color-info);
       font-size: var(--font-lg);
       flex-shrink: 0;
     }
@@ -2029,20 +2037,18 @@ const handleCelebrationClose = () => {
     }
 
     :deep(.el-input__wrapper) {
-      background: #fff;
-      border: 1px solid #e5e7eb;
+      background: var(--el-fill-color-blank);
+      border: 1px solid var(--el-border-color);
       border-radius: var(--radius-sm);
-      box-shadow: none;
       transition: all 0.2s ease;
 
       &:hover {
-        border-color: #d1d5db;
+        border-color: var(--el-border-color-hover);
       }
 
       &.is-focus {
-        border-color: var(--theme-color);
-        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
-        background: #fff;
+        border-color: var(--el-color-primary);
+        box-shadow: 0 0 0 2px var(--el-color-primary-light-9);
       }
     }
 
@@ -2053,26 +2059,24 @@ const handleCelebrationClose = () => {
     }
 
     :deep(.el-textarea__wrapper) {
-      background: #fff;
-      border: 1px solid #e5e7eb;
+      background: var(--el-fill-color-blank);
+      border: 1px solid var(--el-border-color);
       border-radius: var(--radius-sm);
-      box-shadow: none;
       transition: all 0.2s ease;
       padding: var(--spacing-sm);
 
       &:hover {
-        border-color: #d1d5db;
+        border-color: var(--el-border-color-hover);
       }
 
       &.is-focus {
-        border-color: var(--theme-color);
-        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
-        background: #fff;
+        border-color: var(--el-color-primary);
+        box-shadow: 0 0 0 2px var(--el-color-primary-light-9);
       }
     }
 
     :deep(.el-input__prefix) {
-      color: #9ca3af;
+      color: var(--el-text-color-placeholder);
     }
 
     :deep(.el-input-number) {
@@ -2088,8 +2092,8 @@ const handleCelebrationClose = () => {
       gap: var(--spacing-md);
       margin-bottom: var(--spacing-md);
       padding: 10px;
-      background: #fafafa;
-      border: 1px solid #f0f0f0;
+      background: var(--el-fill-color-light);
+      border: 1px solid var(--el-border-color-lighter);
       border-radius: var(--radius-sm);
 
       :deep(.el-checkbox) {
@@ -2098,11 +2102,11 @@ const handleCelebrationClose = () => {
           align-items: center;
           gap: 4px;
           font-size: 10px;
-          color: #64748b;
+          color: var(--el-text-color-regular);
           font-weight: 500;
 
           i {
-            color: var(--theme-color);
+            color: var(--el-color-primary);
             font-size: 11px;
           }
         }
@@ -2122,8 +2126,8 @@ const handleCelebrationClose = () => {
 
         &.is-checked {
           .el-checkbox__inner {
-            background: var(--theme-color);
-            border-color: var(--theme-color);
+            background: var(--el-color-primary);
+            border-color: var(--el-color-primary);
           }
         }
       }
@@ -2131,56 +2135,92 @@ const handleCelebrationClose = () => {
 
     .step-actions {
       display: flex;
-      gap: var(--spacing-sm);
+      justify-content: flex-end;
+      gap: 10px;
       margin-top: 12px;
 
       :deep(.el-button) {
-        height: 36px;
-        font-size: var(--font-sm);
+        height: 32px;
+        font-size: 12px;
         font-weight: 500;
-        border-radius: var(--radius-md);
+        border-radius: 6px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        padding: 0 18px;
+        padding: 0 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         position: relative;
-        overflow: hidden;
+
+        span {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+        }
 
         i {
-          margin-right: 4px;
-          font-size: 11px;
+          font-size: 12px;
+          line-height: 1;
+          display: inline-flex;
+          align-items: center;
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         &.el-button--primary {
-          background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
-          border: 1px solid #e9d5ff;
-          color: var(--theme-color);
-          box-shadow: 0 1px 3px rgba(139, 92, 246, 0.08);
-          font-weight: 600;
+          background: var(--el-fill-color-light);
+          border: 1px solid var(--el-border-color-lighter);
+          color: var(--el-color-primary);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 
-          &:hover,
-          &:focus {
-            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
-            border-color: #d8b4fe;
-            color: #7c3aed;
-            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
-            transform: translateY(-1px);
+          &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 6px;
+            background: linear-gradient(135deg, var(--el-color-primary), var(--el-color-primary-light-3));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+          }
+
+          &:hover:not(:disabled) {
+            border-color: transparent;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+
+            &::after {
+              opacity: 1;
+            }
+
+            i {
+              transform: translateX(3px);
+            }
           }
 
           &:active {
             transform: translateY(0);
-            background: #e9d5ff;
-            box-shadow: 0 1px 4px rgba(139, 92, 246, 0.12);
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
           }
         }
 
         &.el-button--default {
-          background: #fff;
-          border: 1.5px solid #e5e7eb;
-          color: #6b7280;
+          background: var(--el-fill-color-blank);
+          border: 1px solid var(--el-border-color-lighter);
+          color: var(--el-text-color-regular);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 
           &:hover {
-            background: #fafafa;
-            border-color: #d1d5db;
-            color: #374151;
+            background: var(--el-fill-color-light);
+            border-color: var(--el-border-color);
+            color: var(--el-color-primary);
+
+            i {
+              transform: translateX(-3px);
+            }
           }
         }
       }
@@ -2194,34 +2234,12 @@ const handleCelebrationClose = () => {
   }
 
   .sidebar-widget {
-    background: linear-gradient(135deg, 
-                  rgba(255, 255, 255, 0.88) 0%, 
-                  rgba(255, 255, 255, 0.82) 100%);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: var(--el-bg-color);
     border-radius: var(--radius-md);
     padding: 14px;
-    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.12), 
-                0 4px 16px rgba(0, 0, 0, 0.08),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    position: relative;
-
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: var(--radius-md);
-      padding: 1px;
-      background: linear-gradient(135deg, 
-                    rgba(139, 92, 246, 0.2), 
-                    rgba(217, 70, 239, 0.1),
-                    rgba(167, 139, 250, 0.15));
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-    }
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03), 
+                0 0 1px rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--el-border-color-lighter);
 
     .widget-header {
       display: flex;
@@ -2229,22 +2247,10 @@ const handleCelebrationClose = () => {
       gap: 6px;
       margin-bottom: 12px;
       padding-bottom: 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-      position: relative;
-
-      &::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: -1px;
-        width: 24px;
-        height: 2px;
-        background: var(--theme-color);
-        border-radius: 2px;
-      }
+      border-bottom: 1px solid var(--el-border-color-lighter);
 
       i {
-        color: var(--theme-color);
+        color: var(--el-color-primary);
         font-size: var(--font-md);
       }
 
@@ -2267,15 +2273,14 @@ const handleCelebrationClose = () => {
         align-items: center;
         gap: 8px;
         padding: 10px;
-        background: rgba(255, 255, 255, 0.5);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.6);
+        background: var(--el-fill-color-light);
+        border: 1px solid var(--el-border-color-lighter);
         border-radius: var(--radius-sm);
         transition: all 0.2s ease;
 
         &:hover {
-          background: rgba(255, 255, 255, 0.7);
-          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+          background: var(--el-fill-color);
+          box-shadow: var(--el-box-shadow-light);
         }
 
         .stat-icon {
@@ -2314,54 +2319,6 @@ const handleCelebrationClose = () => {
     }
   }
 
-  .support-tips {
-    margin-top: var(--spacing-md);
-    padding: 12px;
-    background: rgba(139, 92, 246, 0.04);
-    border: 1px solid rgba(139, 92, 246, 0.1);
-    border-left: 3px solid var(--theme-color);
-    border-radius: var(--radius-sm);
-
-    .tips-header {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 8px;
-      color: var(--theme-color);
-      font-size: var(--font-xs);
-      font-weight: 600;
-
-      i {
-        font-size: var(--font-sm);
-      }
-    }
-
-    .tips-content {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-
-      .tip-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 6px;
-        font-size: 10px;
-        color: #64748b;
-        line-height: 1.6;
-
-        i {
-          color: var(--theme-color);
-          font-size: 10px;
-          margin-top: 2px;
-          flex-shrink: 0;
-        }
-
-        span {
-          flex: 1;
-        }
-      }
-    }
-  }
 
   .activity-widget {
     .activity-tabs {
@@ -2369,9 +2326,8 @@ const handleCelebrationClose = () => {
       gap: 4px;
       margin-bottom: 12px;
       padding: 3px;
-      background: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      background: var(--el-fill-color-light);
+      border: 1px solid var(--el-border-color-lighter);
       border-radius: var(--radius-sm);
 
       .tab-item {
@@ -2384,7 +2340,7 @@ const handleCelebrationClose = () => {
         border-radius: 4px;
         font-size: var(--font-xs);
         font-weight: 500;
-        color: #666;
+        color: var(--el-text-color-regular);
         cursor: pointer;
         transition: all 0.2s ease;
         user-select: none;
@@ -2394,11 +2350,11 @@ const handleCelebrationClose = () => {
         }
 
         &:hover:not(.active) {
-          color: var(--theme-color);
+          color: var(--el-color-primary);
         }
 
         &.active {
-          background: var(--theme-color);
+          background: var(--el-color-primary);
           color: #fff;
           font-weight: 600;
         }
@@ -2420,9 +2376,8 @@ const handleCelebrationClose = () => {
         padding: 8px;
         margin-bottom: 6px;
         border-radius: var(--radius-sm);
-        background: rgba(255, 255, 255, 0.5);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.6);
+        background: var(--el-fill-color-light);
+        border: 1px solid var(--el-border-color-lighter);
         transition: all 0.2s ease;
 
         &:last-child {
@@ -2430,8 +2385,8 @@ const handleCelebrationClose = () => {
         }
 
         &:hover {
-          background: rgba(255, 255, 255, 0.75);
-          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+          background: var(--el-fill-color);
+          box-shadow: var(--el-box-shadow-light);
         }
 
         .ranking-badge {
@@ -2461,8 +2416,8 @@ const handleCelebrationClose = () => {
           }
 
           &:not(.rank-1):not(.rank-2):not(.rank-3) {
-            background: #e5e7eb;
-            color: #6b7280;
+            background: var(--el-fill-color);
+            color: var(--el-text-color-secondary);
           }
         }
 
@@ -2470,7 +2425,7 @@ const handleCelebrationClose = () => {
           width: 24px;
           height: 24px;
           border-radius: 50%;
-          background: var(--theme-color);
+          background: var(--el-color-primary);
           color: #fff;
           display: flex;
           align-items: center;
