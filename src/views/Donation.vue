@@ -1122,11 +1122,14 @@ const handleCelebrationClose = () => {
 
     .content-wrapper {
       display: grid;
-      grid-template-columns: 1fr 320px;
+      grid-template-columns: 1fr;
       gap: 16px;
 
-      @media (max-width: 1024px) {
-        grid-template-columns: 1fr;
+      @media (min-width: 1024px) {
+        grid-template-columns: 1fr 320px;
+      }
+      
+      @media (max-width: 1023px) {
         gap: 20px;
       }
     }
@@ -1185,15 +1188,17 @@ const handleCelebrationClose = () => {
 
     .header-tips {
       display: flex;
-      gap: 8px;
+      gap: 6px;
+      flex-wrap: wrap;
 
       .tip-item {
-        flex: 1;
+        flex: 1 1 auto;
+        min-width: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 5px;
-        padding: 5px 8px;
+        gap: 4px;
+        padding: 5px 6px;
         background: var(--el-fill-color-light);
         border-radius: 4px;
         transition: all 0.2s ease;
