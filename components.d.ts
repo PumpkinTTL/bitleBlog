@@ -160,6 +160,7 @@ declare module 'vue' {
     SecurityGuide: typeof import('./src/components/platform/SecurityGuide.vue')['default']
     SiteStats: typeof import('./src/components/data/SiteStats.vue')['default']
     StatsShowcase: typeof import('./src/components/StatsShowcase.vue')['default']
+    StepForm: typeof import('./src/components/StepForm.vue')['default']
     Tags: typeof import('./src/components/index/Tags.vue')['default']
     TechStack: typeof import('./src/components/TechStack.vue')['default']
     TechToolsRecommend: typeof import('./src/components/index/TechToolsRecommend.vue')['default']

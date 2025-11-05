@@ -1,93 +1,157 @@
 <template>
   <div class="donation-page">
+    <!-- 背景粒子效果 -->
+    <div class="particles-container">
+      <div v-for="i in 20" :key="i" class="particle" :style="{
+        left: Math.random() * 100 + '%',
+        top: Math.random() * 100 + '%',
+        animationDelay: Math.random() * 20 + 's',
+        animationDuration: (15 + Math.random() * 10) + 's'
+      }"></div>
+    </div>
+    
+    <!-- 渐变光晕 -->
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+    
+    <!-- 几何装饰 -->
+    <div class="bg-decoration shape-1"></div>
+    <div class="bg-decoration shape-2"></div>
+    <div class="bg-decoration shape-3"></div>
+    <div class="bg-decoration shape-4"></div>
+    <div class="bg-decoration line-1"></div>
+    <div class="bg-decoration line-2"></div>
+    
+    <!-- 网格背景 -->
+    <div class="grid-background"></div>
+    
+    <!-- 流动波纹 -->
+    <div class="wave-decoration wave-1"></div>
+    <div class="wave-decoration wave-2"></div>
+    
+    <!-- 左侧星星装饰 -->
+    <div v-for="i in 8" :key="'star-left-' + i" class="star-sparkle" :style="{
+      left: Math.random() * 15 + '%',
+      top: Math.random() * 100 + '%',
+      animationDelay: Math.random() * 5 + 's',
+      animationDuration: (2 + Math.random() * 3) + 's'
+    }"></div>
+    
+    <!-- 右侧星星装饰 -->
+    <div v-for="i in 8" :key="'star-right-' + i" class="star-sparkle" :style="{
+      left: (85 + Math.random() * 15) + '%',
+      top: Math.random() * 100 + '%',
+      animationDelay: Math.random() * 5 + 's',
+      animationDuration: (2 + Math.random() * 3) + 's'
+    }"></div>
+    
+    <!-- 图标装饰 -->
+    <div class="icon-decoration icon-1"><i class="fas fa-heart"></i></div>
+    <div class="icon-decoration icon-2"><i class="fas fa-star"></i></div>
+    <div class="icon-decoration icon-3"><i class="fas fa-gift"></i></div>
+    <div class="icon-decoration icon-4"><i class="fas fa-gem"></i></div>
+    <div class="icon-decoration icon-5"><i class="fas fa-star"></i></div>
+    <div class="icon-decoration icon-6"><i class="fas fa-heart"></i></div>
+    <div class="icon-decoration icon-7"><i class="fas fa-certificate"></i></div>
+    <div class="icon-decoration icon-8"><i class="fas fa-sparkles"></i></div>
+    
+    <!-- 光环装饰 -->
+    <div class="ring-decoration ring-1"></div>
+    <div class="ring-decoration ring-2"></div>
+    <div class="ring-decoration ring-3"></div>
+    
+    <!-- 散射光线 -->
+    <div class="light-ray ray-1"></div>
+    <div class="light-ray ray-2"></div>
+    <div class="light-ray ray-3"></div>
+    <div class="light-ray ray-4"></div>
+    
+    <!-- 浮动卡片装饰 -->
+    <div class="floating-card card-1"></div>
+    <div class="floating-card card-2"></div>
+    <div class="floating-card card-3"></div>
+    
     <div class="donation-content">
       <div class="content-wrapper">
         <div class="donation-form-section animate-item">
           <a-card :bordered="false" class="form-card">
             <div class="card-header-custom">
               <div class="header-icon">
-                <i class="fas fa-gift"></i>
+                <i class="fas fa-hand-holding-heart"></i>
               </div>
               <div class="header-content">
-                <h2 class="header-title">支持我们的创作</h2>
-                <p class="header-subtitle">您的每一份支持，都是我们持续创作的动力</p>
+                <h2 class="header-title">
+                  <i class="fas fa-sparkles sparkle-icon"></i>
+                  支持我们
+                  <i class="fas fa-sparkles sparkle-icon"></i>
+                </h2>
+                <p class="header-subtitle">您的支持是我们前进的动力</p>
+              </div>
+              <div class="header-decoration">
+                <i class="fas fa-star star-deco"></i>
+                <i class="fas fa-star star-deco"></i>
+                <i class="fas fa-star star-deco"></i>
               </div>
             </div>
 
             <div class="donation-form">
               <el-form ref="formRef" :model="formData" :rules="formRules" label-position="top">
                 <!-- 步骤条 -->
-                <div class="steps-section">
-                  <el-steps :active="currentStep" finish-status="success" align-center>
-                    <el-step title="选择方式" :description="stepDescriptions[0]" />
-                    <el-step title="必填信息" :description="stepDescriptions[1]" />
-                    <el-step title="可选信息" :description="stepDescriptions[2]" />
-                  </el-steps>
-                </div>
+                <StepForm 
+                  :active="currentStep" 
+                  :steps="[
+                    { title: '选择方式', description: stepDescriptions[0] },
+                    { title: '必填信息', description: stepDescriptions[1] },
+                    { title: '可选信息', description: stepDescriptions[2] }
+                  ]"
+                  theme-color="#8b5cf6"
+                  finish-color="#7c3aed"
+                />
 
                 <!-- 步骤1: 选择捐赠方式 -->
                 <div v-show="currentStep === 0" class="qrcode-section">
-                  <div class="qrcode-title">
-                    <i class="fas fa-hand-holding-heart"></i>
-                    <span>选择捐赠方式</span>
-                  </div>
-                  <el-row :gutter="16" class="qrcode-grid">
+                    <el-row :gutter="16" class="qrcode-grid">
                     <el-col :xs="12" :sm="6" :md="6">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'cardkey' }"
                         @click="selectChannel('cardkey')">
-                        <div class="qrcode-container">
-                          <div class="qrcode-image-wrapper">
-                            <img :src="collectionCarkey" alt="购买卡密" />
-                          </div>
-                          <div class="qrcode-tip">
-                            <a href="https://www.qianxun1688.com/links/1C9EDE0B" target="_blank" class="card-link"
-                              @click.stop>
-                              购买卡密
-                            </a>
-                          </div>
-                          <span class="channel-badge recommend">推荐</span>
+                        <img :src="collectionCarkey" alt="购买卡密" />
+                        <div class="qrcode-tip">
+                          <a href="https://www.qianxun1688.com/links/1C9EDE0B" target="_blank" class="card-link"
+                            @click.stop>
+                            购买卡密
+                          </a>
                         </div>
+                        <span class="channel-badge recommend">推荐</span>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="6" :md="6">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'crypto' }"
                         @click="selectChannel('crypto')">
-                        <div class="qrcode-container">
-                          <span class="channel-badge-left crypto-badge">
-                            <i class="fab fa-bitcoin"></i>
-                            <span>加密货币</span>
-                          </span>
-                          <div class="qrcode-image-wrapper">
-                            <img :src="collectionTp" alt="USDT收款码" />
-                          </div>
-                          <div class="qrcode-tip">USDT TRC-20</div>
-                          <span class="channel-badge recommend">推荐</span>
-                        </div>
+                        <span class="channel-badge-left crypto-badge">
+                          <i class="fab fa-bitcoin"></i>
+                          <span>加密货币</span>
+                        </span>
+                        <img :src="collectionTp" alt="USDT收款码" />
+                        <div class="qrcode-tip">USDT TRC-20</div>
+                        <span class="channel-badge recommend">推荐</span>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="6" :md="6">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'alipay' }"
                         @click="selectChannel('alipay')">
-                        <div class="qrcode-container">
-                          <div class="qrcode-image-wrapper">
-                            <img :src="collectionAlipay" alt="支付宝收款码" />
-                          </div>
-                          <div class="qrcode-tip">支付宝支付</div>
-                        </div>
+                        <img :src="collectionAlipay" alt="支付宝收款码" />
+                        <div class="qrcode-tip">支付宝支付</div>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="6" :md="6">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'wechat' }"
                         @click="selectChannel('wechat')">
-                        <div class="qrcode-container">
-                          <div class="qrcode-image-wrapper">
-                            <img :src="collectionWechat" alt="微信收款码" />
-                          </div>
-                          <div class="qrcode-tip">微信扫码支付</div>
-                        </div>
+                        <img :src="collectionWechat" alt="微信收款码" />
+                        <div class="qrcode-tip">微信扫码支付</div>
                       </div>
                     </el-col>
-                  </el-row>
+                    </el-row>
                   <div class="step-actions">
                     <el-button type="primary" :disabled="!selectedChannel" @click="nextStep" style="width: 100%">
                       下一步
@@ -145,13 +209,13 @@
                       </el-form-item>
                     </div>
 
-                    <div class="step-actions">
-                      <el-button @click="prevStep">上一步</el-button>
-                      <el-button type="primary" @click="nextStep" style="flex: 1">
-                        下一步
-                      </el-button>
-                    </div>
+                  <div class="step-actions">
+                    <el-button @click="prevStep">上一步</el-button>
+                    <el-button type="primary" @click="nextStep" style="flex: 1">
+                      下一步
+                    </el-button>
                   </div>
+                </div>
 
                 <!-- 步骤3: 可选信息 -->
                 <div v-show="currentStep === 2" class="form-step-section">
@@ -204,77 +268,138 @@
                   </div>
                 </div>
               </el-form>
+
+              <!-- 支持说明 -->
+              <div class="support-tips">
+                <div class="tips-header">
+                  <i class="fas fa-lightbulb"></i>
+                  <span>温馨提示</span>
+                </div>
+                <div class="tips-content">
+                  <div class="tip-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>捐赠记录实时同步，可随时查询</span>
+                  </div>
+                  <div class="tip-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>个人信息加密存储，严格保密</span>
+                  </div>
+                  <div class="tip-item">
+                    <i class="fas fa-heart"></i>
+                    <span>您的支持将用于项目持续发展</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </a-card>
         </div>
 
         <div class="donation-info-section">
-          <a-card :bordered="false" class="info-card stats-card animate-item">
-            <template #title>
-              <div class="card-title"><i class="fas fa-chart-line"></i><span>捐赠统计</span></div>
-            </template>
+          <!-- 统计卡片 -->
+          <div class="sidebar-widget stats-widget animate-item">
+            <div class="widget-header">
+              <i class="fas fa-chart-line"></i>
+              <span>捐赠数据</span>
+            </div>
             <div class="stats-grid">
               <div class="stat-item">
-                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-icon" style="background: linear-gradient(135deg, rgba(22, 119, 255, 0.1), rgba(22, 119, 255, 0.2)); color: #1677ff;">
+                  <i class="fas fa-users"></i>
+                </div>
                 <div class="stat-info">
                   <div class="stat-value">1,234</div>
-                  <div class="stat-label">捐赠人数</div>
+                  <div class="stat-label">支持者</div>
                 </div>
               </div>
               <div class="stat-item">
-                <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                <div class="stat-icon" style="background: linear-gradient(135deg, rgba(82, 196, 26, 0.1), rgba(82, 196, 26, 0.2)); color: #52c41a;">
+                  <i class="fas fa-coins"></i>
+                </div>
                 <div class="stat-info">
                   <div class="stat-value">¥56,789</div>
                   <div class="stat-label">累计金额</div>
                 </div>
               </div>
+              <div class="stat-item">
+                <div class="stat-icon" style="background: linear-gradient(135deg, rgba(250, 140, 22, 0.1), rgba(250, 140, 22, 0.2)); color: #fa8c16;">
+                  <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-info">
+                  <div class="stat-value">328</div>
+                  <div class="stat-label">本月捐赠</div>
+                </div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-icon" style="background: linear-gradient(135deg, rgba(114, 46, 209, 0.1), rgba(114, 46, 209, 0.2)); color: #722ed1;">
+                  <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-info">
+                  <div class="stat-value">¥1,888</div>
+                  <div class="stat-label">最高单笔</div>
+                </div>
+              </div>
             </div>
-          </a-card>
+          </div>
 
-          <a-card :bordered="false" class="info-card guide-card animate-item">
-            <template #title>
-              <div class="card-title"><i class="fas fa-info-circle"></i><span>捐赠说明</span></div>
-            </template>
-            <div class="guide-content">
-              <div class="guide-item">
-                <div class="guide-icon"><i class="fas fa-check-circle"></i></div>
-                <div class="guide-text">
-                  <div class="guide-title">安全可靠</div>
-                  <div class="guide-desc">所有捐赠记录都会被妥善保存</div>
-                </div>
+          <!-- 捐赠榜/最近捐赠 - Tab切换 -->
+          <div class="sidebar-widget activity-widget animate-item">
+            <div class="activity-tabs">
+              <div 
+                class="tab-item" 
+                :class="{ active: activeTab === 'ranking' }"
+                @click="activeTab = 'ranking'"
+              >
+                <i class="fas fa-crown"></i>
+                <span>捐赠榜</span>
               </div>
-              <div class="guide-item">
-                <div class="guide-icon"><i class="fas fa-shield-alt"></i></div>
-                <div class="guide-text">
-                  <div class="guide-title">隐私保护</div>
-                  <div class="guide-desc">您的个人信息将被严格保密</div>
-                </div>
-              </div>
-              <div class="guide-item">
-                <div class="guide-icon"><i class="fas fa-heart"></i></div>
-                <div class="guide-text">
-                  <div class="guide-title">感谢支持</div>
-                  <div class="guide-desc">您的支持是我们前进的动力</div>
-                </div>
+              <div 
+                class="tab-item" 
+                :class="{ active: activeTab === 'recent' }"
+                @click="activeTab = 'recent'"
+              >
+                <i class="fas fa-history"></i>
+                <span>最近捐赠</span>
               </div>
             </div>
-          </a-card>
 
-          <a-card :bordered="false" class="info-card recent-card animate-item">
-            <template #title>
-              <div class="card-title"><i class="fas fa-history"></i><span>最近捐赠</span></div>
-            </template>
-            <div class="recent-list">
-              <div v-for="item in recentDonations" :key="item.id" class="recent-item">
-                <div class="recent-avatar"><i class="fas fa-user-circle"></i></div>
-                <div class="recent-info">
-                  <div class="recent-name">{{ item.name }}</div>
-                  <div class="recent-time">{{ item.time }}</div>
+            <div class="activity-content">
+              <!-- 捐赠榜 -->
+              <div v-show="activeTab === 'ranking'" class="ranking-list">
+                <div v-for="(item, index) in topDonors" :key="item.id" class="ranking-item">
+                  <div class="ranking-badge" :class="`rank-${index + 1}`">
+                    <span v-if="index < 3">
+                      <i v-if="index === 0" class="fas fa-crown"></i>
+                      <i v-else-if="index === 1" class="fas fa-medal"></i>
+                      <i v-else class="fas fa-award"></i>
+                    </span>
+                    <span v-else>{{ index + 1 }}</span>
+                  </div>
+                  <div class="ranking-avatar">{{ item.name.charAt(0) }}</div>
+                  <div class="ranking-info">
+                    <div class="ranking-name">{{ item.name }}</div>
+                    <div class="ranking-count">{{ item.count }}次捐赠</div>
+                  </div>
+                  <div class="ranking-amount">¥{{ item.amount }}</div>
                 </div>
-                <div class="recent-amount">¥{{ item.amount }}</div>
+              </div>
+
+              <!-- 最近捐赠 -->
+              <div v-show="activeTab === 'recent'" class="recent-list">
+                <div v-for="item in recentDonations" :key="item.id" class="recent-item">
+                  <div class="recent-dot"></div>
+                  <div class="recent-avatar">{{ item.name.charAt(0) }}</div>
+                  <div class="recent-info">
+                    <div class="recent-name">{{ item.name }}</div>
+                    <div class="recent-time">
+                      <i class="fas fa-clock"></i>
+                      {{ item.time }}
+                    </div>
+                  </div>
+                  <div class="recent-amount">¥{{ item.amount }}</div>
+                </div>
               </div>
             </div>
-          </a-card>
+          </div>
         </div>
       </div>
     </div>
@@ -292,6 +417,7 @@ import type { FormInstance } from 'element-plus'
 import { addDonationR } from '@/request/donation'
 import type { DonationChannel, DonationFormData, CelebrationDetail, CelebrationAction } from '@/types/donation'
 import CelebrationModal from '@/components/common/CelebrationModal.vue'
+import StepForm from '@/components/StepForm.vue'
 import collectionWechat from '@/assets/images/collection_wechat.jpg'
 import collectionAlipay from '@/assets/images/collection_alipay.jpg'
 import collectionTp from '@/assets/images/collection_tp.jpg'
@@ -357,13 +483,24 @@ const recentDonations = ref([
   { id: 1, name: '热心网友', amount: 100, time: '5分钟前' },
   { id: 2, name: '张三', amount: 50, time: '1小时前' },
   { id: 3, name: '匿名用户', amount: 200, time: '2小时前' },
-  { id: 4, name: '李四', amount: 88, time: '3小时前' }
+  { id: 4, name: '李四', amount: 88, time: '3小时前' },
+  { id: 5, name: '王五', amount: 66, time: '5小时前' }
 ])
+
+const topDonors = ref([
+  { id: 1, name: '张大豪', amount: 5888, count: 12 },
+  { id: 2, name: '李大富', amount: 3666, count: 8 },
+  { id: 3, name: '王大人', amount: 2888, count: 6 },
+  { id: 4, name: '赵先生', amount: 1888, count: 5 },
+  { id: 5, name: '刘女士', amount: 999, count: 3 }
+])
+
+const activeTab = ref<'ranking' | 'recent'>('ranking')
 
 const showCelebration = ref(false)
 const celebrationData = reactive<{ title: string; message: string; subMessage: string; details: CelebrationDetail[]; actions: CelebrationAction[] }>({
   title: '🎉 捐赠成功！',
-  message: '感谢您的慷慨支持！',
+  message: '感谢您的慰慨支持！',
   subMessage: '您的每一份心意都是我们前进的动力',
   details: [],
   actions: []
@@ -468,23 +605,23 @@ const handleCelebrationClose = () => {
   --theme-secondary: #d946ef;
   --theme-accent: #3b82f6;
 
-  // 统一间距
-  --spacing-xs: 8px;
-  --spacing-sm: 12px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
+  // 统一间距 - 缩小
+  --spacing-xs: 6px;
+  --spacing-sm: 10px;
+  --spacing-md: 14px;
+  --spacing-lg: 20px;
 
   // 统一圆角
   --radius-sm: 6px;
   --radius-md: 8px;
-  --radius-lg: 10px;
+  --radius-lg: 12px;
 
-  // 统一字号
-  --font-xs: 12px;
-  --font-sm: 13px;
-  --font-md: 14px;
-  --font-lg: 16px;
-  --font-xl: 18px;
+  // 统一字号 - 缩小
+  --font-xs: 11px;
+  --font-sm: 12px;
+  --font-md: 13px;
+  --font-lg: 14px;
+  --font-xl: 16px;
 
   // 覆盖 Element Plus 全局主题色
   --el-color-primary: #8b5cf6;
@@ -496,9 +633,10 @@ const handleCelebrationClose = () => {
   --el-color-primary-dark-2: #7c3aed;
 
   min-height: 100vh;
-  padding: var(--spacing-lg) 0;
-  background: linear-gradient(135deg, #f5f3ff 0%, #faf5ff 50%, #f3f4f6 100%);
+  padding: var(--spacing-md) 0;
+  background: linear-gradient(135deg, #faf8ff 0%, #f9fafb 100%);
   position: relative;
+  overflow: hidden;
 
   &::before {
     content: '';
@@ -514,8 +652,423 @@ const handleCelebrationClose = () => {
     z-index: 0;
   }
 
+  &::after {
+    content: '';
+    position: fixed;
+    top: -20%;
+    left: -10%;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(167, 139, 250, 0.08) 0%, transparent 60%);
+    border-radius: 50%;
+    animation: float1 25s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(40px);
+  }
+
+  // 粒子效果容器
+  .particles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.8), transparent);
+    border-radius: 50%;
+    animation: particleFloat 20s infinite ease-in-out;
+    opacity: 0;
+    filter: blur(1px);
+  }
+
+  // 渐变光晕
+  .gradient-orb {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(60px);
+    opacity: 0.6;
+
+    &.orb-1 {
+      top: 10%;
+      right: 15%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.15), transparent);
+      animation: orbFloat1 20s ease-in-out infinite;
+    }
+
+    &.orb-2 {
+      bottom: 20%;
+      left: 10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(217, 70, 239, 0.1), transparent);
+      animation: orbFloat2 25s ease-in-out infinite;
+    }
+
+    &.orb-3 {
+      top: 50%;
+      left: 50%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(167, 139, 250, 0.12), transparent);
+      animation: orbFloat3 18s ease-in-out infinite;
+    }
+  }
+
+  // 几何装饰
+  .bg-decoration {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+
+    &.shape-1 {
+      top: 15%;
+      right: 20%;
+      width: 120px;
+      height: 120px;
+      border: 3px solid rgba(139, 92, 246, 0.15);
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      animation: morphShape1 15s ease-in-out infinite;
+      filter: blur(2px);
+    }
+
+    &.shape-2 {
+      bottom: 25%;
+      right: 15%;
+      width: 80px;
+      height: 80px;
+      border: 2px solid rgba(217, 70, 239, 0.2);
+      border-radius: 50%;
+      animation: pulse3 8s ease-in-out infinite;
+      box-shadow: inset 0 0 20px rgba(217, 70, 239, 0.1);
+    }
+
+    &.shape-3 {
+      top: 40%;
+      left: 10%;
+      width: 100px;
+      height: 100px;
+      border: 2px solid rgba(167, 139, 250, 0.12);
+      border-radius: 20px;
+      transform: rotate(25deg);
+      animation: rotate2 30s linear infinite;
+    }
+
+    &.shape-4 {
+      bottom: 15%;
+      left: 30%;
+      width: 60px;
+      height: 60px;
+      background: conic-gradient(from 0deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+      border-radius: 50%;
+      animation: spin360 20s linear infinite;
+    }
+
+    &.line-1 {
+      top: 30%;
+      left: 5%;
+      width: 150px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+      animation: lineMove1 12s ease-in-out infinite;
+    }
+
+    &.line-2 {
+      bottom: 35%;
+      right: 8%;
+      width: 2px;
+      height: 120px;
+      background: linear-gradient(180deg, transparent, rgba(217, 70, 239, 0.25), transparent);
+      animation: lineMove2 10s ease-in-out infinite;
+    }
+  }
+
+  // 网格背景
+  .grid-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  // 流动波纹
+  .wave-decoration {
+    position: fixed;
+    width: 100%;
+    height: 200px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+
+    &.wave-1 {
+      top: 20%;
+      left: -10%;
+      width: 120%;
+      height: 150px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(139, 92, 246, 0.05) 25%,
+        rgba(167, 139, 250, 0.08) 50%,
+        rgba(139, 92, 246, 0.05) 75%,
+        transparent 100%);
+      transform: skewY(-2deg);
+      animation: waveFlow1 15s ease-in-out infinite;
+      filter: blur(30px);
+    }
+
+    &.wave-2 {
+      bottom: 15%;
+      right: -10%;
+      width: 120%;
+      height: 180px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(217, 70, 239, 0.04) 25%,
+        rgba(167, 139, 250, 0.06) 50%,
+        rgba(217, 70, 239, 0.04) 75%,
+        transparent 100%);
+      transform: skewY(2deg);
+      animation: waveFlow2 18s ease-in-out infinite;
+      filter: blur(40px);
+    }
+  }
+
+  // 星星闪烁
+  .star-sparkle {
+    position: fixed;
+    width: 3px;
+    height: 3px;
+    background: #fbbf24;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    animation: starTwinkle 3s ease-in-out infinite;
+    box-shadow: 0 0 10px #fbbf24, 0 0 20px rgba(251, 191, 36, 0.5);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.6), transparent);
+      border-radius: 50%;
+      animation: starPulse 2s ease-in-out infinite;
+    }
+  }
+
+  // 图标装饰
+  .icon-decoration {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    font-size: 20px;
+    opacity: 0.15;
+    color: var(--theme-color);
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+
+    &.icon-1 {
+      top: 15%;
+      left: 8%;
+      color: #ec4899;
+      animation: iconFloat1 10s ease-in-out infinite;
+    }
+
+    &.icon-2 {
+      top: 35%;
+      left: 6%;
+      color: #fbbf24;
+      animation: iconRotate 15s linear infinite;
+    }
+
+    &.icon-3 {
+      bottom: 25%;
+      left: 10%;
+      color: #8b5cf6;
+      animation: iconFloat2 12s ease-in-out infinite;
+    }
+
+    &.icon-4 {
+      top: 60%;
+      left: 4%;
+      color: #a78bfa;
+      animation: iconBounce 8s ease-in-out infinite;
+    }
+
+    &.icon-5 {
+      top: 20%;
+      right: 7%;
+      color: #fbbf24;
+      animation: iconRotate 18s linear infinite reverse;
+    }
+
+    &.icon-6 {
+      top: 50%;
+      right: 5%;
+      color: #ec4899;
+      animation: iconFloat1 11s ease-in-out infinite;
+    }
+
+    &.icon-7 {
+      bottom: 30%;
+      right: 9%;
+      color: #d946ef;
+      animation: iconRotate 20s linear infinite;
+    }
+
+    &.icon-8 {
+      top: 70%;
+      right: 6%;
+      color: #a78bfa;
+      animation: iconFloat2 13s ease-in-out infinite;
+    }
+  }
+
+  // 光环装饰
+  .ring-decoration {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+
+    &.ring-1 {
+      top: 10%;
+      left: 5%;
+      width: 300px;
+      height: 300px;
+      border: 2px solid rgba(139, 92, 246, 0.15);
+      animation: ringRotate1 20s linear infinite;
+      box-shadow: inset 0 0 30px rgba(139, 92, 246, 0.1);
+    }
+
+    &.ring-2 {
+      bottom: 15%;
+      right: 8%;
+      width: 250px;
+      height: 250px;
+      border: 3px solid rgba(217, 70, 239, 0.12);
+      animation: ringRotate2 25s linear infinite reverse;
+      box-shadow: 0 0 40px rgba(217, 70, 239, 0.15);
+    }
+
+    &.ring-3 {
+      top: 45%;
+      right: 3%;
+      width: 180px;
+      height: 180px;
+      border: 2px dashed rgba(167, 139, 250, 0.2);
+      animation: ringPulse 15s ease-in-out infinite;
+    }
+  }
+
+  // 散射光线
+  .light-ray {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.15;
+
+    &.ray-1 {
+      top: 20%;
+      left: 10%;
+      width: 200px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.4), transparent);
+      transform: rotate(35deg);
+      animation: rayShine1 8s ease-in-out infinite;
+    }
+
+    &.ray-2 {
+      top: 60%;
+      right: 15%;
+      width: 150px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(217, 70, 239, 0.4), transparent);
+      transform: rotate(-25deg);
+      animation: rayShine2 10s ease-in-out infinite;
+    }
+
+    &.ray-3 {
+      bottom: 30%;
+      left: 20%;
+      width: 180px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.4), transparent);
+      transform: rotate(50deg);
+      animation: rayShine1 12s ease-in-out infinite;
+    }
+
+    &.ray-4 {
+      top: 40%;
+      right: 25%;
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+      transform: rotate(-40deg);
+      animation: rayShine2 9s ease-in-out infinite;
+    }
+  }
+
+  // 浮动卡片
+  .floating-card {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(139, 92, 246, 0.15);
+    backdrop-filter: blur(5px);
+
+    &.card-1 {
+      top: 25%;
+      left: 3%;
+      width: 100px;
+      height: 140px;
+      animation: cardFloat1 15s ease-in-out infinite;
+      transform: rotate(-10deg);
+    }
+
+    &.card-2 {
+      bottom: 20%;
+      right: 5%;
+      width: 120px;
+      height: 90px;
+      animation: cardFloat2 18s ease-in-out infinite;
+      transform: rotate(8deg);
+    }
+
+    &.card-3 {
+      top: 55%;
+      left: 2%;
+      width: 80px;
+      height: 110px;
+      animation: cardFloat3 20s ease-in-out infinite;
+      transform: rotate(15deg);
+    }
+  }
+
   .donation-content {
-    max-width: 1440px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 var(--spacing-md);
     position: relative;
@@ -523,11 +1076,12 @@ const handleCelebrationClose = () => {
 
     .content-wrapper {
       display: grid;
-      grid-template-columns: 1fr 360px;
-      gap: var(--spacing-lg);
+      grid-template-columns: 1fr 320px;
+      gap: 16px;
 
       @media (max-width: 1024px) {
         grid-template-columns: 1fr;
+        gap: 20px;
       }
     }
   }
@@ -535,12 +1089,44 @@ const handleCelebrationClose = () => {
   .card-header-custom {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-md) var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(217, 70, 239, 0.05) 100%);
+    gap: 12px;
+    padding: 16px;
+    margin-bottom: var(--spacing-md);
+    background: linear-gradient(135deg, 
+                  rgba(250, 245, 255, 0.95) 0%, 
+                  rgba(243, 232, 255, 0.92) 100%);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
+    border: 1px solid rgba(233, 213, 255, 0.6);
     border-radius: var(--radius-md);
-    border: 1px solid rgba(139, 92, 246, 0.1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(217, 70, 239, 0.06) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
 
     .header-icon {
       width: 48px;
@@ -548,10 +1134,12 @@ const handleCelebrationClose = () => {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      background: linear-gradient(135deg, #8b5cf6, #a78bfa);
       border-radius: var(--radius-md);
       flex-shrink: 0;
-      box-shadow: 0 2px 6px rgba(250, 112, 154, 0.25);
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3), 0 0 0 3px rgba(139, 92, 246, 0.15);
 
       i {
         color: #fff;
@@ -566,22 +1154,513 @@ const handleCelebrationClose = () => {
       z-index: 1;
 
       .header-title {
-        font-size: 17px;
+        font-size: 16px;
         font-weight: 700;
-        background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+        color: #6b21a8;
+        margin: 0 0 4px 0;
+        line-height: 1.3;
+        letter-spacing: 0.3px;
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        margin: 0 0 4px 0;
-        line-height: 1.3;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        .sparkle-icon {
+          font-size: 12px;
+          color: #a855f7;
+          animation: sparkle 2s ease-in-out infinite;
+          
+          &:first-child {
+            animation-delay: 0s;
+          }
+          
+          &:last-child {
+            animation-delay: 1s;
+          }
+        }
       }
 
       .header-subtitle {
-        font-size: var(--font-sm);
-        color: var(--el-text-color-regular);
+        font-size: 12px;
+        color: #9333ea;
         margin: 0;
-        line-height: 1.5;
+        line-height: 1.4;
+        font-weight: 400;
+        opacity: 0.8;
       }
+    }
+
+    .header-decoration {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 1;
+
+      .star-deco {
+        font-size: 12px;
+        color: #fbbf24;
+        animation: twinkle 2s ease-in-out infinite;
+        filter: drop-shadow(0 0 3px rgba(251, 191, 36, 0.5));
+
+        &:nth-child(1) {
+          animation-delay: 0s;
+        }
+
+        &:nth-child(2) {
+          animation-delay: 0.4s;
+          font-size: 10px;
+        }
+
+        &:nth-child(3) {
+          animation-delay: 0.8s;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  @keyframes sparkle {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+  }
+
+  @keyframes twinkle {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(1) rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.15) rotate(10deg);
+    }
+  }
+
+  @keyframes badgePulse {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 3px 12px rgba(255, 107, 107, 0.6);
+    }
+  }
+
+  @keyframes badgeFloat {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-2px);
+    }
+  }
+
+  @keyframes badgeBounce {
+    0%, 100% {
+      transform: scale(1);
+    }
+    25% {
+      transform: scale(1.1) rotate(-5deg);
+    }
+    75% {
+      transform: scale(1.1) rotate(5deg);
+    }
+  }
+
+  @keyframes badgeShake {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-2px);
+    }
+    75% {
+      transform: translateX(2px);
+    }
+  }
+
+  @keyframes coinSpin {
+    0% {
+      transform: rotateY(0deg);
+    }
+    100% {
+      transform: rotateY(360deg);
+    }
+  }
+
+  @keyframes float1 {
+    0%, 100% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    33% {
+      transform: translate(30px, -30px) rotate(120deg);
+    }
+    66% {
+      transform: translate(-20px, 20px) rotate(240deg);
+    }
+  }
+
+  @keyframes float2 {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.3;
+    }
+    50% {
+      transform: translate(-40px, 40px) scale(1.2);
+      opacity: 0.6;
+    }
+  }
+
+  @keyframes float3 {
+    0%, 100% {
+      transform: translate(0, 0);
+      opacity: 0.2;
+    }
+    50% {
+      transform: translate(20px, -50px);
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes rotate1 {
+    0% {
+      transform: rotate(45deg);
+      opacity: 0.1;
+    }
+    50% {
+      opacity: 0.2;
+    }
+    100% {
+      transform: rotate(405deg);
+      opacity: 0.1;
+    }
+  }
+
+  @keyframes pulse2 {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.08;
+    }
+    50% {
+      transform: scale(1.3);
+      opacity: 0.15;
+    }
+  }
+
+  @keyframes pulse3 {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.2;
+    }
+    50% {
+      transform: scale(1.15);
+      opacity: 0.4;
+    }
+  }
+
+  @keyframes particleFloat {
+    0% {
+      transform: translateY(0) translateX(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100vh) translateX(50px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes orbFloat1 {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(-50px, 50px) scale(1.1);
+    }
+  }
+
+  @keyframes orbFloat2 {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(60px, -40px) scale(1.15);
+    }
+  }
+
+  @keyframes orbFloat3 {
+    0%, 100% {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+      transform: translate(calc(-50% + 30px), calc(-50% - 30px)) scale(1.2);
+    }
+  }
+
+  @keyframes morphShape1 {
+    0%, 100% {
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      transform: rotate(0deg);
+    }
+    25% {
+      border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%;
+    }
+    50% {
+      border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%;
+      transform: rotate(180deg);
+    }
+    75% {
+      border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%;
+    }
+  }
+
+  @keyframes rotate2 {
+    0% {
+      transform: rotate(25deg);
+    }
+    100% {
+      transform: rotate(385deg);
+    }
+  }
+
+  @keyframes spin360 {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes lineMove1 {
+    0%, 100% {
+      transform: translateX(0) scaleX(1);
+      opacity: 0.3;
+    }
+    50% {
+      transform: translateX(20px) scaleX(1.2);
+      opacity: 0.6;
+    }
+  }
+
+  @keyframes lineMove2 {
+    0%, 100% {
+      transform: translateY(0) scaleY(1);
+      opacity: 0.25;
+    }
+    50% {
+      transform: translateY(-20px) scaleY(1.2);
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes waveFlow1 {
+    0%, 100% {
+      transform: skewY(-2deg) translateX(0);
+      opacity: 0.3;
+    }
+    50% {
+      transform: skewY(-2deg) translateX(-5%);
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes waveFlow2 {
+    0%, 100% {
+      transform: skewY(2deg) translateX(0);
+      opacity: 0.3;
+    }
+    50% {
+      transform: skewY(2deg) translateX(5%);
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes starTwinkle {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.5);
+    }
+  }
+
+  @keyframes starPulse {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.8);
+    }
+  }
+
+  @keyframes ringRotate1 {
+    0% {
+      transform: rotate(0deg) scale(1);
+    }
+    50% {
+      transform: rotate(180deg) scale(1.05);
+    }
+    100% {
+      transform: rotate(360deg) scale(1);
+    }
+  }
+
+  @keyframes ringRotate2 {
+    0% {
+      transform: rotate(0deg) scale(1);
+      opacity: 0.12;
+    }
+    50% {
+      transform: rotate(-180deg) scale(1.08);
+      opacity: 0.2;
+    }
+    100% {
+      transform: rotate(-360deg) scale(1);
+      opacity: 0.12;
+    }
+  }
+
+  @keyframes ringPulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.2;
+    }
+    50% {
+      transform: scale(1.15);
+      opacity: 0.35;
+    }
+  }
+
+  @keyframes rayShine1 {
+    0%, 100% {
+      opacity: 0.05;
+      transform: rotate(35deg) scaleX(1);
+    }
+    50% {
+      opacity: 0.25;
+      transform: rotate(35deg) scaleX(1.3);
+    }
+  }
+
+  @keyframes rayShine2 {
+    0%, 100% {
+      opacity: 0.05;
+      transform: rotate(-25deg) scaleX(1);
+    }
+    50% {
+      opacity: 0.2;
+      transform: rotate(-25deg) scaleX(1.25);
+    }
+  }
+
+  @keyframes cardFloat1 {
+    0%, 100% {
+      transform: rotate(-10deg) translateY(0);
+      opacity: 0.6;
+    }
+    50% {
+      transform: rotate(-8deg) translateY(-20px);
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes cardFloat2 {
+    0%, 100% {
+      transform: rotate(8deg) translateY(0) translateX(0);
+      opacity: 0.6;
+    }
+    50% {
+      transform: rotate(10deg) translateY(-15px) translateX(10px);
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes cardFloat3 {
+    0%, 100% {
+      transform: rotate(15deg) translateX(0);
+      opacity: 0.5;
+    }
+    50% {
+      transform: rotate(12deg) translateX(-15px);
+      opacity: 0.75;
+    }
+  }
+
+  @keyframes iconFloat1 {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+      opacity: 0.15;
+    }
+    50% {
+      transform: translateY(-20px) scale(1.1);
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes iconFloat2 {
+    0%, 100% {
+      transform: translateY(0) translateX(0) scale(1);
+      opacity: 0.15;
+    }
+    50% {
+      transform: translateY(-15px) translateX(10px) scale(1.15);
+      opacity: 0.28;
+    }
+  }
+
+  @keyframes iconRotate {
+    0% {
+      transform: rotate(0deg) scale(1);
+      opacity: 0.15;
+    }
+    50% {
+      transform: rotate(180deg) scale(1.2);
+      opacity: 0.25;
+    }
+    100% {
+      transform: rotate(360deg) scale(1);
+      opacity: 0.15;
+    }
+  }
+
+  @keyframes iconBounce {
+    0%, 100% {
+      transform: translateY(0);
+      opacity: 0.15;
+    }
+    25% {
+      transform: translateY(-15px);
+      opacity: 0.25;
+    }
+    50% {
+      transform: translateY(-5px);
+      opacity: 0.2;
+    }
+    75% {
+      transform: translateY(-10px);
+      opacity: 0.22;
     }
   }
 
@@ -614,18 +1693,36 @@ const handleCelebrationClose = () => {
     }
   }
 
+
   .form-card,
   .info-card {
     border-radius: var(--radius-lg);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.12), 
+                0 4px 16px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    background: linear-gradient(135deg, 
+                  rgba(255, 255, 255, 0.9) 0%, 
+                  rgba(255, 255, 255, 0.85) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    position: relative;
 
-    &:hover {
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-      transform: translateY(-1px);
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-lg);
+      padding: 1px;
+      background: linear-gradient(135deg, 
+                    rgba(139, 92, 246, 0.2), 
+                    rgba(217, 70, 239, 0.1),
+                    rgba(167, 139, 250, 0.15));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
     }
 
     :deep(.ant-card-head) {
@@ -650,69 +1747,13 @@ const handleCelebrationClose = () => {
     }
 
     :deep(.ant-card-body) {
-      padding: var(--spacing-lg);
+      padding: 16px;
     }
   }
 
-  .steps-section {
-    margin-bottom: var(--spacing-lg);
-    padding: var(--spacing-md) var(--spacing-lg);
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.03) 0%, rgba(217, 70, 239, 0.03) 100%);
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(139, 92, 246, 0.08);
-
-    :deep(.el-steps) {
-      .el-step__head {
-        .el-step__icon {
-          width: 28px;
-          height: 28px;
-          font-size: var(--font-sm);
-          border-width: 2px;
-          transition: all 0.3s ease;
-        }
-
-        .el-step__line {
-          top: 14px;
-        }
-      }
-
-      .el-step__title {
-        font-size: var(--font-sm);
-        font-weight: 600;
-        line-height: 28px;
-      }
-
-      .el-step__description {
-        font-size: var(--font-xs);
-        margin-top: 0;
-        padding-top: 2px;
-      }
-
-      .el-step.is-process {
-        .el-step__icon {
-          box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-        }
-      }
-    }
-  }
 
   .qrcode-section {
-    margin-bottom: var(--spacing-lg);
-
-    .qrcode-title {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-sm);
-      font-size: var(--font-md);
-      font-weight: 500;
-      color: var(--el-text-color-primary);
-      margin-bottom: var(--spacing-md);
-
-      i {
-        color: var(--theme-color);
-        font-size: var(--font-lg);
-      }
-    }
+    margin-bottom: var(--spacing-md);
 
     .qrcode-grid {
       .qrcode-item {
@@ -721,176 +1762,133 @@ const handleCelebrationClose = () => {
         @media (min-width: 768px) {
           margin-bottom: 0;
         }
-
-        &:nth-child(n+3) {
-          @media (max-width: 767px) {
-            margin-bottom: 0;
-          }
-        }
       }
     }
 
     .qrcode-item {
       cursor: pointer;
       position: relative;
-
-      &.active .qrcode-container {
-        border-color: var(--theme-color);
-        box-shadow: 0 1px 4px rgba(139, 92, 246, 0.2);
-      }
-    }
-
-    .qrcode-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: var(--spacing-md);
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(249, 250, 251, 0.9) 100%);
-      border: 1.5px solid rgba(139, 92, 246, 0.1);
+      padding: var(--spacing-sm);
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1.5px solid rgba(255, 255, 255, 0.8);
       border-radius: var(--radius-md);
       height: 100%;
-      position: relative;
-      transition: all 0.3s ease;
-      overflow: visible;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
       &:hover {
-        transform: translateY(-2px);
         border-color: var(--theme-color);
-        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.12);
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+        transform: translateY(-2px);
 
-        .qrcode-image-wrapper img {
-          transform: scale(1.05);
+        .channel-badge.recommend {
+          animation: badgeBounce 0.6s ease-in-out;
+        }
+
+        .channel-badge-left.crypto-badge {
+          animation: badgeShake 0.6s ease-in-out;
         }
       }
 
-      .qrcode-image-wrapper {
+      &.active {
+        border-color: var(--theme-color);
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.02), rgba(167, 139, 250, 0.02));
+      }
+
+      img {
         width: 100%;
         aspect-ratio: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
+        object-fit: contain;
         border-radius: var(--radius-sm);
-        margin-bottom: var(--spacing-sm);
-        background: #fff;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-        position: relative;
-        padding: 8px;
-
-        img {
-          max-width: 100%;
-          max-height: 100%;
-          width: auto;
-          height: auto;
-          object-fit: contain;
-          transition: transform 0.3s ease;
-          border-radius: 4px;
-        }
+        margin-bottom: var(--spacing-xs);
+        background: #f9fafb;
+        padding: 6px;
       }
 
       .qrcode-tip {
-        font-size: var(--font-xs);
+        font-size: 10px;
         font-weight: 500;
-        color: var(--el-text-color-regular);
+        color: #666;
         text-align: center;
-        position: relative;
-        z-index: 10;
+        line-height: 1.3;
 
         .card-link {
           color: var(--theme-color);
           text-decoration: none;
           transition: all 0.2s ease;
-          position: relative;
-          z-index: 10;
-          pointer-events: auto;
 
           &:hover {
             color: var(--theme-color-light-3);
             text-decoration: underline;
           }
         }
-
-        &.crypto-tip {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 4px;
-
-          i {
-            font-size: var(--font-xs);
-            color: var(--el-color-success);
-          }
-
-          span {
-            font-size: var(--font-xs);
-            font-weight: 500;
-            color: var(--el-text-color-regular);
-          }
-        }
       }
 
-      .channel-badge {
+      .channel-badge.recommend {
         position: absolute;
-        top: var(--spacing-sm);
-        right: var(--spacing-sm);
-        padding: 4px 10px;
-        border-radius: 20px;
-        font-size: var(--font-xs);
-        font-weight: 600;
+        top: 6px;
+        right: 6px;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 9px;
+        font-weight: 700;
         line-height: 1;
-        white-space: nowrap;
-        z-index: 2;
-
-        &.recommend {
-          background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
-          color: #fff;
-          box-shadow: 0 1px 3px rgba(255, 107, 107, 0.3);
-        }
+        background: linear-gradient(135deg, #ff6b6b, #ff8787);
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+        animation: badgePulse 2s ease-in-out infinite;
+        letter-spacing: 0.5px;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
       }
 
       .channel-badge-left {
         position: absolute;
-        top: var(--spacing-sm);
-        left: var(--spacing-sm);
+        top: 6px;
+        left: 6px;
         display: flex;
         align-items: center;
         gap: 4px;
-        padding: 5px 10px;
-        border-radius: 20px;
-        font-size: var(--font-xs);
-        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 9px;
+        font-weight: 700;
         line-height: 1;
         white-space: nowrap;
         z-index: 2;
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+        animation: badgeFloat 3s ease-in-out infinite;
 
         &.crypto-badge {
-          background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+          background: linear-gradient(135deg, #8b5cf6, #a78bfa);
           color: #fff;
-          box-shadow: 0 1px 3px rgba(139, 92, 246, 0.3);
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 
           i {
-            font-size: var(--font-xs);
+            font-size: 10px;
+            animation: coinSpin 4s linear infinite;
           }
         }
       }
     }
   }
 
-
-
   .crypto-info-tips {
     display: inline-flex;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
+    gap: 6px;
+    margin-bottom: var(--spacing-sm);
 
     .crypto-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      background: linear-gradient(135deg, rgba(103, 194, 58, 0.08) 0%, rgba(103, 194, 58, 0.12) 100%);
-      border: 1px solid rgba(103, 194, 58, 0.25);
-      border-radius: 20px;
+      gap: 4px;
+      padding: 4px 8px;
+      background: rgba(103, 194, 58, 0.08);
+      border: 1px solid rgba(103, 194, 58, 0.15);
+      border-radius: 12px;
       transition: all 0.2s ease;
 
       &:hover {
@@ -899,7 +1897,7 @@ const handleCelebrationClose = () => {
       }
 
       i {
-        font-size: var(--font-sm);
+        font-size: 11px;
         color: #67c23a;
         flex-shrink: 0;
       }
@@ -907,15 +1905,15 @@ const handleCelebrationClose = () => {
       .badge-text {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 2px;
 
         .badge-label {
-          font-size: var(--font-xs);
+          font-size: 9px;
           color: var(--el-text-color-secondary);
         }
 
         .badge-value {
-          font-size: var(--font-sm);
+          font-size: 10px;
           font-weight: 600;
           color: #67c23a;
         }
@@ -937,47 +1935,46 @@ const handleCelebrationClose = () => {
   }
 
   .optional-section {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
 
     .section-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: var(--spacing-sm) var(--spacing-md);
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.03) 0%, rgba(217, 70, 239, 0.03) 100%);
-      border: 1px solid rgba(139, 92, 246, 0.08);
+      padding: 8px 10px;
+      background: #fafafa;
+      border: 1px solid #f0f0f0;
       border-radius: var(--radius-sm);
       cursor: pointer;
       transition: all 0.2s ease;
       user-select: none;
 
       &:hover {
-        background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(217, 70, 239, 0.05) 100%);
-        border-color: rgba(139, 92, 246, 0.15);
+        background: #f5f5f5;
       }
 
       .header-left {
         display: flex;
         align-items: center;
-        gap: var(--spacing-xs);
-        font-size: var(--font-sm);
+        gap: 6px;
+        font-size: 10px;
         color: var(--el-text-color-regular);
 
         i {
           color: var(--el-color-info);
-          font-size: 14px;
+          font-size: 11px;
         }
       }
 
       >i {
         color: var(--el-text-color-secondary);
-        font-size: 12px;
+        font-size: 9px;
         transition: transform 0.2s ease;
       }
     }
 
     .optional-content {
-      padding-top: 12px;
+      padding-top: 10px;
     }
   }
 
@@ -1007,7 +2004,7 @@ const handleCelebrationClose = () => {
 
   .donation-form {
     :deep(.el-form-item) {
-      margin-bottom: 20px;
+      margin-bottom: var(--spacing-md);
 
       .el-form-item__error {
         position: relative;
@@ -1024,54 +2021,52 @@ const handleCelebrationClose = () => {
 
     :deep(.el-form-item__label) {
       font-weight: 600;
-      font-size: var(--font-md);
+      font-size: var(--font-xs);
       color: var(--el-text-color-primary);
-      padding-bottom: var(--spacing-xs);
-      margin-bottom: 8px;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
       line-height: 1.5;
     }
 
     :deep(.el-input__wrapper) {
       background: #fff;
-      border: 1.5px solid #e5e7eb;
+      border: 1px solid #e5e7eb;
       border-radius: var(--radius-sm);
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      box-shadow: none;
       transition: all 0.2s ease;
 
       &:hover {
         border-color: #d1d5db;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
       }
 
       &.is-focus {
         border-color: var(--theme-color);
-        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.08);
+        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
         background: #fff;
       }
     }
 
     :deep(.el-input__inner),
     :deep(.el-textarea__inner) {
-      font-size: var(--font-md);
+      font-size: var(--font-xs);
       color: var(--el-text-color-primary);
     }
 
     :deep(.el-textarea__wrapper) {
       background: #fff;
-      border: 1.5px solid #e5e7eb;
+      border: 1px solid #e5e7eb;
       border-radius: var(--radius-sm);
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      box-shadow: none;
       transition: all 0.2s ease;
       padding: var(--spacing-sm);
 
       &:hover {
         border-color: #d1d5db;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
       }
 
       &.is-focus {
         border-color: var(--theme-color);
-        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.08);
+        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
         background: #fff;
       }
     }
@@ -1091,33 +2086,37 @@ const handleCelebrationClose = () => {
     .privacy-options {
       display: flex;
       gap: var(--spacing-md);
-      margin-bottom: 20px;
-      padding: var(--spacing-md);
-      background: #f9fafb;
-      border: 1.5px solid #e5e7eb;
+      margin-bottom: var(--spacing-md);
+      padding: 10px;
+      background: #fafafa;
+      border: 1px solid #f0f0f0;
       border-radius: var(--radius-sm);
 
       :deep(.el-checkbox) {
         .el-checkbox__label {
           display: flex;
           align-items: center;
-          gap: var(--spacing-xs);
-          font-size: var(--font-sm);
-          color: var(--el-text-color-regular);
+          gap: 4px;
+          font-size: 10px;
+          color: #64748b;
           font-weight: 500;
 
           i {
             color: var(--theme-color);
-            font-size: var(--font-md);
+            font-size: 11px;
           }
         }
 
         .el-checkbox__inner {
-          border-color: #d1d5db;
-          transition: all 0.2s ease;
+          width: 14px;
+          height: 14px;
+          border-radius: 3px;
 
-          &:hover {
-            border-color: var(--theme-color);
+          &::after {
+            width: 3px;
+            height: 6px;
+            left: 4px;
+            top: 1px;
           }
         }
 
@@ -1133,178 +2132,428 @@ const handleCelebrationClose = () => {
     .step-actions {
       display: flex;
       gap: var(--spacing-sm);
-      margin-top: 20px;
+      margin-top: 12px;
 
       :deep(.el-button) {
-        height: 40px;
-        font-size: var(--font-md);
+        height: 36px;
+        font-size: var(--font-sm);
         font-weight: 500;
-        border-radius: var(--radius-sm);
-        transition: all 0.2s ease;
+        border-radius: var(--radius-md);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 0 18px;
+        position: relative;
+        overflow: hidden;
 
         i {
-          margin-right: var(--spacing-xs);
+          margin-right: 4px;
+          font-size: 11px;
         }
 
         &.el-button--primary {
-          background-color: var(--theme-color);
-          border-color: var(--theme-color);
+          background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+          border: 1px solid #e9d5ff;
+          color: var(--theme-color);
+          box-shadow: 0 1px 3px rgba(139, 92, 246, 0.08);
+          font-weight: 600;
 
           &:hover,
           &:focus {
-            background-color: var(--theme-color-light-3);
-            border-color: var(--theme-color-light-3);
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+            border-color: #d8b4fe;
+            color: #7c3aed;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
+            transform: translateY(-1px);
           }
 
           &:active {
-            background-color: var(--theme-color);
-            border-color: var(--theme-color);
+            transform: translateY(0);
+            background: #e9d5ff;
+            box-shadow: 0 1px 4px rgba(139, 92, 246, 0.12);
+          }
+        }
+
+        &.el-button--default {
+          background: #fff;
+          border: 1.5px solid #e5e7eb;
+          color: #6b7280;
+
+          &:hover {
+            background: #fafafa;
+            border-color: #d1d5db;
+            color: #374151;
           }
         }
       }
     }
-
   }
 
   .donation-info-section {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
   }
 
-  .stats-card {
+  .sidebar-widget {
+    background: linear-gradient(135deg, 
+                  rgba(255, 255, 255, 0.88) 0%, 
+                  rgba(255, 255, 255, 0.82) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.12), 
+                0 4px 16px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-md);
+      padding: 1px;
+      background: linear-gradient(135deg, 
+                    rgba(139, 92, 246, 0.2), 
+                    rgba(217, 70, 239, 0.1),
+                    rgba(167, 139, 250, 0.15));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .widget-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -1px;
+        width: 24px;
+        height: 2px;
+        background: var(--theme-color);
+        border-radius: 2px;
+      }
+
+      i {
+        color: var(--theme-color);
+        font-size: var(--font-md);
+      }
+
+      span {
+        font-size: var(--font-md);
+        font-weight: 600;
+        color: var(--el-text-color-primary);
+      }
+    }
+  }
+
+  .stats-widget {
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      gap: 8px;
 
       .stat-item {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 14px;
-        background: var(--el-fill-color-light);
-        border-radius: 8px;
+        gap: 8px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-radius: var(--radius-sm);
         transition: all 0.2s ease;
 
         &:hover {
-          background: var(--el-fill-color);
-          transform: translateY(-1px);
+          background: rgba(255, 255, 255, 0.7);
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
         }
 
         .stat-icon {
-          width: 42px;
-          height: 42px;
+          width: 32px;
+          height: 32px;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: 8px;
-          background: var(--el-color-primary);
-          color: #fff;
-          font-size: 20px;
+          border-radius: var(--radius-sm);
+          flex-shrink: 0;
+
+          i {
+            font-size: 15px;
+          }
         }
 
         .stat-info {
           flex: 1;
+          min-width: 0;
 
           .stat-value {
-            font-size: 18px;
+            font-size: var(--font-md);
             font-weight: 700;
             color: var(--el-text-color-primary);
             margin-bottom: 2px;
+            line-height: 1.2;
           }
 
           .stat-label {
-            font-size: 12px;
+            font-size: 10px;
             color: var(--el-text-color-secondary);
+            line-height: 1;
           }
         }
       }
     }
   }
 
-  .guide-card {
-    .guide-content {
+  .support-tips {
+    margin-top: var(--spacing-md);
+    padding: 12px;
+    background: rgba(139, 92, 246, 0.04);
+    border: 1px solid rgba(139, 92, 246, 0.1);
+    border-left: 3px solid var(--theme-color);
+    border-radius: var(--radius-sm);
+
+    .tips-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      color: var(--theme-color);
+      font-size: var(--font-xs);
+      font-weight: 600;
+
+      i {
+        font-size: var(--font-sm);
+      }
+    }
+
+    .tips-content {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 6px;
 
-      .guide-item {
+      .tip-item {
         display: flex;
-        gap: 10px;
-        padding: 10px;
-        background: var(--el-fill-color-light);
-        border-radius: 6px;
-        transition: all 0.2s ease;
+        align-items: flex-start;
+        gap: 6px;
+        font-size: 10px;
+        color: #64748b;
+        line-height: 1.6;
 
-        &:hover {
-          background: var(--el-fill-color);
-          transform: translateX(2px);
-        }
-
-        .guide-icon {
-          width: 36px;
-          height: 36px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 6px;
-          background: var(--el-color-primary);
-          color: #fff;
-          font-size: 16px;
+        i {
+          color: var(--theme-color);
+          font-size: 10px;
+          margin-top: 2px;
           flex-shrink: 0;
         }
 
-        .guide-text {
+        span {
           flex: 1;
-
-          .guide-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--el-text-color-primary);
-            margin-bottom: 2px;
-          }
-
-          .guide-desc {
-            font-size: 12px;
-            color: var(--el-text-color-regular);
-            line-height: 1.4;
-          }
         }
       }
     }
   }
 
-  .recent-card {
-    .recent-list {
+  .activity-widget {
+    .activity-tabs {
       display: flex;
-      flex-direction: column;
-      gap: 10px;
+      gap: 4px;
+      margin-bottom: 12px;
+      padding: 3px;
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: var(--radius-sm);
 
-      .recent-item {
+      .tab-item {
+        flex: 1;
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 10px;
-        background: var(--el-fill-color-light);
-        border-radius: 6px;
+        justify-content: center;
+        gap: 5px;
+        padding: 6px 10px;
+        border-radius: 4px;
+        font-size: var(--font-xs);
+        font-weight: 500;
+        color: #666;
+        cursor: pointer;
         transition: all 0.2s ease;
+        user-select: none;
 
-        &:hover {
-          background: var(--el-fill-color);
-          transform: translateX(2px);
+        i {
+          font-size: 11px;
         }
 
-        .recent-avatar {
-          width: 36px;
-          height: 36px;
+        &:hover:not(.active) {
+          color: var(--theme-color);
+        }
+
+        &.active {
+          background: var(--theme-color);
+          color: #fff;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .activity-content {
+      min-height: 240px;
+    }
+  }
+
+  .ranking-widget,
+  .activity-widget {
+    .ranking-list {
+      .ranking-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        margin-bottom: 6px;
+        border-radius: var(--radius-sm);
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        transition: all 0.2s ease;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.75);
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+        }
+
+        .ranking-badge {
+          width: 20px;
+          height: 20px;
           display: flex;
           align-items: center;
           justify-content: center;
           border-radius: 50%;
-          background: var(--el-color-primary);
+          font-size: 9px;
+          font-weight: 600;
+          flex-shrink: 0;
+
+          &.rank-1 {
+            background: #fbbf24;
+            color: #fff;
+          }
+
+          &.rank-2 {
+            background: #94a3b8;
+            color: #fff;
+          }
+
+          &.rank-3 {
+            background: #f97316;
+            color: #fff;
+          }
+
+          &:not(.rank-1):not(.rank-2):not(.rank-3) {
+            background: #e5e7eb;
+            color: #6b7280;
+          }
+        }
+
+        .ranking-avatar {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: var(--theme-color);
           color: #fff;
-          font-size: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 10px;
+          font-weight: 600;
+          flex-shrink: 0;
+        }
+
+        .ranking-info {
+          flex: 1;
+          min-width: 0;
+
+          .ranking-name {
+            font-size: var(--font-xs);
+            font-weight: 600;
+            color: var(--el-text-color-primary);
+            margin-bottom: 2px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          .ranking-count {
+            font-size: 9px;
+            color: var(--el-text-color-secondary);
+          }
+        }
+
+        .ranking-amount {
+          font-size: var(--font-xs);
+          font-weight: 700;
+          color: var(--theme-color);
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+
+  .recent-widget,
+  .activity-widget {
+    .recent-list {
+      .recent-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        margin-bottom: 6px;
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-radius: var(--radius-sm);
+        transition: all 0.2s ease;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.75);
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+        }
+
+        .recent-dot {
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: var(--theme-color);
+          flex-shrink: 0;
+          opacity: 0.5;
+        }
+
+        .recent-avatar {
+          width: 22px;
+          height: 22px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          background: var(--theme-color);
+          color: #fff;
+          font-size: 10px;
+          font-weight: 600;
           flex-shrink: 0;
         }
 
@@ -1313,25 +2562,38 @@ const handleCelebrationClose = () => {
           min-width: 0;
 
           .recent-name {
-            font-size: 13px;
-            font-weight: 600;
+            font-size: var(--font-xs);
+            font-weight: 500;
             color: var(--el-text-color-primary);
             margin-bottom: 2px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
 
           .recent-time {
-            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 9px;
             color: var(--el-text-color-secondary);
+
+            i {
+              font-size: 8px;
+              opacity: 0.7;
+            }
           }
         }
 
         .recent-amount {
-          font-size: 15px;
+          font-size: var(--font-xs);
           font-weight: 700;
           color: var(--theme-color);
+          flex-shrink: 0;
         }
       }
     }
   }
+
 }
 </style>
