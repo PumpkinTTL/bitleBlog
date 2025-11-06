@@ -1,68 +1,5 @@
 <template>
   <div class="donation-page">
-    <!-- 背景装饰 -->
-    <div class="bg-decorations">
-      <!-- 左侧装饰 -->
-      <div class="decoration-left">
-        <!-- 星星 -->
-        <div class="star-icon" style="top: 8%; left: 8%;">★</div>
-        <div class="star-icon" style="top: 15%; left: 5%;">★</div>
-        <div class="star-icon" style="top: 28%; left: 10%;">★</div>
-        <div class="star-icon" style="top: 38%; left: 4%;">★</div>
-        <div class="star-icon" style="top: 52%; left: 9%;">★</div>
-        <div class="star-icon" style="top: 63%; left: 6%;">★</div>
-        <div class="star-icon" style="top: 75%; left: 7%;">★</div>
-        <div class="star-icon" style="top: 88%; left: 5%;">★</div>
-        <div class="star-icon" style="top: 12%; left: 3%;">✦</div>
-        <div class="star-icon" style="top: 22%; left: 11%;">✦</div>
-        <div class="star-icon" style="top: 45%; left: 3%;">✦</div>
-        <div class="star-icon" style="top: 68%; left: 11%;">✦</div>
-        <div class="star-icon" style="top: 82%; left: 10%;">✦</div>
-        <div class="star-icon" style="top: 92%; left: 8%;">✦</div>
-        
-        <!-- FontAwesome图标 -->
-        <div class="fa-icon" style="top: 10%; left: 6%;"><i class="fas fa-heart"></i></div>
-        <div class="fa-icon" style="top: 25%; left: 7%;"><i class="fas fa-gift"></i></div>
-        <div class="fa-icon" style="top: 40%; left: 8%;"><i class="fas fa-gem"></i></div>
-        <div class="fa-icon" style="top: 55%; left: 5%;"><i class="fas fa-star"></i></div>
-        <div class="fa-icon" style="top: 70%; left: 9%;"><i class="fas fa-hand-holding-usd"></i></div>
-        <div class="fa-icon" style="top: 85%; left: 7%;"><i class="fas fa-trophy"></i></div>
-        <div class="fa-icon" style="top: 95%; left: 4%;"><i class="fas fa-crown"></i></div>
-      </div>
-      
-      <!-- 右侧装饰 -->
-      <div class="decoration-right">
-        <!-- 星星 -->
-        <div class="star-icon" style="top: 6%; right: 7%;">★</div>
-        <div class="star-icon" style="top: 18%; right: 10%;">★</div>
-        <div class="star-icon" style="top: 32%; right: 5%;">★</div>
-        <div class="star-icon" style="top: 43%; right: 9%;">★</div>
-        <div class="star-icon" style="top: 58%; right: 6%;">★</div>
-        <div class="star-icon" style="top: 70%; right: 11%;">★</div>
-        <div class="star-icon" style="top: 80%; right: 7%;">★</div>
-        <div class="star-icon" style="top: 91%; right: 9%;">★</div>
-        <div class="star-icon" style="top: 10%; right: 4%;">✦</div>
-        <div class="star-icon" style="top: 25%; right: 3%;">✦</div>
-        <div class="star-icon" style="top: 48%; right: 12%;">✦</div>
-        <div class="star-icon" style="top: 64%; right: 4%;">✦</div>
-        <div class="star-icon" style="top: 76%; right: 3%;">✦</div>
-        <div class="star-icon" style="top: 95%; right: 6%;">✦</div>
-        
-        <!-- FontAwesome图标 -->
-        <div class="fa-icon" style="top: 8%; right: 8%;"><i class="fas fa-coins"></i></div>
-        <div class="fa-icon" style="top: 22%; right: 6%;"><i class="fas fa-hand-holding-heart"></i></div>
-        <div class="fa-icon" style="top: 38%; right: 7%;"><i class="fas fa-certificate"></i></div>
-        <div class="fa-icon" style="top: 53%; right: 8%;"><i class="fas fa-sparkles"></i></div>
-        <div class="fa-icon" style="top: 68%; right: 5%;"><i class="fas fa-donate"></i></div>
-        <div class="fa-icon" style="top: 83%; right: 10%;"><i class="fas fa-medal"></i></div>
-        <div class="fa-icon" style="top: 97%; right: 7%;"><i class="fas fa-award"></i></div>
-      </div>
-      
-      <!-- 背景光晕 -->
-      <div class="bg-glow bg-glow-left"></div>
-      <div class="bg-glow bg-glow-right"></div>
-    </div>
-    
     <div class="donation-content">
       <div class="content-wrapper">
         <div class="donation-form-section animate__animated animate__fadeInUp animate__fast">
@@ -689,98 +626,6 @@ const handleCelebrationClose = () => {
     z-index: 0;
   }
 
-  // 背景装饰容器
-  .bg-decorations {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-  }
-  
-  // 左右侧装饰容器
-  .decoration-left,
-  .decoration-right {
-    position: absolute;
-    top: 0;
-    width: 15%;
-    height: 100%;
-    
-    @media (max-width: 1024px) {
-      width: 10%;
-    }
-    
-    @media (max-width: 768px) {
-      width: 8%;
-    }
-  }
-  
-  .decoration-left {
-    left: 0;
-  }
-  
-  .decoration-right {
-    right: 0;
-  }
-  
-  // 星星装饰
-  .star-icon {
-    position: absolute;
-    font-size: 20px;
-    color: #fbbf24;
-    opacity: 0.3;
-    text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
-    
-    @media (max-width: 768px) {
-      font-size: 14px;
-      opacity: 0.2;
-    }
-  }
-  
-  // FontAwesome图标装饰
-  .fa-icon {
-    position: absolute;
-    font-size: 22px;
-    opacity: 0.15;
-    
-    i {
-      color: var(--el-color-primary);
-      text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
-    }
-    
-    @media (max-width: 768px) {
-      font-size: 16px;
-      opacity: 0.1;
-    }
-  }
-  
-  // 背景光晕
-  .bg-glow {
-    position: absolute;
-    width: 400px;
-    height: 600px;
-    border-radius: 50%;
-    opacity: 0.4;
-    
-    &.bg-glow-left {
-      top: 20%;
-      left: -100px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 60%);
-    }
-    
-    &.bg-glow-right {
-      bottom: 20%;
-      right: -100px;
-      background: radial-gradient(circle, rgba(217, 70, 239, 0.06) 0%, transparent 60%);
-    }
-    
-    @media (max-width: 768px) {
-      opacity: 0.2;
-    }
-  }
 
   .donation-content {
     max-width: 1200px;
@@ -1023,152 +868,7 @@ const handleCelebrationClose = () => {
     }
   }
 
-  @keyframes sparkle {
-    0%, 100% {
-      opacity: 0.3;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 1;
-      transform: scale(1.2);
-    }
-  }
 
-  @keyframes twinkle {
-    0%, 100% {
-      opacity: 0.3;
-      transform: scale(1) rotate(0deg);
-    }
-    50% {
-      opacity: 1;
-      transform: scale(1.15) rotate(10deg);
-    }
-  }
-
-  @keyframes badgePulse {
-    0%, 100% {
-      transform: scale(1);
-      box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
-    }
-    50% {
-      transform: scale(1.05);
-      box-shadow: 0 3px 12px rgba(255, 107, 107, 0.6);
-    }
-  }
-
-  @keyframes badgeFloat {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-2px);
-    }
-  }
-
-  @keyframes badgeBounce {
-    0%, 100% {
-      transform: scale(1);
-    }
-    25% {
-      transform: scale(1.1) rotate(-5deg);
-    }
-    75% {
-      transform: scale(1.1) rotate(5deg);
-    }
-  }
-
-  @keyframes badgeShake {
-    0%, 100% {
-      transform: translateX(0);
-    }
-    25% {
-      transform: translateX(-2px);
-    }
-    75% {
-      transform: translateX(2px);
-    }
-  }
-
-  @keyframes coinSpin {
-    0% {
-      transform: rotateY(0deg);
-    }
-    100% {
-      transform: rotateY(360deg);
-    }
-  }
-
-  @keyframes float1 {
-    0%, 100% {
-      transform: translate(0, 0) rotate(0deg);
-    }
-    33% {
-      transform: translate(30px, -30px) rotate(120deg);
-    }
-    66% {
-      transform: translate(-20px, 20px) rotate(240deg);
-    }
-  }
-
-  @keyframes float2 {
-    0%, 100% {
-      transform: translate(0, 0) scale(1);
-      opacity: 0.3;
-    }
-    50% {
-      transform: translate(-40px, 40px) scale(1.2);
-      opacity: 0.6;
-    }
-  }
-
-  @keyframes float3 {
-    0%, 100% {
-      transform: translate(0, 0);
-      opacity: 0.2;
-    }
-    50% {
-      transform: translate(20px, -50px);
-      opacity: 0.5;
-    }
-  }
-
-  @keyframes rotate1 {
-    0% {
-      transform: rotate(45deg);
-      opacity: 0.1;
-    }
-    50% {
-      opacity: 0.2;
-    }
-    100% {
-      transform: rotate(405deg);
-      opacity: 0.1;
-    }
-  }
-
-  @keyframes pulse2 {
-    0%, 100% {
-      transform: scale(1);
-      opacity: 0.08;
-    }
-    50% {
-      transform: scale(1.3);
-      opacity: 0.15;
-    }
-  }
-
-  @keyframes pulse3 {
-    0%, 100% {
-      transform: scale(1);
-      opacity: 0.2;
-    }
-    50% {
-      transform: scale(1.15);
-      opacity: 0.4;
-    }
-  }
-
-  // 已删除所有不再使用的装饰动画关键帧
 
   // 使用animate.css统一动画 - 快速流畅
   .animate__animated {
@@ -1248,14 +948,6 @@ const handleCelebrationClose = () => {
         border-color: var(--el-color-primary-light-3);
         box-shadow: 0 4px 16px rgba(139, 92, 246, 0.15);
         transform: translateY(-3px) scale(1.02);
-
-        .channel-badge.recommend {
-          animation: badgeBounce 0.6s ease-in-out;
-        }
-
-        .channel-badge-left.crypto-badge {
-          animation: badgeShake 0.6s ease-in-out;
-        }
         
         @media (max-width: 768px) {
           transform: translateY(-2px);
@@ -1311,12 +1003,6 @@ const handleCelebrationClose = () => {
         background: linear-gradient(135deg, #ff6b6b, #ff8787);
         color: #fff;
         box-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
-        animation: badgePulse 2s ease-in-out infinite;
-        will-change: transform;
-        
-        @media (max-width: 768px) {
-          animation: none;
-        }
       }
 
       .channel-badge-left {
@@ -1334,12 +1020,6 @@ const handleCelebrationClose = () => {
         white-space: nowrap;
         z-index: 2;
         box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
-        animation: badgeFloat 3s ease-in-out infinite;
-        will-change: transform;
-        
-        @media (max-width: 768px) {
-          animation: none;
-        }
 
         &.crypto-badge {
           background: var(--el-color-primary);
@@ -1347,11 +1027,6 @@ const handleCelebrationClose = () => {
 
           i {
             font-size: 10px;
-            animation: coinSpin 4s linear infinite;
-            
-            @media (max-width: 768px) {
-              animation: none;
-            }
           }
         }
       }
