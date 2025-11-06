@@ -450,13 +450,13 @@ watch(() => props.totalArticles, (newValue) => {
       }
     }
 
-    .article-count {
+  .article-count {
       padding: 4px 12px;
-      background: var(--el-fill-color-light);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.15));
       border-radius: 20px;
       font-size: 12px;
-      color: var(--el-text-color-regular);
-      font-weight: 500;
+      color: var(--el-color-primary);
+      font-weight: 600;
 
       @media (max-width: 768px) {
         font-size: 11px;
@@ -497,14 +497,15 @@ watch(() => props.totalArticles, (newValue) => {
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 36px;
-  padding: 0 12px;
-  background: var(--el-fill-color-light);
-  border: 1px solid var(--el-border-color-light);
-  border-radius: 8px;
+  height: 38px;
+  padding: 0 14px;
+  background: var(--el-fill-color-blank);
+  border: 2px solid var(--el-border-color-light);
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   min-width: 180px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 
   @media (max-width: 768px) {
     height: 32px;
@@ -513,8 +514,10 @@ watch(() => props.totalArticles, (newValue) => {
   }
 
   &:hover {
-    background: var(--el-color-primary-light-9);
-    border-color: var(--el-color-primary-light-7);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f5ff 100%);
+    border-color: var(--el-color-primary-light-5);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.12);
+    transform: translateY(-1px);
 
     .search-icon {
       color: var(--el-color-primary);
@@ -522,8 +525,9 @@ watch(() => props.totalArticles, (newValue) => {
   }
 
   &.expanded {
-    background: var(--el-color-primary-light-9);
+    background: linear-gradient(135deg, #ffffff 0%, #f5f3ff 100%);
     border-color: var(--el-color-primary);
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2), 0 0 0 3px rgba(139, 92, 246, 0.08);
 
     .search-icon {
       color: var(--el-color-primary);
@@ -531,6 +535,7 @@ watch(() => props.totalArticles, (newValue) => {
 
     .search-text {
       color: var(--el-color-primary);
+      font-weight: 600;
     }
   }
 
@@ -655,10 +660,11 @@ watch(() => props.totalArticles, (newValue) => {
 }
 
 .search-input :deep(.el-input__wrapper) {
-  height: 36px;
-  border-radius: 6px;
-  border: 1px solid var(--el-border-color);
-  transition: all 0.2s ease;
+  height: 38px;
+  border-radius: 8px;
+  border: 1.5px solid var(--el-border-color-light);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
 
   @media (max-width: 768px) {
     height: 34px;
@@ -667,12 +673,13 @@ watch(() => props.totalArticles, (newValue) => {
 }
 
 .search-input :deep(.el-input__wrapper):hover {
-  border-color: var(--el-color-primary-light-7);
+  border-color: var(--el-color-primary-light-5);
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
 }
 
 .search-input :deep(.el-input__wrapper.is-focus) {
   border-color: var(--el-color-primary);
-  box-shadow: 0 0 0 2px var(--el-color-primary-light-8);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12), 0 2px 8px rgba(139, 92, 246, 0.1);
 }
 
 .input-icon {
@@ -685,11 +692,12 @@ watch(() => props.totalArticles, (newValue) => {
 }
 
 .search-btn {
-  height: 36px;
-  padding: 0 16px;
-  border-radius: 6px;
-  font-weight: 500;
+  height: 38px;
+  padding: 0 18px;
+  border-radius: 8px;
+  font-weight: 600;
   font-size: 13px;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
 
   @media (max-width: 768px) {
     height: 34px;
@@ -756,16 +764,17 @@ watch(() => props.totalArticles, (newValue) => {
   gap: 4px;
   padding: 4px 10px;
   height: 28px;
-  background: var(--el-fill-color-light);
-  border: 1px solid var(--el-border-color-lighter);
-  border-radius: 6px;
+  background: var(--el-fill-color-blank);
+  border: 1.5px solid var(--el-border-color-light);
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 12px;
   color: var(--el-text-color-regular);
   white-space: nowrap;
   line-height: 1;
   font-weight: 500;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
 
   @media (max-width: 768px) {
     height: 26px;
@@ -778,19 +787,20 @@ watch(() => props.totalArticles, (newValue) => {
 
 .filter-tag:hover,
 .category-tag:hover {
-  background: var(--el-color-primary-light-9);
-  border-color: var(--el-color-primary-light-7);
+  background: linear-gradient(135deg, #ffffff 0%, #f8f5ff 100%);
+  border-color: var(--el-color-primary-light-5);
   color: var(--el-color-primary);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(64, 158, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
 }
 
 .filter-tag.active,
 .category-tag.active {
-  background: var(--el-color-primary);
+  background: linear-gradient(135deg, var(--el-color-primary), var(--el-color-primary-light-3));
   border-color: var(--el-color-primary);
   color: white;
-  box-shadow: 0 2px 8px var(--el-color-primary-light-5);
+  box-shadow: 0 3px 12px rgba(139, 92, 246, 0.35), 0 1px 4px rgba(139, 92, 246, 0.2);
+  transform: translateY(-1px);
 }
 
 .tag-icon {
@@ -848,11 +858,12 @@ watch(() => props.totalArticles, (newValue) => {
   display: flex;
   align-items: center;
   gap: 4px;
-  height: 32px;
-  padding: 0 12px;
-  border-radius: 6px;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 8px;
   font-weight: 500;
   font-size: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   @media (max-width: 768px) {
     height: 30px;
