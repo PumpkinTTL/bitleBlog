@@ -36,7 +36,7 @@
         <div class="header-actions">
           <!-- 捐赠按钮 -->
           <router-link to="/donation" class="donation-link">
-            <i class="fas fa-heart"></i>
+            <i class="fas fa-hand-holding-heart"></i>
             <span class="donation-text">捐赠本站</span>
           </router-link>
 
@@ -610,17 +610,17 @@ onMounted(() => {
   padding: 8px 16px;
   border-radius: 10px;
   background: linear-gradient(135deg,
-    rgba(239, 68, 68, 0.1) 0%,
-    rgba(220, 38, 38, 0.15) 100%);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #ef4444;
+    rgba(245, 158, 11, 0.1) 0%,
+    rgba(234, 88, 12, 0.15) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #f59e0b;
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
 
   // 内部光泽
   &::before {
@@ -636,10 +636,9 @@ onMounted(() => {
     pointer-events: none;
   }
 
-  // 心跳动画
   i {
     font-size: 14px;
-    animation: heartbeat 1.5s ease-in-out infinite;
+    transition: transform 0.3s ease;
   }
 
   .donation-text {
@@ -652,16 +651,15 @@ onMounted(() => {
 
   &:hover {
     background: linear-gradient(135deg,
-      rgba(239, 68, 68, 0.2) 0%,
-      rgba(220, 38, 38, 0.25) 100%);
-    border-color: rgba(239, 68, 68, 0.5);
-    color: #dc2626;
+      rgba(245, 158, 11, 0.2) 0%,
+      rgba(234, 88, 12, 0.25) 100%);
+    border-color: rgba(245, 158, 11, 0.5);
+    color: #ea580c;
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
 
     i {
-      animation: heartbeat 0.8s ease-in-out infinite;
-      transform: scale(1.1);
+      transform: scale(1.15) translateY(-1px);
     }
   }
 
@@ -993,14 +991,31 @@ onMounted(() => {
   align-items: center;
   gap: 6px;
   padding: 7px 16px;
-  border: 1px solid var(--el-color-primary);
-  background: var(--el-color-primary);
-  border-radius: 6px;
+  border: 1px solid #8b5cf6;
+  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+  border-radius: 10px;
   color: white;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
+  
+  // 内部光泽
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.25) 0%,
+      transparent 100%);
+    pointer-events: none;
+  }
   
   @media (max-width: 992px) {
     display: none !important;
@@ -1008,22 +1023,28 @@ onMounted(() => {
   
   i {
     font-size: 12px;
+    transition: transform 0.3s ease;
   }
   
   span {
-    font-weight: 500;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
   }
   
   &:hover {
-    background: var(--el-color-primary-light-3);
-    border-color: var(--el-color-primary-light-3);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+    border-color: #7c3aed;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.35);
+    
+    i {
+      transform: scale(1.1);
+    }
   }
   
   &:active {
     transform: translateY(0);
-    background: var(--el-color-primary-dark-2);
   }
 }
 
@@ -1458,9 +1479,9 @@ onMounted(() => {
   gap: 12px;
   padding: 16px;
   background: linear-gradient(135deg,
-    rgba(239, 68, 68, 0.08) 0%,
-    rgba(220, 38, 38, 0.12) 100%);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+    rgba(245, 158, 11, 0.08) 0%,
+    rgba(234, 88, 12, 0.12) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.2);
   border-radius: 12px;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -1486,8 +1507,8 @@ onMounted(() => {
     height: 48px;
     border-radius: 12px;
     background: linear-gradient(135deg,
-      rgba(239, 68, 68, 0.2) 0%,
-      rgba(220, 38, 38, 0.3) 100%);
+      rgba(245, 158, 11, 0.2) 0%,
+      rgba(234, 88, 12, 0.3) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1495,8 +1516,8 @@ onMounted(() => {
 
     i {
       font-size: 22px;
-      color: #ef4444;
-      animation: heartbeat 1.5s ease-in-out infinite;
+      color: #f59e0b;
+      transition: transform 0.3s ease;
     }
   }
 
@@ -1506,38 +1527,37 @@ onMounted(() => {
     .donation-card-title {
       font-size: 15px;
       font-weight: 700;
-      color: #ef4444;
+      color: #f59e0b;
       margin: 0 0 4px;
     }
 
     .donation-card-desc {
       font-size: 12px;
-      color: rgba(239, 68, 68, 0.8);
+      color: rgba(245, 158, 11, 0.8);
       margin: 0;
     }
   }
 
   .donation-arrow {
     font-size: 14px;
-    color: rgba(239, 68, 68, 0.6);
+    color: rgba(245, 158, 11, 0.6);
     transition: all 0.3s ease;
   }
 
   &:hover {
     background: linear-gradient(135deg,
-      rgba(239, 68, 68, 0.15) 0%,
-      rgba(220, 38, 38, 0.2) 100%);
-    border-color: rgba(239, 68, 68, 0.4);
+      rgba(245, 158, 11, 0.15) 0%,
+      rgba(234, 88, 12, 0.2) 100%);
+    border-color: rgba(245, 158, 11, 0.4);
     transform: translateX(4px);
-    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2);
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.2);
 
     .donation-card-icon i {
-      animation: heartbeat 0.8s ease-in-out infinite;
-      transform: scale(1.1);
+      transform: scale(1.15) translateY(-2px);
     }
 
     .donation-arrow {
-      color: #ef4444;
+      color: #ea580c;
       transform: translateX(4px);
     }
   }

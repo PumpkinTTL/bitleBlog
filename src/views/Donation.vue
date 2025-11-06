@@ -895,6 +895,15 @@ const handleCelebrationClose = () => {
     }
   }
 
+  @keyframes tipIconGlow {
+    0%, 100% {
+      filter: drop-shadow(0 1px 2px rgba(139, 92, 246, 0.3));
+    }
+    50% {
+      filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.5));
+    }
+  }
+
   @keyframes iconPulse {
     0%, 100% {
       transform: scale(1);
@@ -966,8 +975,8 @@ const handleCelebrationClose = () => {
     margin-bottom: var(--spacing-md);
 
     .qrcode-grid {
-      .qrcode-item {
-        margin-bottom: 12px;
+      :deep(.el-col) {
+        margin-bottom: 16px;
 
         @media (min-width: 768px) {
           margin-bottom: 0;
@@ -1205,21 +1214,36 @@ const handleCelebrationClose = () => {
   }
   
   .field-tip {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     margin-top: 6px;
-    padding: 6px 8px;
-    background: var(--el-color-primary-light-9);
-    border-radius: 4px;
+    padding: 3px 8px 3px 4px;
+    background: linear-gradient(135deg, 
+      rgba(139, 92, 246, 0.04) 0%, 
+      rgba(217, 70, 239, 0.06) 100%);
+    border-radius: 6px;
     font-size: 10px;
-    color: var(--el-text-color-secondary);
+    color: rgba(0, 0, 0, 0.65);
     line-height: 1.4;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: linear-gradient(135deg, 
+        rgba(139, 92, 246, 0.08) 0%, 
+        rgba(217, 70, 239, 0.1) 100%);
+    }
     
     i {
-      color: var(--el-color-primary-light-5);
-      font-size: 11px;
+      color: var(--el-color-primary);
+      font-size: 12px;
       flex-shrink: 0;
+      filter: drop-shadow(0 1px 2px rgba(139, 92, 246, 0.3));
+      animation: tipIconGlow 2.5s ease-in-out infinite;
+    }
+    
+    span {
+      font-weight: 500;
     }
   }
 
