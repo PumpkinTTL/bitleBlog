@@ -53,7 +53,12 @@
                       style="animation-delay: 0.2s;">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'cardkey' }"
                         @click="selectChannel('cardkey')">
-                        <img :src="collectionCarkey" alt="购买卡密" />
+                        <div class="qrcode-container">
+                          <a-qrcode :value="qrCodeUrls.cardkey" :size="qrSize" :bordered="false" />
+                          <div class="qrcode-icon icon-cardkey">
+                            <i class="fas fa-gift"></i>
+                          </div>
+                        </div>
                         <div class="qrcode-tip">
                           <a href="https://www.qianxun1688.com/links/1C9EDE0B" target="_blank" class="card-link"
                             @click.stop>
@@ -71,7 +76,12 @@
                           <i class="fab fa-bitcoin"></i>
                           <span>加密货币</span>
                         </span>
-                        <img :src="collectionTp" alt="USDT收款码" />
+                        <div class="qrcode-container">
+                          <a-qrcode :value="qrCodeUrls.crypto" :size="qrSize" :bordered="false" />
+                          <div class="qrcode-icon icon-crypto">
+                            <i class="fab fa-bitcoin"></i>
+                          </div>
+                        </div>
                         <div class="qrcode-tip">USDT TRC-20</div>
                         <span class="channel-badge recommend">推荐</span>
                       </div>
@@ -80,7 +90,12 @@
                       style="animation-delay: 0.5s;">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'alipay' }"
                         @click="selectChannel('alipay')">
-                        <img :src="collectionAlipay" alt="支付宝收款码" />
+                        <div class="qrcode-container">
+                          <a-qrcode :value="qrCodeUrls.alipay" :size="qrSize" :bordered="false" />
+                          <div class="qrcode-icon icon-alipay">
+                            <i class="fab fa-alipay"></i>
+                          </div>
+                        </div>
                         <div class="qrcode-tip">支付宝支付</div>
                       </div>
                     </el-col>
@@ -88,7 +103,12 @@
                       style="animation-delay: 0.65s;">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'wechat' }"
                         @click="selectChannel('wechat')">
-                        <img :src="collectionWechat" alt="微信收款码" />
+                        <div class="qrcode-container">
+                          <a-qrcode :value="qrCodeUrls.wechat" :size="qrSize" :bordered="false" />
+                          <div class="qrcode-icon icon-wechat">
+                            <i class="fab fa-weixin"></i>
+                          </div>
+                        </div>
                         <div class="qrcode-tip">微信扫码支付</div>
                       </div>
                     </el-col>
@@ -386,17 +406,42 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import { message } from 'ant-design-vue'
 import type { FormInstance } from 'element-plus'
 import { addDonationR } from '@/request/donation'
 import type { DonationChannel, DonationFormData, CelebrationDetail, CelebrationAction } from '@/types/donation'
 import CelebrationModal from '@/components/common/CelebrationModal.vue'
 import StepForm from '@/components/StepForm.vue'
-import collectionWechat from '@/assets/images/collection_wechat.jpg'
-import collectionAlipay from '@/assets/images/collection_alipay.jpg'
-import collectionTp from '@/assets/images/collection_tp.jpg'
-import collectionCarkey from '@/assets/images/collection_carkey.png'
+
+// QR Code URLs for different payment methods
+const qrCodeUrls = {
+  alipay: 'https://qr.alipay.com/2m611879glsa53vvau4ux69',
+  wechat: 'wxp://f2f0xVBAYEhdffGHmomPankQ6VnmvlDEBRIv9CmY0ZJbrQQ',
+  crypto: 'TZfRzskyPjHCE8Kf3PjpfEE4RdVVV8H9Eu', // USDT TRC-20 address
+  cardkey: 'https://www.qianxun1688.com/links/1C9EDE0B'
+}
+
+// Responsive QR code size
+const windowWidth = ref(window.innerWidth)
+const qrSize = computed(() => {
+  if (windowWidth.value < 768) {
+    return 130 // Mobile
+  }
+  return 170 // Desktop
+})
+
+const handleResize = () => {
+  windowWidth.value = window.innerWidth
+}
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
 
 const formRef = ref<FormInstance>()
 const selectedChannel = ref<DonationChannel>('cardkey')
@@ -998,59 +1043,121 @@ const handleCelebrationClose = () => {
       }
     }
 
-    .qrcode-item {
-      cursor: pointer;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 16px;
-      background: var(--el-fill-color-blank);
-      border: 1.5px solid var(--el-border-color);
-      border-radius: var(--radius-md);
-      height: 100%;
-      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-      will-change: transform;
-
-      @media (max-width: 768px) {
-        transition: all 0.2s ease;
-      }
-
-      &:hover {
-        border-color: var(--el-color-primary-light-3);
-        box-shadow: 0 4px 16px rgba(139, 92, 246, 0.15);
-        transform: translateY(-3px) scale(1.02);
+      .qrcode-item {
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 14px;
+        background: var(--el-fill-color-blank);
+        border: 2px solid var(--el-border-color-light);
+        border-radius: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+        overflow: hidden;
 
         @media (max-width: 768px) {
+          padding: 10px;
+          border-radius: 10px;
+        }
+
+        &:hover {
+          border-color: var(--el-color-primary-light-7);
+          box-shadow: 0 6px 24px rgba(139, 92, 246, 0.12), 0 2px 8px rgba(139, 92, 246, 0.08);
+          transform: translateY(-4px);
+
+          @media (max-width: 768px) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.1);
+          }
+        }
+
+        &.active {
+          border-color: var(--el-color-primary);
+          box-shadow: 0 6px 24px rgba(139, 92, 246, 0.2), 
+                      0 2px 8px rgba(139, 92, 246, 0.1),
+                      0 0 0 4px rgba(139, 92, 246, 0.08);
           transform: translateY(-2px);
-          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+        }
+
+      .qrcode-container {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 8px;
+        line-height: 0;
+
+        @media (max-width: 768px) {
+          margin-bottom: 6px;
+        }
+
+        :deep(.ant-qrcode) {
+          display: block;
+          
+          canvas {
+            display: block !important;
+          }
+        }
+
+        .qrcode-icon {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 36px;
+          height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #fff;
+          border-radius: 8px;
+          box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+          pointer-events: none;
+
+          i {
+            font-size: 22px;
+          }
+
+          &.icon-alipay i {
+            color: #1677ff;
+          }
+
+          &.icon-wechat i {
+            color: #09bb07;
+          }
+
+          &.icon-crypto i {
+            color: #f7931a;
+          }
+
+          &.icon-cardkey i {
+            color: #ff6b35;
+          }
+
+          @media (max-width: 768px) {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+
+            i {
+              font-size: 14px;
+            }
+          }
         }
       }
 
-      &.active {
-        border-color: var(--el-color-primary);
-        border-width: 2px;
-        box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25), 0 0 0 3px var(--el-color-primary-light-9);
-        transform: translateY(-2px);
-      }
-
-      img {
-        width: 100%;
-        aspect-ratio: 1;
-        object-fit: contain;
-        border-radius: 4px;
-        margin-bottom: 6px;
-        background: var(--el-fill-color-light);
-        padding: 4px;
-      }
-
       .qrcode-tip {
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 500;
         color: var(--el-text-color-regular);
         text-align: center;
-        line-height: 1.3;
+        line-height: 1.4;
+        margin-top: 2px;
+
+        @media (max-width: 768px) {
+          font-size: 10px;
+          margin-top: 0;
+        }
 
         .card-link {
           color: var(--el-color-primary);

@@ -36,6 +36,7 @@ declare module 'vue' {
     AModal: typeof import('ant-design-vue/es')['Modal']
     APagination: typeof import('ant-design-vue/es')['Pagination']
     ApiTest: typeof import('./src/components/ApiTest.vue')['default']
+    AQrcode: typeof import('ant-design-vue/es')['QRCode']
     AResult: typeof import('ant-design-vue/es')['Result']
     ARow: typeof import('ant-design-vue/es')['Row']
     ArticleCard: typeof import('./src/components/index/v2/ArticleCard.vue')['default']
