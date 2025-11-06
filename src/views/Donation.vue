@@ -33,7 +33,8 @@
                 </div>
               </div>
             </div>
-
+            
+            <div class="form-and-sidebar-wrapper">
             <div class="donation-form">
               <el-form ref="formRef" :model="formData" :rules="formRules" label-position="top">
                 <!-- 步骤条 -->
@@ -49,7 +50,7 @@
                 <div v-show="currentStep === 0" class="qrcode-section">
                   <el-row :gutter="16" class="qrcode-grid">
                     <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast"
-                      style="animation-delay: 0.3s;">
+                      style="animation-delay: 0.2s;">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'cardkey' }"
                         @click="selectChannel('cardkey')">
                         <img :src="collectionCarkey" alt="购买卡密" />
@@ -63,7 +64,7 @@
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast"
-                      style="animation-delay: 0.4s;">
+                      style="animation-delay: 0.35s;">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'crypto' }"
                         @click="selectChannel('crypto')">
                         <span class="channel-badge-left crypto-badge">
@@ -84,7 +85,7 @@
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast"
-                      style="animation-delay: 0.6s;">
+                      style="animation-delay: 0.65s;">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'wechat' }"
                         @click="selectChannel('wechat')">
                         <img :src="collectionWechat" alt="微信收款码" />
@@ -239,19 +240,16 @@
                 </div>
               </el-form>
             </div>
-          </a-card>
-        </div>
-
-        <div class="donation-info-section">
+            
+            <div class="donation-info-section">
           <!-- 统计卡片 -->
-          <div class="sidebar-widget stats-widget animate__animated animate__fadeInUp animate__fast"
-            style="animation-delay: 0.15s;">
+          <div class="sidebar-widget stats-widget">
             <div class="widget-header">
               <i class="fas fa-chart-line"></i>
               <span>捐赠数据</span>
             </div>
             <div class="stats-grid">
-              <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.25s;">
+              <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.2s;">
                 <div class="stat-icon"
                   style="background: linear-gradient(135deg, rgba(22, 119, 255, 0.1), rgba(22, 119, 255, 0.2)); color: #1677ff;">
                   <i class="fas fa-users"></i>
@@ -267,11 +265,11 @@
                   <i class="fas fa-coins"></i>
                 </div>
                 <div class="stat-info">
-                  <div class="stat-value">¥56,789</div>
+                  <div class="stat-value">￥56,789</div>
                   <div class="stat-label">累计金额</div>
                 </div>
               </div>
-              <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.45s;">
+              <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.5s;">
                 <div class="stat-icon"
                   style="background: linear-gradient(135deg, rgba(250, 140, 22, 0.1), rgba(250, 140, 22, 0.2)); color: #fa8c16;">
                   <i class="fas fa-calendar-check"></i>
@@ -281,7 +279,7 @@
                   <div class="stat-label">本月捐赠</div>
                 </div>
               </div>
-              <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.55s;">
+              <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.65s;">
                 <div class="stat-icon"
                   style="background: linear-gradient(135deg, rgba(114, 46, 209, 0.1), rgba(114, 46, 209, 0.2)); color: #722ed1;">
                   <i class="fas fa-trophy"></i>
@@ -295,8 +293,7 @@
           </div>
 
           <!-- 捐赠榜/最近捐赠 - Tab切换 -->
-          <div class="sidebar-widget activity-widget animate__animated animate__fadeInUp animate__fast"
-            style="animation-delay: 0.3s;">
+          <div class="sidebar-widget activity-widget">
             <div class="activity-tabs">
               <div class="tab-item" :class="{ active: activeTab === 'ranking' }" @click="activeTab = 'ranking'">
                 <i class="fas fa-crown"></i>
@@ -313,7 +310,7 @@
               <div v-show="activeTab === 'ranking'" class="ranking-list">
                 <div v-for="(item, index) in topDonors" :key="item.id"
                   class="ranking-item animate__animated animate__fadeInLeft animate__fast"
-                  :style="`animation-delay: ${0.4 + index * 0.1}s;`">
+                  :style="`animation-delay: ${index * 0.15}s;`">
                   <div class="ranking-badge" :class="`rank-${index + 1}`">
                     <span v-if="index < 3">
                       <i v-if="index === 0" class="fas fa-crown"></i>
@@ -347,7 +344,7 @@
               <div v-show="activeTab === 'recent'" class="recent-list">
                 <div v-for="item in recentDonations" :key="item.id"
                   class="recent-item animate__animated animate__fadeInLeft animate__fast"
-                  :style="`animation-delay: ${0.4 + recentDonations.indexOf(item) * 0.1}s;`">
+                  :style="`animation-delay: ${recentDonations.indexOf(item) * 0.15}s;`">
                   <div class="recent-avatar" :class="{ anonymous: item.is_anonymous }">
                     <i v-if="item.is_anonymous" class="fas fa-user-secret"></i>
                     <span v-else>{{ item.name.charAt(0) }}</span>
@@ -375,6 +372,9 @@
               </div>
             </div>
           </div>
+        </div>
+        </div>
+          </a-card>
         </div>
       </div>
     </div>
@@ -668,24 +668,25 @@ const handleCelebrationClose = () => {
 
 
   .donation-content {
-    max-width: 1200px;
+    max-width: 1440px;
     margin: 0 auto;
     padding: 0 var(--spacing-md);
     position: relative;
     z-index: 1;
 
     .content-wrapper {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-
-      @media (min-width: 1024px) {
-        grid-template-columns: 1fr 320px;
-      }
-
-      @media (max-width: 1023px) {
-        gap: 20px;
-      }
+      display: block;
+    }
+  }
+  
+  .form-and-sidebar-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    
+    @media (min-width: 1024px) {
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
     }
   }
 
@@ -727,8 +728,7 @@ const handleCelebrationClose = () => {
           inset: -2px;
           background: inherit;
           border-radius: inherit;
-          opacity: 0.3;
-          filter: blur(8px);
+          opacity: 0.2;
           z-index: -1;
         }
 
@@ -908,17 +908,6 @@ const handleCelebrationClose = () => {
     }
   }
 
-  @keyframes tipIconGlow {
-
-    0%,
-    100% {
-      filter: drop-shadow(0 1px 2px rgba(139, 92, 246, 0.3));
-    }
-
-    50% {
-      filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.5));
-    }
-  }
 
   @keyframes iconPulse {
 
@@ -1263,8 +1252,6 @@ const handleCelebrationClose = () => {
       color: var(--el-color-primary);
       font-size: 12px;
       flex-shrink: 0;
-      filter: drop-shadow(0 1px 2px rgba(139, 92, 246, 0.3));
-      animation: tipIconGlow 2.5s ease-in-out infinite;
     }
 
     span {
@@ -1597,14 +1584,14 @@ const handleCelebrationClose = () => {
 
           .stat-value {
             font-size: 16px;
-            font-weight: 700;
+            font-weight: normal;
             color: var(--el-text-color-primary);
             line-height: 1.3;
           }
 
           .stat-label {
             font-size: 11px;
-            font-weight: 500;
+            font-weight: normal;
             color: var(--el-text-color-secondary);
             line-height: 1;
           }
@@ -1685,10 +1672,7 @@ const handleCelebrationClose = () => {
         padding: 10px 12px;
         margin-bottom: 8px;
         border-radius: 10px;
-        background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.8) 0%,
-            rgba(255, 255, 255, 0.5) 100%);
-        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.9);
         border: 1px solid rgba(139, 92, 246, 0.08);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
@@ -1698,19 +1682,14 @@ const handleCelebrationClose = () => {
         }
 
         &:hover {
-          transform: translateY(-2px);
           box-shadow: 0 4px 16px rgba(139, 92, 246, 0.12);
           border-color: var(--el-color-primary-light-7);
 
           .ranking-badge {
-            transform: scale(1.1) rotate(10deg);
+            transform: scale(1.08);
           }
 
           .ranking-avatar {
-            transform: scale(1.05);
-          }
-
-          .ranking-amount {
             transform: scale(1.05);
           }
         }
@@ -1725,7 +1704,7 @@ const handleCelebrationClose = () => {
           font-size: 10px;
           font-weight: 700;
           flex-shrink: 0;
-          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: transform 0.2s ease;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
           &.rank-1 {
@@ -1767,7 +1746,7 @@ const handleCelebrationClose = () => {
           font-size: 11px;
           font-weight: 700;
           flex-shrink: 0;
-          transition: transform 0.3s ease;
+          transition: transform 0.2s ease;
           box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
 
           &.anonymous {
@@ -1835,7 +1814,7 @@ const handleCelebrationClose = () => {
 
         .ranking-amount {
           font-size: 14px;
-          font-weight: 800;
+          font-weight: normal;
           background: linear-gradient(135deg,
               #f59e0b 0%,
               #ea580c 100%);
@@ -1843,9 +1822,7 @@ const handleCelebrationClose = () => {
           -webkit-text-fill-color: transparent;
           background-clip: text;
           flex-shrink: 0;
-          transition: all 0.3s ease;
           letter-spacing: 0.3px;
-          text-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
         }
       }
     }
@@ -1860,10 +1837,7 @@ const handleCelebrationClose = () => {
         gap: 10px;
         padding: 10px 12px;
         margin-bottom: 8px;
-        background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.8) 0%,
-            rgba(255, 255, 255, 0.5) 100%);
-        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.9);
         border: 1px solid rgba(139, 92, 246, 0.08);
         border-radius: 10px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1874,15 +1848,10 @@ const handleCelebrationClose = () => {
         }
 
         &:hover {
-          transform: translateY(-2px);
           box-shadow: 0 4px 16px rgba(139, 92, 246, 0.12);
           border-color: var(--el-color-primary-light-7);
 
           .recent-avatar {
-            transform: scale(1.05);
-          }
-
-          .recent-amount {
             transform: scale(1.05);
           }
         }
@@ -1901,7 +1870,7 @@ const handleCelebrationClose = () => {
           font-size: 11px;
           font-weight: 700;
           flex-shrink: 0;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: transform 0.2s ease;
           box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
 
           &.anonymous {
@@ -1992,7 +1961,7 @@ const handleCelebrationClose = () => {
 
         .recent-amount {
           font-size: 14px;
-          font-weight: 800;
+          font-weight: normal;
           background: linear-gradient(135deg,
               #f59e0b 0%,
               #ea580c 100%);
@@ -2000,9 +1969,7 @@ const handleCelebrationClose = () => {
           -webkit-text-fill-color: transparent;
           background-clip: text;
           flex-shrink: 0;
-          transition: all 0.3s ease;
           letter-spacing: 0.3px;
-          text-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
         }
       }
     }
