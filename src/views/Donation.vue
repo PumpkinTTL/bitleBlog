@@ -4,7 +4,8 @@
       <div class="content-wrapper">
         <div class="donation-form-section animate__animated animate__fadeInUp animate__fast">
           <a-card :bordered="false" class="form-card">
-            <div class="card-header-custom animate__animated animate__fadeIn animate__fast" style="animation-delay: 0.1s;">
+            <div class="card-header-custom animate__animated animate__fadeIn animate__fast"
+              style="animation-delay: 0.1s;">
               <div class="header-main">
                 <div class="header-icon">
                   <i class="fas fa-hand-holding-heart"></i>
@@ -16,7 +17,7 @@
                   <p class="header-subtitle">您的支持是我们前进的动力</p>
                 </div>
               </div>
-              
+
               <div class="header-tips">
                 <div class="tip-item">
                   <i class="fas fa-check-circle"></i>
@@ -37,19 +38,18 @@
               <el-form ref="formRef" :model="formData" :rules="formRules" label-position="top">
                 <!-- 步骤条 -->
                 <StepForm class="animate__animated animate__fadeIn animate__fast" style="animation-delay: 0.2s;"
-                  :active="currentStep" 
-                  :steps="[
+                  :active="currentStep" :steps="[
                     { title: '选择方式', description: stepDescriptions[0] },
                     { title: '必填信息', description: stepDescriptions[1] },
                     { title: '可选信息', description: stepDescriptions[2] },
                     { title: '完成', description: stepDescriptions[3] || '提交成功' }
-                  ]"
-                />
+                  ]" />
 
                 <!-- 步骤1: 选择捐赠方式 -->
                 <div v-show="currentStep === 0" class="qrcode-section">
-                    <el-row :gutter="16" class="qrcode-grid">
-                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast" style="animation-delay: 0.3s;">
+                  <el-row :gutter="16" class="qrcode-grid">
+                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast"
+                      style="animation-delay: 0.3s;">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'cardkey' }"
                         @click="selectChannel('cardkey')">
                         <img :src="collectionCarkey" alt="购买卡密" />
@@ -62,7 +62,8 @@
                         <span class="channel-badge recommend">推荐</span>
                       </div>
                     </el-col>
-                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast" style="animation-delay: 0.4s;">
+                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast"
+                      style="animation-delay: 0.4s;">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'crypto' }"
                         @click="selectChannel('crypto')">
                         <span class="channel-badge-left crypto-badge">
@@ -74,21 +75,23 @@
                         <span class="channel-badge recommend">推荐</span>
                       </div>
                     </el-col>
-                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast" style="animation-delay: 0.5s;">
+                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast"
+                      style="animation-delay: 0.5s;">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'alipay' }"
                         @click="selectChannel('alipay')">
                         <img :src="collectionAlipay" alt="支付宝收款码" />
                         <div class="qrcode-tip">支付宝支付</div>
                       </div>
                     </el-col>
-                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast" style="animation-delay: 0.6s;">
+                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast"
+                      style="animation-delay: 0.6s;">
                       <div class="qrcode-item" :class="{ active: selectedChannel === 'wechat' }"
                         @click="selectChannel('wechat')">
                         <img :src="collectionWechat" alt="微信收款码" />
                         <div class="qrcode-tip">微信扫码支付</div>
                       </div>
                     </el-col>
-                    </el-row>
+                  </el-row>
                   <div class="step-actions step-1">
                     <el-button type="primary" :disabled="!selectedChannel" @click="nextStep">
                       <span>下一步</span>
@@ -99,53 +102,53 @@
 
                 <!-- 步骤2: 必填信息 -->
                 <div v-show="currentStep === 1" class="form-step-section">
-                    <div v-if="selectedChannel === 'cardkey'">
-                      <el-form-item label="卡密码" prop="card_key_code">
-                        <el-input v-model="formData.card_key_code" placeholder="请输入卡密码，格式：ABCD-1234-EFGH-5678" clearable>
-                          <template #prefix><i class="fas fa-key"></i></template>
-                        </el-input>
-                      </el-form-item>
-                    </div>
+                  <div v-if="selectedChannel === 'cardkey'">
+                    <el-form-item label="卡密码" prop="card_key_code">
+                      <el-input v-model="formData.card_key_code" placeholder="请输入卡密码，格式：ABCD-1234-EFGH-5678" clearable>
+                        <template #prefix><i class="fas fa-key"></i></template>
+                      </el-input>
+                    </el-form-item>
+                  </div>
 
-                    <div v-else-if="selectedChannel === 'crypto'">
-                      <div class="crypto-info-tips">
-                        <div class="crypto-badge">
-                          <i class="fas fa-coins"></i>
-                          <div class="badge-text">
-                            <span class="badge-label">币种</span>
-                            <span class="badge-value">USDT</span>
-                          </div>
-                        </div>
-                        <div class="crypto-badge network">
-                          <i class="fas fa-network-wired"></i>
-                          <div class="badge-text">
-                            <span class="badge-label">区块网络</span>
-                            <span class="badge-value">TRC20</span>
-                          </div>
+                  <div v-else-if="selectedChannel === 'crypto'">
+                    <div class="crypto-info-tips">
+                      <div class="crypto-badge">
+                        <i class="fas fa-coins"></i>
+                        <div class="badge-text">
+                          <span class="badge-label">币种</span>
+                          <span class="badge-value">USDT</span>
                         </div>
                       </div>
-                      <el-form-item label="捐赠金额" prop="amount">
-                        <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
-                          placeholder="请输入USDT金额" style="width: 100%" controls-position="right" />
-                      </el-form-item>
-                      <el-form-item label="交易哈希" prop="transaction_hash">
-                        <el-input v-model="formData.transaction_hash" placeholder="请输入交易哈希值" clearable>
-                          <template #prefix><i class="fas fa-hashtag"></i></template>
-                        </el-input>
-                      </el-form-item>
+                      <div class="crypto-badge network">
+                        <i class="fas fa-network-wired"></i>
+                        <div class="badge-text">
+                          <span class="badge-label">区块网络</span>
+                          <span class="badge-value">TRC20</span>
+                        </div>
+                      </div>
                     </div>
+                    <el-form-item label="捐赠金额" prop="amount">
+                      <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
+                        placeholder="请输入USDT金额" style="width: 100%" controls-position="right" />
+                    </el-form-item>
+                    <el-form-item label="交易哈希" prop="transaction_hash">
+                      <el-input v-model="formData.transaction_hash" placeholder="请输入交易哈希值" clearable>
+                        <template #prefix><i class="fas fa-hashtag"></i></template>
+                      </el-input>
+                    </el-form-item>
+                  </div>
 
-                    <div v-else-if="selectedChannel === 'wechat' || selectedChannel === 'alipay'">
-                      <el-form-item label="捐赠金额" prop="amount">
-                        <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
-                          placeholder="请输入捐赠金额" style="width: 100%" controls-position="right" />
-                      </el-form-item>
-                      <el-form-item label="订单号" prop="order_no">
-                        <el-input v-model="formData.order_no" placeholder="请输入支付订单号" clearable>
-                          <template #prefix><i class="fas fa-receipt"></i></template>
-                        </el-input>
-                      </el-form-item>
-                    </div>
+                  <div v-else-if="selectedChannel === 'wechat' || selectedChannel === 'alipay'">
+                    <el-form-item label="捐赠金额" prop="amount">
+                      <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
+                        placeholder="请输入捐赠金额" style="width: 100%" controls-position="right" />
+                    </el-form-item>
+                    <el-form-item label="订单号" prop="order_no">
+                      <el-input v-model="formData.order_no" placeholder="请输入支付订单号" clearable>
+                        <template #prefix><i class="fas fa-receipt"></i></template>
+                      </el-input>
+                    </el-form-item>
+                  </div>
 
                   <div class="step-actions">
                     <el-button @click="prevStep">
@@ -241,14 +244,16 @@
 
         <div class="donation-info-section">
           <!-- 统计卡片 -->
-          <div class="sidebar-widget stats-widget animate__animated animate__fadeInUp animate__fast" style="animation-delay: 0.15s;">
+          <div class="sidebar-widget stats-widget animate__animated animate__fadeInUp animate__fast"
+            style="animation-delay: 0.15s;">
             <div class="widget-header">
               <i class="fas fa-chart-line"></i>
               <span>捐赠数据</span>
             </div>
             <div class="stats-grid">
               <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.25s;">
-                <div class="stat-icon" style="background: linear-gradient(135deg, rgba(22, 119, 255, 0.1), rgba(22, 119, 255, 0.2)); color: #1677ff;">
+                <div class="stat-icon"
+                  style="background: linear-gradient(135deg, rgba(22, 119, 255, 0.1), rgba(22, 119, 255, 0.2)); color: #1677ff;">
                   <i class="fas fa-users"></i>
                 </div>
                 <div class="stat-info">
@@ -257,7 +262,8 @@
                 </div>
               </div>
               <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.35s;">
-                <div class="stat-icon" style="background: linear-gradient(135deg, rgba(82, 196, 26, 0.1), rgba(82, 196, 26, 0.2)); color: #52c41a;">
+                <div class="stat-icon"
+                  style="background: linear-gradient(135deg, rgba(82, 196, 26, 0.1), rgba(82, 196, 26, 0.2)); color: #52c41a;">
                   <i class="fas fa-coins"></i>
                 </div>
                 <div class="stat-info">
@@ -266,7 +272,8 @@
                 </div>
               </div>
               <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.45s;">
-                <div class="stat-icon" style="background: linear-gradient(135deg, rgba(250, 140, 22, 0.1), rgba(250, 140, 22, 0.2)); color: #fa8c16;">
+                <div class="stat-icon"
+                  style="background: linear-gradient(135deg, rgba(250, 140, 22, 0.1), rgba(250, 140, 22, 0.2)); color: #fa8c16;">
                   <i class="fas fa-calendar-check"></i>
                 </div>
                 <div class="stat-info">
@@ -275,7 +282,8 @@
                 </div>
               </div>
               <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.55s;">
-                <div class="stat-icon" style="background: linear-gradient(135deg, rgba(114, 46, 209, 0.1), rgba(114, 46, 209, 0.2)); color: #722ed1;">
+                <div class="stat-icon"
+                  style="background: linear-gradient(135deg, rgba(114, 46, 209, 0.1), rgba(114, 46, 209, 0.2)); color: #722ed1;">
                   <i class="fas fa-trophy"></i>
                 </div>
                 <div class="stat-info">
@@ -287,21 +295,14 @@
           </div>
 
           <!-- 捐赠榜/最近捐赠 - Tab切换 -->
-          <div class="sidebar-widget activity-widget animate__animated animate__fadeInUp animate__fast" style="animation-delay: 0.3s;">
+          <div class="sidebar-widget activity-widget animate__animated animate__fadeInUp animate__fast"
+            style="animation-delay: 0.3s;">
             <div class="activity-tabs">
-              <div 
-                class="tab-item" 
-                :class="{ active: activeTab === 'ranking' }"
-                @click="activeTab = 'ranking'"
-              >
+              <div class="tab-item" :class="{ active: activeTab === 'ranking' }" @click="activeTab = 'ranking'">
                 <i class="fas fa-crown"></i>
                 <span>捐赠榜</span>
               </div>
-              <div 
-                class="tab-item" 
-                :class="{ active: activeTab === 'recent' }"
-                @click="activeTab = 'recent'"
-              >
+              <div class="tab-item" :class="{ active: activeTab === 'recent' }" @click="activeTab = 'recent'">
                 <i class="fas fa-history"></i>
                 <span>最近捐赠</span>
               </div>
@@ -310,7 +311,9 @@
             <div class="activity-content">
               <!-- 捐赠榜 -->
               <div v-show="activeTab === 'ranking'" class="ranking-list">
-              <div v-for="(item, index) in topDonors" :key="item.id" class="ranking-item animate__animated animate__fadeInLeft animate__fast" :style="`animation-delay: ${0.4 + index * 0.1}s;`">
+                <div v-for="(item, index) in topDonors" :key="item.id"
+                  class="ranking-item animate__animated animate__fadeInLeft animate__fast"
+                  :style="`animation-delay: ${0.4 + index * 0.1}s;`">
                   <div class="ranking-badge" :class="`rank-${index + 1}`">
                     <span v-if="index < 3">
                       <i v-if="index === 0" class="fas fa-crown"></i>
@@ -342,7 +345,9 @@
 
               <!-- 最近捐赠 -->
               <div v-show="activeTab === 'recent'" class="recent-list">
-                <div v-for="item in recentDonations" :key="item.id" class="recent-item animate__animated animate__fadeInLeft animate__fast" :style="`animation-delay: ${0.4 + recentDonations.indexOf(item) * 0.1}s;`">
+                <div v-for="item in recentDonations" :key="item.id"
+                  class="recent-item animate__animated animate__fadeInLeft animate__fast"
+                  :style="`animation-delay: ${0.4 + recentDonations.indexOf(item) * 0.1}s;`">
                   <div class="recent-avatar" :class="{ anonymous: item.is_anonymous }">
                     <i v-if="item.is_anonymous" class="fas fa-user-secret"></i>
                     <span v-else>{{ item.name.charAt(0) }}</span>
@@ -480,8 +485,8 @@ const activeTab = ref<'ranking' | 'recent'>('ranking')
 const showCelebration = ref(false)
 const celebrationData = reactive<{ title: string; message: string; subMessage: string; details: CelebrationDetail[]; actions: CelebrationAction[] }>({
   title: '🎉 捐赠成功！',
-  message: '感谢您的慰慨支持！',
-  subMessage: '您的每一份心意都是我们前进的动力',
+  message: '星光不负赶路人',
+  subMessage: '每一份温暖，都将点亮前行的灯火',
   details: [],
   actions: []
 })
@@ -503,13 +508,13 @@ const nextStep = async () => {
     currentStep.value++
     return
   }
-  
+
   // 步骤1：验证必填字段
   if (currentStep.value === 1) {
     try {
       // 根据支付方式验证对应的必填字段
       const fieldsToValidate: string[] = []
-      
+
       if (selectedChannel.value === 'cardkey') {
         fieldsToValidate.push('card_key_code')
       } else if (selectedChannel.value === 'crypto') {
@@ -517,7 +522,7 @@ const nextStep = async () => {
       } else if (selectedChannel.value === 'wechat' || selectedChannel.value === 'alipay') {
         fieldsToValidate.push('amount', 'order_no')
       }
-      
+
       // 只验证必填字段
       await formRef.value?.validateField(fieldsToValidate)
       currentStep.value++
@@ -564,8 +569,8 @@ const handleSubmit = async () => {
 
     if (response.code === 200) {
       celebrationData.title = '🎉 捐赠成功！'
-      celebrationData.message = '感谢您的慷慨支持！'
-      celebrationData.subMessage = '您的每一份心意都是我们前进的动力'
+      celebrationData.message = '星光不负赶路人'
+      celebrationData.subMessage = '每一份温暖，都将点亮前行的灯火'
       celebrationData.details = [
         { label: '捐赠编号', value: response.data.donation_no, icon: 'fas fa-hashtag' },
         { label: '捐赠金额', value: response.data.card_key_value ? `¥${response.data.card_key_value}` : `¥${formData.amount}`, icon: 'fas fa-coins' },
@@ -677,7 +682,7 @@ const handleCelebrationClose = () => {
       @media (min-width: 1024px) {
         grid-template-columns: 1fr 320px;
       }
-      
+
       @media (max-width: 1023px) {
         gap: 20px;
       }
@@ -687,9 +692,9 @@ const handleCelebrationClose = () => {
   .card-header-custom {
     padding: 20px;
     margin-bottom: var(--spacing-md);
-    background: linear-gradient(135deg, 
-      rgba(139, 92, 246, 0.05) 0%, 
-      rgba(217, 70, 239, 0.03) 100%);
+    background: linear-gradient(135deg,
+        rgba(139, 92, 246, 0.05) 0%,
+        rgba(217, 70, 239, 0.03) 100%);
     border: 1px solid var(--el-border-color-lighter);
     border-radius: 12px;
     position: relative;
@@ -707,9 +712,9 @@ const handleCelebrationClose = () => {
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, 
-          var(--el-color-primary) 0%, 
-          var(--theme-secondary) 100%);
+        background: linear-gradient(135deg,
+            var(--el-color-primary) 0%,
+            var(--theme-secondary) 100%);
         border-radius: 12px;
         flex-shrink: 0;
         box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
@@ -741,9 +746,9 @@ const handleCelebrationClose = () => {
         .header-title {
           font-size: 18px;
           font-weight: 700;
-          background: linear-gradient(135deg, 
-            var(--el-color-primary) 0%, 
-            var(--theme-secondary) 100%);
+          background: linear-gradient(135deg,
+              var(--el-color-primary) 0%,
+              var(--theme-secondary) 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -773,9 +778,9 @@ const handleCelebrationClose = () => {
         align-items: center;
         gap: 6px;
         padding: 6px 14px;
-        background: linear-gradient(135deg, 
-          rgba(139, 92, 246, 0.08) 0%, 
-          rgba(217, 70, 239, 0.05) 100%);
+        background: linear-gradient(135deg,
+            rgba(139, 92, 246, 0.08) 0%,
+            rgba(217, 70, 239, 0.05) 100%);
         border: 1.5px solid transparent;
         border-radius: 20px;
         position: relative;
@@ -788,9 +793,11 @@ const handleCelebrationClose = () => {
         &:nth-child(1) {
           animation-delay: 0.2s;
         }
+
         &:nth-child(2) {
           animation-delay: 0.35s;
         }
+
         &:nth-child(3) {
           animation-delay: 0.5s;
         }
@@ -801,9 +808,9 @@ const handleCelebrationClose = () => {
           inset: 0;
           border-radius: inherit;
           padding: 1.5px;
-          background: linear-gradient(135deg, 
-            var(--el-color-primary-light-3), 
-            var(--theme-secondary));
+          background: linear-gradient(135deg,
+              var(--el-color-primary-light-3),
+              var(--theme-secondary));
           -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
           -webkit-mask-composite: xor;
           mask-composite: exclude;
@@ -815,9 +822,9 @@ const handleCelebrationClose = () => {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, 
-            rgba(139, 92, 246, 0.15) 0%, 
-            rgba(217, 70, 239, 0.1) 100%);
+          background: linear-gradient(135deg,
+              rgba(139, 92, 246, 0.15) 0%,
+              rgba(217, 70, 239, 0.1) 100%);
           opacity: 0;
           transition: opacity 0.35s ease;
           z-index: 0;
@@ -874,6 +881,7 @@ const handleCelebrationClose = () => {
       opacity: 0;
       transform: translateX(-20px);
     }
+
     100% {
       opacity: 1;
       transform: translateX(0);
@@ -881,34 +889,45 @@ const handleCelebrationClose = () => {
   }
 
   @keyframes tabIconBounce {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: scale(1);
     }
+
     25% {
       transform: scale(0.9) rotate(-5deg);
     }
+
     50% {
       transform: scale(1.1) rotate(5deg);
     }
+
     75% {
       transform: scale(1.05) rotate(-3deg);
     }
   }
 
   @keyframes tipIconGlow {
-    0%, 100% {
+
+    0%,
+    100% {
       filter: drop-shadow(0 1px 2px rgba(139, 92, 246, 0.3));
     }
+
     50% {
       filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.5));
     }
   }
 
   @keyframes iconPulse {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: scale(1);
       box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
     }
+
     50% {
       transform: scale(1.05);
       box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
@@ -916,13 +935,19 @@ const handleCelebrationClose = () => {
   }
 
   @keyframes heartBeat {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: scale(1);
     }
-    10%, 30% {
+
+    10%,
+    30% {
       transform: scale(1.1);
     }
-    20%, 40% {
+
+    20%,
+    40% {
       transform: scale(1);
     }
   }
@@ -941,8 +966,8 @@ const handleCelebrationClose = () => {
     overflow: hidden;
     background: var(--el-bg-color);
     border: 1px solid var(--el-border-color-lighter);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03), 
-                0 0 1px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03),
+      0 0 1px rgba(0, 0, 0, 0.02);
 
     :deep(.ant-card-head) {
       background: var(--el-bg-color);
@@ -984,30 +1009,30 @@ const handleCelebrationClose = () => {
       }
     }
 
-      .qrcode-item {
-        cursor: pointer;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 16px;
-        background: var(--el-fill-color-blank);
-        border: 1.5px solid var(--el-border-color);
-        border-radius: var(--radius-md);
-        height: 100%;
-        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-        will-change: transform;
-        
-        @media (max-width: 768px) {
-          transition: all 0.2s ease;
-        }
+    .qrcode-item {
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      background: var(--el-fill-color-blank);
+      border: 1.5px solid var(--el-border-color);
+      border-radius: var(--radius-md);
+      height: 100%;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      will-change: transform;
+
+      @media (max-width: 768px) {
+        transition: all 0.2s ease;
+      }
 
       &:hover {
         border-color: var(--el-color-primary-light-3);
         box-shadow: 0 4px 16px rgba(139, 92, 246, 0.15);
         transform: translateY(-3px) scale(1.02);
-        
+
         @media (max-width: 768px) {
           transform: translateY(-2px);
           box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
@@ -1193,12 +1218,12 @@ const handleCelebrationClose = () => {
       padding-top: 10px;
     }
   }
-  
+
   .label-with-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    
+
     .optional-badge {
       display: inline-flex;
       align-items: center;
@@ -1212,28 +1237,28 @@ const handleCelebrationClose = () => {
       line-height: 1;
     }
   }
-  
+
   .field-tip {
     display: inline-flex;
     align-items: center;
     gap: 5px;
     margin-top: 6px;
     padding: 3px 8px 3px 4px;
-    background: linear-gradient(135deg, 
-      rgba(139, 92, 246, 0.04) 0%, 
-      rgba(217, 70, 239, 0.06) 100%);
+    background: linear-gradient(135deg,
+        rgba(139, 92, 246, 0.04) 0%,
+        rgba(217, 70, 239, 0.06) 100%);
     border-radius: 6px;
     font-size: 10px;
     color: rgba(0, 0, 0, 0.65);
     line-height: 1.4;
     transition: all 0.2s ease;
-    
+
     &:hover {
-      background: linear-gradient(135deg, 
-        rgba(139, 92, 246, 0.08) 0%, 
-        rgba(217, 70, 239, 0.1) 100%);
+      background: linear-gradient(135deg,
+          rgba(139, 92, 246, 0.08) 0%,
+          rgba(217, 70, 239, 0.1) 100%);
     }
-    
+
     i {
       color: var(--el-color-primary);
       font-size: 12px;
@@ -1241,7 +1266,7 @@ const handleCelebrationClose = () => {
       filter: drop-shadow(0 1px 2px rgba(139, 92, 246, 0.3));
       animation: tipIconGlow 2.5s ease-in-out infinite;
     }
-    
+
     span {
       font-weight: 500;
     }
@@ -1498,8 +1523,8 @@ const handleCelebrationClose = () => {
     background: var(--el-bg-color);
     border-radius: var(--radius-md);
     padding: 14px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03), 
-                0 0 1px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03),
+      0 0 1px rgba(0, 0, 0, 0.02);
     border: 1px solid var(--el-border-color-lighter);
 
     .widget-header {
@@ -1543,7 +1568,7 @@ const handleCelebrationClose = () => {
         &:hover {
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(139, 92, 246, 0.12);
-          
+
           .stat-icon {
             transform: scale(1.08);
           }
@@ -1595,9 +1620,9 @@ const handleCelebrationClose = () => {
       gap: 6px;
       margin-bottom: 14px;
       padding: 4px;
-      background: linear-gradient(135deg, 
-        rgba(139, 92, 246, 0.05) 0%, 
-        rgba(217, 70, 239, 0.03) 100%);
+      background: linear-gradient(135deg,
+          rgba(139, 92, 246, 0.05) 0%,
+          rgba(217, 70, 239, 0.03) 100%);
       border: 1px solid rgba(139, 92, 246, 0.1);
       border-radius: 10px;
 
@@ -1625,19 +1650,19 @@ const handleCelebrationClose = () => {
         &:hover:not(.active) {
           color: var(--el-color-primary);
           background: rgba(139, 92, 246, 0.08);
-          
+
           i {
             transform: scale(1.15);
           }
         }
 
         &.active {
-          background: linear-gradient(135deg, 
-            var(--el-color-primary) 0%, 
-            var(--theme-secondary) 100%);
+          background: linear-gradient(135deg,
+              var(--el-color-primary) 0%,
+              var(--theme-secondary) 100%);
           color: #fff;
           box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-          
+
           i {
             animation: tabIconBounce 0.6s ease;
           }
@@ -1660,9 +1685,9 @@ const handleCelebrationClose = () => {
         padding: 10px 12px;
         margin-bottom: 8px;
         border-radius: 10px;
-        background: linear-gradient(135deg, 
-          rgba(255, 255, 255, 0.8) 0%, 
-          rgba(255, 255, 255, 0.5) 100%);
+        background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.8) 0%,
+            rgba(255, 255, 255, 0.5) 100%);
         backdrop-filter: blur(10px);
         border: 1px solid rgba(139, 92, 246, 0.08);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1732,9 +1757,9 @@ const handleCelebrationClose = () => {
           width: 28px;
           height: 28px;
           border-radius: 50%;
-          background: linear-gradient(135deg, 
-            var(--el-color-primary) 0%, 
-            var(--theme-secondary) 100%);
+          background: linear-gradient(135deg,
+              var(--el-color-primary) 0%,
+              var(--theme-secondary) 100%);
           color: #fff;
           display: flex;
           align-items: center;
@@ -1747,7 +1772,7 @@ const handleCelebrationClose = () => {
 
           &.anonymous {
             background: linear-gradient(135deg, #94a3b8, #64748b);
-            
+
             i {
               font-size: 12px;
             }
@@ -1792,12 +1817,15 @@ const handleCelebrationClose = () => {
               &.fa-key {
                 color: #722ed1;
               }
+
               &.fa-bitcoin {
                 color: #f7931a;
               }
+
               &.fa-alipay {
                 color: #1677ff;
               }
+
               &.fa-weixin {
                 color: #07c160;
               }
@@ -1808,9 +1836,9 @@ const handleCelebrationClose = () => {
         .ranking-amount {
           font-size: 14px;
           font-weight: 800;
-          background: linear-gradient(135deg, 
-            #f59e0b 0%, 
-            #ea580c 100%);
+          background: linear-gradient(135deg,
+              #f59e0b 0%,
+              #ea580c 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -1832,9 +1860,9 @@ const handleCelebrationClose = () => {
         gap: 10px;
         padding: 10px 12px;
         margin-bottom: 8px;
-        background: linear-gradient(135deg, 
-          rgba(255, 255, 255, 0.8) 0%, 
-          rgba(255, 255, 255, 0.5) 100%);
+        background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.8) 0%,
+            rgba(255, 255, 255, 0.5) 100%);
         backdrop-filter: blur(10px);
         border: 1px solid rgba(139, 92, 246, 0.08);
         border-radius: 10px;
@@ -1866,9 +1894,9 @@ const handleCelebrationClose = () => {
           align-items: center;
           justify-content: center;
           border-radius: 50%;
-          background: linear-gradient(135deg, 
-            var(--el-color-primary) 0%, 
-            var(--theme-secondary) 100%);
+          background: linear-gradient(135deg,
+              var(--el-color-primary) 0%,
+              var(--theme-secondary) 100%);
           color: #fff;
           font-size: 11px;
           font-weight: 700;
@@ -1878,7 +1906,7 @@ const handleCelebrationClose = () => {
 
           &.anonymous {
             background: linear-gradient(135deg, #94a3b8, #64748b);
-            
+
             i {
               font-size: 12px;
             }
@@ -1965,9 +1993,9 @@ const handleCelebrationClose = () => {
         .recent-amount {
           font-size: 14px;
           font-weight: 800;
-          background: linear-gradient(135deg, 
-            #f59e0b 0%, 
-            #ea580c 100%);
+          background: linear-gradient(135deg,
+              #f59e0b 0%,
+              #ea580c 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -1983,6 +2011,7 @@ const handleCelebrationClose = () => {
 
   // ==================== 深色模式适配 ====================
   html.dark & {
+
     // 数据卡片深色模式
     .stats-widget .stats-grid .stat-item {
       background: rgba(30, 30, 40, 0.6);
@@ -1992,48 +2021,48 @@ const handleCelebrationClose = () => {
         box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
       }
     }
-    
+
     // Tab切换深色模式
     .activity-widget .activity-tabs {
-      background: linear-gradient(135deg, 
-        rgba(139, 92, 246, 0.08) 0%, 
-        rgba(217, 70, 239, 0.05) 100%);
+      background: linear-gradient(135deg,
+          rgba(139, 92, 246, 0.08) 0%,
+          rgba(217, 70, 239, 0.05) 100%);
       border-color: rgba(139, 92, 246, 0.15);
-      
+
       .tab-item:hover:not(.active) {
         background: rgba(139, 92, 246, 0.12);
       }
     }
-    
+
     // 榜单卡片深色模式
     .ranking-widget .ranking-list .ranking-item,
     .activity-widget .ranking-list .ranking-item {
-      background: linear-gradient(135deg, 
-        rgba(55, 65, 81, 0.5) 0%, 
-        rgba(31, 41, 55, 0.7) 100%);
+      background: linear-gradient(135deg,
+          rgba(55, 65, 81, 0.5) 0%,
+          rgba(31, 41, 55, 0.7) 100%);
       border-color: rgba(139, 92, 246, 0.15);
-      
+
       &:hover {
-        background: linear-gradient(135deg, 
-          rgba(55, 65, 81, 0.7) 0%, 
-          rgba(31, 41, 55, 0.9) 100%);
+        background: linear-gradient(135deg,
+            rgba(55, 65, 81, 0.7) 0%,
+            rgba(31, 41, 55, 0.9) 100%);
         border-color: rgba(139, 92, 246, 0.3);
         box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
       }
     }
-    
+
     // 最近捐赠深色模式
     .recent-widget .recent-list .recent-item,
     .activity-widget .recent-list .recent-item {
-      background: linear-gradient(135deg, 
-        rgba(55, 65, 81, 0.5) 0%, 
-        rgba(31, 41, 55, 0.7) 100%);
+      background: linear-gradient(135deg,
+          rgba(55, 65, 81, 0.5) 0%,
+          rgba(31, 41, 55, 0.7) 100%);
       border-color: rgba(139, 92, 246, 0.15);
-      
+
       &:hover {
-        background: linear-gradient(135deg, 
-          rgba(55, 65, 81, 0.7) 0%, 
-          rgba(31, 41, 55, 0.9) 100%);
+        background: linear-gradient(135deg,
+            rgba(55, 65, 81, 0.7) 0%,
+            rgba(31, 41, 55, 0.9) 100%);
         border-color: rgba(139, 92, 246, 0.3);
         box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
       }
