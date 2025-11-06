@@ -1531,85 +1531,54 @@ const handleCelebrationClose = () => {
 
       .stat-item {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 14px 10px;
-        background: linear-gradient(135deg, 
-          rgba(255, 255, 255, 0.9) 0%, 
-          rgba(255, 255, 255, 0.6) 100%);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(139, 92, 246, 0.1);
-        border-radius: 12px;
-        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        gap: 10px;
+        padding: 12px 14px;
+        background: var(--el-fill-color-blank);
+        border-radius: 10px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
-        overflow: hidden;
-
-        &::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, 
-            rgba(139, 92, 246, 0.08) 0%, 
-            rgba(217, 70, 239, 0.05) 100%);
-          opacity: 0;
-          transition: opacity 0.35s ease;
-        }
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 
         &:hover {
-          transform: translateY(-4px) scale(1.02);
-          box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
-          border-color: var(--el-color-primary-light-5);
-
-          &::before {
-            opacity: 1;
-          }
-
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.12);
+          
           .stat-icon {
-            transform: scale(1.1) rotateY(180deg);
-          }
-
-          .stat-value {
-            transform: scale(1.05);
+            transform: scale(1.08);
           }
         }
 
         .stat-icon {
-          width: 40px;
-          height: 40px;
+          width: 36px;
+          height: 36px;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: 10px;
+          border-radius: 8px;
           flex-shrink: 0;
-          transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-          position: relative;
-          z-index: 1;
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
           i {
-            font-size: 18px;
+            font-size: 16px;
           }
         }
 
         .stat-info {
           display: flex;
           flex-direction: column;
-          align-items: center;
           gap: 2px;
-          position: relative;
-          z-index: 1;
+          flex: 1;
 
           .stat-value {
             font-size: 16px;
             font-weight: 700;
             color: var(--el-text-color-primary);
-            line-height: 1.2;
-            transition: transform 0.3s ease;
+            line-height: 1.3;
           }
 
           .stat-label {
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 500;
             color: var(--el-text-color-secondary);
             line-height: 1;
@@ -2011,5 +1980,64 @@ const handleCelebrationClose = () => {
     }
   }
 
+
+  // ==================== 深色模式适配 ====================
+  html.dark & {
+    // 数据卡片深色模式
+    .stats-widget .stats-grid .stat-item {
+      background: rgba(30, 30, 40, 0.6);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+
+      &:hover {
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+      }
+    }
+    
+    // Tab切换深色模式
+    .activity-widget .activity-tabs {
+      background: linear-gradient(135deg, 
+        rgba(139, 92, 246, 0.08) 0%, 
+        rgba(217, 70, 239, 0.05) 100%);
+      border-color: rgba(139, 92, 246, 0.15);
+      
+      .tab-item:hover:not(.active) {
+        background: rgba(139, 92, 246, 0.12);
+      }
+    }
+    
+    // 榜单卡片深色模式
+    .ranking-widget .ranking-list .ranking-item,
+    .activity-widget .ranking-list .ranking-item {
+      background: linear-gradient(135deg, 
+        rgba(55, 65, 81, 0.5) 0%, 
+        rgba(31, 41, 55, 0.7) 100%);
+      border-color: rgba(139, 92, 246, 0.15);
+      
+      &:hover {
+        background: linear-gradient(135deg, 
+          rgba(55, 65, 81, 0.7) 0%, 
+          rgba(31, 41, 55, 0.9) 100%);
+        border-color: rgba(139, 92, 246, 0.3);
+        box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+      }
+    }
+    
+    // 最近捐赠深色模式
+    .recent-widget .recent-list .recent-item,
+    .activity-widget .recent-list .recent-item {
+      background: linear-gradient(135deg, 
+        rgba(55, 65, 81, 0.5) 0%, 
+        rgba(31, 41, 55, 0.7) 100%);
+      border-color: rgba(139, 92, 246, 0.15);
+      
+      &:hover {
+        background: linear-gradient(135deg, 
+          rgba(55, 65, 81, 0.7) 0%, 
+          rgba(31, 41, 55, 0.9) 100%);
+        border-color: rgba(139, 92, 246, 0.3);
+        box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+      }
+    }
+  }
 }
 </style>

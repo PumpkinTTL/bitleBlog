@@ -610,17 +610,18 @@ onMounted(() => {
   padding: 8px 16px;
   border-radius: 10px;
   background: linear-gradient(135deg,
-    rgba(245, 158, 11, 0.1) 0%,
-    rgba(234, 88, 12, 0.15) 100%);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  color: #f59e0b;
+    rgba(251, 191, 36, 0.12) 0%,
+    rgba(245, 158, 11, 0.14) 50%,
+    rgba(249, 115, 22, 0.16) 100%);
+  border: 1.5px solid rgba(249, 115, 22, 0.45);
+  color: #f97316;
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.2);
 
   // 内部光泽
   &::before {
@@ -631,7 +632,7 @@ onMounted(() => {
     right: 0;
     height: 50%;
     background: linear-gradient(180deg,
-      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0.08) 0%,
       transparent 100%);
     pointer-events: none;
   }
@@ -651,12 +652,13 @@ onMounted(() => {
 
   &:hover {
     background: linear-gradient(135deg,
-      rgba(245, 158, 11, 0.2) 0%,
-      rgba(234, 88, 12, 0.25) 100%);
-    border-color: rgba(245, 158, 11, 0.5);
+      rgba(251, 191, 36, 0.18) 0%,
+      rgba(245, 158, 11, 0.20) 50%,
+      rgba(249, 115, 22, 0.24) 100%);
+    border-color: rgba(249, 115, 22, 0.65);
     color: #ea580c;
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+    box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
 
     i {
       transform: scale(1.15) translateY(-1px);
@@ -990,7 +992,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 16px;
+  padding: 8px 16px;
   border: 1px solid #8b5cf6;
   background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
   border-radius: 10px;
@@ -1000,22 +1002,7 @@ onMounted(() => {
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
-  overflow: hidden;
   box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
-  
-  // 内部光泽
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 50%;
-    background: linear-gradient(180deg,
-      rgba(255, 255, 255, 0.25) 0%,
-      transparent 100%);
-    pointer-events: none;
-  }
   
   @media (max-width: 992px) {
     display: none !important;
