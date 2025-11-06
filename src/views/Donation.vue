@@ -319,28 +319,53 @@
                     </span>
                     <span v-else>{{ index + 1 }}</span>
                   </div>
-                  <div class="ranking-avatar">{{ item.name.charAt(0) }}</div>
-                  <div class="ranking-info">
-                    <div class="ranking-name">{{ item.name }}</div>
-                    <div class="ranking-count">{{ item.count }}次捐赠</div>
+                  <div class="ranking-avatar" :class="{ anonymous: item.is_anonymous }">
+                    <i v-if="item.is_anonymous" class="fas fa-user-secret"></i>
+                    <span v-else>{{ item.name.charAt(0) }}</span>
                   </div>
-                  <div class="ranking-amount">¥{{ item.amount }}</div>
+                  <div class="ranking-info">
+                    <div class="ranking-name">
+                      {{ item.is_anonymous ? '匿名用户' : item.name }}
+                      <i v-if="item.email" class="fas fa-envelope-circle-check" title="已留邮箱"></i>
+                    </div>
+                    <div class="ranking-channel">
+                      <i v-if="item.channel === 'cardkey'" class="fas fa-key"></i>
+                      <i v-else-if="item.channel === 'crypto'" class="fab fa-bitcoin"></i>
+                      <i v-else-if="item.channel === 'alipay'" class="fab fa-alipay"></i>
+                      <i v-else-if="item.channel === 'wechat'" class="fab fa-weixin"></i>
+                      <span>{{ getChannelName(item.channel) }}</span>
+                    </div>
+                  </div>
+                  <div class="ranking-amount">{{ item.channel === 'crypto' ? '$' : '¥' }}{{ item.amount }}</div>
                 </div>
               </div>
 
               <!-- 最近捐赠 -->
               <div v-show="activeTab === 'recent'" class="recent-list">
                 <div v-for="item in recentDonations" :key="item.id" class="recent-item animate__animated animate__fadeInLeft animate__fast" :style="`animation-delay: ${0.4 + recentDonations.indexOf(item) * 0.1}s;`">
-                  <div class="recent-dot"></div>
-                  <div class="recent-avatar">{{ item.name.charAt(0) }}</div>
+                  <div class="recent-avatar" :class="{ anonymous: item.is_anonymous }">
+                    <i v-if="item.is_anonymous" class="fas fa-user-secret"></i>
+                    <span v-else>{{ item.name.charAt(0) }}</span>
+                  </div>
                   <div class="recent-info">
-                    <div class="recent-name">{{ item.name }}</div>
-                    <div class="recent-time">
-                      <i class="fas fa-clock"></i>
-                      {{ item.time }}
+                    <div class="recent-name">
+                      {{ item.is_anonymous ? '匿名用户' : item.name }}
+                      <i v-if="item.email" class="fas fa-envelope-circle-check" title="已留邮箱"></i>
+                    </div>
+                    <div class="recent-meta">
+                      <span class="recent-channel" :class="`channel-${item.channel}`">
+                        <i v-if="item.channel === 'cardkey'" class="fas fa-key"></i>
+                        <i v-else-if="item.channel === 'crypto'" class="fab fa-bitcoin"></i>
+                        <i v-else-if="item.channel === 'alipay'" class="fab fa-alipay"></i>
+                        <i v-else-if="item.channel === 'wechat'" class="fab fa-weixin"></i>
+                      </span>
+                      <span class="recent-time">
+                        <i class="fas fa-clock"></i>
+                        {{ item.time }}
+                      </span>
                     </div>
                   </div>
-                  <div class="recent-amount">¥{{ item.amount }}</div>
+                  <div class="recent-amount">{{ item.channel === 'crypto' ? '$' : '¥' }}{{ item.amount }}</div>
                 </div>
               </div>
             </div>
@@ -425,20 +450,30 @@ const formRules = computed(() => {
 })
 
 const recentDonations = ref([
-  { id: 1, name: '热心网友', amount: 100, time: '5分钟前' },
-  { id: 2, name: '张三', amount: 50, time: '1小时前' },
-  { id: 3, name: '匿名用户', amount: 200, time: '2小时前' },
-  { id: 4, name: '李四', amount: 88, time: '3小时前' },
-  { id: 5, name: '王五', amount: 66, time: '5小时前' }
+  { id: 1, name: '热心网友', amount: 100, time: '5分钟前', channel: 'wechat', is_anonymous: false, email: true },
+  { id: 2, name: '张三', amount: 50, time: '1小时前', channel: 'alipay', is_anonymous: false, email: false },
+  { id: 3, name: '匿名用户', amount: 200, time: '2小时前', channel: 'crypto', is_anonymous: true, email: false },
+  { id: 4, name: '李四', amount: 88, time: '3小时前', channel: 'cardkey', is_anonymous: false, email: true },
+  { id: 5, name: '王五', amount: 66, time: '5小时前', channel: 'wechat', is_anonymous: false, email: false }
 ])
 
 const topDonors = ref([
-  { id: 1, name: '张大豪', amount: 5888, count: 12 },
-  { id: 2, name: '李大富', amount: 3666, count: 8 },
-  { id: 3, name: '王大人', amount: 2888, count: 6 },
-  { id: 4, name: '赵先生', amount: 1888, count: 5 },
-  { id: 5, name: '刘女士', amount: 999, count: 3 }
+  { id: 1, name: '张大豪', amount: 5888, channel: 'crypto', is_anonymous: false, email: true },
+  { id: 2, name: '李大富', amount: 3666, channel: 'wechat', is_anonymous: false, email: false },
+  { id: 3, name: '王大人', amount: 2888, channel: 'cardkey', is_anonymous: false, email: true },
+  { id: 4, name: '匿名用户', amount: 1888, channel: 'alipay', is_anonymous: true, email: false },
+  { id: 5, name: '刘女士', amount: 999, channel: 'wechat', is_anonymous: false, email: true }
 ])
+
+const getChannelName = (channel: string) => {
+  const names: Record<string, string> = {
+    cardkey: '卡密',
+    crypto: 'USDT',
+    wechat: '微信',
+    alipay: '支付宝'
+  }
+  return names[channel] || channel
+}
 
 const activeTab = ref<'ranking' | 'recent'>('ranking')
 
@@ -842,6 +877,21 @@ const handleCelebrationClose = () => {
     100% {
       opacity: 1;
       transform: translateX(0);
+    }
+  }
+
+  @keyframes tabIconBounce {
+    0%, 100% {
+      transform: scale(1);
+    }
+    25% {
+      transform: scale(0.9) rotate(-5deg);
+    }
+    50% {
+      transform: scale(1.1) rotate(5deg);
+    }
+    75% {
+      transform: scale(1.05) rotate(-3deg);
     }
   }
 
@@ -1453,51 +1503,90 @@ const handleCelebrationClose = () => {
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
+      gap: 10px;
 
       .stat-item {
         display: flex;
+        flex-direction: column;
         align-items: center;
+        justify-content: center;
         gap: 8px;
-        padding: 10px;
-        background: var(--el-fill-color-light);
-        border: 1px solid var(--el-border-color-lighter);
-        border-radius: var(--radius-sm);
-        transition: all 0.2s ease;
+        padding: 14px 10px;
+        background: linear-gradient(135deg, 
+          rgba(255, 255, 255, 0.9) 0%, 
+          rgba(255, 255, 255, 0.6) 100%);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(139, 92, 246, 0.1);
+        border-radius: 12px;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, 
+            rgba(139, 92, 246, 0.08) 0%, 
+            rgba(217, 70, 239, 0.05) 100%);
+          opacity: 0;
+          transition: opacity 0.35s ease;
+        }
 
         &:hover {
-          background: var(--el-fill-color);
-          box-shadow: var(--el-box-shadow-light);
+          transform: translateY(-4px) scale(1.02);
+          box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
+          border-color: var(--el-color-primary-light-5);
+
+          &::before {
+            opacity: 1;
+          }
+
+          .stat-icon {
+            transform: scale(1.1) rotateY(180deg);
+          }
+
+          .stat-value {
+            transform: scale(1.05);
+          }
         }
 
         .stat-icon {
-          width: 32px;
-          height: 32px;
+          width: 40px;
+          height: 40px;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: var(--radius-sm);
+          border-radius: 10px;
           flex-shrink: 0;
+          transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          z-index: 1;
 
           i {
-            font-size: 15px;
+            font-size: 18px;
           }
         }
 
         .stat-info {
-          flex: 1;
-          min-width: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 2px;
+          position: relative;
+          z-index: 1;
 
           .stat-value {
-            font-size: var(--font-md);
+            font-size: 16px;
             font-weight: 700;
             color: var(--el-text-color-primary);
-            margin-bottom: 2px;
             line-height: 1.2;
+            transition: transform 0.3s ease;
           }
 
           .stat-label {
             font-size: 10px;
+            font-weight: 500;
             color: var(--el-text-color-secondary);
             line-height: 1;
           }
@@ -1510,40 +1599,55 @@ const handleCelebrationClose = () => {
   .activity-widget {
     .activity-tabs {
       display: flex;
-      gap: 4px;
-      margin-bottom: 12px;
-      padding: 3px;
-      background: var(--el-fill-color-light);
-      border: 1px solid var(--el-border-color-lighter);
-      border-radius: var(--radius-sm);
+      gap: 6px;
+      margin-bottom: 14px;
+      padding: 4px;
+      background: linear-gradient(135deg, 
+        rgba(139, 92, 246, 0.05) 0%, 
+        rgba(217, 70, 239, 0.03) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.1);
+      border-radius: 10px;
 
       .tab-item {
         flex: 1;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 5px;
-        padding: 6px 10px;
-        border-radius: 4px;
-        font-size: var(--font-xs);
-        font-weight: 500;
+        gap: 6px;
+        padding: 8px 12px;
+        border-radius: 7px;
+        font-size: 11px;
+        font-weight: 600;
         color: var(--el-text-color-regular);
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         user-select: none;
+        position: relative;
 
         i {
-          font-size: 11px;
+          font-size: 12px;
+          transition: transform 0.3s ease;
         }
 
         &:hover:not(.active) {
           color: var(--el-color-primary);
+          background: rgba(139, 92, 246, 0.08);
+          
+          i {
+            transform: scale(1.15);
+          }
         }
 
         &.active {
-          background: var(--el-color-primary);
+          background: linear-gradient(135deg, 
+            var(--el-color-primary) 0%, 
+            var(--theme-secondary) 100%);
           color: #fff;
-          font-weight: 600;
+          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+          
+          i {
+            animation: tabIconBounce 0.6s ease;
+          }
         }
       }
     }
@@ -1559,67 +1663,102 @@ const handleCelebrationClose = () => {
       .ranking-item {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 8px;
-        margin-bottom: 6px;
-        border-radius: var(--radius-sm);
-        background: var(--el-fill-color-light);
-        border: 1px solid var(--el-border-color-lighter);
-        transition: all 0.2s ease;
+        gap: 10px;
+        padding: 10px 12px;
+        margin-bottom: 8px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, 
+          rgba(255, 255, 255, 0.8) 0%, 
+          rgba(255, 255, 255, 0.5) 100%);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(139, 92, 246, 0.08);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
 
         &:last-child {
           margin-bottom: 0;
         }
 
         &:hover {
-          background: var(--el-fill-color);
-          box-shadow: var(--el-box-shadow-light);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 16px rgba(139, 92, 246, 0.12);
+          border-color: var(--el-color-primary-light-7);
+
+          .ranking-badge {
+            transform: scale(1.1) rotate(10deg);
+          }
+
+          .ranking-avatar {
+            transform: scale(1.05);
+          }
+
+          .ranking-amount {
+            transform: scale(1.05);
+          }
         }
 
         .ranking-badge {
-          width: 20px;
-          height: 20px;
+          width: 24px;
+          height: 24px;
           display: flex;
           align-items: center;
           justify-content: center;
           border-radius: 50%;
-          font-size: 9px;
-          font-weight: 600;
+          font-size: 10px;
+          font-weight: 700;
           flex-shrink: 0;
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
           &.rank-1 {
-            background: #fbbf24;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
             color: #fff;
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
           }
 
           &.rank-2 {
-            background: #94a3b8;
+            background: linear-gradient(135deg, #cbd5e1, #94a3b8);
             color: #fff;
+            box-shadow: 0 4px 12px rgba(148, 163, 184, 0.4);
           }
 
           &.rank-3 {
-            background: #f97316;
+            background: linear-gradient(135deg, #fb923c, #f97316);
             color: #fff;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
           }
 
           &:not(.rank-1):not(.rank-2):not(.rank-3) {
             background: var(--el-fill-color);
             color: var(--el-text-color-secondary);
+            box-shadow: none;
           }
         }
 
         .ranking-avatar {
-          width: 24px;
-          height: 24px;
+          width: 28px;
+          height: 28px;
           border-radius: 50%;
-          background: var(--el-color-primary);
+          background: linear-gradient(135deg, 
+            var(--el-color-primary) 0%, 
+            var(--theme-secondary) 100%);
           color: #fff;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 10px;
-          font-weight: 600;
+          font-size: 11px;
+          font-weight: 700;
           flex-shrink: 0;
+          transition: transform 0.3s ease;
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+
+          &.anonymous {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+            
+            i {
+              font-size: 12px;
+            }
+          }
         }
 
         .ranking-info {
@@ -1627,26 +1766,65 @@ const handleCelebrationClose = () => {
           min-width: 0;
 
           .ranking-name {
-            font-size: var(--font-xs);
+            font-size: 12px;
             font-weight: 600;
             color: var(--el-text-color-primary);
-            margin-bottom: 2px;
+            margin-bottom: 3px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            i.fa-envelope-circle-check {
+              font-size: 11px;
+              color: #52c41a;
+              opacity: 0.8;
+            }
           }
 
-          .ranking-count {
-            font-size: 9px;
+          .ranking-channel {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 500;
             color: var(--el-text-color-secondary);
+
+            i {
+              font-size: 10px;
+              opacity: 0.7;
+
+              &.fa-key {
+                color: #722ed1;
+              }
+              &.fa-bitcoin {
+                color: #f7931a;
+              }
+              &.fa-alipay {
+                color: #1677ff;
+              }
+              &.fa-weixin {
+                color: #07c160;
+              }
+            }
           }
         }
 
         .ranking-amount {
-          font-size: var(--font-xs);
-          font-weight: 700;
-          color: var(--theme-color);
+          font-size: 14px;
+          font-weight: 800;
+          background: linear-gradient(135deg, 
+            #f59e0b 0%, 
+            #ea580c 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
           flex-shrink: 0;
+          transition: all 0.3s ease;
+          letter-spacing: 0.3px;
+          text-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
         }
       }
     }
@@ -1658,45 +1836,60 @@ const handleCelebrationClose = () => {
       .recent-item {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 8px;
-        margin-bottom: 6px;
-        background: rgba(255, 255, 255, 0.5);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        border-radius: var(--radius-sm);
-        transition: all 0.2s ease;
+        gap: 10px;
+        padding: 10px 12px;
+        margin-bottom: 8px;
+        background: linear-gradient(135deg, 
+          rgba(255, 255, 255, 0.8) 0%, 
+          rgba(255, 255, 255, 0.5) 100%);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(139, 92, 246, 0.08);
+        border-radius: 10px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
 
         &:last-child {
           margin-bottom: 0;
         }
 
         &:hover {
-          background: rgba(255, 255, 255, 0.75);
-          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
-        }
+          transform: translateY(-2px);
+          box-shadow: 0 4px 16px rgba(139, 92, 246, 0.12);
+          border-color: var(--el-color-primary-light-7);
 
-        .recent-dot {
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          background: var(--theme-color);
-          flex-shrink: 0;
-          opacity: 0.5;
+          .recent-avatar {
+            transform: scale(1.05);
+          }
+
+          .recent-amount {
+            transform: scale(1.05);
+          }
         }
 
         .recent-avatar {
-          width: 22px;
-          height: 22px;
+          width: 28px;
+          height: 28px;
           display: flex;
           align-items: center;
           justify-content: center;
           border-radius: 50%;
-          background: var(--theme-color);
+          background: linear-gradient(135deg, 
+            var(--el-color-primary) 0%, 
+            var(--theme-secondary) 100%);
           color: #fff;
-          font-size: 10px;
-          font-weight: 600;
+          font-size: 11px;
+          font-weight: 700;
           flex-shrink: 0;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+
+          &.anonymous {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+            
+            i {
+              font-size: 12px;
+            }
+          }
         }
 
         .recent-info {
@@ -1704,34 +1897,91 @@ const handleCelebrationClose = () => {
           min-width: 0;
 
           .recent-name {
-            font-size: var(--font-xs);
-            font-weight: 500;
+            font-size: 12px;
+            font-weight: 600;
             color: var(--el-text-color-primary);
-            margin-bottom: 2px;
+            margin-bottom: 4px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-          }
-
-          .recent-time {
             display: flex;
             align-items: center;
-            gap: 3px;
-            font-size: 9px;
-            color: var(--el-text-color-secondary);
+            gap: 4px;
 
-            i {
-              font-size: 8px;
-              opacity: 0.7;
+            i.fa-envelope-circle-check {
+              font-size: 11px;
+              color: #52c41a;
+              opacity: 0.8;
+            }
+          }
+
+          .recent-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            .recent-channel {
+              display: inline-flex;
+              align-items: center;
+              padding: 2px 6px;
+              border-radius: 4px;
+              font-size: 11px;
+              transition: all 0.2s ease;
+
+              i {
+                font-size: 11px;
+              }
+
+              &.channel-cardkey {
+                background: rgba(114, 46, 209, 0.08);
+                color: #722ed1;
+              }
+
+              &.channel-crypto {
+                background: rgba(247, 147, 26, 0.08);
+                color: #f7931a;
+              }
+
+              &.channel-alipay {
+                background: rgba(22, 119, 255, 0.08);
+                color: #1677ff;
+              }
+
+              &.channel-wechat {
+                background: rgba(7, 193, 96, 0.08);
+                color: #07c160;
+              }
+            }
+
+            .recent-time {
+              display: inline-flex;
+              align-items: center;
+              gap: 3px;
+              font-size: 10px;
+              font-weight: 500;
+              color: var(--el-text-color-secondary);
+
+              i {
+                font-size: 9px;
+                opacity: 0.7;
+              }
             }
           }
         }
 
         .recent-amount {
-          font-size: var(--font-xs);
-          font-weight: 700;
-          color: var(--theme-color);
+          font-size: 14px;
+          font-weight: 800;
+          background: linear-gradient(135deg, 
+            #f59e0b 0%, 
+            #ea580c 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
           flex-shrink: 0;
+          transition: all 0.3s ease;
+          letter-spacing: 0.3px;
+          text-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
         }
       }
     }
