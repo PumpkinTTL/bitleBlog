@@ -6,35 +6,38 @@
       <div class="header-main">
         <div class="section-info">
           <div class="section-title">
-            <el-icon class="title-icon">
-              <Grid />
-            </el-icon>
-            <span>最新文章</span>
-          </div>
-          <div class="article-count" v-if="totalArticles > 0">
-            共 {{ totalArticles }} 篇
+            <i class="fas fa-th-large title-icon"></i>
+            <span>共 {{ totalArticles }} 篇</span>
           </div>
         </div>
 
         <div class="header-controls">
           <!-- 布局切换 -->
           <div class="layout-toggle">
-            <el-button-group size="small">
-              <el-button :type="viewMode === 'list' ? 'primary' : 'default'" @click="handleViewModeChange('list')"
-                :icon="Menu" />
-              <el-button :type="viewMode === 'card' && gridColumns === 2 ? 'primary' : 'default'"
-                @click="handleViewModeChange('card', 2)">
-                <el-icon>
-                  <Grid />
-                </el-icon>
-              </el-button>
-              <el-button :type="viewMode === 'card' && gridColumns === 3 ? 'primary' : 'default'"
-                @click="handleViewModeChange('card', 3)">
-                <el-icon>
-                  <Operation />
-                </el-icon>
-              </el-button>
-            </el-button-group>
+            <button 
+              class="toggle-btn" 
+              :class="{ 'active': viewMode === 'list' }"
+              @click="handleViewModeChange('list')"
+              title="列表视图"
+            >
+              <i class="fas fa-bars"></i>
+            </button>
+            <button 
+              class="toggle-btn" 
+              :class="{ 'active': viewMode === 'card' && gridColumns === 2 }"
+              @click="handleViewModeChange('card', 2)"
+              title="双列卡片"
+            >
+              <i class="fas fa-th-large"></i>
+            </button>
+            <button 
+              class="toggle-btn" 
+              :class="{ 'active': viewMode === 'card' && gridColumns === 3 }"
+              @click="handleViewModeChange('card', 3)"
+              title="三列卡片"
+            >
+              <i class="fas fa-th"></i>
+            </button>
           </div>
 
           <!-- 搜索触发按钮 -->
@@ -45,16 +48,12 @@
             @mouseleave="handleTriggerMouseLeave"
             :class="{ 'expanded': isPanelOpen }"
           >
-            <el-icon class="search-icon">
-              <Search />
-            </el-icon>
+            <i class="fas fa-search search-icon"></i>
             <span class="search-text">
-              <span class="desktop-text">搜索筛选文章</span>
-              <span class="mobile-text">搜索筛选</span>
+              <span class="desktop-text">搜索筛选</span>
+              <span class="mobile-text">搜索</span>
             </span>
-            <el-icon class="expand-icon" :class="{ 'rotated': isPanelOpen }">
-              <ArrowDown />
-            </el-icon>
+            <i class="fas fa-chevron-down expand-icon" :class="{ 'rotated': isPanelOpen }"></i>
           </div>
         </div>
       </div>
@@ -71,17 +70,27 @@
         <!-- 搜索行 -->
         <div class="search-row">
           <div class="search-wrapper">
-            <el-input v-model="searchKeyword" placeholder="输入关键词搜索..." size="default" class="search-input"
-              @keyup.enter="handleSearch(searchKeyword)" clearable ref="searchInputRef">
-              <template #prefix>
-                <el-icon class="input-icon">
-                  <Search />
-                </el-icon>
-              </template>
-            </el-input>
-            <el-button type="primary" @click="handleSearch(searchKeyword)" class="search-btn">
+            <div class="search-input-wrapper">
+              <i class="fas fa-search input-icon"></i>
+              <input 
+                v-model="searchKeyword" 
+                type="text" 
+                placeholder="输入关键词搜索..." 
+                class="search-input"
+                @keyup.enter="handleSearch(searchKeyword)"
+                ref="searchInputRef"
+              />
+              <button 
+                v-if="searchKeyword" 
+                class="clear-btn" 
+                @click="searchKeyword = ''"
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <button class="search-btn" @click="handleSearch(searchKeyword)">
               搜索
-            </el-button>
+            </button>
           </div>
         </div>
 
@@ -90,12 +99,13 @@
           <div class="filter-section">
             <span class="section-label">类型</span>
             <div class="filter-tags">
-              <button v-for="item in filterOptions" :key="item.value"
+              <button 
+                v-for="item in filterOptions" 
+                :key="item.value"
                 :class="['filter-tag', { 'active': activeFilter === item.value }]"
-                @click="handleFilterChange(item.value)">
-                <el-icon class="tag-icon">
-                  <component :is="item.icon" />
-                </el-icon>
+                @click="handleFilterChange(item.value)"
+              >
+                <i :class="item.icon" class="tag-icon"></i>
                 <span>{{ item.label }}</span>
               </button>
             </div>
@@ -107,9 +117,12 @@
           <div class="category-section">
             <span class="section-label">分类</span>
             <div class="category-tags">
-              <button v-for="category in categories.slice(0, isMobile ? 6 : 8)" :key="category.id"
+              <button 
+                v-for="category in categories.slice(0, isMobile ? 6 : 8)" 
+                :key="category.id"
                 :class="['category-tag', { 'active': activeCategory === category.id }]"
-                @click="handleCategoryChange(category.id)">
+                @click="handleCategoryChange(category.id)"
+              >
                 <i :class="getCategoryIcon(category)" class="tag-icon"></i>
                 <span>{{ category.name }}</span>
                 <em v-if="category.count" class="tag-count">{{ category.count }}</em>
@@ -120,15 +133,13 @@
 
         <!-- 底部操作 -->
         <div class="actions-row">
-          <el-button size="small" @click="handleReset" class="reset-btn">
-            <el-icon>
-              <RefreshLeft />
-            </el-icon>
+          <button class="reset-btn" @click="handleReset">
+            <i class="fas fa-redo-alt"></i>
             <span>重置</span>
-          </el-button>
-          <el-button size="small" type="primary" @click="closePanel" class="close-btn">
+          </button>
+          <button class="close-btn" @click="closePanel">
             <span>收起</span>
-          </el-button>
+          </button>
         </div>
       </div>
     </Transition>
@@ -137,7 +148,6 @@
 
 <script setup lang="ts">
 import { ref, nextTick, computed, onMounted, onUnmounted, watch } from 'vue'
-import { Search, Star, Clock, TrendCharts, Grid, Filter, Collection, Close, RefreshLeft, Check, ArrowDown, Menu, Operation } from '@element-plus/icons-vue'
 
 // 定义分类类型
 interface Category {
@@ -193,15 +203,15 @@ const totalArticles = ref(props.totalArticles)
 
 // 面板状态
 const isPanelOpen = ref(false)
-const searchInputRef = ref(null)
+const searchInputRef = ref<HTMLInputElement | null>(null)
 const isScrolled = ref(false)
 
 // 过滤选项
 const filterOptions = [
-  { value: 'all', label: '全部文章', icon: Grid },
-  { value: 'recommended', label: '推荐', icon: Star },
-  { value: 'latest', label: '最新', icon: Clock },
-  { value: 'popular', label: '热门', icon: TrendCharts }
+  { value: 'all', label: '全部文章', icon: 'fas fa-th-large' },
+  { value: 'recommended', label: '推荐', icon: 'fas fa-star' },
+  { value: 'latest', label: '最新', icon: 'fas fa-clock' },
+  { value: 'popular', label: '热门', icon: 'fas fa-fire' }
 ]
 
 // 分类数据 - 使用从父组件传入的真实数据
@@ -244,7 +254,7 @@ const closePanel = () => {
   isPanelOpen.value = false
 }
 
-// 鼠标悬停逼辑
+// 鼠标悬停逻辑
 let mouseLeaveTimer: NodeJS.Timeout | null = null
 
 // 鼠标进入触发按钮或面板
@@ -274,7 +284,6 @@ const handleMouseLeave = () => {
 // 事件处理函数
 const handleSearch = (query: string) => {
   emit('search', query)
-  // 搜索后保持面板开启，方便用户进一步筛选
 }
 
 const handleFilterChange = (filterValue: string) => {
@@ -296,7 +305,7 @@ const handleViewModeChange = (mode: 'card' | 'list', columns?: number) => {
   emit('viewModeChange', mode, columns)
 }
 
-// 新增的事件处理
+// 重置处理
 const handleReset = () => {
   searchKeyword.value = ''
   activeFilter.value = 'all'
@@ -306,14 +315,6 @@ const handleReset = () => {
   emit('search', '')
   emit('filterChange', 'all')
   emit('categoryChange', 0)
-}
-
-const handleApply = () => {
-  // 应用当前的所有筛选条件
-  emit('search', searchKeyword.value)
-  emit('filterChange', activeFilter.value)
-  emit('categoryChange', activeCategory.value)
-  closePanel()
 }
 
 // 移动端检测
@@ -326,7 +327,6 @@ const handleResize = () => {
 
 // 滚动检测
 const handleScroll = () => {
-  // 获取父容器的滚动位置
   const container = document.querySelector('.main-content-body')
   if (container) {
     isScrolled.value = container.scrollTop > 10
@@ -369,35 +369,38 @@ watch(() => props.gridColumns, (newValue) => {
 watch(() => props.totalArticles, (newValue) => {
   totalArticles.value = newValue
 }, { immediate: true })
-
 </script>
 
-<style scoped>
-/* ==== 紧凑搜索筛选栏样式 ==== */
+<style scoped lang="less">
+/* 紫色渐变主题变量 - 与捐赠界面保持一致 */
+@theme-primary: #8b5cf6;
+@theme-secondary: #d946ef;
+@theme-light-3: #a78bfa;
+@theme-light-5: #c4b5fd;
+@theme-light-7: #ddd6fe;
+@theme-light-9: #ede9fe;
+
+/* 浮动搜索筛选栏 */
 .floating-search-filter {
   position: sticky;
   top: 0;
   z-index: 998;
-  background: var(--el-bg-color);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   border-bottom: 1px solid transparent;
-
-  /* 默认就有阴影，表明固定性质 */
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.10);
   
-  /* 滚动时增强视觉反馈 */
   &.scrolled {
-    border-bottom-color: var(--el-border-color-light);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+    border-bottom-color: rgba(139, 92, 246, 0.1);
+    box-shadow: 0 8px 28px rgba(139, 92, 246, 0.15);
   }
   
-  /* 移动端适配 */
   @media (max-width: 768px) {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.10);
     
     &.scrolled {
-      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 6px 22px rgba(139, 92, 246, 0.15);
     }
   }
 }
@@ -434,7 +437,7 @@ watch(() => props.totalArticles, (newValue) => {
       gap: 8px;
       font-size: 18px;
       font-weight: 600;
-      color: var(--el-text-color-primary);
+      color: #333;
 
       @media (max-width: 768px) {
         font-size: 16px;
@@ -442,25 +445,30 @@ watch(() => props.totalArticles, (newValue) => {
 
       .title-icon {
         font-size: 20px;
-        color: var(--el-color-primary);
+        background: linear-gradient(135deg, @theme-primary, @theme-secondary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
 
         @media (max-width: 768px) {
           font-size: 18px;
         }
       }
-    }
+      
+      span {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        background: linear-gradient(135deg, @theme-primary, @theme-secondary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 600;
 
-  .article-count {
-      padding: 4px 12px;
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.15));
-      border-radius: 20px;
-      font-size: 12px;
-      color: var(--el-color-primary);
-      font-weight: 600;
-
-      @media (max-width: 768px) {
-        font-size: 11px;
-        padding: 3px 10px;
+        @media (max-width: 768px) {
+          font-size: 11px;
+          padding: 3px 10px;
+        }
       }
     }
   }
@@ -477,16 +485,48 @@ watch(() => props.totalArticles, (newValue) => {
   }
 
   .layout-toggle {
-    :deep(.el-button-group) {
-      .el-button {
-        height: 36px;
-        width: 36px;
-        padding: 0;
+    display: flex;
+    gap: 4px;
+    background: rgba(139, 92, 246, 0.05);
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid rgba(139, 92, 246, 0.1);
+    
+    .toggle-btn {
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      
+      i {
+        font-size: 14px;
+      }
 
-        @media (max-width: 768px) {
-          height: 32px;
-          width: 32px;
+      @media (max-width: 768px) {
+        width: 32px;
+        height: 32px;
+        
+        i {
+          font-size: 13px;
         }
+      }
+
+      &:hover {
+        background: rgba(139, 92, 246, 0.1);
+        color: @theme-primary;
+      }
+
+      &.active {
+        background: linear-gradient(135deg, @theme-primary, @theme-secondary);
+        color: white;
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
       }
     }
   }
@@ -499,13 +539,13 @@ watch(() => props.totalArticles, (newValue) => {
   gap: 8px;
   height: 38px;
   padding: 0 14px;
-  background: var(--el-fill-color-blank);
-  border: 2px solid var(--el-border-color-light);
+  background: white;
+  border: 2px solid rgba(139, 92, 246, 0.2);
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   min-width: 180px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
 
   @media (max-width: 768px) {
     height: 32px;
@@ -514,34 +554,34 @@ watch(() => props.totalArticles, (newValue) => {
   }
 
   &:hover {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f5ff 100%);
-    border-color: var(--el-color-primary-light-5);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.12);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(217, 70, 239, 0.05));
+    border-color: @theme-light-5;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
     transform: translateY(-1px);
 
     .search-icon {
-      color: var(--el-color-primary);
+      color: @theme-primary;
     }
   }
 
   &.expanded {
-    background: linear-gradient(135deg, #ffffff 0%, #f5f3ff 100%);
-    border-color: var(--el-color-primary);
-    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2), 0 0 0 3px rgba(139, 92, 246, 0.08);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(217, 70, 239, 0.08));
+    border-color: @theme-primary;
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.25), 0 0 0 3px rgba(139, 92, 246, 0.08);
 
     .search-icon {
-      color: var(--el-color-primary);
+      color: @theme-primary;
     }
 
     .search-text {
-      color: var(--el-color-primary);
+      color: @theme-primary;
       font-weight: 600;
     }
   }
 
   .search-icon {
     font-size: 16px;
-    color: var(--el-text-color-regular);
+    color: #999;
     transition: color 0.3s ease;
 
     @media (max-width: 768px) {
@@ -552,7 +592,7 @@ watch(() => props.totalArticles, (newValue) => {
   .search-text {
     flex: 1;
     font-size: 13px;
-    color: var(--el-text-color-regular);
+    color: #666;
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
@@ -581,7 +621,7 @@ watch(() => props.totalArticles, (newValue) => {
 
   .expand-icon {
     font-size: 14px;
-    color: var(--el-text-color-secondary);
+    color: #999;
     transition: transform 0.3s ease;
     flex-shrink: 0;
 
@@ -595,16 +635,16 @@ watch(() => props.totalArticles, (newValue) => {
   }
 }
 
-/* 展开面板 - 小巧精致设计 */
+/* 展开面板 */
 .search-panel {
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
-  background: var(--el-bg-color);
+  background: rgba(255, 255, 255, 0.98);
   border-radius: 0 0 10px 10px;
   padding: 14px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
   pointer-events: auto;
   backdrop-filter: blur(12px);
   z-index: 1001;
@@ -613,7 +653,7 @@ watch(() => props.totalArticles, (newValue) => {
     padding: 12px;
     margin: 0 -4px;
     border-radius: 0 0 8px 8px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.18);
   }
 }
 
@@ -636,7 +676,7 @@ watch(() => props.totalArticles, (newValue) => {
   transform: translateY(-10px);
 }
 
-/* 搜索行 - 紧凑设计 */
+/* 搜索行 */
 .search-row {
   margin-bottom: 12px;
 
@@ -655,48 +695,102 @@ watch(() => props.totalArticles, (newValue) => {
   }
 }
 
-.search-input {
+.search-input-wrapper {
+  position: relative;
   flex: 1;
-}
-
-.search-input :deep(.el-input__wrapper) {
-  height: 38px;
-  border-radius: 8px;
-  border: 1.5px solid var(--el-border-color-light);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
-
-  @media (max-width: 768px) {
-    height: 34px;
-    border-radius: 5px;
+  display: flex;
+  align-items: center;
+  
+  .input-icon {
+    position: absolute;
+    left: 12px;
+    color: #999;
+    font-size: 15px;
+    pointer-events: none;
+    
+    @media (max-width: 768px) {
+      font-size: 14px;
+      left: 10px;
+    }
   }
-}
-
-.search-input :deep(.el-input__wrapper):hover {
-  border-color: var(--el-color-primary-light-5);
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
-}
-
-.search-input :deep(.el-input__wrapper.is-focus) {
-  border-color: var(--el-color-primary);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12), 0 2px 8px rgba(139, 92, 246, 0.1);
-}
-
-.input-icon {
-  font-size: 15px;
-  color: var(--el-text-color-placeholder);
-
-  @media (max-width: 768px) {
-    font-size: 14px;
+  
+  .search-input {
+    width: 100%;
+    height: 38px;
+    padding: 0 40px 0 38px;
+    border: 1.5px solid rgba(139, 92, 246, 0.2);
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+    box-shadow: 0 1px 4px rgba(139, 92, 246, 0.05);
+    
+    @media (max-width: 768px) {
+      height: 34px;
+      border-radius: 5px;
+      padding: 0 35px 0 34px;
+      font-size: 12px;
+    }
+    
+    &::placeholder {
+      color: #bbb;
+    }
+    
+    &:hover {
+      border-color: @theme-light-5;
+      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+    }
+    
+    &:focus {
+      border-color: @theme-primary;
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12), 0 2px 8px rgba(139, 92, 246, 0.15);
+    }
+  }
+  
+  .clear-btn {
+    position: absolute;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: rgba(139, 92, 246, 0.1);
+    color: @theme-primary;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    
+    @media (max-width: 768px) {
+      width: 20px;
+      height: 20px;
+      right: 6px;
+    }
+    
+    i {
+      font-size: 10px;
+    }
+    
+    &:hover {
+      background: rgba(139, 92, 246, 0.2);
+      transform: scale(1.1);
+    }
   }
 }
 
 .search-btn {
   height: 38px;
   padding: 0 18px;
+  border: none;
   border-radius: 8px;
+  background: linear-gradient(135deg, @theme-primary, @theme-secondary);
+  color: white;
   font-weight: 600;
   font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
 
   @media (max-width: 768px) {
@@ -705,9 +799,18 @@ watch(() => props.totalArticles, (newValue) => {
     font-size: 12px;
     border-radius: 5px;
   }
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.35);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
 }
 
-/* 筛选行 - 紧凑适配移动端 */
+/* 筛选行与分类行 */
 .filter-row,
 .category-row {
   margin-bottom: 10px;
@@ -731,7 +834,7 @@ watch(() => props.totalArticles, (newValue) => {
 
 .section-label {
   font-size: 12px;
-  color: var(--el-text-color-secondary);
+  color: #666;
   font-weight: 600;
   white-space: nowrap;
   padding-top: 6px;
@@ -764,17 +867,17 @@ watch(() => props.totalArticles, (newValue) => {
   gap: 4px;
   padding: 4px 10px;
   height: 28px;
-  background: var(--el-fill-color-blank);
-  border: 1.5px solid var(--el-border-color-light);
+  background: rgba(139, 92, 246, 0.08);
+  border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 12px;
-  color: var(--el-text-color-regular);
+  color: #666;
   white-space: nowrap;
   line-height: 1;
   font-weight: 500;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  box-shadow: none;
 
   @media (max-width: 768px) {
     height: 26px;
@@ -783,24 +886,20 @@ watch(() => props.totalArticles, (newValue) => {
     border-radius: 5px;
     gap: 3px;
   }
-}
-
-.filter-tag:hover,
-.category-tag:hover {
-  background: linear-gradient(135deg, #ffffff 0%, #f8f5ff 100%);
-  border-color: var(--el-color-primary-light-5);
-  color: var(--el-color-primary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
-}
-
-.filter-tag.active,
-.category-tag.active {
-  background: linear-gradient(135deg, var(--el-color-primary), var(--el-color-primary-light-3));
-  border-color: var(--el-color-primary);
-  color: white;
-  box-shadow: 0 3px 12px rgba(139, 92, 246, 0.35), 0 1px 4px rgba(139, 92, 246, 0.2);
-  transform: translateY(-1px);
+  
+  &:hover {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(217, 70, 239, 0.12));
+    color: @theme-primary;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+  }
+  
+  &.active {
+    background: linear-gradient(135deg, @theme-primary, @theme-secondary);
+    color: white;
+    box-shadow: 0 3px 12px rgba(139, 92, 246, 0.35), 0 1px 4px rgba(139, 92, 246, 0.25);
+    transform: translateY(-1px);
+  }
 }
 
 .tag-icon {
@@ -837,13 +936,13 @@ watch(() => props.totalArticles, (newValue) => {
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* 操作行 - 紧凑设计 */
+/* 操作行 */
 .actions-row {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
   padding-top: 10px;
-  border-top: 1px solid var(--el-border-color-lighter);
+  border-top: 1px solid rgba(139, 92, 246, 0.1);
   margin-top: 6px;
 
   @media (max-width: 768px) {
@@ -863,7 +962,9 @@ watch(() => props.totalArticles, (newValue) => {
   border-radius: 8px;
   font-weight: 500;
   font-size: 12px;
+  cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
 
   @media (max-width: 768px) {
     height: 30px;
@@ -872,6 +973,35 @@ watch(() => props.totalArticles, (newValue) => {
     gap: 3px;
     border-radius: 5px;
   }
+  
+  i {
+    font-size: 12px;
+  }
+}
+
+.reset-btn {
+  background: rgba(139, 92, 246, 0.08);
+  color: @theme-primary;
+  
+  &:hover {
+    background: rgba(139, 92, 246, 0.15);
+    transform: translateY(-1px);
+  }
+}
+
+.close-btn {
+  background: linear-gradient(135deg, @theme-primary, @theme-secondary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
 }
 
 /* 移动端适配 */
@@ -879,48 +1009,11 @@ watch(() => props.totalArticles, (newValue) => {
   .integrated-header {
     .section-info {
       .section-title {
-        span {
+        span:first-child {
           display: none;
-          /* 移动端隐藏标题文本 */
         }
       }
     }
-  }
-
-  .search-text {
-    font-size: 13px;
-  }
-
-  .search-panel {
-    padding: 12px;
-  }
-
-  .search-wrapper {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .search-btn {
-    width: 100%;
-    height: 36px;
-  }
-
-  .filter-tags,
-  .category-tags {
-    gap: 6px;
-  }
-
-  .filter-tag,
-  .category-tag {
-    padding: 4px 10px;
-    height: 28px;
-    font-size: 12px;
-  }
-
-  .section-label {
-    min-width: 32px;
-    font-size: 12px;
-    padding-top: 6px;
   }
 
   .actions-row {
@@ -934,90 +1027,5 @@ watch(() => props.totalArticles, (newValue) => {
     height: 36px;
     justify-content: center;
   }
-}
-
-@media (max-width: 480px) {
-  .integrated-header {
-    padding: 12px;
-  }
-
-  .search-trigger {
-    height: 30px;
-    min-width: 120px;
-    padding: 0 8px;
-  }
-
-  .search-text {
-    font-size: 11px;
-  }
-
-  .search-panel {
-    padding: 10px;
-  }
-
-  .filter-tags,
-  .category-tags {
-    gap: 4px;
-  }
-
-  .filter-tag,
-  .category-tag {
-    padding: 3px 8px;
-    height: 26px;
-    font-size: 11px;
-  }
-
-  .section-label {
-    min-width: 28px;
-    font-size: 11px;
-  }
-
-  .search-input :deep(.el-input__wrapper),
-  .search-btn {
-    height: 36px;
-  }
-}
-
-/* 暗黑主题适配 */
-.dark .floating-search-filter {
-  background: var(--el-bg-color);
-  border-bottom-color: var(--el-border-color-darker);
-
-  &.scrolled {
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
-  }
-}
-
-.dark .integrated-header {
-  .section-info {
-    .article-count {
-      background: var(--el-fill-color-darker);
-      color: var(--el-text-color-regular);
-    }
-  }
-}
-
-.dark .search-trigger {
-  background: var(--el-fill-color-darker);
-  border-color: var(--el-border-color-darker);
-
-  &:hover {
-    background: var(--el-fill-color-dark);
-  }
-
-  &.expanded {
-    background: var(--el-color-primary-light-8);
-    border-color: var(--el-color-primary);
-  }
-}
-
-.dark .filter-tag:hover,
-.dark .category-tag:hover {
-  background: var(--el-fill-color);
-}
-
-.dark .search-panel {
-  background: var(--el-bg-color-page);
-  backdrop-filter: blur(12px);
 }
 </style>
