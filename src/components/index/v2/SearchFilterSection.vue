@@ -372,13 +372,16 @@ watch(() => props.totalArticles, (newValue) => {
 </script>
 
 <style scoped lang="less">
+// 引入全局主题变量
+@import '@/assets/style/theme.less';
+
 /* 紫色渐变主题变量 - 与捐赠界面保持一致 */
-@theme-primary: #8b5cf6;
-@theme-secondary: #d946ef;
-@theme-light-3: #a78bfa;
-@theme-light-5: #c4b5fd;
-@theme-light-7: #ddd6fe;
-@theme-light-9: #ede9fe;
+@theme-primary: @theme-purple-primary;
+@theme-secondary: @theme-purple-secondary;
+@theme-light-3: @theme-purple-light-3;
+@theme-light-5: @theme-purple-light-5;
+@theme-light-7: @theme-purple-light-7;
+@theme-light-9: @theme-purple-light-9;
 
 /* 浮动搜索筛选栏 */
 .floating-search-filter {

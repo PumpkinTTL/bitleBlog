@@ -654,14 +654,17 @@ const handleCelebrationClose = () => {
 </script>
 
 <style scoped lang="less">
+// 引入全局主题变量
+@import '@/assets/style/theme.less';
+
 .donation-page {
-  // 统一设计变量
-  --theme-color: #8b5cf6;
-  --theme-color-light-3: #a78bfa;
-  --theme-color-light-5: #c4b5fd;
-  --theme-color-light-7: #ddd6fe;
-  --theme-color-light-9: #ede9fe;
-  --theme-secondary: #d946ef;
+  // 统一设计变量 - 使用全局紫色主题
+  --theme-color: @theme-purple-primary;
+  --theme-color-light-3: @theme-purple-light-3;
+  --theme-color-light-5: @theme-purple-light-5;
+  --theme-color-light-7: @theme-purple-light-7;
+  --theme-color-light-9: @theme-purple-light-9;
+  --theme-secondary: @theme-purple-secondary;
   --theme-accent: #3b82f6;
 
   // 统一间距 - 缩小
@@ -682,13 +685,13 @@ const handleCelebrationClose = () => {
   --font-lg: 14px;
   --font-xl: 16px;
 
-  // 覆盖 Element Plus 全局主题色
-  --el-color-primary: #8b5cf6;
-  --el-color-primary-light-3: #a78bfa;
-  --el-color-primary-light-5: #c4b5fd;
-  --el-color-primary-light-7: #ddd6fe;
+  // 覆盖 Element Plus 全局主题色 - 使用全局紫色主题
+  --el-color-primary: @theme-purple-primary;
+  --el-color-primary-light-3: @theme-purple-light-3;
+  --el-color-primary-light-5: @theme-purple-light-5;
+  --el-color-primary-light-7: @theme-purple-light-7;
   --el-color-primary-light-8: #e9d5ff;
-  --el-color-primary-light-9: #ede9fe;
+  --el-color-primary-light-9: @theme-purple-light-9;
   --el-color-primary-dark-2: #7c3aed;
 
   min-height: 100vh;
