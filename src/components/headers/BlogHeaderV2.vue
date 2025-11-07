@@ -116,11 +116,13 @@
     <el-dialog
       v-model="notificationCenterVisible"
       title="通知中心"
-      width="900px"
-      top="5vh"
+      width="95%"
+      :style="{ maxWidth: '900px', minWidth: '320px' }"
+      top="3vh"
       :close-on-click-modal="false"
       class="notification-center-dialog"
       destroy-on-close
+      :lock-scroll="false"
     >
       <div class="notification-wrapper">
         <NotificationCenter v-if="notificationCenterVisible" />
@@ -461,8 +463,8 @@ onMounted(() => {
   }
   
   @media (max-width: 768px) {
-    padding: 0 12px;
-    gap: 8px;
+    padding: 0 16px;
+    gap: 12px;
     justify-content: space-between;
   }
 }
@@ -517,19 +519,8 @@ onMounted(() => {
       font-size: 8px;
     }
     
-    // 中等屏幕稍小
+    // 移动端隐藏Logo文字，防止挤压右侧按钮
     @media (max-width: 768px) {
-      .logo-main {
-        font-size: 13px;
-      }
-      
-      .logo-sub {
-        font-size: 7px;
-      }
-    }
-    
-    // 只有超小屏才隐藏
-    @media (max-width: 400px) {
       display: none !important;
     }
   }
@@ -623,8 +614,7 @@ onMounted(() => {
   gap: 10px;
 
   @media (max-width: 768px) {
-    gap: 8px;
-    margin-left: auto;
+    gap: 10px;
   }
 }
 
@@ -1621,9 +1611,31 @@ html.dark {
 
 // ==================== 通知中心弹窗 ====================
 :deep(.notification-center-dialog) {
+  // 移动端宽度自适应
+  .el-dialog {
+    @media (max-width: 768px) {
+      width: 95% !important;
+      max-width: none !important;
+      margin: 0 2.5%;
+    }
+    
+    @media (max-width: 480px) {
+      width: 98% !important;
+      margin: 0 1%;
+    }
+  }
+  
   .el-dialog__header {
     padding: 20px 24px;
     border-bottom: 1px solid var(--el-border-color-lighter);
+    
+    @media (max-width: 768px) {
+      padding: 16px 20px;
+    }
+    
+    @media (max-width: 480px) {
+      padding: 14px 16px;
+    }
     
     .el-dialog__title {
       font-size: 18px;
@@ -1633,11 +1645,32 @@ html.dark {
       align-items: center;
       gap: 8px;
       
+      @media (max-width: 768px) {
+        font-size: 16px;
+      }
+      
+      @media (max-width: 480px) {
+        font-size: 15px;
+      }
+      
       &::before {
-        content: '';
+        content: '\f0f3';
         font-family: 'Font Awesome 5 Free';
         font-weight: 900;
         color: @primary-color;
+        margin-right: 4px;
+        
+        @media (max-width: 480px) {
+          font-size: 14px;
+        }
+      }
+    }
+    
+    .el-dialog__headerbtn {
+      @media (max-width: 480px) {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
       }
     }
   }
@@ -1646,12 +1679,39 @@ html.dark {
     padding: 0;
     height: 70vh;
     overflow: hidden;
+    
+    @media (max-width: 768px) {
+      height: 75vh;
+    }
+    
+    @media (max-width: 480px) {
+      height: 80vh;
+    }
+  }
+  
+  // 移动端增强对比度
+  @media (max-width: 768px) {
+    .el-dialog {
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .el-dialog {
+      border-radius: 8px;
+    }
   }
 }
 
 .notification-wrapper {
   height: 100%;
   overflow: hidden;
+  
+  // 保证在移动端不会出现水平滚动条
+  @media (max-width: 768px) {
+    overflow-x: hidden;
+  }
 }
 </style>
 
