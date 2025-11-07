@@ -6,7 +6,7 @@
       <div class="header-main">
         <div class="section-info">
           <div class="section-title">
-            <i class="fas fa-th-large title-icon"></i>
+            <i class="fas fa-book title-icon"></i>
             <span>共 {{ totalArticles }} 篇</span>
           </div>
         </div>
@@ -434,40 +434,45 @@ watch(() => props.totalArticles, (newValue) => {
     .section-title {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 18px;
-      font-weight: 600;
-      color: #333;
+      gap: 7px;
+      padding: 6px 12px;
+      height: 36px;
+      background: rgba(139, 92, 246, 0.08);
+      border-radius: 8px;
+      transition: all 0.25s ease;
 
       @media (max-width: 768px) {
-        font-size: 16px;
+        padding: 5px 10px;
+        height: 32px;
+      }
+
+      &:hover {
+        background: rgba(139, 92, 246, 0.12);
       }
 
       .title-icon {
-        font-size: 20px;
+        font-size: 14px;
         background: linear-gradient(135deg, @theme-primary, @theme-secondary);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
 
         @media (max-width: 768px) {
-          font-size: 18px;
+          font-size: 13px;
         }
       }
       
       span {
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 12px;
+        font-size: 13px;
         background: linear-gradient(135deg, @theme-primary, @theme-secondary);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
         font-weight: 600;
+        line-height: 1;
 
         @media (max-width: 768px) {
-          font-size: 11px;
-          padding: 3px 10px;
+          font-size: 12px;
         }
       }
     }
@@ -486,47 +491,47 @@ watch(() => props.totalArticles, (newValue) => {
 
   .layout-toggle {
     display: flex;
-    gap: 4px;
-    background: rgba(139, 92, 246, 0.05);
-    padding: 4px;
+    gap: 3px;
+    background: rgba(139, 92, 246, 0.08);
+    padding: 3px;
     border-radius: 8px;
-    border: 1px solid rgba(139, 92, 246, 0.1);
+    height: 36px;
     
     .toggle-btn {
-      width: 36px;
-      height: 36px;
+      width: 30px;
+      height: 30px;
       border: none;
       background: transparent;
       cursor: pointer;
-      border-radius: 6px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 5px;
+      transition: all 0.25s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #666;
+      color: #777;
       
       i {
-        font-size: 14px;
+        font-size: 13px;
       }
 
       @media (max-width: 768px) {
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
         
         i {
-          font-size: 13px;
+          font-size: 12px;
         }
       }
 
       &:hover {
-        background: rgba(139, 92, 246, 0.1);
+        background: rgba(139, 92, 246, 0.15);
         color: @theme-primary;
       }
 
       &.active {
         background: linear-gradient(135deg, @theme-primary, @theme-secondary);
         color: white;
-        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
       }
     }
   }
@@ -537,15 +542,13 @@ watch(() => props.totalArticles, (newValue) => {
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 38px;
+  height: 36px;
   padding: 0 14px;
-  background: white;
-  border: 2px solid rgba(139, 92, 246, 0.2);
-  border-radius: 10px;
+  background: rgba(139, 92, 246, 0.08);
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: 180px;
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
+  transition: all 0.25s ease;
+  min-width: 150px;
 
   @media (max-width: 768px) {
     height: 32px;
