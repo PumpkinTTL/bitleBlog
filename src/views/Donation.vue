@@ -2088,6 +2088,19 @@ const handleCelebrationClose = () => {
 
   // ==================== 深色模式适配 ====================
   html.dark & {
+    
+    // 二维码容器深色模式 - 添加白色背景以便扫描
+    .qrcode-container {
+      background: #fff !important;
+      padding: 8px !important;
+      border-radius: 8px !important;
+      
+      :deep(.ant-qrcode) {
+        canvas {
+          background: #fff !important;
+        }
+      }
+    }
 
     // 数据卡片深色模式
     .stats-widget .stats-grid .stat-item {
