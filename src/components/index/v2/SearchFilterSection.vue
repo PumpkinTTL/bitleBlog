@@ -1034,4 +1034,135 @@ watch(() => props.totalArticles, (newValue) => {
     justify-content: center;
   }
 }
+
+/* 深色模式适配 */
+html.dark {
+  .floating-search-filter {
+    background: rgba(30, 30, 30, 0.95);
+    
+    &.scrolled {
+      border-bottom-color: rgba(167, 139, 250, 0.15);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+    }
+  }
+  
+  // 使用深色模式的紫色变量
+  .section-title {
+    background: rgba(167, 139, 250, 0.12) !important;
+    
+    &:hover {
+      background: rgba(167, 139, 250, 0.18) !important;
+    }
+    
+    .title-icon,
+    span {
+      background: linear-gradient(135deg, @theme-purple-primary-dark, @theme-purple-secondary-dark) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+    }
+  }
+  
+  .layout-toggle {
+    background: rgba(167, 139, 250, 0.12) !important;
+    
+    .toggle-btn {
+      color: #aaa;
+      
+      &:hover {
+        background: rgba(167, 139, 250, 0.2) !important;
+        color: @theme-purple-primary-dark;
+      }
+      
+      &.active {
+        background: linear-gradient(135deg, @theme-purple-primary-dark, @theme-purple-secondary-dark) !important;
+      }
+    }
+  }
+  
+  .search-trigger {
+    background: rgba(167, 139, 250, 0.12) !important;
+    color: #ccc;
+    
+    .search-icon,
+    .expand-icon {
+      color: #aaa;
+    }
+    
+    &:hover {
+      background: rgba(167, 139, 250, 0.18) !important;
+      
+      .search-icon {
+        color: @theme-purple-primary-dark;
+      }
+    }
+    
+    &.expanded {
+      background: rgba(167, 139, 250, 0.2) !important;
+      border-color: @theme-purple-primary-dark;
+      
+      .search-icon {
+        color: @theme-purple-primary-dark;
+      }
+      
+      .search-text {
+        color: @theme-purple-primary-dark;
+      }
+    }
+  }
+  
+  .search-panel {
+    background: rgba(30, 30, 30, 0.98);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+  
+  .search-input {
+    background: rgba(50, 50, 50, 0.8) !important;
+    border-color: rgba(167, 139, 250, 0.3) !important;
+    color: #ddd !important;
+    
+    &::placeholder {
+      color: #777 !important;
+    }
+    
+    &:focus {
+      border-color: @theme-purple-primary-dark !important;
+      box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15), 0 2px 8px rgba(167, 139, 250, 0.2) !important;
+    }
+  }
+  
+  .search-btn {
+    background: linear-gradient(135deg, @theme-purple-primary-dark, @theme-purple-secondary-dark) !important;
+  }
+  
+  .filter-tag,
+  .category-tag {
+    background: rgba(167, 139, 250, 0.1) !important;
+    border-color: rgba(167, 139, 250, 0.2) !important;
+    color: #bbb !important;
+    
+    &:hover {
+      background: rgba(167, 139, 250, 0.18) !important;
+      color: @theme-purple-primary-dark !important;
+    }
+    
+    &.active {
+      background: linear-gradient(135deg, @theme-purple-primary-dark, @theme-purple-secondary-dark) !important;
+      color: white !important;
+    }
+  }
+  
+  .reset-btn {
+    background: rgba(167, 139, 250, 0.12) !important;
+    color: @theme-purple-primary-dark !important;
+    
+    &:hover {
+      background: rgba(167, 139, 250, 0.2) !important;
+    }
+  }
+  
+  .close-btn {
+    background: linear-gradient(135deg, @theme-purple-primary-dark, @theme-purple-secondary-dark) !important;
+  }
+}
 </style>
