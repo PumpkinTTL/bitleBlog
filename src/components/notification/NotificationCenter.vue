@@ -509,7 +509,7 @@ onMounted(async () => {
     
     .tag-category {
       transform: translateY(-1px);
-      box-shadow: 0 3px 8px rgba(249, 115, 22, 0.35);
+      box-shadow: 0 3px 8px rgba(16, 185, 129, 0.35);
     }
   }
 }
@@ -602,16 +602,28 @@ onMounted(async () => {
 }
 
 .tag-category {
-  background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
-  color: white;
+  // 改为清爽的绿色系，减少与主题橙色的冲突
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  color: #ffffff;
   border: none;
-  box-shadow: 0 2px 6px rgba(249, 115, 22, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  text-shadow: 0 1px 2px rgba(154, 52, 18, 0.4);
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  text-shadow: 0 1px 2px rgba(6, 95, 70, 0.35);
   font-weight: 700;
   transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  
+  // 轻微高光装饰
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0) 40%);
+    pointer-events: none;
+  }
   
   &::before {
-    content: '\f02b';
+    content: '\\f02b';
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
     margin-right: 4px;
@@ -623,17 +635,23 @@ onMounted(async () => {
 .time {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   font-size: 10px;
-  font-weight: 500;
-  color: var(--el-text-color-secondary);
+  font-weight: 700;
+  color: #475569;
+  padding: 3px 8px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.2px;
   
   &::before {
-    content: '\f017';
+    content: '\\f017';
     font-family: 'Font Awesome 5 Free';
     font-weight: 400;
     font-size: 10px;
-    color: var(--el-text-color-placeholder);
+    color: #64748b;
   }
 }
 
