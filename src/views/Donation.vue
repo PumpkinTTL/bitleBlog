@@ -708,8 +708,8 @@ const handleCelebrationClose = () => {
     right: 0;
     bottom: 0;
     background:
-      radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-      radial-gradient(circle at 80% 70%, rgba(217, 70, 239, 0.06) 0%, transparent 50%);
+      radial-gradient(circle at 20% 30%, var(--theme-orange-overlay) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, var(--theme-orange-bg-2) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
   }
@@ -742,8 +742,8 @@ const handleCelebrationClose = () => {
     padding: 20px;
     margin-bottom: var(--spacing-md);
     background: linear-gradient(135deg,
-        rgba(139, 92, 246, 0.05) 0%,
-        rgba(217, 70, 239, 0.03) 100%);
+        var(--theme-orange-bg-2) 0%,
+        var(--theme-orange-bg-1) 100%);
     border: 1px solid var(--el-border-color-lighter);
     border-radius: 12px;
     position: relative;
@@ -766,7 +766,7 @@ const handleCelebrationClose = () => {
             var(--theme-secondary) 100%);
         border-radius: 12px;
         flex-shrink: 0;
-        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        box-shadow: 0 4px 12px var(--theme-orange-glow);
         position: relative;
         animation: iconPulse 3s ease-in-out infinite;
 
@@ -827,8 +827,8 @@ const handleCelebrationClose = () => {
         gap: 6px;
         padding: 6px 14px;
         background: linear-gradient(135deg,
-            rgba(139, 92, 246, 0.08) 0%,
-            rgba(217, 70, 239, 0.05) 100%);
+            var(--theme-orange-bg-3) 0%,
+            var(--theme-orange-bg-2) 100%);
         border: 1.5px solid transparent;
         border-radius: 20px;
         position: relative;
@@ -871,8 +871,8 @@ const handleCelebrationClose = () => {
           position: absolute;
           inset: 0;
           background: linear-gradient(135deg,
-              rgba(139, 92, 246, 0.15) 0%,
-              rgba(217, 70, 239, 0.1) 100%);
+              var(--theme-orange-border-3) 0%,
+              var(--theme-orange-border-2) 100%);
           opacity: 0;
           transition: opacity 0.35s ease;
           z-index: 0;
@@ -900,7 +900,7 @@ const handleCelebrationClose = () => {
 
         &:hover {
           transform: translateY(-2px) scale(1.03);
-          box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+          box-shadow: 0 4px 16px var(--theme-orange-shadow);
 
           &::before {
             opacity: 1;
@@ -962,12 +962,12 @@ const handleCelebrationClose = () => {
     0%,
     100% {
       transform: scale(1);
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+      box-shadow: 0 4px 12px var(--theme-orange-glow);
     }
 
     50% {
       transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+      box-shadow: 0 6px 20px var(--theme-orange-glow);
     }
   }
 
@@ -1067,20 +1067,20 @@ const handleCelebrationClose = () => {
 
         &:hover {
           border-color: var(--el-color-primary-light-7);
-          box-shadow: 0 6px 24px rgba(139, 92, 246, 0.12), 0 2px 8px rgba(139, 92, 246, 0.08);
+          box-shadow: 0 6px 24px var(--theme-orange-border-2), 0 2px 8px var(--theme-orange-bg-3);
           transform: translateY(-4px);
 
           @media (max-width: 768px) {
             transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.1);
+            box-shadow: 0 4px 16px var(--theme-orange-border-2);
           }
         }
 
         &.active {
           border-color: var(--el-color-primary);
-          box-shadow: 0 6px 24px rgba(139, 92, 246, 0.2), 
-                      0 2px 8px rgba(139, 92, 246, 0.1),
-                      0 0 0 4px rgba(139, 92, 246, 0.08);
+          box-shadow: 0 6px 24px var(--theme-orange-shadow), 
+                      0 2px 8px var(--theme-orange-border-2),
+                      0 0 0 4px var(--theme-orange-bg-3);
           transform: translateY(-2px);
         }
 
@@ -1202,7 +1202,7 @@ const handleCelebrationClose = () => {
         line-height: 1;
         white-space: nowrap;
         z-index: 2;
-        box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
+        box-shadow: 0 2px 4px var(--theme-orange-shadow);
 
         &.crypto-badge {
           background: var(--el-color-primary);
@@ -1344,8 +1344,8 @@ const handleCelebrationClose = () => {
     margin-top: 6px;
     padding: 3px 8px 3px 4px;
     background: linear-gradient(135deg,
-        rgba(139, 92, 246, 0.04) 0%,
-        rgba(217, 70, 239, 0.06) 100%);
+        var(--theme-orange-bg-1) 0%,
+        var(--theme-orange-bg-2) 100%);
     border-radius: 6px;
     font-size: 10px;
     color: rgba(0, 0, 0, 0.65);
@@ -1354,8 +1354,8 @@ const handleCelebrationClose = () => {
 
     &:hover {
       background: linear-gradient(135deg,
-          rgba(139, 92, 246, 0.08) 0%,
-          rgba(217, 70, 239, 0.1) 100%);
+          var(--theme-orange-bg-3) 0%,
+          var(--theme-orange-border-2) 100%);
     }
 
     i {
@@ -1569,7 +1569,7 @@ const handleCelebrationClose = () => {
             border-color: transparent;
             color: #fff;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+            box-shadow: 0 4px 12px var(--theme-orange-shadow);
 
             &::after {
               opacity: 1;
@@ -1664,7 +1664,7 @@ const handleCelebrationClose = () => {
 
         &:hover {
           transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.12);
+          box-shadow: 0 4px 12px var(--theme-orange-border-2);
 
           .stat-icon {
             transform: scale(1.08);
@@ -1718,9 +1718,9 @@ const handleCelebrationClose = () => {
       margin-bottom: 14px;
       padding: 4px;
       background: linear-gradient(135deg,
-          rgba(139, 92, 246, 0.05) 0%,
-          rgba(217, 70, 239, 0.03) 100%);
-      border: 1px solid rgba(139, 92, 246, 0.1);
+          var(--theme-orange-bg-2) 0%,
+          var(--theme-orange-bg-1) 100%);
+      border: 1px solid var(--theme-orange-border-2);
       border-radius: 10px;
 
       .tab-item {
@@ -1746,7 +1746,7 @@ const handleCelebrationClose = () => {
 
         &:hover:not(.active) {
           color: var(--el-color-primary);
-          background: rgba(139, 92, 246, 0.08);
+          background: var(--theme-orange-bg-3);
 
           i {
             transform: scale(1.15);
@@ -1758,7 +1758,7 @@ const handleCelebrationClose = () => {
               var(--el-color-primary) 0%,
               var(--theme-secondary) 100%);
           color: #fff;
-          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+          box-shadow: 0 4px 12px var(--theme-orange-glow);
 
           i {
             animation: tabIconBounce 0.6s ease;
@@ -1783,7 +1783,7 @@ const handleCelebrationClose = () => {
         margin-bottom: 8px;
         border-radius: 10px;
         background: rgba(255, 255, 255, 0.9);
-        border: 1px solid rgba(139, 92, 246, 0.08);
+        border: 1px solid var(--theme-orange-bg-3);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
 
@@ -1792,7 +1792,7 @@ const handleCelebrationClose = () => {
         }
 
         &:hover {
-          box-shadow: 0 4px 16px rgba(139, 92, 246, 0.12);
+          box-shadow: 0 4px 16px var(--theme-orange-border-2);
           border-color: var(--el-color-primary-light-7);
 
           .ranking-badge {
@@ -1857,7 +1857,7 @@ const handleCelebrationClose = () => {
           font-weight: 700;
           flex-shrink: 0;
           transition: transform 0.2s ease;
-          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+          box-shadow: 0 2px 8px var(--theme-orange-glow);
 
           &.anonymous {
             background: linear-gradient(135deg, #94a3b8, #64748b);
@@ -1948,7 +1948,7 @@ const handleCelebrationClose = () => {
         padding: 10px 12px;
         margin-bottom: 8px;
         background: rgba(255, 255, 255, 0.9);
-        border: 1px solid rgba(139, 92, 246, 0.08);
+        border: 1px solid var(--theme-orange-bg-3);
         border-radius: 10px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
@@ -1958,7 +1958,7 @@ const handleCelebrationClose = () => {
         }
 
         &:hover {
-          box-shadow: 0 4px 16px rgba(139, 92, 246, 0.12);
+          box-shadow: 0 4px 16px var(--theme-orange-border-2);
           border-color: var(--el-color-primary-light-7);
 
           .recent-avatar {
@@ -1981,7 +1981,7 @@ const handleCelebrationClose = () => {
           font-weight: 700;
           flex-shrink: 0;
           transition: transform 0.2s ease;
-          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+          box-shadow: 0 2px 8px var(--theme-orange-glow);
 
           &.anonymous {
             background: linear-gradient(135deg, #94a3b8, #64748b);
@@ -2108,19 +2108,19 @@ const handleCelebrationClose = () => {
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 
       &:hover {
-        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+        box-shadow: 0 4px 12px var(--theme-orange-shadow);
       }
     }
 
     // Tab切换深色模式
     .activity-widget .activity-tabs {
       background: linear-gradient(135deg,
-          rgba(139, 92, 246, 0.08) 0%,
-          rgba(217, 70, 239, 0.05) 100%);
-      border-color: rgba(139, 92, 246, 0.15);
+          var(--theme-orange-bg-3) 0%,
+          var(--theme-orange-bg-2) 100%);
+      border-color: var(--theme-orange-border-3);
 
       .tab-item:hover:not(.active) {
-        background: rgba(139, 92, 246, 0.12);
+        background: var(--theme-orange-border-2);
       }
     }
 
@@ -2130,14 +2130,14 @@ const handleCelebrationClose = () => {
       background: linear-gradient(135deg,
           rgba(55, 65, 81, 0.5) 0%,
           rgba(31, 41, 55, 0.7) 100%);
-      border-color: rgba(139, 92, 246, 0.15);
+      border-color: var(--theme-orange-border-3);
 
       &:hover {
         background: linear-gradient(135deg,
             rgba(55, 65, 81, 0.7) 0%,
             rgba(31, 41, 55, 0.9) 100%);
-        border-color: rgba(139, 92, 246, 0.3);
-        box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+        border-color: var(--theme-orange-glow);
+        box-shadow: 0 4px 16px var(--theme-orange-shadow);
       }
     }
 
@@ -2147,14 +2147,14 @@ const handleCelebrationClose = () => {
       background: linear-gradient(135deg,
           rgba(55, 65, 81, 0.5) 0%,
           rgba(31, 41, 55, 0.7) 100%);
-      border-color: rgba(139, 92, 246, 0.15);
+      border-color: var(--theme-orange-border-3);
 
       &:hover {
         background: linear-gradient(135deg,
             rgba(55, 65, 81, 0.7) 0%,
             rgba(31, 41, 55, 0.9) 100%);
-        border-color: rgba(139, 92, 246, 0.3);
-        box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+        border-color: var(--theme-orange-glow);
+        box-shadow: 0 4px 16px var(--theme-orange-shadow);
       }
     }
   }

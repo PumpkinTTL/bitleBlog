@@ -84,6 +84,7 @@ declare module 'vue' {
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
     ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
+    ElEmpty: typeof import('element-plus/es')['ElEmpty']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElIcon: typeof import('element-plus/es')['ElIcon']
@@ -125,6 +126,7 @@ declare module 'vue' {
     Newsletter: typeof import('./src/components/index/Newsletter.vue')['default']
     NoticeCard: typeof import('./src/components/index/v2/NoticeCard.vue')['default']
     Notification: typeof import('./src/components/Notification.vue')['default']
+    NotificationCenter: typeof import('./src/components/notification/NotificationCenter.vue')['default']
     PersonCenter: typeof import('./src/components/PersonCenter.vue')['default']
     PersonInfoCard: typeof import('./src/components/person/PersonInfoCard.vue')['default']
     PlaceholderCard: typeof import('./src/components/PlaceholderCard.vue')['default']
@@ -169,5 +171,8 @@ declare module 'vue' {
     ThemeToggle: typeof import('./src/components/index/ThemeToggle.vue')['default']
     UserAgreement: typeof import('./src/components/platform/UserAgreement.vue')['default']
     UserLogin: typeof import('./src/components/UserLogin.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

@@ -136,6 +136,9 @@ const themeColorRgba = computed(() => {
 </script>
 
 <style lang="less" scoped>
+// 引入全局主题变量
+@import '@/assets/style/theme.less';
+
 .step-form {
   width: 100%;
 
@@ -243,15 +246,15 @@ const themeColorRgba = computed(() => {
           background: linear-gradient(135deg, v-bind("finishColor || 'var(--el-color-primary-dark-2)'"), var(--el-color-primary));
           color: #fff;
           position: relative;
-          box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18),
-                      0 0 12px rgba(124, 58, 237, 0.2),
-                      0 2px 8px rgba(124, 58, 237, 0.25);
+          box-shadow: 0 0 0 3px var(--theme-orange-border-3),
+                      0 0 12px var(--theme-orange-shadow),
+                      0 2px 8px var(--theme-orange-shadow);
 
           &:hover {
             transform: scale(1.08);
-            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.25),
-                        0 0 16px rgba(124, 58, 237, 0.3),
-                        0 4px 12px rgba(124, 58, 237, 0.35);
+            box-shadow: 0 0 0 4px var(--theme-orange-border-3),
+                        0 0 16px var(--theme-orange-shadow),
+                        0 4px 12px var(--theme-orange-shadow);
           }
         }
 
@@ -276,9 +279,9 @@ const themeColorRgba = computed(() => {
           color: #fff;
           transform: scale(1.12);
           position: relative;
-          box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.25),
-                      0 0 20px rgba(139, 92, 246, 0.3),
-                      0 4px 16px rgba(139, 92, 246, 0.25);
+          box-shadow: 0 0 0 4px var(--theme-orange-border-3),
+                      0 0 20px var(--theme-orange-shadow),
+                      0 4px 16px var(--theme-orange-shadow);
           animation: activeGlow 2s ease-in-out infinite;
 
           &::after {
@@ -286,16 +289,16 @@ const themeColorRgba = computed(() => {
             position: absolute;
             inset: -8px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%);
+            background: radial-gradient(circle, var(--theme-orange-glow) 0%, transparent 70%);
             animation: ripple 2s ease-in-out infinite;
             z-index: -1;
           }
 
           &:hover {
             transform: scale(1.18);
-            box-shadow: 0 0 0 5px rgba(139, 92, 246, 0.3),
-                        0 0 25px rgba(139, 92, 246, 0.4),
-                        0 6px 20px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 0 0 5px var(--theme-orange-border-3),
+                        0 0 25px var(--theme-orange-glow),
+                        0 6px 20px var(--theme-orange-shadow);
             animation: activeGlowHover 1.5s ease-in-out infinite;
           }
         }
@@ -362,27 +365,27 @@ const themeColorRgba = computed(() => {
 
 @keyframes activeGlow {
   0%, 100% {
-    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.25),
-                0 0 20px rgba(139, 92, 246, 0.3),
-                0 4px 16px rgba(139, 92, 246, 0.25);
+    box-shadow: 0 0 0 4px var(--theme-orange-border-3),
+                0 0 20px var(--theme-orange-shadow),
+                0 4px 16px var(--theme-orange-shadow);
   }
   50% {
-    box-shadow: 0 0 0 6px rgba(139, 92, 246, 0.35),
-                0 0 30px rgba(139, 92, 246, 0.4),
-                0 6px 24px rgba(139, 92, 246, 0.35);
+    box-shadow: 0 0 0 6px var(--theme-orange-border-3),
+                0 0 30px var(--theme-orange-glow),
+                0 6px 24px var(--theme-orange-shadow);
   }
 }
 
 @keyframes activeGlowHover {
   0%, 100% {
-    box-shadow: 0 0 0 5px rgba(139, 92, 246, 0.3),
-                0 0 25px rgba(139, 92, 246, 0.4),
-                0 6px 20px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 0 0 5px var(--theme-orange-border-3),
+                0 0 25px var(--theme-orange-glow),
+                0 6px 20px var(--theme-orange-shadow);
   }
   50% {
-    box-shadow: 0 0 0 7px rgba(139, 92, 246, 0.4),
-                0 0 35px rgba(139, 92, 246, 0.5),
-                0 8px 28px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 0 0 7px var(--theme-orange-glow),
+                0 0 35px var(--theme-orange-glow),
+                0 8px 28px var(--theme-orange-glow);
   }
 }
 
@@ -403,10 +406,10 @@ const themeColorRgba = computed(() => {
 
 @keyframes titleGlow {
   0%, 100% {
-    text-shadow: 0 0 0px rgba(139, 92, 246, 0);
+    text-shadow: 0 0 0px transparent;
   }
   50% {
-    text-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
+    text-shadow: 0 0 8px var(--theme-orange-shadow);
   }
 }
 

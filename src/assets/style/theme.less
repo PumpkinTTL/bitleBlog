@@ -34,6 +34,28 @@
   // 渐变色
   --theme-gradient-warm: linear-gradient(135deg, #EF6310 0%, #f4832e 50%, #f6923d 100%);
   --theme-gradient-soft: linear-gradient(135deg, #fef2e8 0%, #fff7f0 100%);
+  
+  // 高级效果颜色
+  --theme-orange-glow: rgba(239, 99, 16, 0.4);
+  --theme-orange-shadow: rgba(239, 99, 16, 0.15);
+  --theme-orange-overlay: rgba(239, 99, 16, 0.08);
+  --theme-orange-glass: rgba(239, 99, 16, 0.1);
+  
+  // 装饰性浅底色和边框色 - 用于卡片、提示框等
+  --theme-orange-bg-1: rgba(239, 99, 16, 0.03);    // 极浅背景
+  --theme-orange-bg-2: rgba(239, 99, 16, 0.05);    // 浅背景
+  --theme-orange-bg-3: rgba(239, 99, 16, 0.08);    // 中等背景
+  --theme-orange-border-1: rgba(239, 99, 16, 0.08); // 极浅边框
+  --theme-orange-border-2: rgba(239, 99, 16, 0.1);  // 浅边框
+  --theme-orange-border-3: rgba(239, 99, 16, 0.15); // 中等边框
+  
+  // 橙色系列 - 与紫色变量名保持一致，使用橙色渐变
+  --theme-purple-primary: #EF6310;        // 橙色渐变起始色
+  --theme-purple-secondary: #f59e0b;      // 橙黄色渐变结束色
+  --theme-purple-light-3: #f6923d;
+  --theme-purple-light-5: #fab05b;
+  --theme-purple-light-7: #fdce79;
+  --theme-purple-light-9: #ffec97;
 }
 
 // 暗色模式 - 橙色系调整
@@ -68,6 +90,28 @@ html.dark {
   // 暗色模式渐变
   --theme-gradient-warm: linear-gradient(135deg, #FF7A28 0%, #ff8539 50%, #ff904a 100%);
   --theme-gradient-soft: linear-gradient(135deg, #3d2418 0%, #2a1a10 100%);
+  
+  // 暗色模式高级效果颜色
+  --theme-orange-glow: rgba(255, 122, 40, 0.5);
+  --theme-orange-shadow: rgba(255, 122, 40, 0.2);
+  --theme-orange-overlay: rgba(255, 122, 40, 0.12);
+  --theme-orange-glass: rgba(255, 122, 40, 0.15);
+  
+  // 暗色模式装饰性浅底色和边框色
+  --theme-orange-bg-1: rgba(255, 122, 40, 0.05);
+  --theme-orange-bg-2: rgba(255, 122, 40, 0.08);
+  --theme-orange-bg-3: rgba(255, 122, 40, 0.12);
+  --theme-orange-border-1: rgba(255, 122, 40, 0.12);
+  --theme-orange-border-2: rgba(255, 122, 40, 0.15);
+  --theme-orange-border-3: rgba(255, 122, 40, 0.2);
+  
+  // 暗色模式橙色系列 - 渐变色
+  --theme-purple-primary: #FF7A28;        // 橙色渐变起始色
+  --theme-purple-secondary: #fbbf24;      // 金黄色渐变结束色
+  --theme-purple-light-3: #ff9b5b;
+  --theme-purple-light-5: #ffb17d;
+  --theme-purple-light-7: #ffc79f;
+  --theme-purple-light-9: #ffddc1;
 }
 
 // ================================================
@@ -92,24 +136,24 @@ html.dark {
 @primary-text-light: var(--theme-primary-text-light);
 
 // ================================================
-// 紫色主题变量 - 用于特定组件（捐赠页面、文章筛选等）
+// 扩展橙色主题变量 - 用于特定组件（捐赠页面、文章筛选等）
 // ================================================
 
-// 紫色主题基础色 - 浅色模式
-@theme-purple-primary: #8b5cf6;       // 主紫色
-@theme-purple-secondary: #d946ef;     // 次要紫色（品红）
-@theme-purple-light-3: #a78bfa;       // 浅色3
-@theme-purple-light-5: #c4b5fd;       // 浅色5
-@theme-purple-light-7: #ddd6fe;       // 浅色7
-@theme-purple-light-9: #ede9fe;       // 浅色9
+// 橙色主题扩展 - 浅色模式（保持向后兼容的变量名）
+@theme-purple-primary: #EF6310;       // 主橙色（渐变起始）
+@theme-purple-secondary: #f59e0b;     // 橙黄色（渐变结束）
+@theme-purple-light-3: #f6923d;       // 浅色3
+@theme-purple-light-5: #fab05b;       // 浅色5
+@theme-purple-light-7: #fdce79;       // 浅色7
+@theme-purple-light-9: #ffec97;       // 浅色9
 
-// 紫色主题基础色 - 深色模式（更柔和的颜色）
-@theme-purple-primary-dark: #a78bfa;       // 深色模式主紫色（更亮）
-@theme-purple-secondary-dark: #e879f9;     // 深色模式次要紫色
-@theme-purple-light-3-dark: #c4b5fd;       // 深色模式浅色3
-@theme-purple-light-5-dark: #ddd6fe;       // 深色模式浅色5
-@theme-purple-light-7-dark: #ede9fe;       // 深色模式浅色7
-@theme-purple-light-9-dark: #f5f3ff;       // 深色模式浅色9
+// 橙色主题扩展 - 深色模式（更柔和的颜色）
+@theme-purple-primary-dark: #FF7A28;       // 深色模式主橙色（渐变起始）
+@theme-purple-secondary-dark: #fbbf24;     // 深色模式金黄色（渐变结束）
+@theme-purple-light-3-dark: #ff9b5b;       // 深色模式浅色3
+@theme-purple-light-5-dark: #ffb17d;       // 深色模式浅色5
+@theme-purple-light-7-dark: #ffc79f;       // 深色模式浅色7
+@theme-purple-light-9-dark: #ffddc1;       // 深色模式浅色9
 
 // ================================================
 // Element UI Plus 主题色映射（可选）
@@ -177,4 +221,54 @@ html.dark {
 
 .theme-gradient-soft {
   background: var(--theme-gradient-soft) !important;
+}
+
+// ================================================
+// 高级效果工具类
+// ================================================
+
+// 玻璃态效果
+.glassmorphism-orange {
+  background: rgba(239, 99, 16, 0.1) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(239, 99, 16, 0.2) !important;
+  box-shadow: 0 4px 16px rgba(239, 99, 16, 0.15) !important;
+}
+
+// 橙色光晕效果
+.glow-orange {
+  box-shadow: 0 0 20px rgba(239, 99, 16, 0.4),
+              0 0 40px rgba(239, 99, 16, 0.2) !important;
+}
+
+// 文字渐变效果
+.text-gradient-orange {
+  background: var(--theme-gradient-warm) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+// 悬停提升效果
+.hover-lift-orange {
+  transition: all 0.3s ease !important;
+  
+  &:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 24px rgba(239, 99, 16, 0.25) !important;
+  }
+}
+
+// 脉冲动画
+.pulse-orange {
+  animation: pulse-orange-animation 2s ease-in-out infinite !important;
+}
+
+@keyframes pulse-orange-animation {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 99, 16, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(239, 99, 16, 0);
+  }
 }

@@ -392,18 +392,18 @@ watch(() => props.totalArticles, (newValue) => {
   backdrop-filter: blur(20px);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   border-bottom: 1px solid transparent;
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.10);
+  box-shadow: 0 6px 20px var(--theme-orange-border-2);
   
   &.scrolled {
-    border-bottom-color: rgba(139, 92, 246, 0.1);
-    box-shadow: 0 8px 28px rgba(139, 92, 246, 0.15);
+    border-bottom-color: var(--theme-orange-border-2);
+    box-shadow: 0 8px 28px var(--theme-orange-shadow);
   }
   
   @media (max-width: 768px) {
-    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.10);
+    box-shadow: 0 4px 16px var(--theme-orange-border-2);
     
     &.scrolled {
-      box-shadow: 0 6px 22px rgba(139, 92, 246, 0.15);
+      box-shadow: 0 6px 22px var(--theme-orange-shadow);
     }
   }
 }
@@ -440,7 +440,7 @@ watch(() => props.totalArticles, (newValue) => {
       gap: 7px;
       padding: 6px 12px;
       height: 36px;
-      background: rgba(139, 92, 246, 0.08);
+      background: var(--theme-orange-bg-2);
       border-radius: 8px;
       transition: all 0.25s ease;
 
@@ -450,7 +450,7 @@ watch(() => props.totalArticles, (newValue) => {
       }
 
       &:hover {
-        background: rgba(139, 92, 246, 0.12);
+        background: var(--theme-orange-bg-3);
       }
 
       .title-icon {
@@ -495,7 +495,7 @@ watch(() => props.totalArticles, (newValue) => {
   .layout-toggle {
     display: flex;
     gap: 3px;
-    background: rgba(139, 92, 246, 0.08);
+    background: var(--theme-orange-bg-2);
     padding: 3px;
     border-radius: 8px;
     height: 36px;
@@ -527,14 +527,14 @@ watch(() => props.totalArticles, (newValue) => {
       }
 
       &:hover {
-        background: rgba(139, 92, 246, 0.15);
+        background: var(--theme-orange-bg-3);
         color: @theme-primary;
       }
 
       &.active {
         background: linear-gradient(135deg, @theme-primary, @theme-secondary);
         color: white;
-        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
+        box-shadow: 0 2px 8px var(--theme-orange-shadow);
       }
     }
   }
@@ -547,7 +547,7 @@ watch(() => props.totalArticles, (newValue) => {
   gap: 8px;
   height: 36px;
   padding: 0 14px;
-  background: rgba(139, 92, 246, 0.08);
+  background: var(--theme-orange-bg-2);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.25s ease;
@@ -560,9 +560,9 @@ watch(() => props.totalArticles, (newValue) => {
   }
 
   &:hover {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(217, 70, 239, 0.05));
+    background: linear-gradient(135deg, var(--theme-orange-bg-1), var(--theme-orange-bg-2));
     border-color: @theme-light-5;
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+    box-shadow: 0 4px 12px var(--theme-orange-shadow);
     transform: translateY(-1px);
 
     .search-icon {
@@ -571,9 +571,9 @@ watch(() => props.totalArticles, (newValue) => {
   }
 
   &.expanded {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(217, 70, 239, 0.08));
+    background: linear-gradient(135deg, var(--theme-orange-bg-2), var(--theme-orange-bg-3));
     border-color: @theme-primary;
-    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.25), 0 0 0 3px rgba(139, 92, 246, 0.08);
+    box-shadow: 0 4px 16px var(--theme-orange-shadow), 0 0 0 3px var(--theme-orange-bg-2);
 
     .search-icon {
       color: @theme-primary;
@@ -650,7 +650,7 @@ watch(() => props.totalArticles, (newValue) => {
   background: rgba(255, 255, 255, 0.98);
   border-radius: 0 0 10px 10px;
   padding: 14px;
-  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
+  box-shadow: 0 8px 24px var(--theme-orange-shadow);
   pointer-events: auto;
   backdrop-filter: blur(12px);
   z-index: 1001;
@@ -659,7 +659,7 @@ watch(() => props.totalArticles, (newValue) => {
     padding: 12px;
     margin: 0 -4px;
     border-radius: 0 0 8px 8px;
-    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.18);
+    box-shadow: 0 6px 20px var(--theme-orange-border-3);
   }
 }
 
@@ -724,13 +724,13 @@ watch(() => props.totalArticles, (newValue) => {
     width: 100%;
     height: 38px;
     padding: 0 40px 0 38px;
-    border: 1.5px solid rgba(139, 92, 246, 0.2);
+    border: 1.5px solid var(--theme-orange-border-2);
     border-radius: 8px;
     font-size: 13px;
     outline: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     background: white;
-    box-shadow: 0 1px 4px rgba(139, 92, 246, 0.05);
+    box-shadow: 0 1px 4px var(--theme-orange-bg-3);
     
     @media (max-width: 768px) {
       height: 34px;
@@ -745,12 +745,12 @@ watch(() => props.totalArticles, (newValue) => {
     
     &:hover {
       border-color: @theme-light-5;
-      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+      box-shadow: 0 2px 8px var(--theme-orange-border-2);
     }
     
     &:focus {
       border-color: @theme-primary;
-      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12), 0 2px 8px rgba(139, 92, 246, 0.15);
+      box-shadow: 0 0 0 3px var(--theme-orange-bg-3), 0 2px 8px var(--theme-orange-shadow);
     }
   }
   
@@ -760,7 +760,7 @@ watch(() => props.totalArticles, (newValue) => {
     width: 24px;
     height: 24px;
     border: none;
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--theme-orange-border-2);
     color: @theme-primary;
     border-radius: 50%;
     cursor: pointer;
@@ -780,7 +780,7 @@ watch(() => props.totalArticles, (newValue) => {
     }
     
     &:hover {
-      background: rgba(139, 92, 246, 0.2);
+      background: var(--theme-orange-border-3);
       transform: scale(1.1);
     }
   }
@@ -797,7 +797,7 @@ watch(() => props.totalArticles, (newValue) => {
   font-size: 13px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
+  box-shadow: 0 2px 8px var(--theme-orange-shadow);
 
   @media (max-width: 768px) {
     height: 34px;
@@ -808,7 +808,7 @@ watch(() => props.totalArticles, (newValue) => {
   
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.35);
+    box-shadow: 0 4px 16px var(--theme-orange-shadow);
   }
   
   &:active {
@@ -873,7 +873,7 @@ watch(() => props.totalArticles, (newValue) => {
   gap: 4px;
   padding: 4px 10px;
   height: 28px;
-  background: rgba(139, 92, 246, 0.08);
+  background: var(--theme-orange-bg-2);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -894,16 +894,16 @@ watch(() => props.totalArticles, (newValue) => {
   }
   
   &:hover {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(217, 70, 239, 0.12));
+    background: linear-gradient(135deg, var(--theme-orange-bg-3), var(--theme-orange-border-2));
     color: @theme-primary;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+    box-shadow: 0 4px 12px var(--theme-orange-shadow);
   }
   
   &.active {
     background: linear-gradient(135deg, @theme-primary, @theme-secondary);
     color: white;
-    box-shadow: 0 3px 12px rgba(139, 92, 246, 0.35), 0 1px 4px rgba(139, 92, 246, 0.25);
+    box-shadow: 0 3px 12px var(--theme-orange-shadow), 0 1px 4px var(--theme-orange-shadow);
     transform: translateY(-1px);
   }
 }
@@ -948,7 +948,7 @@ watch(() => props.totalArticles, (newValue) => {
   justify-content: flex-end;
   gap: 8px;
   padding-top: 10px;
-  border-top: 1px solid rgba(139, 92, 246, 0.1);
+  border-top: 1px solid var(--theme-orange-border-2);
   margin-top: 6px;
 
   @media (max-width: 768px) {
@@ -986,11 +986,11 @@ watch(() => props.totalArticles, (newValue) => {
 }
 
 .reset-btn {
-  background: rgba(139, 92, 246, 0.08);
+  background: var(--theme-orange-bg-2);
   color: @theme-primary;
   
   &:hover {
-    background: rgba(139, 92, 246, 0.15);
+    background: var(--theme-orange-bg-3);
     transform: translateY(-1px);
   }
 }
@@ -998,11 +998,11 @@ watch(() => props.totalArticles, (newValue) => {
 .close-btn {
   background: linear-gradient(135deg, @theme-primary, @theme-secondary);
   color: white;
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
+  box-shadow: 0 2px 8px var(--theme-orange-shadow);
   
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35);
+    box-shadow: 0 4px 12px var(--theme-orange-shadow);
   }
   
   &:active {

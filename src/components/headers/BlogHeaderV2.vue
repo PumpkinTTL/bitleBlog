@@ -81,6 +81,10 @@
                     <i class="fas fa-user"></i>
                     <span>个人中心</span>
                   </el-dropdown-item>
+                  <el-dropdown-item command="notification">
+                    <i class="fas fa-bell"></i>
+                    <span>通知中心</span>
+                  </el-dropdown-item>
                   <el-dropdown-item command="settings">
                     <i class="fas fa-cog"></i>
                     <span>设置</span>
@@ -107,6 +111,21 @@
         </div>
       </div>
     </header>
+
+    <!-- 通知中心弹窗 -->
+    <el-dialog
+      v-model="notificationCenterVisible"
+      title="通知中心"
+      width="900px"
+      top="5vh"
+      :close-on-click-modal="false"
+      class="notification-center-dialog"
+      destroy-on-close
+    >
+      <div class="notification-wrapper">
+        <NotificationCenter v-if="notificationCenterVisible" />
+      </div>
+    </el-dialog>
 
     <!-- 移动端抽屉菜单 -->
     <el-drawer
@@ -258,6 +277,7 @@ import { useStore } from '@/store'
 import { useThemeStore } from '@/stores/theme'
 import { removeToken } from '@/util/Auth'
 import Logo from '../Logo.vue'
+import NotificationCenter from '@/components/notification/NotificationCenter.vue'
 
 const router = useRouter()
 const store = useStore()
@@ -289,6 +309,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 // 响应式数据
 const mobileMenuOpen = ref(false)
+const notificationCenterVisible = ref(false)
 const isDarkMode = computed(() => themeStore.isDark)
 
 // 导航项目
@@ -343,6 +364,9 @@ const handleUserCommand = (command: string) => {
     case 'profile':
       router.push('/profile')
       break
+    case 'notification':
+      notificationCenterVisible.value = true
+      break
     case 'settings':
       router.push('/settings')
       break
@@ -382,10 +406,12 @@ onMounted(() => {
 
 <style scoped lang="less">
 // ==================== 变量 ====================
+@import '@/assets/style/theme.less';
+
 @header-height: 60px;
 @header-height-mobile: 54px;
-@primary-color: #8b5cf6;
-@secondary-color: #d946ef;
+@primary-color: @theme-purple-primary; // 使用橙色主题
+@secondary-color: @theme-purple-secondary; // 使用橙黄色渐变
 
 // ==================== 头部容器 ====================
 .header-v2-wrapper {
@@ -1591,6 +1617,41 @@ html.dark {
     background: var(--el-bg-color);
     border-bottom-color: var(--el-border-color-darker);
   }
+}
+
+// ==================== 通知中心弹窗 ====================
+:deep(.notification-center-dialog) {
+  .el-dialog__header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--el-border-color-lighter);
+    
+    .el-dialog__title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--el-text-color-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      &::before {
+        content: '';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        color: @primary-color;
+      }
+    }
+  }
+  
+  .el-dialog__body {
+    padding: 0;
+    height: 70vh;
+    overflow: hidden;
+  }
+}
+
+.notification-wrapper {
+  height: 100%;
+  overflow: hidden;
 }
 </style>
 
