@@ -372,16 +372,6 @@ watch(() => props.totalArticles, (newValue) => {
 </script>
 
 <style scoped lang="less">
-// 引入全局主题变量
-@import '@/assets/style/theme.less';
-
-/* 紫色渐变主题变量 - 与捐赠界面保持一致 */
-@theme-primary: @theme-purple-primary;
-@theme-secondary: @theme-purple-secondary;
-@theme-light-3: @theme-purple-light-3;
-@theme-light-5: @theme-purple-light-5;
-@theme-light-7: @theme-purple-light-7;
-@theme-light-9: @theme-purple-light-9;
 
 /* 浮动搜索筛选栏 */
 .floating-search-filter {
@@ -455,7 +445,7 @@ watch(() => props.totalArticles, (newValue) => {
 
       .title-icon {
         font-size: 14px;
-        background: linear-gradient(135deg, @theme-primary, @theme-secondary);
+        background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -467,7 +457,7 @@ watch(() => props.totalArticles, (newValue) => {
       
       span {
         font-size: 13px;
-        background: linear-gradient(135deg, @theme-primary, @theme-secondary);
+        background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -528,11 +518,11 @@ watch(() => props.totalArticles, (newValue) => {
 
       &:hover {
         background: var(--theme-orange-bg-3);
-        color: @theme-primary;
+        color: var(--theme-purple-primary);
       }
 
       &.active {
-        background: linear-gradient(135deg, @theme-primary, @theme-secondary);
+        background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
         color: white;
         box-shadow: 0 2px 8px var(--theme-orange-shadow);
       }
@@ -561,26 +551,26 @@ watch(() => props.totalArticles, (newValue) => {
 
   &:hover {
     background: linear-gradient(135deg, var(--theme-orange-bg-1), var(--theme-orange-bg-2));
-    border-color: @theme-light-5;
+    border-color: var(--theme-purple-light-5);
     box-shadow: 0 4px 12px var(--theme-orange-shadow);
     transform: translateY(-1px);
 
     .search-icon {
-      color: @theme-primary;
+      color: var(--theme-purple-primary);
     }
   }
 
   &.expanded {
     background: linear-gradient(135deg, var(--theme-orange-bg-2), var(--theme-orange-bg-3));
-    border-color: @theme-primary;
+    border-color: var(--theme-purple-primary);
     box-shadow: 0 4px 16px var(--theme-orange-shadow), 0 0 0 3px var(--theme-orange-bg-2);
 
     .search-icon {
-      color: @theme-primary;
+      color: var(--theme-purple-primary);
     }
 
     .search-text {
-      color: @theme-primary;
+      color: var(--theme-purple-primary);
       font-weight: 600;
     }
   }
@@ -744,12 +734,12 @@ watch(() => props.totalArticles, (newValue) => {
     }
     
     &:hover {
-      border-color: @theme-light-5;
+      border-color: var(--theme-purple-light-5);
       box-shadow: 0 2px 8px var(--theme-orange-border-2);
     }
     
     &:focus {
-      border-color: @theme-primary;
+      border-color: var(--theme-purple-primary);
       box-shadow: 0 0 0 3px var(--theme-orange-bg-3), 0 2px 8px var(--theme-orange-shadow);
     }
   }
@@ -761,7 +751,7 @@ watch(() => props.totalArticles, (newValue) => {
     height: 24px;
     border: none;
     background: var(--theme-orange-border-2);
-    color: @theme-primary;
+    color: var(--theme-purple-primary);
     border-radius: 50%;
     cursor: pointer;
     display: flex;
@@ -791,7 +781,7 @@ watch(() => props.totalArticles, (newValue) => {
   padding: 0 18px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(135deg, @theme-primary, @theme-secondary);
+  background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
   color: white;
   font-weight: 600;
   font-size: 13px;
@@ -895,13 +885,13 @@ watch(() => props.totalArticles, (newValue) => {
   
   &:hover {
     background: linear-gradient(135deg, var(--theme-orange-bg-3), var(--theme-orange-border-2));
-    color: @theme-primary;
+    color: var(--theme-purple-primary);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px var(--theme-orange-shadow);
   }
   
   &.active {
-    background: linear-gradient(135deg, @theme-primary, @theme-secondary);
+    background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
     color: white;
     box-shadow: 0 3px 12px var(--theme-orange-shadow), 0 1px 4px var(--theme-orange-shadow);
     transform: translateY(-1px);
@@ -987,7 +977,7 @@ watch(() => props.totalArticles, (newValue) => {
 
 .reset-btn {
   background: var(--theme-orange-bg-2);
-  color: @theme-primary;
+  color: var(--theme-purple-primary);
   
   &:hover {
     background: var(--theme-orange-bg-3);
@@ -996,7 +986,7 @@ watch(() => props.totalArticles, (newValue) => {
 }
 
 .close-btn {
-  background: linear-gradient(135deg, @theme-primary, @theme-secondary);
+  background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
   color: white;
   box-shadow: 0 2px 8px var(--theme-orange-shadow);
   
@@ -1056,7 +1046,7 @@ html.dark {
     
     .title-icon,
     span {
-      background: linear-gradient(135deg, @theme-purple-primary-dark, @theme-purple-secondary-dark) !important;
+      background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary)) !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
       background-clip: text !important;
@@ -1071,11 +1061,11 @@ html.dark {
       
       &:hover {
         background: rgba(167, 139, 250, 0.2) !important;
-        color: @theme-purple-primary-dark;
+        color: var(--theme-purple-primary);
       }
       
       &.active {
-        background: linear-gradient(135deg, @theme-purple-primary-dark, @theme-purple-secondary-dark) !important;
+        background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary)) !important;
       }
     }
   }
@@ -1093,20 +1083,20 @@ html.dark {
       background: rgba(167, 139, 250, 0.18) !important;
       
       .search-icon {
-        color: @theme-purple-primary-dark;
+        color: var(--theme-purple-primary);
       }
     }
     
     &.expanded {
       background: rgba(167, 139, 250, 0.2) !important;
-      border-color: @theme-purple-primary-dark;
+      border-color: var(--theme-purple-primary);
       
       .search-icon {
-        color: @theme-purple-primary-dark;
+        color: var(--theme-purple-primary);
       }
       
       .search-text {
-        color: @theme-purple-primary-dark;
+        color: var(--theme-purple-primary);
       }
     }
   }
@@ -1126,13 +1116,13 @@ html.dark {
     }
     
     &:focus {
-      border-color: @theme-purple-primary-dark !important;
+      border-color: var(--theme-purple-primary) !important;
       box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15), 0 2px 8px rgba(167, 139, 250, 0.2) !important;
     }
   }
   
   .search-btn {
-    background: linear-gradient(135deg, @theme-purple-primary-dark, @theme-purple-secondary-dark) !important;
+    background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary)) !important;
   }
   
   .filter-tag,
@@ -1143,18 +1133,18 @@ html.dark {
     
     &:hover {
       background: rgba(167, 139, 250, 0.18) !important;
-      color: @theme-purple-primary-dark !important;
+      color: var(--theme-purple-primary) !important;
     }
     
     &.active {
-      background: linear-gradient(135deg, @theme-purple-primary-dark, @theme-purple-secondary-dark) !important;
+      background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary)) !important;
       color: white !important;
     }
   }
   
   .reset-btn {
     background: rgba(167, 139, 250, 0.12) !important;
-    color: @theme-purple-primary-dark !important;
+    color: var(--theme-purple-primary) !important;
     
     &:hover {
       background: rgba(167, 139, 250, 0.2) !important;
@@ -1162,7 +1152,7 @@ html.dark {
   }
   
   .close-btn {
-    background: linear-gradient(135deg, @theme-purple-primary-dark, @theme-purple-secondary-dark) !important;
+    background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary)) !important;
   }
 }
 </style>

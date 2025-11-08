@@ -1,0 +1,90 @@
+// ================================================
+// BitlEBlog 主题色配置 - 紫色系
+// ================================================
+
+// 主题色定义 - 基于 #8b5cf6 紫色系
+:root {
+  // 紫色系列 - 保持 purple 变量名以兼容现有代码
+  --theme-purple-primary: #8b5cf6;        // 紫色渐变起始色
+  --theme-purple-secondary: #d946ef;      // 粉紫色渐变结束色
+  --theme-purple-light-3: #a78bfa;
+  --theme-purple-light-5: #c4b5fd;
+  --theme-purple-light-7: #ddd6fe;
+  --theme-purple-light-9: #ede9fe;
+  
+  // 效果颜色 - 用于阴影、背景、边框等
+  --theme-orange-glow: rgba(139, 92, 246, 0.4);
+  --theme-orange-shadow: rgba(139, 92, 246, 0.15);
+  --theme-orange-overlay: rgba(139, 92, 246, 0.08);
+  --theme-orange-bg-1: rgba(139, 92, 246, 0.03);
+  --theme-orange-bg-2: rgba(139, 92, 246, 0.05);
+  --theme-orange-bg-3: rgba(139, 92, 246, 0.08);
+  --theme-orange-border-1: rgba(139, 92, 246, 0.08);
+  --theme-orange-border-2: rgba(139, 92, 246, 0.1);
+  --theme-orange-border-3: rgba(139, 92, 246, 0.15);
+}
+
+// 暗色模式 - 紫色系调整
+html.dark {
+  // 暗色模式紫色系列 - 调亮以适应暗色背景
+  --theme-purple-primary: #a78bfa;
+  --theme-purple-secondary: #e879f9;
+  --theme-purple-light-3: #c4b5fd;
+  --theme-purple-light-5: #ddd6fe;
+  --theme-purple-light-7: #ede9fe;
+  --theme-purple-light-9: #f5f3ff;
+  
+  // 暗色模式效果颜色
+  --theme-orange-glow: rgba(167, 139, 250, 0.5);
+  --theme-orange-shadow: rgba(167, 139, 250, 0.2);
+  --theme-orange-overlay: rgba(167, 139, 250, 0.12);
+  --theme-orange-bg-1: rgba(167, 139, 250, 0.05);
+  --theme-orange-bg-2: rgba(167, 139, 250, 0.08);
+  --theme-orange-bg-3: rgba(167, 139, 250, 0.12);
+  --theme-orange-border-1: rgba(167, 139, 250, 0.12);
+  --theme-orange-border-2: rgba(167, 139, 250, 0.15);
+  --theme-orange-border-3: rgba(167, 139, 250, 0.2);
+}
+
+// ================================================
+// Less 变量定义 - 兼容现有代码
+// ================================================
+
+// 主题色变量 - 紫色系
+@theme-purple-primary: #8b5cf6;
+@theme-purple-secondary: #d946ef;
+@theme-purple-light-3: #a78bfa;
+@theme-purple-light-5: #c4b5fd;
+@theme-purple-light-7: #ddd6fe;
+@theme-purple-light-9: #ede9fe;
+
+// 暗色模式主题色变量
+@theme-purple-primary-dark: #a78bfa;
+@theme-purple-secondary-dark: #e879f9;
+@theme-purple-light-3-dark: #c4b5fd;
+@theme-purple-light-5-dark: #ddd6fe;
+@theme-purple-light-7-dark: #ede9fe;
+@theme-purple-light-9-dark: #f5f3ff;
+
+// 基础主题色变量
+@primary-color: #8b5cf6;
+@secondary-color: #d946ef;
+@primary-light-1: #9333ea;
+@primary-light-2: #9d4edd;
+@primary-light-3: #a78bfa;
+@primary-light-5: #c4b5fd;
+@primary-light-7: #ddd6fe;
+@primary-light-9: #ede9fe;
+@primary-dark-1: #7c3aed;
+@primary-dark-2: #6d28d9;
+
+// 效果色变量
+@theme-orange-shadow: var(--theme-orange-shadow);
+@theme-orange-glow: var(--theme-orange-glow);
+@theme-orange-overlay: var(--theme-orange-overlay);
+@theme-orange-bg-1: var(--theme-orange-bg-1);
+@theme-orange-bg-2: var(--theme-orange-bg-2);
+@theme-orange-bg-3: var(--theme-orange-bg-3);
+@theme-orange-border-1: var(--theme-orange-border-1);
+@theme-orange-border-2: var(--theme-orange-border-2);
+@theme-orange-border-3: var(--theme-orange-border-3);

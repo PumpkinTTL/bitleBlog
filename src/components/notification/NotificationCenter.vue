@@ -244,8 +244,6 @@ onMounted(async () => {
 </script>
 
 <style scoped lang="less">
-@import '@/assets/style/theme.less';
-
 .bitle-notice-center {
   display: flex;
   flex-direction: column;

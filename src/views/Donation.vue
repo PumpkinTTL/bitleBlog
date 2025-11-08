@@ -654,17 +654,14 @@ const handleCelebrationClose = () => {
 </script>
 
 <style scoped lang="less">
-// 引入全局主题变量
-@import '@/assets/style/theme.less';
-
 .donation-page {
-  // 统一设计变量 - 使用全局紫色主题
-  --theme-color: @theme-purple-primary;
-  --theme-color-light-3: @theme-purple-light-3;
-  --theme-color-light-5: @theme-purple-light-5;
-  --theme-color-light-7: @theme-purple-light-7;
-  --theme-color-light-9: @theme-purple-light-9;
-  --theme-secondary: @theme-purple-secondary;
+  // 统一设计变量 - 直接使用全局 CSS 变量
+  --theme-color: var(--theme-purple-primary);
+  --theme-color-light-3: var(--theme-purple-light-3);
+  --theme-color-light-5: var(--theme-purple-light-5);
+  --theme-color-light-7: var(--theme-purple-light-7);
+  --theme-color-light-9: var(--theme-purple-light-9);
+  --theme-secondary: var(--theme-purple-secondary);
   --theme-accent: #3b82f6;
 
   // 统一间距 - 缩小
@@ -685,14 +682,14 @@ const handleCelebrationClose = () => {
   --font-lg: 14px;
   --font-xl: 16px;
 
-  // 覆盖 Element Plus 全局主题色 - 使用全局紫色主题
-  --el-color-primary: @theme-purple-primary;
-  --el-color-primary-light-3: @theme-purple-light-3;
-  --el-color-primary-light-5: @theme-purple-light-5;
-  --el-color-primary-light-7: @theme-purple-light-7;
-  --el-color-primary-light-8: #e9d5ff;
-  --el-color-primary-light-9: @theme-purple-light-9;
-  --el-color-primary-dark-2: #7c3aed;
+  // 覆盖 Element Plus 全局主题色 - 直接使用全局 CSS 变量
+  --el-color-primary: var(--theme-purple-primary);
+  --el-color-primary-light-3: var(--theme-purple-light-3);
+  --el-color-primary-light-5: var(--theme-purple-light-5);
+  --el-color-primary-light-7: var(--theme-purple-light-7);
+  --el-color-primary-light-8: var(--theme-purple-light-9);
+  --el-color-primary-light-9: var(--theme-purple-light-9);
+  --el-color-primary-dark-2: var(--theme-purple-primary);
 
   min-height: 100vh;
   padding: var(--spacing-md) 0;
@@ -1818,9 +1815,9 @@ const handleCelebrationClose = () => {
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
           &.rank-1 {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            background: linear-gradient(135deg, var(--theme-purple-secondary), var(--theme-purple-primary));
             color: #fff;
-            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+            box-shadow: 0 4px 12px var(--theme-orange-glow);
           }
 
           &.rank-2 {
@@ -1830,9 +1827,9 @@ const handleCelebrationClose = () => {
           }
 
           &.rank-3 {
-            background: linear-gradient(135deg, #fb923c, #f97316);
+            background: linear-gradient(135deg, var(--theme-purple-light-3), var(--theme-purple-primary));
             color: #fff;
-            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+            box-shadow: 0 4px 12px var(--theme-orange-shadow);
           }
 
           &:not(.rank-1):not(.rank-2):not(.rank-3) {
@@ -2073,8 +2070,8 @@ const handleCelebrationClose = () => {
           font-size: 14px;
           font-weight: normal;
           background: linear-gradient(135deg,
-              #f59e0b 0%,
-              #ea580c 100%);
+              var(--theme-purple-secondary) 0%,
+              var(--theme-purple-primary) 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;

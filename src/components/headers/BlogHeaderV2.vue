@@ -408,12 +408,14 @@ onMounted(() => {
 
 <style scoped lang="less">
 // ==================== 变量 ====================
-@import '@/assets/style/theme.less';
-
 @header-height: 60px;
 @header-height-mobile: 54px;
-@primary-color: @theme-purple-primary; // 使用橙色主题
-@secondary-color: @theme-purple-secondary; // 使用橙黄色渐变
+@primary-color: var(--theme-purple-primary);
+@secondary-color: var(--theme-purple-secondary);
+@primary-light-2: var(--theme-purple-light-3);
+@primary-dark-1: var(--theme-purple-primary);
+@theme-orange-shadow: var(--theme-orange-shadow);
+@theme-orange-glow: var(--theme-orange-glow);
 
 // ==================== 头部容器 ====================
 .header-v2-wrapper {

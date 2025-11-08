@@ -136,9 +136,6 @@ const themeColorRgba = computed(() => {
 </script>
 
 <style lang="less" scoped>
-// 引入全局主题变量
-@import '@/assets/style/theme.less';
-
 .step-form {
   width: 100%;
 
