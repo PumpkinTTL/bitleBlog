@@ -1,0 +1,90 @@
+// ================================================
+// BitlEBlog 主题色配置 - 琥珀色系
+// ================================================
+
+// 主题色定义 - 基于 #f59e0b 琥珀色系
+:root {
+  // 琥珀色系列 - 保持 purple 变量名以兼容现有代码
+  --theme-purple-primary: #f59e0b;        // 琥珀色渐变起始色 (Amber-500)
+  --theme-purple-secondary: #d97706;      // 深琥珀色渐变结束色 (Amber-600)
+  --theme-purple-light-3: #fbbf24;        // 浅琥珀色 (Amber-400)
+  --theme-purple-light-5: #fcd34d;        // 更浅琥珀色 (Amber-300)
+  --theme-purple-light-7: #fde68a;        // 极浅琥珀色 (Amber-200)
+  --theme-purple-light-9: #fef3c7;        // 最浅琥珀色 (Amber-100)
+  
+  // 效果颜色 - 用于阴影、背景、边框等
+  --theme-orange-glow: rgba(245, 158, 11, 0.4);
+  --theme-orange-shadow: rgba(245, 158, 11, 0.15);
+  --theme-orange-overlay: rgba(245, 158, 11, 0.08);
+  --theme-orange-bg-1: rgba(245, 158, 11, 0.03);
+  --theme-orange-bg-2: rgba(245, 158, 11, 0.05);
+  --theme-orange-bg-3: rgba(245, 158, 11, 0.08);
+  --theme-orange-border-1: rgba(245, 158, 11, 0.08);
+  --theme-orange-border-2: rgba(245, 158, 11, 0.1);
+  --theme-orange-border-3: rgba(245, 158, 11, 0.15);
+}
+
+// 暗色模式 - 琥珀色系调整
+html.dark {
+  // 暗色模式琥珀色系列 - 调亮以适应暗色背景
+  --theme-purple-primary: #fbbf24;        // Amber-400
+  --theme-purple-secondary: #f59e0b;      // Amber-500
+  --theme-purple-light-3: #fcd34d;        // Amber-300
+  --theme-purple-light-5: #fde68a;        // Amber-200
+  --theme-purple-light-7: #fef3c7;        // Amber-100
+  --theme-purple-light-9: #fffbeb;        // Amber-50
+  
+  // 暗色模式效果颜色
+  --theme-orange-glow: rgba(251, 191, 36, 0.5);
+  --theme-orange-shadow: rgba(251, 191, 36, 0.2);
+  --theme-orange-overlay: rgba(251, 191, 36, 0.12);
+  --theme-orange-bg-1: rgba(251, 191, 36, 0.05);
+  --theme-orange-bg-2: rgba(251, 191, 36, 0.08);
+  --theme-orange-bg-3: rgba(251, 191, 36, 0.12);
+  --theme-orange-border-1: rgba(251, 191, 36, 0.12);
+  --theme-orange-border-2: rgba(251, 191, 36, 0.15);
+  --theme-orange-border-3: rgba(251, 191, 36, 0.2);
+}
+
+// ================================================
+// Less 变量定义 - 兼容现有代码
+// ================================================
+
+// 主题色变量 - 琥珀色系
+@theme-purple-primary: #f59e0b;
+@theme-purple-secondary: #d97706;
+@theme-purple-light-3: #fbbf24;
+@theme-purple-light-5: #fcd34d;
+@theme-purple-light-7: #fde68a;
+@theme-purple-light-9: #fef3c7;
+
+// 暗色模式主题色变量
+@theme-purple-primary-dark: #fbbf24;
+@theme-purple-secondary-dark: #f59e0b;
+@theme-purple-light-3-dark: #fcd34d;
+@theme-purple-light-5-dark: #fde68a;
+@theme-purple-light-7-dark: #fef3c7;
+@theme-purple-light-9-dark: #fffbeb;
+
+// 基础主题色变量
+@primary-color: #f59e0b;
+@secondary-color: #d97706;
+@primary-light-1: #f97316;
+@primary-light-2: #ea580c;
+@primary-light-3: #fbbf24;
+@primary-light-5: #fcd34d;
+@primary-light-7: #fde68a;
+@primary-light-9: #fef3c7;
+@primary-dark-1: #d97706;
+@primary-dark-2: #b45309;
+
+// 效果色变量
+@theme-orange-shadow: var(--theme-orange-shadow);
+@theme-orange-glow: var(--theme-orange-glow);
+@theme-orange-overlay: var(--theme-orange-overlay);
+@theme-orange-bg-1: var(--theme-orange-bg-1);
+@theme-orange-bg-2: var(--theme-orange-bg-2);
+@theme-orange-bg-3: var(--theme-orange-bg-3);
+@theme-orange-border-1: var(--theme-orange-border-1);
+@theme-orange-border-2: var(--theme-orange-border-2);
+@theme-orange-border-3: var(--theme-orange-border-3);
