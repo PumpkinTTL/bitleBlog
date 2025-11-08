@@ -188,6 +188,23 @@ class TokenManager {
   private handleTokenExpired(): void {
     console.warn('[TokenManager] 处理token过期');
     removeToken();
+    
+    // 清除store中的登录状态
+    try {
+      // 动态导入 useStore 避免 Pinia 未初始化错误
+      import('@/store').then(({ useStore }) => {
+        const store = useStore();
+        store.$patch((state: any) => {
+          state.isLogin = false;
+          state.userInfo = null;
+        });
+      }).catch(err => {
+        console.error('[TokenManager] 更新store状态失败:', err);
+      });
+    } catch (error) {
+      console.error('[TokenManager] 更新store状态失败:', error);
+    }
+    
     message.warning("登录已过期，请重新登录");
     router.push("/login");
   }
@@ -199,6 +216,22 @@ class TokenManager {
   private handleRefreshFailure(error: any): void {
     console.error('[TokenManager] 处理续签失败:', error);
     removeToken();
+    
+    // 清除store中的登录状态
+    try {
+      // 动态导入 useStore 避免 Pinia 未初始化错误
+      import('@/store').then(({ useStore }) => {
+        const store = useStore();
+        store.$patch((state: any) => {
+          state.isLogin = false;
+          state.userInfo = null;
+        });
+      }).catch(err => {
+        console.error('[TokenManager] 更新store状态失败:', err);
+      });
+    } catch (error) {
+      console.error('[TokenManager] 更新store状态失败:', error);
+    }
 
     // 根据错误类型显示不同的提示
     if (error?.response?.status === 401) {

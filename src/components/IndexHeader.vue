@@ -265,7 +265,21 @@ async function login() {
     // const data = await loginR({});
 }
 async function outLogin() {
-    localStorage.clear()
+    // 使用新的清除方法
+    const { removeToken } = await import('@/util/Auth');
+    removeToken();
+    
+    // 清除旧的localStorage字段（兼容）
+    localStorage.removeItem('isLogin')
+    localStorage.removeItem('loginCredentials')
+    
+    // 清除store中的用户状态
+    store.$patch((state: any) => {
+        state.isLogin = false
+        state.userInfo = null
+    })
+    
+    // 重新加载页面
     window.location.reload()
 }
 

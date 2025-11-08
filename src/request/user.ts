@@ -1,8 +1,6 @@
 
 import Axios from ".";
-import { useStore } from "@/store";
 import { clearUserInfo } from "@/util/Auth";
-const store = useStore()
 // 用户登录
 export const loginR = (params: any) => {
     return Axios({

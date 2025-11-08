@@ -4,10 +4,6 @@ import { message } from 'ant-design-vue';
 import { getToken } from "@/util/Auth";
 import { tokenManager } from "@/util/tokenManager";
 import { isWhitelisted, requiresAuth } from "@/config/requestConfig";
-import { createPinia } from 'pinia';
-import { useStore } from "@/store";
-const pinia = createPinia();
-const store = useStore(pinia);
 //创建axios的一个实例
 const Axios = axios.create({
     baseURL: "/api", //接口统一域名
@@ -54,6 +50,7 @@ Axios.interceptors.request.use(
                     } else {
                         // Token有效，添加到请求头
                         config.headers.Authorization = `Bearer ${tokenData.token}`;
+                        console.log('[Request] 发送请求，Token:', tokenData.token.substring(0, 20) + '...');
                     }
                 } catch (error) {
                     console.error('[Request] Token检查失败:', error);
@@ -94,6 +91,27 @@ Axios.interceptors.response.use(
         // 登录过期时
         if (response.data.status === 'TOKEN_ERROR') {
             message.warning(response.data.msg)
+            
+            // 清除登录状态 - 异步处理避免阻塞
+            Promise.all([
+                import('@/util/Auth'),
+                import('@/store')
+            ]).then(([{ removeToken }, { useStore }]) => {
+                removeToken();
+                try {
+                    const store = useStore();
+                    store.$patch((state: any) => {
+                        state.isLogin = false;
+                        state.userInfo = null;
+                    });
+                    console.log('[Response] TOKEN_ERROR - 已清除登录状态');
+                } catch (err) {
+                    console.error('[Response] 更新store失败:', err);
+                }
+            }).catch(error => {
+                console.error('[Response] 清除登录状态失败:', error);
+            });
+            
             // 终止promise 链
             return Promise.reject(response)
         }
@@ -115,6 +133,26 @@ Axios.interceptors.response.use(
                     break;
                 case 401:
                     messageHint = "认证失败，请重新登录";
+                    
+                    // 清除登录状态 - 异步处理避免阻塞
+                    Promise.all([
+                        import('@/util/Auth'),
+                        import('@/store')
+                    ]).then(([{ removeToken }, { useStore }]) => {
+                        removeToken();
+                        try {
+                            const store = useStore();
+                            store.$patch((state: any) => {
+                                state.isLogin = false;
+                                state.userInfo = null;
+                            });
+                            console.log('[Response] 401 - 已清除登录状态');
+                        } catch (err) {
+                            console.error('[Response] 更新store失败:', err);
+                        }
+                    }).catch(error => {
+                        console.error('[Response] 清除登录状态失败:', error);
+                    });
                     break;
                 case 404:
                     messageHint = "请求地址出错";

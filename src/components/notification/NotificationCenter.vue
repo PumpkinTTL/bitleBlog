@@ -35,13 +35,6 @@
               <i class="title-icon fas fa-bookmark"></i>
               <h3 class="title">{{ n.title }}</h3>
             </div>
-            <div class="meta-row">
-              <span v-if="n.is_top" class="tag tag-top"><i class="fas fa-thumbtack"></i>置顶</span>
-              <span v-if="n.priority === 2" class="tag tag-urgent"><i class="fas fa-exclamation-circle"></i>紧急</span>
-              <span v-else-if="n.priority === 1" class="tag tag-important"><i class="fas fa-star"></i>重要</span>
-              <span class="tag tag-category">{{ n.category_type_text }}</span>
-              <span class="time">{{ formatTime(n.publish_time) }}</span>
-            </div>
           </div>
           <p class="excerpt">{{ getExcerpt(n.content) }}</p>
           <div class="card-bottom">
@@ -54,6 +47,16 @@
               <span>查看详情</span>
               <i class="fas fa-arrow-right"></i>
             </div>
+          </div>
+          <div class="meta-row">
+            <span v-if="n.is_top" class="tag tag-top"><i class="fas fa-thumbtack"></i>置顶</span>
+            <span v-if="n.priority === 2" class="tag tag-urgent"><i class="fas fa-exclamation-circle"></i>紧急</span>
+            <span v-else-if="n.priority === 1" class="tag tag-important"><i class="fas fa-star"></i>重要</span>
+            <span class="tag tag-category">
+              <i class="fas" :class="getCategoryInfo(n.category_type).icon"></i>
+              {{ getCategoryInfo(n.category_type).label }}
+            </span>
+            <span class="time"><i class="far fa-clock"></i>{{ formatTime(n.publish_time) }}</span>
           </div>
         </div>
       </div>
@@ -77,7 +80,10 @@
           <div class="modal-body" v-if="currentNotice">
             <div class="modal-tags">
               <span :class="['tag', 'tag-priority', `p${currentNotice.priority}`]">{{ currentNotice.priority_text }}</span>
-              <span class="tag tag-category">{{ currentNotice.category_type_text }}</span>
+              <span class="tag tag-category">
+                <i class="fas" :class="getCategoryInfo(currentNotice.category_type).icon"></i>
+                {{ getCategoryInfo(currentNotice.category_type).label }}
+              </span>
             </div>
             <div class="modal-meta">
               <div v-if="currentNotice.publisher" class="author">
@@ -106,9 +112,23 @@ import { getClientNoticeList, getClientNoticeDetail, type ClientNotice } from '@
 const loading = ref(false), noticeList = ref<ClientNotice[]>([]), total = ref(0), currentPage = ref(1), pageSize = ref(10), searchText = ref(''), activeTab = ref<number | null>(null), detailVisible = ref(false), currentNotice = ref<ClientNotice | null>(null)
 const filterGroupRef = ref<HTMLElement | null>(null)
 const notificationAnimations = ref<string[]>([])
-const tabs = computed(() => [{ label: '全部', value: null, icon: 'fas fa-th' }, { label: '系统', value: 1, icon: 'fas fa-cog' }, { label: '安全', value: 2, icon: 'fas fa-shield-alt' }, { label: '活动', value: 3, icon: 'fas fa-bullhorn' }, { label: '政策', value: 4, icon: 'fas fa-file-contract' }, { label: '其他', value: 5, icon: 'fas fa-ellipsis-h' }])
+const tabs = computed(() => [{ label: '全部', value: null, icon: 'fas fa-th' }, { label: '系统', value: 1, icon: 'fas fa-server' }, { label: '安全', value: 2, icon: 'fas fa-lock' }, { label: '活动', value: 3, icon: 'fas fa-gift' }, { label: '政策', value: 4, icon: 'fas fa-book' }, { label: '其他', value: 5, icon: 'fas fa-tag' }])
 const tabRefs = ref<(HTMLElement | null)[]>([])
 const totalPages = computed(() => Math.ceil(total.value / pageSize.value))
+
+// 分类映射
+const categoryMap: Record<number, { label: string; icon: string }> = {
+  1: { label: '系统', icon: 'fa-server' },
+  2: { label: '安全', icon: 'fa-lock' },
+  3: { label: '活动', icon: 'fa-gift' },
+  4: { label: '政策', icon: 'fa-book' },
+  5: { label: '其他', icon: 'fa-tag' }
+}
+
+// 获取分类信息
+const getCategoryInfo = (categoryType: number) => {
+  return categoryMap[categoryType] || { label: '未知', icon: 'fa-question' }
+}
 const loadNotices = async () => { 
   loading.value = true
   try { 
@@ -153,11 +173,9 @@ const updateSliderPosition = async () => {
   
   await nextTick()
   
-  const groupRect = filterGroupRef.value.getBoundingClientRect()
-  const btnRect = activeBtn.getBoundingClientRect()
-  
-  const left = btnRect.left - groupRect.left
-  const width = btnRect.width
+  // 使用 offsetLeft/offsetWidth 更稳定，并避免重复计算 padding
+  const left = (activeBtn as HTMLElement).offsetLeft
+  const width = (activeBtn as HTMLElement).offsetWidth
   
   // 更新CSS变量控制滑块位置
   filterGroupRef.value.style.setProperty('--slider-left', `${left}px`)
@@ -202,6 +220,9 @@ watch(() => activeTab.value, () => {
 }, { flush: 'post' })
 
 onMounted(async () => {
+  // 设置默认选中第一个标签（全部）
+  activeTab.value = null
+  
   await loadNotices()
   await nextTick()
 
@@ -210,7 +231,7 @@ onMounted(async () => {
   
   // 初始化滑块位置，等待DOM完全渲染
   const initSlider = () => {
-    if (tabRefs.value.some(ref => ref && ref.offsetWidth > 0)) {
+    if (tabRefs.value.length > 0 && tabRefs.value[0] && tabRefs.value[0].offsetWidth > 0) {
       updateSliderPosition()
     } else {
       // 如果DOM还没渲染完成，再等待一下
@@ -218,7 +239,7 @@ onMounted(async () => {
     }
   }
   
-  setTimeout(initSlider, 100)
+  setTimeout(initSlider, 150)
 })
 </script>
 
@@ -319,7 +340,7 @@ onMounted(async () => {
     content: '';
     position: absolute;
     top: 4px;
-    left: calc(4px + var(--slider-left));
+    left: var(--slider-left);
     width: var(--slider-width);
     height: calc(100% - 8px);
     background: linear-gradient(135deg, #ef6310 0%, #f97316 50%, #fb923c 100%);
@@ -492,30 +513,11 @@ onMounted(async () => {
       }
     }
     
-    .tag-top {
-      transform: translateY(-1px);
-      box-shadow: 0 3px 8px rgba(251, 191, 36, 0.35);
-    }
-    
-    .tag-urgent {
-      transform: translateY(-1px);
-      box-shadow: 0 3px 8px rgba(239, 68, 68, 0.35);
-    }
-    
-    .tag-important {
-      transform: translateY(-1px);
-      box-shadow: 0 3px 8px rgba(59, 130, 246, 0.35);
-    }
-    
-    .tag-category {
-      transform: translateY(-1px);
-      box-shadow: 0 3px 8px rgba(16, 185, 129, 0.35);
-    }
   }
 }
 
 .card-top {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .title-row {
@@ -552,82 +554,72 @@ onMounted(async () => {
   align-items: center;
   gap: 6px;
   flex-wrap: wrap;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(226, 232, 240, 0.5);
 }
 
 .tag {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
-  padding: 3px 8px;
+  gap: 4px;
+  padding: 4px 9px;
   border-radius: 14px;
   font-size: 10px;
   font-weight: 700;
   white-space: nowrap;
   transition: all 0.3s;
   letter-spacing: 0.2px;
+  line-height: 1.2;
   
   i {
-    font-size: 9px;
+    font-size: 10px;
+    line-height: 1;
   }
 }
 
 .tag-top {
-  background: linear-gradient(135deg, #fbbf24 0%, #fcd34d 100%);
-  color: #713f12;
+  background: #f59e0b;
+  color: #fff;
   border: none;
-  box-shadow: 0 2px 6px rgba(251, 191, 36, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
-  font-weight: 700;
-  transition: all 0.3s;
+  box-shadow: none;
+  text-shadow: none;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
 .tag-urgent {
-  background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+  background: #dc2626;
   color: white;
   border: none;
-  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  text-shadow: 0 1px 2px rgba(153, 27, 27, 0.4);
-  font-weight: 700;
-  transition: all 0.3s;
+  box-shadow: none;
+  text-shadow: none;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
 .tag-important {
-  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  background: #f97316;
   color: white;
   border: none;
-  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  text-shadow: 0 1px 2px rgba(30, 64, 175, 0.4);
-  font-weight: 700;
-  transition: all 0.3s;
+  box-shadow: none;
+  text-shadow: none;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
 .tag-category {
-  // 改为清爽的绿色系，减少与主题橙色的冲突
-  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-  color: #ffffff;
-  border: none;
-  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  text-shadow: 0 1px 2px rgba(6, 95, 70, 0.35);
-  font-weight: 700;
-  transition: all 0.3s;
-  position: relative;
-  overflow: hidden;
+  background: #fff7ed;
+  color: #ea580c;
+  border: 1px solid #fed7aa;
+  box-shadow: none;
+  text-shadow: none;
+  font-weight: 600;
+  transition: none;
   
-  // 轻微高光装饰
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0) 40%);
-    pointer-events: none;
-  }
-  
-  &::before {
-    content: '\\f02b';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    margin-right: 4px;
-    font-size: 10px;
+  i {
+    margin-right: 3px;
+    color: #f97316;
   }
 }
 
@@ -635,23 +627,20 @@ onMounted(async () => {
 .time {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   font-size: 10px;
-  font-weight: 700;
-  color: #475569;
-  padding: 3px 8px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  letter-spacing: 0.2px;
+  font-weight: 500;
+  color: #92400e;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  box-shadow: none;
+  letter-spacing: 0.3px;
   
-  &::before {
-    content: '\\f017';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 400;
+  i {
     font-size: 10px;
-    color: #64748b;
+    color: #d97706;
   }
 }
 
@@ -659,7 +648,7 @@ onMounted(async () => {
   font-size: 12px;
   color: var(--el-text-color-secondary);
   line-height: 1.6;
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -938,21 +927,30 @@ onMounted(async () => {
   }
   
   .filter-group {
-    gap: 8px;
+    gap: 6px;
     margin-bottom: 10px;
+    padding: 3px;
+    
+    &::after {
+      top: 3px;
+      left: var(--slider-left);
+      height: calc(100% - 6px);
+    }
   }
   
   .filter-btn {
-    padding: 10px 14px;
+    padding: 8px 10px;
     font-size: 14px;
     border-radius: 8px;
+    min-width: auto;
+    flex: 0 0 auto;
     
     span {
       display: none;
     }
     
     i {
-      font-size: 16px;
+      font-size: 15px;
       color: #475569;
     }
     

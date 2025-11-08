@@ -1009,8 +1009,8 @@ onMounted(() => {
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  border: 1px solid #8b5cf6;
-  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+  border: 1px solid @primary-color;
+  background: linear-gradient(135deg, @primary-color 0%, @primary-light-2 100%);
   border-radius: 10px;
   color: white;
   font-size: 13px;
@@ -1018,28 +1018,46 @@ onMounted(() => {
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
+  box-shadow: 0 2px 8px @theme-orange-shadow;
+  flex-shrink: 0;
   
   @media (max-width: 992px) {
-    display: none !important;
+    padding: 7px 12px;
+    font-size: 12px;
+    gap: 5px;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 6px 10px;
+    font-size: 11px;
+    gap: 4px;
   }
   
   i {
     font-size: 12px;
     transition: transform 0.3s ease;
+    
+    @media (max-width: 768px) {
+      font-size: 11px;
+    }
   }
   
   span {
     font-weight: 600;
     position: relative;
     z-index: 1;
+    white-space: nowrap;
+    
+    @media (max-width: 768px) {
+      font-size: 11px;
+    }
   }
   
   &:hover {
-    background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
-    border-color: #7c3aed;
+    background: linear-gradient(135deg, @primary-dark-1 0%, @primary-color 100%);
+    border-color: @primary-dark-1;
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.35);
+    box-shadow: 0 4px 16px @theme-orange-glow;
     
     i {
       transform: scale(1.1);
