@@ -36,6 +36,15 @@
             
             <div class="form-and-sidebar-wrapper">
             <div class="donation-form">
+              <!-- SmartMessage 测试按钮 -->
+              <div style="margin-bottom: 20px; padding: 10px; background: #f5f7fa; border-radius: 8px;">
+                <div style="margin-bottom: 8px; font-weight: 500; color: #606266;">SmartMessage 测试</div>
+                <el-button type="success" @click="testSuccess">Success</el-button>
+                <el-button type="danger" @click="testError">Error</el-button>
+                <el-button type="warning" @click="testWarning">Warning</el-button>
+                <el-button type="info" @click="testInfo">Info</el-button>
+              </div>
+              
               <el-form ref="formRef" :model="formData" :rules="formRules" label-position="top">
                 <!-- 步骤条 -->
                 <StepForm class="animate__animated animate__fadeIn animate__fast" style="animation-delay: 0.2s;"
@@ -413,6 +422,7 @@ import { addDonationR } from '@/request/donation'
 import type { DonationChannel, DonationFormData, CelebrationDetail, CelebrationAction } from '@/types/donation'
 import CelebrationModal from '@/components/common/CelebrationModal.vue'
 import StepForm from '@/components/StepForm.vue'
+import { smartMessage } from '@/components/modal'
 
 // QR Code URLs for different payment methods
 const qrCodeUrls = {
@@ -650,6 +660,23 @@ const handleSubmit = async () => {
 
 const handleCelebrationClose = () => {
   showCelebration.value = false
+}
+
+// SmartMessage 测试方法
+const testSuccess = () => {
+  smartMessage.success('操作成功！您的捐赠已提交', { borderRadius: 100 })
+}
+
+const testError = () => {
+  smartMessage.error('操作失败，请稍后重试', { borderRadius: 8 })
+}
+
+const testWarning = () => {
+  smartMessage.warning('请先选择捐赠方式', { borderRadius: 12 })
+}
+
+const testInfo = () => {
+  smartMessage.info('欢迎使用SmartMessage组件', { borderRadius: 6 })
 }
 </script>
 

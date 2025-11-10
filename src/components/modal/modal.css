@@ -1,0 +1,215 @@
+/* ========== CSS变量定义 ========== */
+:root {
+  /* 亮色模式 */
+  --smart-msg-bg: rgba(255, 255, 255, 0.85);
+  --smart-msg-text: #1d1d1f;
+  --smart-msg-shadow: rgba(0, 0, 0, 0.15);
+  --smart-msg-success: #34c759;
+  --smart-msg-error: #ff3b30;
+  --smart-msg-warning: #ff9500;
+  --smart-msg-info: #007aff;
+  --smart-msg-backdrop: rgba(0, 0, 0, 0.3);
+}
+
+/* 暗色模式 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --smart-msg-bg: rgba(30, 30, 30, 0.9);
+    --smart-msg-text: #f5f5f7;
+    --smart-msg-shadow: rgba(0, 0, 0, 0.5);
+    --smart-msg-success: #30d158;
+    --smart-msg-error: #ff453a;
+    --smart-msg-warning: #ff9f0a;
+    --smart-msg-info: #0a84ff;
+    --smart-msg-backdrop: rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* 支持手动切换暗色模式 */
+.dark {
+  --smart-msg-bg: rgba(30, 30, 30, 0.9);
+  --smart-msg-text: #f5f5f7;
+  --smart-msg-shadow: rgba(0, 0, 0, 0.5);
+  --smart-msg-success: #30d158;
+  --smart-msg-error: #ff453a;
+  --smart-msg-warning: #ff9f0a;
+  --smart-msg-info: #0a84ff;
+  --smart-msg-backdrop: rgba(0, 0, 0, 0.6);
+}
+
+/* ========== 消息容器 ========== */
+.smart-message-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  pointer-events: none;
+  width: auto;
+  max-width: 90vw;
+  transition: top 0.3s ease;
+}
+
+/* 退出中的容器保持当前位置 */
+.smart-message-container.is-leaving {
+  position: absolute !important;
+}
+
+/* ========== 消息主体 ========== */
+.smart-message {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  margin-bottom: 12px;
+  background: var(--smart-msg-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  /* border-radius 通过内联样式控制 */
+  box-shadow: 
+    0 8px 32px var(--smart-msg-shadow),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  color: var(--smart-msg-text);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  pointer-events: auto;
+  user-select: none;
+  will-change: transform, opacity, max-width;
+  /* transition 在后面的动画部分定义 */
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .smart-message-container {
+    top: 12px;
+    max-width: 95vw;
+  }
+}
+
+/* ========== 图标样式 ========== */
+.smart-message__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.smart-message:hover .smart-message__icon {
+  transform: scale(1.15) rotate(10deg);
+}
+
+.smart-message--success .smart-message__icon {
+  color: var(--smart-msg-success);
+}
+
+.smart-message--error .smart-message__icon {
+  color: var(--smart-msg-error);
+}
+
+.smart-message--warning .smart-message__icon {
+  color: var(--smart-msg-warning);
+}
+
+.smart-message--info .smart-message__icon {
+  color: var(--smart-msg-info);
+}
+
+/* ========== 内容区域 ========== */
+.smart-message__content {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 400px;
+}
+
+@media (max-width: 768px) {
+  .smart-message__content {
+    max-width: 250px;
+  }
+}
+
+/* ========== 关闭按钮 ========== */
+.smart-message__close {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 16px;
+}
+
+.smart-message__close:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.08);
+  transform: rotate(90deg);
+}
+
+/* ========== 灵动岛动画 ========== */
+/* 默认隐藏状态 - 从小胶囊缩放+横向压缩 */
+.smart-message {
+  opacity: 0;
+  transform: translateY(-20px) scale(0.4, 0.5);
+  max-width: 60px;
+  overflow: hidden;
+  transition: 
+    opacity 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    max-width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 显示状态 - 弹出+横向展开 */
+.smart-message.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1, 1);
+  max-width: 600px;
+}
+
+/* ========== Hover效果 ========== */
+.smart-message.is-visible:hover {
+  box-shadow: 
+    0 12px 48px var(--smart-msg-shadow),
+    0 4px 12px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  filter: brightness(1.05);
+  transition: box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+/* ========== 活跃状态光晕效果 ========== */
+.smart-message::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 100px;
+  padding: 2px;
+  background: linear-gradient(135deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    transparent 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.smart-message:hover::before {
+  opacity: 1;
+}
+
+/* 移除所有左侧装饰 */
