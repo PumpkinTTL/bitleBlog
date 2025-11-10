@@ -53,13 +53,8 @@
           >
             <!-- 注册模式安全提示 -->
             <div v-if="isRegisterMode" class="security-notice">
-              <div class="notice-icon">
-                <i class="fas fa-shield-alt"></i>
-              </div>
-              <div class="notice-content">
-                <strong>安全提示</strong>
-                <p>请使用电子邮箱注册，保护您的隐私安全</p>
-              </div>
+              <i class="fas fa-info-circle"></i>
+              <span>注册需要有效的邀请码</span>
             </div>
             
             <!-- 账号密码登录 -->
@@ -147,6 +142,21 @@
                   type="password"
                   placeholder="确认密码"
                   show-password
+                  clearable
+                  class="modern-input"
+                />
+              </div>
+            </el-form-item>
+            
+            <!-- 注册邀请码 -->
+            <el-form-item v-if="isRegisterMode" prop="inviteCode" class="form-item-modern">
+              <div class="input-wrapper">
+                <div class="input-icon">
+                  <i class="fas fa-ticket-alt"></i>
+                </div>
+                <el-input
+                  v-model="formState.inviteCode"
+                  placeholder="请输入注册邀请码"
                   clearable
                   class="modern-input"
                 />
@@ -307,6 +317,7 @@ const formState = reactive({
   confirmPassword: '',
   email: '',
   verificationCode: '',
+  inviteCode: '',
   remember: false
 })
 
@@ -371,6 +382,10 @@ const formRules = {
   verificationCode: [
     { required: true, message: '请输入验证码', trigger: 'blur' },
     { min: 4, max: 6, message: '验证码长度不正确', trigger: 'blur' }
+  ],
+  inviteCode: [
+    { required: true, message: '请输入注册邀请码', trigger: 'blur' },
+    { min: 6, max: 20, message: '邀请码长度在 6 到 20 个字符', trigger: 'blur' }
   ]
 }
 
@@ -391,6 +406,7 @@ const resetForm = () => {
   formState.confirmPassword = ''
   formState.email = ''
   formState.verificationCode = ''
+  formState.inviteCode = ''
   formState.remember = false
   
   if (timer) {
@@ -527,10 +543,10 @@ const openPrivacyPolicy = () => {
 </script>
 
 <style scoped lang="less">
-// 紫色主题色（与头部组件统一）
-@primary-color: #8b5cf6;
-@secondary-color: #d946ef;
-@primary-gradient: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+// 使用全局主题变量
+@primary-color: var(--theme-purple-primary);
+@secondary-color: var(--theme-purple-secondary);
+@primary-gradient: linear-gradient(135deg, var(--theme-purple-primary) 0%, var(--theme-purple-secondary) 100%);
 
 // 对话框全局样式
 .login-dialog-v2 {
@@ -702,44 +718,19 @@ const openPrivacyPolicy = () => {
 
 // 安全提示
 .security-notice {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 12px;
-  background: linear-gradient(135deg, rgba(255, 193, 7, 0.08) 0%, rgba(255, 152, 0, 0.05) 100%);
-  border-left: 3px solid #ffc107;
-  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--theme-orange-bg-2);
+  border-radius: 20px;
   margin-bottom: 16px;
+  font-size: 12px;
+  color: var(--el-text-color-regular);
   
-  .notice-icon {
-    width: 28px;
-    height: 28px;
-    background: #ffc107;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 14px;
-    flex-shrink: 0;
-  }
-  
-  .notice-content {
-    flex: 1;
-    
-    strong {
-      display: block;
-      margin-bottom: 2px;
-      color: #ff9800;
-      font-size: 13px;
-    }
-    
-    p {
-      margin: 0;
-      font-size: 12px;
-      color: var(--el-text-color-secondary);
-      line-height: 1.4;
-    }
+  i {
+    color: var(--theme-purple-primary);
+    font-size: 13px;
   }
 }
 

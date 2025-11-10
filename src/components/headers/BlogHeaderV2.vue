@@ -364,7 +364,7 @@ const showLogin = () => {
 const handleUserCommand = (command: string) => {
   switch (command) {
     case 'profile':
-      router.push('/profile')
+      router.push('/person')
       break
     case 'notification':
       notificationCenterVisible.value = true
