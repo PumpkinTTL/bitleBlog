@@ -45,6 +45,8 @@ export const createMessage = (options: MessageOptions): MessageInstance => {
   // 合并配置
   const props = { ...defaultOptions, ...options };
   
+  // 不再调整 duration，每个消息独立计时
+  
   // 生成唯一ID
   const id = generateId();
   
@@ -56,14 +58,23 @@ export const createMessage = (options: MessageOptions): MessageInstance => {
   
   // 关闭消息的回调
   const onClose = () => {
-    // 移除实例
+    console.log(`[${id}] 被要求关闭`);
+    
+    // 立即从 instances 移除，避免影响其他消息的位置计算
     const index = instances.findIndex(inst => inst.id === id);
     if (index !== -1) {
       instances.splice(index, 1);
+      console.log(`[${id}] 从实例列表移除, 剩余: ${instances.length}`);
     }
     
-    // 更新剩余消息的位置
+    // 更新其他消息的位置
     updatePositions();
+    
+    // 触发关闭动画
+    const component = vnode.component;
+    if (component && component.exposed) {
+      component.exposed.close();
+    }
     
     // 调用用户的回调
     if (props.onClose) {
@@ -73,10 +84,13 @@ export const createMessage = (options: MessageOptions): MessageInstance => {
   
   // 销毁消息的回调（动画结束后）
   const onDestroy = () => {
-    // 从DOM中移除
+    console.log(`[${id}] 动画结束，销毁 DOM`);
+    
+    // 从 DOM 中移除
     render(null, container);
     container.remove();
   };
+  
   
   // 创建VNode
   const vnode = createVNode(MessageComponent, {
@@ -109,11 +123,8 @@ export const createMessage = (options: MessageOptions): MessageInstance => {
   
   // 手动关闭方法
   const close = () => {
-    // 调用组件的close方法
-    const component = vnode.component;
-    if (component && component.exposed) {
-      component.exposed.close();
-    }
+    // 调用 onClose 以保证走同一个逻辑
+    onClose();
   };
   
   return {
@@ -121,6 +132,7 @@ export const createMessage = (options: MessageOptions): MessageInstance => {
     close
   };
 };
+
 
 /**
  * 更新所有消息的位置（当某个消息关闭后重新计算堆叠位置）
@@ -150,15 +162,40 @@ const updatePositions = () => {
 };
 
 /**
- * 关闭所有消息
+ * 关闭所有消息（级联关闭）
  */
-export const closeAllMessages = () => {
-  // 倒序关闭（避免数组变化影响遍历）
-  for (let i = instances.length - 1; i >= 0; i--) {
-    const instance = instances[i];
-    const component = instance.vnode.component;
-    if (component && component.exposed) {
-      component.exposed.close();
+export const closeAllMessages = (cascade = true) => {
+  if (!cascade) {
+    // 同时关闭
+    for (let i = instances.length - 1; i >= 0; i--) {
+      const instance = instances[i];
+      const component = instance.vnode.component;
+      if (component && component.exposed) {
+        component.exposed.close();
+      }
     }
+  } else {
+    // 级联关闭：一个接一个关闭
+    closeMessagesSequentially();
+  }
+};
+
+/**
+ * 级联顺序关闭消息
+ */
+const closeMessagesSequentially = (index = instances.length - 1) => {
+  if (index < 0 || instances.length === 0) return;
+  
+  const instance = instances[index];
+  if (!instance) return;
+  
+  const component = instance.vnode.component;
+  if (component && component.exposed) {
+    component.exposed.close();
+    
+    // 延迟 150ms 后关闭下一个
+    setTimeout(() => {
+      closeMessagesSequentially(index - 1);
+    }, 150);
   }
 };

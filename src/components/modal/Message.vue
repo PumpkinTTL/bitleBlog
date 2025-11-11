@@ -3,7 +3,7 @@
     <div 
       class="smart-message-container" 
       :class="{ 'is-leaving': !visible }"
-      :style="{ top: offsetTop, position: visible ? 'fixed' : 'absolute' }"
+      :style="{ top: offsetTop }"
     >
       <div
         :class="[
@@ -135,7 +135,8 @@ const iconComponent = computed(() => {
 const startTimer = () => {
   if (props.duration > 0) {
     timer.value = window.setTimeout(() => {
-      close();
+      // 定时器触发关闭事件
+      emit('close', props.id);
     }, props.duration);
   }
 };
@@ -148,15 +149,22 @@ const clearTimer = () => {
   }
 };
 
-// 关闭消息
+// 关闭消息（只负责视觉动画）
 const close = () => {
+  clearTimer();
   visible.value = false;
-  emit('close', props.id);
+  // 不再 emit('close')，只 emit('destroy') 在动画结束时
 };
 
 // 过渡结束后触发销毁
-const onTransitionEnd = () => {
-  if (!visible.value) {
+const destroyed = ref(false);
+const onTransitionEnd = (e: TransitionEvent) => {
+  // 只响应 opacity 的过渡，避免多次触发
+  if (e.propertyName !== 'opacity') return;
+  
+  if (!visible.value && !destroyed.value) {
+    destroyed.value = true;
+    console.log(`[Message ${props.id}] 触发 destroy`);
     emit('destroy', props.id);
   }
 };

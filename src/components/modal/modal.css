@@ -50,9 +50,9 @@
   transition: top 0.3s ease;
 }
 
-/* 退出中的容器保持当前位置 */
+/* 退出中的容器，保持 fixed 定位 */
 .smart-message-container.is-leaving {
-  position: absolute !important;
+  /* 不再改变 position，让 CSS transition 处理位置变化 */
 }
 
 /* ========== 消息主体 ========== */
@@ -61,7 +61,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 20px;
+  padding: 12px;
   margin-bottom: 12px;
   background: var(--smart-msg-bg);
   backdrop-filter: blur(20px) saturate(180%);
@@ -166,11 +166,14 @@
   opacity: 0;
   transform: translateY(-20px) scale(0.4, 0.5);
   max-width: 60px;
+  padding-left: 12px;
+  padding-right: 12px;
   overflow: hidden;
   transition: 
     opacity 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
     transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-    max-width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    max-width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    padding 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* 显示状态 - 弹出+横向展开 */
@@ -178,6 +181,8 @@
   opacity: 1;
   transform: translateY(0) scale(1, 1);
   max-width: 600px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 /* ========== Hover效果 ========== */
