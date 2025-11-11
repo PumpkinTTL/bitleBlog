@@ -223,10 +223,10 @@ const formatDate = (date: string) => {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 600;
   position: relative;
-  padding-left: 12px;
+  padding-left: 14px;
 
   &::before {
     content: '';
@@ -234,25 +234,44 @@ const formatDate = (date: string) => {
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 4px;
-    height: 20px;
+    width: 3px;
+    height: 18px;
     background: linear-gradient(180deg, var(--theme-purple-primary), var(--theme-purple-secondary));
     border-radius: 2px;
+    box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
   }
 
   i {
     font-size: 18px;
-    background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--theme-purple-primary);
+    animation: heartbeat 2s ease-in-out infinite;
   }
 
   span {
-    background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
+    background: linear-gradient(135deg, var(--theme-purple-primary) 0%, var(--theme-purple-secondary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(1.1);
+  }
+  20% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.1);
+  }
+  40% {
+    transform: scale(1);
   }
 }
 
@@ -444,7 +463,17 @@ const formatDate = (date: string) => {
   i {
     position: relative;
     z-index: 1;
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+    opacity: 1;
   }
 
   &::after {
@@ -454,7 +483,7 @@ const formatDate = (date: string) => {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
     opacity: 0;
     transition: opacity 0.3s ease;
   }
@@ -465,17 +494,17 @@ const formatDate = (date: string) => {
 
   &.type-article {
     background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
-    box-shadow: 0 2px 6px rgba(139, 92, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
   }
 
   &.type-resource {
-    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.25);
   }
 
   &.type-video {
     background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
   }
 }
 
