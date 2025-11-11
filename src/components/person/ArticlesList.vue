@@ -30,12 +30,16 @@
         v-for="article in paginatedArticles" 
         :key="article.id"
         class="article-item"
-        @click="$emit('view', article)"
       >
+        <div class="item-aside">
+          <div class="item-cover" v-if="article.cover">
+            <span :class="['status-badge', article.status]">
+              {{ getStatusText(article.status) }}
+            </span>
+            <img :src="article.cover" :alt="article.title" />
+          </div>
+        </div>
         <div class="item-main">
-          <span :class="['status-badge', article.status]">
-            {{ getStatusText(article.status) }}
-          </span>
           <div class="item-header">
             <h4 class="item-title">{{ article.title }}</h4>
           </div>
@@ -60,12 +64,10 @@
               {{ article.tags.slice(0, 2).join(', ') }}
             </span>
           </div>
-        </div>
-        <div class="item-aside">
-          <div class="item-cover" v-if="article.cover">
-            <img :src="article.cover" :alt="article.title" />
-          </div>
           <div class="item-actions">
+            <button class="action-btn" @click.stop="$emit('view', article)">
+              <i class="fas fa-eye"></i>
+            </button>
             <button class="action-btn" @click.stop="$emit('edit', article)">
               <i class="fas fa-edit"></i>
             </button>
@@ -246,6 +248,10 @@ const formatDate = (date: string) => {
 <style lang="less" scoped>
 .articles-list-container {
   padding: 20px;
+
+  @media (max-width: 768px) {
+    padding: 12px;
+  }
 }
 
 .list-header {
@@ -253,6 +259,12 @@ const formatDate = (date: string) => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 12px;
+  }
 
   .btn-create {
     display: flex;
@@ -313,6 +325,19 @@ const formatDate = (date: string) => {
       transform: translateY(0);
       box-shadow: 0 2px 8px var(--theme-orange-shadow);
     }
+
+    @media (max-width: 768px) {
+      padding: 8px 16px;
+      font-size: 12px;
+      
+      i {
+        font-size: 12px;
+      }
+      
+      span {
+        display: none;
+      }
+    }
   }
 
   .header-right {
@@ -356,6 +381,20 @@ const formatDate = (date: string) => {
       color: var(--el-text-color-secondary);
       font-weight: 500;
     }
+
+    @media (max-width: 768px) {
+      width: 100%;
+      justify-content: space-between;
+
+      .filter-tabs .filter-tab {
+        padding: 4px 10px;
+        font-size: 11px;
+      }
+
+      .total-count {
+        font-size: 11px;
+      }
+    }
   }
 }
 
@@ -388,37 +427,60 @@ const formatDate = (date: string) => {
   align-items: flex-start;
   gap: 20px;
   padding: 18px 20px;
-  padding-top: 36px;
   background: var(--el-bg-color);
   border: 1px solid var(--el-border-color-lighter);
   border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   position: relative;
+  overflow: visible;
+  isolation: isolate;
+
 
   &:hover {
     border-color: var(--theme-purple-primary);
     background: var(--el-fill-color-blank);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.12), 0 4px 8px rgba(0, 0, 0, 0.04);
+    transform: translateY(-4px) scale(1.01);
 
     .item-title {
       color: var(--theme-purple-primary);
     }
 
-    .item-cover img {
-      transform: scale(1.05);
+    .item-cover {
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+      
+      img {
+        transform: scale(1.08);
+      }
     }
 
-    .item-actions {
-      opacity: 1;
-      transform: translateX(0);
+    .status-badge {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
   }
 
-  &:active {
-    transform: translateY(-1px);
+  @media (max-width: 768px) {
+    padding: 10px;
+    flex-direction: row;
+    gap: 10px;
+    align-items: flex-start;
+
+    &:hover {
+      transform: none;
+    }
+
+    .item-main {
+      order: 2;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-aside {
+      order: 1;
+      flex-shrink: 0;
+    }
   }
 
   .item-main {
@@ -428,6 +490,11 @@ const formatDate = (date: string) => {
     flex-direction: column;
     gap: 10px;
     position: relative;
+    z-index: 3;
+
+    @media (max-width: 768px) {
+      gap: 6px;
+    }
   }
 
   .item-header {
@@ -446,23 +513,46 @@ const formatDate = (date: string) => {
     white-space: nowrap;
     transition: all 0.3s ease;
     line-height: 1.5;
+
+    @media (max-width: 768px) {
+      font-size: 13px;
+      line-height: 1.4;
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      margin-bottom: 4px;
+    }
   }
 
   .status-badge {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 0;
+    right: 0;
     padding: 5px 12px;
     font-size: 11px;
     font-weight: 500;
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-radius: 12px 4px 12px 4px;
+    border-radius: 0 8px 0 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    z-index: 2;
+
+    @media (max-width: 768px) {
+      padding: 4px 8px;
+      font-size: 10px;
+      gap: 3px;
+      border-radius: 0 10px 0 8px;
+
+      &::before {
+        width: 4px;
+        height: 4px;
+      }
+    }
     
     &::before {
       content: '';
@@ -503,6 +593,12 @@ const formatDate = (date: string) => {
     font-size: 11px;
     color: var(--el-text-color-secondary);
 
+    @media (max-width: 768px) {
+      gap: 4px;
+      row-gap: 6px;
+      margin-top: 2px;
+    }
+
     .meta-item {
       display: inline-flex;
       align-items: center;
@@ -514,6 +610,16 @@ const formatDate = (date: string) => {
       font-weight: 500;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
+
+      @media (max-width: 768px) {
+        padding: 2px 6px;
+        font-size: 10px;
+        gap: 3px;
+
+        i {
+          font-size: 10px;
+        }
+      }
 
       i {
         font-size: 11px;
@@ -576,6 +682,14 @@ const formatDate = (date: string) => {
     display: flex;
     align-items: center;
     gap: 16px;
+    position: relative;
+    z-index: 3;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+    }
   }
 
   .item-cover {
@@ -587,6 +701,13 @@ const formatDate = (date: string) => {
     flex-shrink: 0;
     box-shadow: 0 0 0 1px var(--el-border-color-lighter);
     position: relative;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    @media (max-width: 768px) {
+      width: 90px;
+      height: 90px;
+      border-radius: 10px;
+    }
 
     &::after {
       content: '';
@@ -612,88 +733,70 @@ const formatDate = (date: string) => {
   }
 
   .item-actions {
-    flex-shrink: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
     display: flex;
-    gap: 6px;
+    gap: 16px;
     opacity: 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 999;
 
+    @media (max-width: 768px) {
+      gap: 12px;
+    }
+  }
+
+  &:hover .item-actions {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
     .action-btn {
-      width: 32px;
-      height: 32px;
+      width: 52px;
+      height: 52px;
       border: none;
-      border-radius: 6px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      font-size: 13px;
-      background: transparent;
-      color: var(--el-text-color-secondary);
-      position: relative;
-      overflow: hidden;
+      transition: all 0.25s ease;
+      font-size: 18px;
+      background: white;
+      color: var(--theme-purple-primary);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      flex-shrink: 0;
 
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border-radius: 6px;
-        opacity: 0;
-        transition: opacity 0.25s ease;
-      }
-
-      i {
-        position: relative;
-        z-index: 1;
-        transition: transform 0.25s ease;
+      @media (max-width: 768px) {
+        width: 46px;
+        height: 46px;
+        font-size: 16px;
       }
 
       &:hover {
-        transform: scale(1.05);
+        transform: scale(1.1);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
       }
 
       &:active {
         transform: scale(0.95);
       }
 
-      &:first-child {
-        &::before {
-          background: linear-gradient(135deg, rgba(96, 165, 250, 0.15), rgba(59, 130, 246, 0.1));
-        }
-
-        &:hover {
-          color: #3b82f6;
-
-          &::before {
-            opacity: 1;
-          }
-
-          i {
-            transform: rotate(-10deg) scale(1.1);
-          }
-        }
+      &:nth-child(1):hover {
+        background: linear-gradient(135deg, #8b5cf6, #6366f1);
+        color: white;
       }
 
-      &:last-child {
-        &::before {
-          background: linear-gradient(135deg, rgba(251, 113, 133, 0.15), rgba(244, 63, 94, 0.1));
-        }
+      &:nth-child(2):hover {
+        background: linear-gradient(135deg, #60a5fa, #3b82f6);
+        color: white;
+      }
 
-        &:hover {
-          color: #f43f5e;
-
-          &::before {
-            opacity: 1;
-          }
-
-          i {
-            transform: scale(1.1);
-          }
-        }
+      &:nth-child(3):hover {
+        background: linear-gradient(135deg, #fb7185, #f43f5e);
+        color: white;
       }
     }
   }
@@ -707,6 +810,13 @@ const formatDate = (date: string) => {
   justify-content: center;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    margin-top: 16px;
+    padding-top: 12px;
+    gap: 6px;
+  }
 
   .page-btn, .page-num {
     width: 32px;
@@ -721,6 +831,12 @@ const formatDate = (date: string) => {
     transition: all 0.2s ease;
     font-size: 13px;
     color: var(--el-text-color-regular);
+
+    @media (max-width: 768px) {
+      width: 28px;
+      height: 28px;
+      font-size: 12px;
+    }
 
     &:hover:not(:disabled) {
       border-color: var(--theme-purple-primary);
@@ -748,6 +864,13 @@ const formatDate = (date: string) => {
   .page-size {
     margin-left: 12px;
 
+    @media (max-width: 768px) {
+      width: 100%;
+      margin: 8px 0 0 0;
+      display: flex;
+      justify-content: center;
+    }
+
     select {
       padding: 6px 10px;
       border: 1px solid var(--el-border-color);
@@ -758,6 +881,11 @@ const formatDate = (date: string) => {
       cursor: pointer;
       transition: all 0.2s ease;
 
+      @media (max-width: 768px) {
+        padding: 5px 8px;
+        font-size: 11px;
+      }
+
       &:hover {
         border-color: var(--theme-purple-primary);
       }
@@ -767,6 +895,40 @@ const formatDate = (date: string) => {
         border-color: var(--theme-purple-primary);
       }
     }
+  }
+}
+
+// 动画关键帧
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-6px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
   }
 }
 </style>
