@@ -1,16 +1,17 @@
 <template>
-  <div class="articles-list-container">
+  <div class="articles-list-container animate__animated animate__fadeInLeft animate__faster">
     <div class="list-header">
-      <button class="btn-create" @click="$emit('create')">
+      <button class="btn-create animate__animated animate__zoomIn animate__faster" @click="$emit('create')">
         <i class="fas fa-pen-nib"></i>
         <span>新建文章</span>
       </button>
       <div class="header-right">
         <div class="filter-tabs">
           <button 
-            v-for="status in statusOptions" 
+            v-for="(status, index) in statusOptions" 
             :key="status.value"
-            :class="['filter-tab', { active: filterStatus === status.value }]"
+            :class="['filter-tab animate__animated animate__zoomIn animate__faster', { active: filterStatus === status.value }]"
+            :style="{ animationDelay: `${index * 0.05}s` }"
             @click="filterStatus = status.value"
           >
             {{ status.label }}
@@ -20,20 +21,21 @@
       </div>
     </div>
 
-    <div v-if="paginatedArticles.length === 0" class="empty-state">
+    <div v-if="paginatedArticles.length === 0" class="empty-state animate__animated animate__zoomIn">
       <i class="fas fa-inbox"></i>
       <p>暂无文章</p>
     </div>
 
     <div v-else class="articles-list">
       <div 
-        v-for="article in paginatedArticles" 
+        v-for="(article, index) in paginatedArticles" 
         :key="article.id"
-        class="article-item"
+        class="article-item animate__animated animate__fadeInUp animate__faster"
+        :style="{ animationDelay: `${index * 0.06}s` }"
       >
         <div class="item-aside">
           <div class="item-cover" v-if="article.cover">
-            <span :class="['status-badge', article.status]">
+            <span :class="['status-badge animate__animated animate__zoomIn animate__faster', article.status]" style="animation-delay: 0.1s">
               {{ getStatusText(article.status) }}
             </span>
             <img :src="article.cover" :alt="article.title" />
@@ -44,22 +46,22 @@
             <h4 class="item-title">{{ article.title }}</h4>
           </div>
           <div class="item-meta">
-            <span class="meta-item date">
+            <span class="meta-item date animate__animated animate__zoomIn animate__faster" style="animation-delay: 0.15s">
               <i class="fas fa-calendar-day"></i>
               {{ formatDate(article.createdAt) }}
             </span>
             <span class="meta-divider"></span>
-            <span class="meta-item views">
+            <span class="meta-item views animate__animated animate__zoomIn animate__faster" style="animation-delay: 0.18s">
               <i class="fas fa-eye"></i>
               {{ article.views }}
             </span>
             <span class="meta-divider"></span>
-            <span class="meta-item comments">
+            <span class="meta-item comments animate__animated animate__zoomIn animate__faster" style="animation-delay: 0.21s">
               <i class="fas fa-comment"></i>
               {{ article.comments }}
             </span>
             <span class="meta-divider" v-if="article.tags.length"></span>
-            <span class="meta-item tags" v-if="article.tags.length">
+            <span class="meta-item tags animate__animated animate__zoomIn animate__faster" v-if="article.tags.length" style="animation-delay: 0.24s">
               <i class="fas fa-tags"></i>
               {{ article.tags.slice(0, 2).join(', ') }}
             </span>
@@ -80,20 +82,21 @@
     </div>
 
     <div class="list-pagination" v-if="totalPages > 1">
-      <button class="page-btn" :disabled="currentPage === 1" @click="currentPage--">
+      <button class="page-btn animate__animated animate__zoomIn animate__faster" :disabled="currentPage === 1" @click="currentPage--">
         <i class="fas fa-chevron-left"></i>
       </button>
       <div class="page-numbers">
         <button 
-          v-for="page in visiblePages" 
+          v-for="(page, index) in visiblePages" 
           :key="page"
-          :class="['page-num', { active: page === currentPage }]"
+          :class="['page-num animate__animated animate__zoomIn animate__faster', { active: page === currentPage }]"
+          :style="{ animationDelay: `${index * 0.03}s` }"
           @click="currentPage = page"
         >
           {{ page }}
         </button>
       </div>
-      <button class="page-btn" :disabled="currentPage === totalPages" @click="currentPage++">
+      <button class="page-btn animate__animated animate__zoomIn animate__faster" :disabled="currentPage === totalPages" @click="currentPage++" style="animation-delay: 0.15s">
         <i class="fas fa-chevron-right"></i>
       </button>
       <div class="page-size">
@@ -738,14 +741,14 @@ const formatDate = (date: string) => {
     left: 50%;
     transform: translate(-50%, -50%) scale(0.7);
     display: flex;
-    gap: 16px;
+    gap: 12px;
     opacity: 0;
     pointer-events: none;
     transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     z-index: 999;
 
     @media (max-width: 768px) {
-      gap: 12px;
+      gap: 10px;
     }
   }
 
@@ -754,8 +757,8 @@ const formatDate = (date: string) => {
     pointer-events: auto;
     transform: translate(-50%, -50%) scale(1);
     .action-btn {
-      width: 52px;
-      height: 52px;
+      width: 44px;
+      height: 44px;
       border: none;
       border-radius: 50%;
       display: flex;
@@ -763,16 +766,16 @@ const formatDate = (date: string) => {
       justify-content: center;
       cursor: pointer;
       transition: all 0.25s ease;
-      font-size: 18px;
+      font-size: 16px;
       background: white;
       color: var(--theme-purple-primary);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
       flex-shrink: 0;
 
       @media (max-width: 768px) {
-        width: 46px;
-        height: 46px;
-        font-size: 16px;
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
       }
 
       &:hover {

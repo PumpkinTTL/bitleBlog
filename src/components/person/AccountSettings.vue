@@ -1,5 +1,5 @@
 <template>
-  <div class="account-settings-card">
+  <div class="account-settings-card animate__animated animate__fadeInLeft animate__faster">
     <div class="card-header">
       <h3 class="header-title">
         <i class="fas fa-cog"></i>
@@ -9,7 +9,7 @@
 
     <div class="settings-content">
       <!-- 基本信息 -->
-      <div class="settings-section">
+      <div class="settings-section animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0s">
         <div class="section-title">
           <i class="fas fa-user"></i>
           基本信息
@@ -35,7 +35,7 @@
       </div>
 
       <!-- 隐私设置 -->
-      <div class="settings-section">
+      <div class="settings-section animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.1s">
         <div class="section-title">
           <i class="fas fa-shield-alt"></i>
           隐私设置
@@ -66,7 +66,7 @@
       </div>
 
       <!-- 通知设置 -->
-      <div class="settings-section">
+      <div class="settings-section animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.2s">
         <div class="section-title">
           <i class="fas fa-bell"></i>
           通知设置
@@ -104,7 +104,7 @@
       </div>
 
       <!-- 操作按钮 -->
-      <div class="settings-actions">
+      <div class="settings-actions animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.3s">
         <el-button type="primary" @click="handleSave" :loading="saving">
           <i class="fas fa-save"></i>
           保存设置
@@ -187,7 +187,6 @@ const handleReset = () => {
   border-radius: 12px;
   border: 1px solid var(--el-border-color-lighter);
   overflow: hidden;
-  animation: fadeIn 0.6s ease-out;
 }
 
 .card-header {
@@ -217,7 +216,6 @@ const handleReset = () => {
 
 .settings-section {
   margin-bottom: 32px;
-  animation: slideUp 0.5s ease-out;
 
   &:last-of-type {
     margin-bottom: 24px;

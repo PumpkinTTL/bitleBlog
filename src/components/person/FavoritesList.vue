@@ -1,5 +1,5 @@
 <template>
-  <div class="favorites-list-card">
+  <div class="favorites-list-card animate__animated animate__fadeInLeft animate__faster">
     <div class="card-header">
       <h3 class="header-title">
         <i class="fas fa-heart"></i>
@@ -31,8 +31,8 @@
       <div 
         v-for="(favorite, index) in filteredFavorites" 
         :key="favorite.id"
-        class="favorite-item"
-        :style="{ animationDelay: `${index * 0.05}s` }"
+        class="favorite-item animate__animated animate__fadeInUp animate__faster"
+        :style="{ animationDelay: `${index * 0.06}s` }"
         @click="$emit('view', favorite)"
       >
         <div class="favorite-icon" :class="`type-${favorite.type}`">
