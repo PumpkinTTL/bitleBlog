@@ -1,126 +1,110 @@
 <template>
-  <div class="account-settings-card animate__animated animate__fadeInLeft animate__faster">
-    <div class="card-header">
-      <h3 class="header-title">
-        <i class="fas fa-cog"></i>
-        账号设置
-      </h3>
+  <div class="account-settings-container animate__animated animate__fadeInLeft animate__faster">
+    <!-- 基本信息 -->
+    <div 
+      class="setting-card animate__animated animate__fadeInUp animate__faster"
+      style="animation-delay: 0s"
+    >
+      <div class="card-main">
+        <div class="card-info">
+          <h4 class="setting-title">基本信息</h4>
+          <div class="input-group">
+            <input 
+              v-model="form.username" 
+              type="text" 
+              class="setting-input" 
+              placeholder="请输入用户名"
+            />
+            <input 
+              v-model="form.email" 
+              type="email" 
+              class="setting-input" 
+              placeholder="请输入邮箱地址"
+            />
+            <textarea 
+              v-model="form.bio" 
+              class="setting-textarea" 
+              placeholder="个人简介"
+              rows="2"
+              maxlength="200"
+            ></textarea>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="settings-content">
-      <!-- 基本信息 -->
-      <div class="settings-section animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0s">
-        <div class="section-title">
-          <i class="fas fa-user"></i>
-          基本信息
+    <!-- 隐私设置 -->
+    <div 
+      class="setting-card animate__animated animate__fadeInUp animate__faster"
+      style="animation-delay: 0.05s"
+    >
+      <div class="card-main">
+        <div class="card-info">
+          <h4 class="setting-title">隐私设置</h4>
+          <div class="switch-group">
+            <div class="switch-row" @click="privacy.publicProfile = !privacy.publicProfile">
+              <span class="switch-text">公开个人资料</span>
+              <div :class="['switch', { on: privacy.publicProfile }]"></div>
+            </div>
+            <div class="switch-row" @click="privacy.showEmail = !privacy.showEmail">
+              <span class="switch-text">显示邮箱地址</span>
+              <div :class="['switch', { on: privacy.showEmail }]"></div>
+            </div>
+            <div class="switch-row" @click="privacy.allowFollow = !privacy.allowFollow">
+              <span class="switch-text">允许其他人关注</span>
+              <div :class="['switch', { on: privacy.allowFollow }]"></div>
+            </div>
+          </div>
         </div>
-        <el-form :model="form" label-width="100px" label-position="left">
-          <el-form-item label="用户名">
-            <el-input v-model="form.username" placeholder="请输入用户名" />
-          </el-form-item>
-          <el-form-item label="邮箱">
-            <el-input v-model="form.email" placeholder="请输入邮箱" />
-          </el-form-item>
-          <el-form-item label="个人简介">
-            <el-input 
-              v-model="form.bio" 
-              type="textarea" 
-              :rows="3"
-              placeholder="介绍一下自己..." 
-              maxlength="200"
-              show-word-limit
-            />
-          </el-form-item>
-        </el-form>
       </div>
+    </div>
 
-      <!-- 隐私设置 -->
-      <div class="settings-section animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.1s">
-        <div class="section-title">
-          <i class="fas fa-shield-alt"></i>
-          隐私设置
-        </div>
-        <div class="privacy-options">
-          <div class="privacy-item">
-            <div class="privacy-info">
-              <div class="privacy-label">公开个人资料</div>
-              <div class="privacy-desc">允许其他用户查看你的个人主页</div>
+    <!-- 通知设置 -->
+    <div 
+      class="setting-card animate__animated animate__fadeInUp animate__faster"
+      style="animation-delay: 0.1s"
+    >
+      <div class="card-main">
+        <div class="card-info">
+          <h4 class="setting-title">通知设置</h4>
+          <div class="switch-group">
+            <div class="switch-row" @click="notifications.comments = !notifications.comments">
+              <span class="switch-text">评论通知</span>
+              <div :class="['switch', { on: notifications.comments }]"></div>
             </div>
-            <el-switch v-model="privacy.publicProfile" />
-          </div>
-          <div class="privacy-item">
-            <div class="privacy-info">
-              <div class="privacy-label">显示邮箱</div>
-              <div class="privacy-desc">在个人主页中显示邮箱地址</div>
+            <div class="switch-row" @click="notifications.likes = !notifications.likes">
+              <span class="switch-text">点赞通知</span>
+              <div :class="['switch', { on: notifications.likes }]"></div>
             </div>
-            <el-switch v-model="privacy.showEmail" />
-          </div>
-          <div class="privacy-item">
-            <div class="privacy-info">
-              <div class="privacy-label">允许关注</div>
-              <div class="privacy-desc">允许其他用户关注你</div>
+            <div class="switch-row" @click="notifications.follows = !notifications.follows">
+              <span class="switch-text">关注通知</span>
+              <div :class="['switch', { on: notifications.follows }]"></div>
             </div>
-            <el-switch v-model="privacy.allowFollow" />
+            <div class="switch-row" @click="notifications.system = !notifications.system">
+              <span class="switch-text">系统通知</span>
+              <div :class="['switch', { on: notifications.system }]"></div>
+            </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- 通知设置 -->
-      <div class="settings-section animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.2s">
-        <div class="section-title">
-          <i class="fas fa-bell"></i>
-          通知设置
-        </div>
-        <div class="notification-options">
-          <div class="notification-item">
-            <div class="notification-info">
-              <div class="notification-label">评论通知</div>
-              <div class="notification-desc">有人评论你的文章时通知你</div>
-            </div>
-            <el-switch v-model="notifications.comments" />
-          </div>
-          <div class="notification-item">
-            <div class="notification-info">
-              <div class="notification-label">点赞通知</div>
-              <div class="notification-desc">有人点赞你的文章时通知你</div>
-            </div>
-            <el-switch v-model="notifications.likes" />
-          </div>
-          <div class="notification-item">
-            <div class="notification-info">
-              <div class="notification-label">关注通知</div>
-              <div class="notification-desc">有人关注你时通知你</div>
-            </div>
-            <el-switch v-model="notifications.follows" />
-          </div>
-          <div class="notification-item">
-            <div class="notification-info">
-              <div class="notification-label">系统通知</div>
-              <div class="notification-desc">接收系统重要通知</div>
-            </div>
-            <el-switch v-model="notifications.system" />
-          </div>
-        </div>
-      </div>
-
-      <!-- 操作按钮 -->
-      <div class="settings-actions animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.3s">
-        <el-button type="primary" @click="handleSave" :loading="saving">
-          <i class="fas fa-save"></i>
-          保存设置
-        </el-button>
-        <el-button @click="handleReset">
-          <i class="fas fa-undo"></i>
-          重置
-        </el-button>
-      </div>
+    <!-- 保存按钮 -->
+    <div class="action-bar animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.15s">
+      <button class="btn-save" @click="handleSave" :disabled="saving">
+        <i class="fas fa-save"></i>
+        {{ saving ? '保存中...' : '保存设置' }}
+      </button>
+      <button class="btn-reset" @click="handleReset">
+        <i class="fas fa-undo"></i>
+        重置
+      </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { ElMessage } from 'element-plus'
 
 interface FormData {
   username: string
@@ -131,7 +115,7 @@ interface FormData {
 const form = reactive<FormData>({
   username: 'BitlE开发者',
   email: 'dev@example.com',
-  bio: '热爱技术，专注前端开发'
+  bio: '热爱技术,专注前端开发'
 })
 
 const privacy = reactive({
@@ -151,6 +135,7 @@ const saving = ref(false)
 
 const emit = defineEmits<{
   save: [data: { form: FormData; privacy: typeof privacy; notifications: typeof notifications }]
+  message: [type: 'success' | 'info', text: string]
 }>()
 
 const handleSave = () => {
@@ -158,7 +143,7 @@ const handleSave = () => {
   
   setTimeout(() => {
     saving.value = false
-    ElMessage.success('设置保存成功')
+    emit('message', 'success', '设置保存成功')
     emit('save', { form, privacy, notifications })
   }, 1000)
 }
@@ -166,7 +151,7 @@ const handleSave = () => {
 const handleReset = () => {
   form.username = 'BitlE开发者'
   form.email = 'dev@example.com'
-  form.bio = '热爱技术，专注前端开发'
+  form.bio = '热爱技术,专注前端开发'
   
   privacy.publicProfile = true
   privacy.showEmail = false
@@ -177,175 +162,243 @@ const handleReset = () => {
   notifications.follows = true
   notifications.system = true
   
-  ElMessage.info('已重置为默认设置')
+  emit('message', 'info', '已重置为默认设置')
 }
 </script>
 
 <style lang="less" scoped>
-.account-settings-card {
+.account-settings-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  @media (max-width: 768px) {
+    padding: 12px;
+  }
+}
+
+.setting-card {
+  padding: 16px;
   background: var(--el-bg-color);
-  border-radius: 12px;
   border: 1px solid var(--el-border-color-lighter);
-  overflow: hidden;
-}
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 
-.card-header {
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-  background: var(--el-fill-color-extra-light);
+  &:hover {
+    border-color: var(--theme-purple-primary);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.12);
+    transform: translateY(-2px);
+  }
 
-  .header-title {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--el-text-color-primary);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    i {
-      color: var(--theme-purple-primary);
-      font-size: 18px;
-    }
+  @media (max-width: 768px) {
+    padding: 12px;
   }
 }
 
-.settings-content {
-  padding: 24px;
+.card-main {
+  display: flex;
+  flex-direction: column;
 }
 
-.settings-section {
-  margin-bottom: 32px;
-
-  &:last-of-type {
-    margin-bottom: 24px;
-  }
+.card-info {
+  flex: 1;
 }
 
-.section-title {
+.setting-title {
   font-size: 15px;
   font-weight: 600;
   color: var(--el-text-color-primary);
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid var(--el-border-color-extra-light);
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  margin: 0 0 12px 0;
 
-  i {
-    color: var(--theme-purple-primary);
-    font-size: 16px;
+  @media (max-width: 768px) {
+    font-size: 14px;
+    margin-bottom: 10px;
   }
 }
 
-.privacy-options,
-.notification-options {
+// 输入框组
+.input-group {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
-.privacy-item,
-.notification-item {
+.setting-input,
+.setting-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--el-fill-color-light);
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--el-text-color-primary);
+  transition: all 0.2s ease;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: var(--el-text-color-placeholder);
+  }
+
+  &:focus {
+    border-color: var(--theme-purple-primary);
+    background: var(--el-bg-color);
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+}
+
+.setting-textarea {
+  resize: vertical;
+  line-height: 1.5;
+  min-height: 60px;
+}
+
+// 开关组
+.switch-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.switch-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  background: var(--el-fill-color-lighter);
-  border-radius: 10px;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
+  padding: 10px 12px;
+  background: var(--el-fill-color-light);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 
   &:hover {
-    background: var(--theme-orange-bg-1);
-    border-color: var(--theme-orange-border-1);
-    transform: translateX(4px);
+    background: var(--el-bg-color);
+    border-color: var(--theme-purple-primary);
+  }
+
+  @media (max-width: 768px) {
+    padding: 8px 10px;
   }
 }
 
-.privacy-info,
-.notification-info {
-  flex: 1;
-  margin-right: 16px;
+.switch-text {
+  font-size: 13px;
+  color: var(--el-text-color-regular);
+  font-weight: 500;
 
-  .privacy-label,
-  .notification-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--el-text-color-primary);
-    margin-bottom: 4px;
-  }
-
-  .privacy-desc,
-  .notification-desc {
+  @media (max-width: 768px) {
     font-size: 12px;
-    color: var(--el-text-color-secondary);
-    line-height: 1.4;
   }
 }
 
-.settings-actions {
+.switch {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  background: var(--el-border-color);
+  border-radius: 11px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  &.on {
+    background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
+
+    &::after {
+      left: 21px;
+    }
+  }
+}
+
+// 操作栏
+.action-bar {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   justify-content: flex-end;
-  padding-top: 20px;
-  border-top: 1px solid var(--el-border-color-extra-light);
-}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
+  @media (max-width: 768px) {
+    gap: 8px;
   }
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+.btn-save,
+.btn-reset {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+
+  i {
+    font-size: 13px;
   }
-  to {
-    opacity: 1;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+}
+
+.btn-save {
+  background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
+  color: white;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+  }
+
+  &:active:not(:disabled) {
     transform: translateY(0);
   }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
 
-// 响应式
-@media (max-width: 768px) {
-  .settings-content {
-    padding: 16px;
+.btn-reset {
+  background: var(--el-bg-color);
+  color: var(--el-text-color-regular);
+  border: 1px solid var(--el-border-color);
+
+  &:hover {
+    border-color: var(--theme-purple-primary);
+    color: var(--theme-purple-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
   }
 
-  .settings-section {
-    margin-bottom: 24px;
-  }
-
-  .privacy-item,
-  .notification-item {
-    padding: 12px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-
-    &:hover {
-      transform: translateX(2px);
-    }
-  }
-
-  .privacy-info,
-  .notification-info {
-    margin-right: 0;
-  }
-
-  .settings-actions {
-    flex-direction: column;
-
-    button {
-      width: 100%;
-    }
+  &:active {
+    transform: translateY(0);
   }
 }
 </style>
