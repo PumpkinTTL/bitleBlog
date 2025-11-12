@@ -41,6 +41,36 @@
         </div>
       </div>
 
+      <!-- 会员信息 & 等级进度 -->
+      <div class="compact-info-row">
+        <!-- 会员信息 -->
+        <div v-if="userInfo.isVip" class="vip-info compact">
+          <div class="vip-header">
+            <i class="fas fa-crown"></i>
+            <span class="vip-title">Premium 会员</span>
+          </div>
+          <div class="vip-privileges">
+            <i class="fas fa-check-circle"></i>
+            <span>享有 8 项专属特权</span>
+          </div>
+        </div>
+
+        <!-- 等级进度 -->
+        <div class="level-progress compact">
+          <div class="progress-header">
+            <span class="current-level">Lv.{{ userInfo.level }}</span>
+            <span class="progress-text">{{ levelProgress }}% → Lv.{{ userInfo.level + 1 }}</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" :style="{ width: levelProgress + '%' }"></div>
+          </div>
+          <div class="progress-tip">
+            <i class="fas fa-star"></i>
+            <span>还需 {{ expNeeded }} 经验升级</span>
+          </div>
+        </div>
+      </div>
+
       <!-- 荣誉徽章 -->
       <div class="badges-section">
         <div class="badge-item">
@@ -82,45 +112,6 @@
         </a>
       </div>
 
-      <!-- 按钮组 -->
-      <div class="actions">
-        <button class="btn-primary" @click="$emit('edit')">
-          <i class="fas fa-edit"></i>
-          编辑资料
-        </button>
-        <button class="btn-secondary" @click="$emit('share')">
-          <i class="fas fa-share-alt"></i>
-          分享
-        </button>
-      </div>
-
-      <!-- 快捷操作 -->
-      <div class="quick-actions">
-        <div class="action-item" @click="$emit('action', 'write')">
-          <i class="fas fa-pen-nib"></i>
-          <span>写文章</span>
-        </div>
-        <div class="action-item" @click="$emit('action', 'upload')">
-          <i class="fas fa-cloud-upload-alt"></i>
-          <span>上传</span>
-        </div>
-        <div class="action-item" @click="$emit('action', 'message')">
-          <i class="fas fa-bell"></i>
-          <span>消息</span>
-        </div>
-        <div class="action-item" @click="$emit('action', 'analytics')">
-          <i class="fas fa-chart-bar"></i>
-          <span>数据</span>
-        </div>
-        <div class="action-item" @click="$emit('action', 'favorites')">
-          <i class="fas fa-bookmark"></i>
-          <span>收藏</span>
-        </div>
-        <div class="action-item" @click="$emit('action', 'settings')">
-          <i class="fas fa-cog"></i>
-          <span>设置</span>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -135,6 +126,9 @@ interface UserInfo {
   isOnline: boolean
   tags: string[]
 }
+
+const levelProgress = 78 // 等级进度百分比
+const expNeeded = 220 // 还需经验
 
 interface Props {
   userInfo?: UserInfo
@@ -267,7 +261,7 @@ const props = withDefaults(defineProps<Props>(), {
 // 用户信息
 .user-info {
   text-align: center;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 
   .username-row {
     display: flex;
@@ -308,8 +302,8 @@ const props = withDefaults(defineProps<Props>(), {
 .badges-section {
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin-bottom: 14px;
+  gap: 10px;
+  margin-bottom: 12px;
 
   .badge-item {
     display: flex;
@@ -372,14 +366,13 @@ const props = withDefaults(defineProps<Props>(), {
   justify-content: center;
   align-items: center;
   gap: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   font-size: 11px;
 
   .info-item {
     display: flex;
     align-items: center;
     gap: 5px;
-    transition: all 0.3s ease;
 
     i {
       font-size: 12px;
@@ -397,10 +390,6 @@ const props = withDefaults(defineProps<Props>(), {
     &:last-child i {
       color: #8b5cf6;
     }
-
-    &:hover {
-      transform: translateY(-1px);
-    }
   }
 
   .info-divider {
@@ -410,12 +399,138 @@ const props = withDefaults(defineProps<Props>(), {
   }
 }
 
+// 紧凑信息行
+.compact-info-row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 14px;
+
+  // 会员信息 - 紧凑样式
+  .vip-info.compact {
+    flex: 1;
+    margin-top: 0;
+    padding: 10px;
+    background: var(--el-fill-color-extra-light);
+    border: 1px solid var(--el-border-color-extra-light);
+    border-radius: 8px;
+    min-width: 0;
+
+    .vip-header {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 6px;
+
+      i {
+        font-size: 11px;
+        color: #ca8a04;
+        flex-shrink: 0;
+      }
+
+      .vip-title {
+        font-size: 11px;
+        font-weight: 600;
+        color: #a16207;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .vip-expire {
+        font-size: 9px;
+        color: #a16207;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+    }
+
+    .vip-privileges {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 9px;
+      color: #a16207;
+
+      i {
+        font-size: 9px;
+        color: #ca8a04;
+        flex-shrink: 0;
+      }
+
+      span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  // 等级进度 - 紧凑样式
+  .level-progress.compact {
+    flex: 1;
+    margin-top: 0;
+    padding: 10px;
+    background: var(--el-fill-color-extra-light);
+    border: 1px solid var(--el-border-color-extra-light);
+    border-radius: 8px;
+    min-width: 0;
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+
+      .current-level {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--theme-purple-primary);
+        white-space: nowrap;
+      }
+
+      .progress-text {
+        font-size: 9px;
+        color: var(--el-text-color-regular);
+        font-weight: 500;
+        white-space: nowrap;
+      }
+    }
+
+    .progress-bar {
+      height: 5px;
+      margin-bottom: 6px;
+    }
+
+    .progress-tip {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 9px;
+      color: var(--el-text-color-secondary);
+
+      i {
+        font-size: 9px;
+        color: #fbbf24;
+        flex-shrink: 0;
+      }
+
+      span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+
 // 社交媒体
 .social-links {
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin-bottom: 14px;
+  gap: 10px;
+  margin-bottom: 0;
 
   .social-icon {
     width: 32px;
@@ -496,114 +611,128 @@ const props = withDefaults(defineProps<Props>(), {
   }
 }
 
+// 会员信息
+.vip-info {
+  margin-top: 14px;
+  padding: 12px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: 10px;
+  border: 1px solid #fbbf24;
 
-// 按钮组
-.actions {
-  display: flex;
-  gap: 8px;
-
-  button {
-    flex: 1;
-    height: 34px;
-    border: none;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  .vip-header {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 6px;
-    font-family: 'OPPO Sans', sans-serif;
+    margin-bottom: 8px;
+
+    i {
+      font-size: 14px;
+      color: #d97706;
+    }
+
+    .vip-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #92400e;
+      flex: 1;
+    }
+
+    .vip-expire {
+      font-size: 10px;
+      color: #78350f;
+    }
+  }
+
+  .vip-privileges {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #78350f;
 
     i {
       font-size: 12px;
-    }
-  }
-
-  .btn-primary {
-    background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
-    color: white;
-    box-shadow: 0 2px 8px var(--theme-orange-shadow);
-
-    &:hover {
-      box-shadow: 0 4px 16px var(--theme-orange-glow);
-      transform: translateY(-2px);
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
-  }
-
-  .btn-secondary {
-    background: var(--el-fill-color-light);
-    color: var(--el-text-color-regular);
-    border: 1px solid var(--el-border-color-light);
-
-    &:hover {
-      background: var(--theme-orange-bg-1);
-      border-color: var(--theme-orange-border-2);
-      color: var(--theme-purple-primary);
-      transform: translateY(-2px);
-    }
-
-    &:active {
-      transform: translateY(0);
+      color: #d97706;
     }
   }
 }
 
-// 快捷操作
-.quick-actions {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+// 等级进度
+.level-progress {
   margin-top: 14px;
+  padding: 12px;
+  background: var(--el-fill-color-extra-light);
+  border-radius: 10px;
+  border: 1px solid var(--el-border-color-extra-light);
 
-  .action-item {
+  .progress-header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    gap: 4px;
-    padding: 10px 6px;
-    background: var(--el-fill-color-extra-light);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid var(--el-border-color-extra-light);
+    margin-bottom: 8px;
 
-    i {
-      font-size: 14px;
+    .current-level {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--theme-purple-primary);
     }
 
-    span {
-      font-size: 10px;
+    .progress-text {
+      font-size: 11px;
       color: var(--el-text-color-regular);
       font-weight: 500;
     }
+  }
 
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  .progress-bar {
+    height: 8px;
+    background: var(--el-fill-color);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    position: relative;
 
-      i {
-        transform: scale(1.1);
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--theme-purple-primary), var(--theme-purple-secondary));
+      border-radius: 10px;
+      transition: width 0.6s ease;
+      position: relative;
+      overflow: hidden;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        animation: shimmer 2s infinite;
       }
     }
+  }
 
-    &:active {
-      transform: translateY(0);
+  .progress-tip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--el-text-color-secondary);
+
+    i {
+      font-size: 11px;
+      color: #fbbf24;
     }
+  }
+}
 
-    // 各个按钮的颜色
-    &:nth-child(1) i { color: #d97706; }
-    &:nth-child(2) i { color: #2563eb; }
-    &:nth-child(3) i { color: #dc2626; }
-    &:nth-child(4) i { color: #10b981; }
-    &:nth-child(5) i { color: #ec4899; }
-    &:nth-child(6) i { color: #6366f1; }
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
   }
 }
 

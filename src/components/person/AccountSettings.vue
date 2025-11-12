@@ -3,11 +3,16 @@
     <!-- 基本信息 -->
     <div 
       class="setting-card animate__animated animate__fadeInUp animate__faster"
-      style="animation-delay: 0s"
+      style="animation-delay: 0.08s"
     >
       <div class="card-main">
         <div class="card-info">
-          <h4 class="setting-title">基本信息</h4>
+          <div class="title-wrapper">
+            <div class="title-icon animate__animated animate__zoomIn animate__faster" style="animation-delay: 0.15s">
+              <i class="fas fa-user-circle"></i>
+            </div>
+            <h4 class="setting-title">基本信息</h4>
+          </div>
           <div class="input-group">
             <input 
               v-model="form.username" 
@@ -36,11 +41,16 @@
     <!-- 隐私设置 -->
     <div 
       class="setting-card animate__animated animate__fadeInUp animate__faster"
-      style="animation-delay: 0.05s"
+      style="animation-delay: 0.16s"
     >
       <div class="card-main">
         <div class="card-info">
-          <h4 class="setting-title">隐私设置</h4>
+          <div class="title-wrapper">
+            <div class="title-icon privacy animate__animated animate__zoomIn animate__faster" style="animation-delay: 0.23s">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h4 class="setting-title">隐私设置</h4>
+          </div>
           <div class="switch-group">
             <div class="switch-row" @click="privacy.publicProfile = !privacy.publicProfile">
               <span class="switch-text">公开个人资料</span>
@@ -62,11 +72,16 @@
     <!-- 通知设置 -->
     <div 
       class="setting-card animate__animated animate__fadeInUp animate__faster"
-      style="animation-delay: 0.1s"
+      style="animation-delay: 0.24s"
     >
       <div class="card-main">
         <div class="card-info">
-          <h4 class="setting-title">通知设置</h4>
+          <div class="title-wrapper">
+            <div class="title-icon notification animate__animated animate__zoomIn animate__faster" style="animation-delay: 0.31s">
+              <i class="fas fa-bell"></i>
+            </div>
+            <h4 class="setting-title">通知设置</h4>
+          </div>
           <div class="switch-group">
             <div class="switch-row" @click="notifications.comments = !notifications.comments">
               <span class="switch-text">评论通知</span>
@@ -90,7 +105,7 @@
     </div>
 
     <!-- 保存按钮 -->
-    <div class="action-bar animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.15s">
+    <div class="action-bar animate__animated animate__zoomIn animate__faster" style="animation-delay: 0.4s">
       <button class="btn-save" @click="handleSave" :disabled="saving">
         <i class="fas fa-save"></i>
         {{ saving ? '保存中...' : '保存设置' }}
@@ -206,15 +221,71 @@ const handleReset = () => {
   flex: 1;
 }
 
+.title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  position: relative;
+
+  @media (max-width: 768px) {
+    margin-bottom: 14px;
+    gap: 10px;
+  }
+}
+
+.title-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(167, 139, 250, 0.1));
+  border-radius: 10px;
+  color: var(--theme-purple-primary);
+  font-size: 16px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+
+  &.privacy {
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(56, 189, 248, 0.1));
+    color: #0ea5e9;
+  }
+
+  &.notification {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+    color: #f59e0b;
+  }
+
+  @media (max-width: 768px) {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+}
+
 .setting-title {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--el-text-color-primary);
-  margin: 0 0 12px 0;
+  margin: 0;
+  letter-spacing: 0.3px;
+  flex: 1;
 
   @media (max-width: 768px) {
     font-size: 14px;
-    margin-bottom: 10px;
+  }
+}
+
+.title-wrapper::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--el-border-color-light), transparent);
+  margin-left: 16px;
+
+  @media (max-width: 768px) {
+    margin-left: 12px;
   }
 }
 
@@ -230,23 +301,35 @@ const handleReset = () => {
   width: 100%;
   padding: 10px 12px;
   background: var(--el-fill-color-light);
-  border: 1px solid var(--el-border-color-light);
+  border: 1px solid transparent;
   border-radius: 8px;
   font-size: 13px;
   color: var(--el-text-color-primary);
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: inherit;
   outline: none;
   box-sizing: border-box;
 
   &::placeholder {
     color: var(--el-text-color-placeholder);
+    transition: color 0.3s ease;
+  }
+
+  &:hover {
+    background: var(--el-fill-color);
+    border-color: var(--el-border-color);
+    transform: translateY(-1px);
   }
 
   &:focus {
     border-color: var(--theme-purple-primary);
     background: var(--el-bg-color);
-    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
+    box-shadow: 0 0 0 3px var(--theme-orange-shadow);
+    transform: translateY(-1px);
+
+    &::placeholder {
+      color: transparent;
+    }
   }
 
   @media (max-width: 768px) {
@@ -274,14 +357,18 @@ const handleReset = () => {
   align-items: center;
   padding: 10px 12px;
   background: var(--el-fill-color-light);
-  border: 1px solid transparent;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
+  border: 1px solid transparent;
 
   &:hover {
-    background: var(--el-bg-color);
-    border-color: var(--theme-purple-primary);
+    background: var(--el-fill-color);
+    border-color: var(--el-border-color);
+    
+    .switch-text {
+      color: var(--theme-purple-primary);
+    }
   }
 
   @media (max-width: 768px) {
@@ -293,6 +380,7 @@ const handleReset = () => {
   font-size: 13px;
   color: var(--el-text-color-regular);
   font-weight: 500;
+  transition: color 0.2s ease;
 
   @media (max-width: 768px) {
     font-size: 12px;
@@ -303,7 +391,7 @@ const handleReset = () => {
   position: relative;
   width: 40px;
   height: 22px;
-  background: var(--el-border-color);
+  background: #e5e7eb;
   border-radius: 11px;
   transition: all 0.3s ease;
   flex-shrink: 0;
