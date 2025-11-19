@@ -33,376 +33,381 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="form-and-sidebar-wrapper">
-            <div class="donation-form">
-              <!-- SmartMessage 测试按钮 -->
-              <div style="margin-bottom: 20px; padding: 10px; background: #f5f7fa; border-radius: 8px;">
-                <div style="margin-bottom: 8px; font-weight: 500; color: #606266;">SmartMessage 测试</div>
-                <el-button type="success" @click="testSuccess">Success</el-button>
-                <el-button type="danger" @click="testError">Error</el-button>
-                <el-button type="warning" @click="testWarning">Warning</el-button>
-                <el-button type="info" @click="testInfo">Info</el-button>
-              </div>
-              
-              <el-form ref="formRef" :model="formData" :rules="formRules" label-position="top">
-                <!-- 步骤条 -->
-                <StepForm class="animate__animated animate__fadeIn animate__fast" style="animation-delay: 0.2s;"
-                  :active="currentStep" :steps="[
-                    { title: '选择方式', description: stepDescriptions[0] },
-                    { title: '必填信息', description: stepDescriptions[1] },
-                    { title: '可选信息', description: stepDescriptions[2] },
-                    { title: '完成', description: stepDescriptions[3] || '提交成功' }
-                  ]" />
+              <div class="donation-form">
+                <!-- SmartMessage 测试按钮 -->
+                <div style="margin-bottom: 20px; padding: 10px; background: #f5f7fa; border-radius: 8px;">
+                  <div style="margin-bottom: 8px; font-weight: 500; color: #606266;">SmartMessage 测试</div>
+                  <el-button type="success" @click="testSuccess">Success</el-button>
+                  <el-button type="danger" @click="testError">Error</el-button>
+                  <el-button type="warning" @click="testWarning">Warning</el-button>
+                  <el-button type="info" @click="testInfo">Info</el-button>
+                </div>
 
-                <!-- 步骤1: 选择捐赠方式 -->
-                <div v-show="currentStep === 0" class="qrcode-section">
-                  <el-row :gutter="16" class="qrcode-grid">
-                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast"
-                      style="animation-delay: 0.2s;">
-                      <div class="qrcode-item" :class="{ active: selectedChannel === 'cardkey' }"
-                        @click="selectChannel('cardkey')">
-                        <div class="qrcode-container">
-                          <a-qrcode :value="qrCodeUrls.cardkey" :size="qrSize" :bordered="false" />
-                          <div class="qrcode-icon icon-cardkey">
-                            <i class="fas fa-gift"></i>
+                <el-form ref="formRef" :model="formData" :rules="formRules" label-position="top">
+                  <!-- 步骤条 -->
+                  <StepForm class="animate__animated animate__fadeIn animate__fast" style="animation-delay: 0.2s;"
+                    :active="currentStep" :steps="[
+                      { title: '选择方式', description: stepDescriptions[0] },
+                      { title: '必填信息', description: stepDescriptions[1] },
+                      { title: '可选信息', description: stepDescriptions[2] },
+                      { title: '完成', description: stepDescriptions[3] || '提交成功' }
+                    ]" />
+
+                  <!-- 步骤1: 选择捐赠方式 -->
+                  <div v-show="currentStep === 0" class="qrcode-section">
+                    <el-row :gutter="16" class="qrcode-grid">
+                      <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast"
+                        style="animation-delay: 0.2s;">
+                        <div class="qrcode-item" :class="{ active: selectedChannel === 'cardkey' }"
+                          @click="selectChannel('cardkey')">
+                          <div class="qrcode-container">
+                            <a-qrcode :value="qrCodeUrls.cardkey" :size="qrSize" :bordered="false" />
+                            <div class="qrcode-icon icon-cardkey">
+                              <i class="fas fa-gift"></i>
+                            </div>
                           </div>
+                          <div class="qrcode-tip">
+                            <a href="https://www.qianxun1688.com/links/1C9EDE0B" target="_blank" class="card-link"
+                              @click.stop>
+                              购买卡密
+                            </a>
+                          </div>
+                          <span class="channel-badge recommend">推荐</span>
                         </div>
-                        <div class="qrcode-tip">
-                          <a href="https://www.qianxun1688.com/links/1C9EDE0B" target="_blank" class="card-link"
-                            @click.stop>
-                            购买卡密
-                          </a>
-                        </div>
-                        <span class="channel-badge recommend">推荐</span>
-                      </div>
-                    </el-col>
-                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast"
-                      style="animation-delay: 0.35s;">
-                      <div class="qrcode-item" :class="{ active: selectedChannel === 'crypto' }"
-                        @click="selectChannel('crypto')">
-                        <span class="channel-badge-left crypto-badge">
-                          <i class="fab fa-bitcoin"></i>
-                          <span>加密货币</span>
-                        </span>
-                        <div class="qrcode-container">
-                          <a-qrcode :value="qrCodeUrls.crypto" :size="qrSize" :bordered="false" />
-                          <div class="qrcode-icon icon-crypto">
+                      </el-col>
+                      <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast"
+                        style="animation-delay: 0.35s;">
+                        <div class="qrcode-item" :class="{ active: selectedChannel === 'crypto' }"
+                          @click="selectChannel('crypto')">
+                          <span class="channel-badge-left crypto-badge">
                             <i class="fab fa-bitcoin"></i>
+                            <span>加密货币</span>
+                          </span>
+                          <div class="qrcode-container">
+                            <a-qrcode :value="qrCodeUrls.crypto" :size="qrSize" :bordered="false" />
+                            <div class="qrcode-icon icon-crypto">
+                              <i class="fab fa-bitcoin"></i>
+                            </div>
                           </div>
+                          <div class="qrcode-tip">USDT TRC-20</div>
+                          <span class="channel-badge recommend">推荐</span>
                         </div>
-                        <div class="qrcode-tip">USDT TRC-20</div>
-                        <span class="channel-badge recommend">推荐</span>
-                      </div>
-                    </el-col>
-                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast"
-                      style="animation-delay: 0.5s;">
-                      <div class="qrcode-item" :class="{ active: selectedChannel === 'alipay' }"
-                        @click="selectChannel('alipay')">
-                        <div class="qrcode-container">
-                          <a-qrcode :value="qrCodeUrls.alipay" :size="qrSize" :bordered="false" />
-                          <div class="qrcode-icon icon-alipay">
-                            <i class="fab fa-alipay"></i>
+                      </el-col>
+                      <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast"
+                        style="animation-delay: 0.5s;">
+                        <div class="qrcode-item" :class="{ active: selectedChannel === 'alipay' }"
+                          @click="selectChannel('alipay')">
+                          <div class="qrcode-container">
+                            <a-qrcode :value="qrCodeUrls.alipay" :size="qrSize" :bordered="false" />
+                            <div class="qrcode-icon icon-alipay">
+                              <i class="fab fa-alipay"></i>
+                            </div>
                           </div>
+                          <div class="qrcode-tip">支付宝支付</div>
                         </div>
-                        <div class="qrcode-tip">支付宝支付</div>
-                      </div>
-                    </el-col>
-                    <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast"
-                      style="animation-delay: 0.65s;">
-                      <div class="qrcode-item" :class="{ active: selectedChannel === 'wechat' }"
-                        @click="selectChannel('wechat')">
-                        <div class="qrcode-container">
-                          <a-qrcode :value="qrCodeUrls.wechat" :size="qrSize" :bordered="false" />
-                          <div class="qrcode-icon icon-wechat">
-                            <i class="fab fa-weixin"></i>
+                      </el-col>
+                      <el-col :xs="12" :sm="6" :md="6" class="animate__animated animate__fadeInUp animate__fast"
+                        style="animation-delay: 0.65s;">
+                        <div class="qrcode-item" :class="{ active: selectedChannel === 'wechat' }"
+                          @click="selectChannel('wechat')">
+                          <div class="qrcode-container">
+                            <a-qrcode :value="qrCodeUrls.wechat" :size="qrSize" :bordered="false" />
+                            <div class="qrcode-icon icon-wechat">
+                              <i class="fab fa-weixin"></i>
+                            </div>
                           </div>
+                          <div class="qrcode-tip">微信扫码支付</div>
                         </div>
-                        <div class="qrcode-tip">微信扫码支付</div>
-                      </div>
-                    </el-col>
-                  </el-row>
-                  <div class="step-actions step-1">
-                    <el-button type="primary" :disabled="!selectedChannel" @click="nextStep">
-                      <span>下一步</span>
-                      <i class="fas fa-chevron-right"></i>
-                    </el-button>
-                  </div>
-                </div>
-
-                <!-- 步骤2: 必填信息 -->
-                <div v-show="currentStep === 1" class="form-step-section">
-                  <div v-if="selectedChannel === 'cardkey'">
-                    <el-form-item label="卡密码" prop="card_key_code">
-                      <el-input v-model="formData.card_key_code" placeholder="请输入卡密码，格式：ABCD-1234-EFGH-5678" clearable>
-                        <template #prefix><i class="fas fa-key"></i></template>
-                      </el-input>
-                    </el-form-item>
+                      </el-col>
+                    </el-row>
+                    <div class="step-actions step-1">
+                      <el-button type="primary" :disabled="!selectedChannel" @click="nextStep">
+                        <span>下一步</span>
+                        <i class="fas fa-chevron-right"></i>
+                      </el-button>
+                    </div>
                   </div>
 
-                  <div v-else-if="selectedChannel === 'crypto'">
-                    <div class="crypto-info-tips">
-                      <div class="crypto-badge">
+                  <!-- 步骤2: 必填信息 -->
+                  <div v-show="currentStep === 1" class="form-step-section">
+                    <div v-if="selectedChannel === 'cardkey'">
+                      <el-form-item label="卡密码" prop="card_key_code">
+                        <el-input v-model="formData.card_key_code" placeholder="请输入卡密码，格式：ABCD-1234-EFGH-5678"
+                          clearable>
+                          <template #prefix><i class="fas fa-key"></i></template>
+                        </el-input>
+                      </el-form-item>
+                    </div>
+
+                    <div v-else-if="selectedChannel === 'crypto'">
+                      <div class="crypto-info-tips">
+                        <div class="crypto-badge">
+                          <i class="fas fa-coins"></i>
+                          <div class="badge-text">
+                            <span class="badge-label">币种</span>
+                            <span class="badge-value">USDT</span>
+                          </div>
+                        </div>
+                        <div class="crypto-badge network">
+                          <i class="fas fa-network-wired"></i>
+                          <div class="badge-text">
+                            <span class="badge-label">区块网络</span>
+                            <span class="badge-value">TRC20</span>
+                          </div>
+                        </div>
+                      </div>
+                      <el-form-item label="捐赠金额" prop="amount">
+                        <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
+                          placeholder="请输入USDT金额" style="width: 100%" controls-position="right" />
+                      </el-form-item>
+                      <el-form-item label="交易哈希" prop="transaction_hash">
+                        <el-input v-model="formData.transaction_hash" placeholder="请输入交易哈希值" clearable>
+                          <template #prefix><i class="fas fa-hashtag"></i></template>
+                        </el-input>
+                      </el-form-item>
+                    </div>
+
+                    <div v-else-if="selectedChannel === 'wechat' || selectedChannel === 'alipay'">
+                      <el-form-item label="捐赠金额" prop="amount">
+                        <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
+                          placeholder="请输入捐赠金额" style="width: 100%" controls-position="right" />
+                      </el-form-item>
+                      <el-form-item label="订单号" prop="order_no">
+                        <el-input v-model="formData.order_no" placeholder="请输入支付订单号" clearable>
+                          <template #prefix><i class="fas fa-receipt"></i></template>
+                        </el-input>
+                      </el-form-item>
+                    </div>
+
+                    <div class="step-actions">
+                      <el-button @click="prevStep">
+                        <i class="fas fa-chevron-left"></i>
+                        <span>上一步</span>
+                      </el-button>
+                      <el-button type="primary" @click="nextStep">
+                        <span>下一步</span>
+                        <i class="fas fa-chevron-right"></i>
+                      </el-button>
+                    </div>
+                  </div>
+
+                  <!-- 步骤3: 可选信息 -->
+                  <div v-show="currentStep === 2" class="form-step-section">
+                    <div class="optional-section">
+                      <el-collapse-transition>
+                        <div v-show="showOptional" class="optional-content">
+                          <el-form-item prop="donor_name">
+                            <template #label>
+                              <span class="label-with-badge">
+                                您的昵称
+                                <span class="optional-badge">可选</span>
+                              </span>
+                            </template>
+                            <el-input v-model="formData.donor_name" placeholder="如：小明、张三" clearable>
+                              <template #prefix><i class="fas fa-user"></i></template>
+                            </el-input>
+                            <div class="field-tip">
+                              <i class="fas fa-lightbulb"></i>
+                              <span>填写后将在捐赠榜上显示您的昵称</span>
+                            </div>
+                          </el-form-item>
+
+                          <el-form-item prop="email">
+                            <template #label>
+                              <span class="label-with-badge">
+                                邮箱地址
+                                <span class="optional-badge">可选</span>
+                              </span>
+                            </template>
+                            <el-input v-model="formData.email" placeholder="用于接收捐赠记录" clearable>
+                              <template #prefix><i class="fas fa-envelope"></i></template>
+                            </el-input>
+                            <div class="field-tip">
+                              <i class="fas fa-lightbulb"></i>
+                              <span>我们将发送捐赠凭证到您的邮箱</span>
+                            </div>
+                          </el-form-item>
+
+                          <el-form-item prop="remark">
+                            <template #label>
+                              <span class="label-with-badge">
+                                留言
+                                <span class="optional-badge">可选</span>
+                              </span>
+                            </template>
+                            <el-input v-model="formData.remark" type="textarea" placeholder="分享您的想法或祝福" :rows="3"
+                              :maxlength="200" show-word-limit />
+                            <div class="field-tip">
+                              <i class="fas fa-lightbulb"></i>
+                              <span>您的留言可能会在捐赠列表中展示</span>
+                            </div>
+                          </el-form-item>
+                        </div>
+                      </el-collapse-transition>
+                    </div>
+
+                    <div class="privacy-options">
+                      <el-checkbox v-model="formData.is_anonymous" :true-label="1" :false-label="0">
+                        <span class="option-label"><i class="fas fa-user-secret"></i>匿名捐赠</span>
+                      </el-checkbox>
+                      <el-checkbox v-model="formData.is_public" :true-label="1" :false-label="0">
+                        <span class="option-label"><i class="fas fa-globe"></i>公开展示</span>
+                      </el-checkbox>
+                    </div>
+
+                    <div class="step-actions">
+                      <el-button @click="prevStep">
+                        <i class="fas fa-chevron-left"></i>
+                        <span>上一步</span>
+                      </el-button>
+                      <el-button type="primary" :loading="submitting" @click="handleSubmit">
+                        <span>{{ submitting ? '提交中...' : '提交捐赠' }}</span>
+                        <i v-if="!submitting" class="fas fa-paper-plane"></i>
+                      </el-button>
+                    </div>
+                  </div>
+                </el-form>
+              </div>
+
+              <div class="donation-info-section">
+                <!-- 统计卡片 -->
+                <div class="sidebar-widget stats-widget">
+                  <div class="widget-header">
+                    <i class="fas fa-chart-line"></i>
+                    <span>捐赠数据</span>
+                  </div>
+                  <div class="stats-grid">
+                    <div class="stat-item animate__animated animate__zoomIn animate__fast"
+                      style="animation-delay: 0.2s;">
+                      <div class="stat-icon"
+                        style="background: linear-gradient(135deg, rgba(22, 119, 255, 0.1), rgba(22, 119, 255, 0.2)); color: #1677ff;">
+                        <i class="fas fa-users"></i>
+                      </div>
+                      <div class="stat-info">
+                        <div class="stat-value">1,234</div>
+                        <div class="stat-label">支持者</div>
+                      </div>
+                    </div>
+                    <div class="stat-item animate__animated animate__zoomIn animate__fast"
+                      style="animation-delay: 0.35s;">
+                      <div class="stat-icon"
+                        style="background: linear-gradient(135deg, rgba(82, 196, 26, 0.1), rgba(82, 196, 26, 0.2)); color: #52c41a;">
                         <i class="fas fa-coins"></i>
-                        <div class="badge-text">
-                          <span class="badge-label">币种</span>
-                          <span class="badge-value">USDT</span>
+                      </div>
+                      <div class="stat-info">
+                        <div class="stat-value">￥56,789</div>
+                        <div class="stat-label">累计金额</div>
+                      </div>
+                    </div>
+                    <div class="stat-item animate__animated animate__zoomIn animate__fast"
+                      style="animation-delay: 0.5s;">
+                      <div class="stat-icon"
+                        style="background: linear-gradient(135deg, rgba(250, 140, 22, 0.1), rgba(250, 140, 22, 0.2)); color: #fa8c16;">
+                        <i class="fas fa-calendar-check"></i>
+                      </div>
+                      <div class="stat-info">
+                        <div class="stat-value">328</div>
+                        <div class="stat-label">本月捐赠</div>
+                      </div>
+                    </div>
+                    <div class="stat-item animate__animated animate__zoomIn animate__fast"
+                      style="animation-delay: 0.65s;">
+                      <div class="stat-icon"
+                        style="background: linear-gradient(135deg, rgba(114, 46, 209, 0.1), rgba(114, 46, 209, 0.2)); color: #722ed1;">
+                        <i class="fas fa-trophy"></i>
+                      </div>
+                      <div class="stat-info">
+                        <div class="stat-value">¥1,888</div>
+                        <div class="stat-label">最高单笔</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 捐赠榜/最近捐赠 - Tab切换 -->
+                <div class="sidebar-widget activity-widget">
+                  <div class="activity-tabs">
+                    <div class="tab-item" :class="{ active: activeTab === 'ranking' }" @click="activeTab = 'ranking'">
+                      <i class="fas fa-crown"></i>
+                      <span>捐赠榜</span>
+                    </div>
+                    <div class="tab-item" :class="{ active: activeTab === 'recent' }" @click="activeTab = 'recent'">
+                      <i class="fas fa-history"></i>
+                      <span>最近捐赠</span>
+                    </div>
+                  </div>
+
+                  <div class="activity-content">
+                    <!-- 捐赠榜 -->
+                    <div v-show="activeTab === 'ranking'" class="ranking-list">
+                      <div v-for="(item, index) in topDonors" :key="item.id"
+                        class="ranking-item animate__animated animate__fadeInLeft animate__fast"
+                        :style="`animation-delay: ${index * 0.15}s;`">
+                        <div class="ranking-badge" :class="`rank-${index + 1}`">
+                          <span v-if="index < 3">
+                            <i v-if="index === 0" class="fas fa-crown"></i>
+                            <i v-else-if="index === 1" class="fas fa-medal"></i>
+                            <i v-else class="fas fa-award"></i>
+                          </span>
+                          <span v-else>{{ index + 1 }}</span>
                         </div>
-                      </div>
-                      <div class="crypto-badge network">
-                        <i class="fas fa-network-wired"></i>
-                        <div class="badge-text">
-                          <span class="badge-label">区块网络</span>
-                          <span class="badge-value">TRC20</span>
+                        <div class="ranking-avatar" :class="{ anonymous: item.is_anonymous }">
+                          <i v-if="item.is_anonymous" class="fas fa-user-secret"></i>
+                          <span v-else>{{ item.name.charAt(0) }}</span>
                         </div>
+                        <div class="ranking-info">
+                          <div class="ranking-name">
+                            {{ item.is_anonymous ? '匿名用户' : item.name }}
+                            <i v-if="item.email" class="fas fa-envelope-circle-check" title="已留邮箱"></i>
+                          </div>
+                          <div class="ranking-channel">
+                            <i v-if="item.channel === 'cardkey'" class="fas fa-key"></i>
+                            <i v-else-if="item.channel === 'crypto'" class="fab fa-bitcoin"></i>
+                            <i v-else-if="item.channel === 'alipay'" class="fab fa-alipay"></i>
+                            <i v-else-if="item.channel === 'wechat'" class="fab fa-weixin"></i>
+                            <span>{{ getChannelName(item.channel) }}</span>
+                          </div>
+                        </div>
+                        <div class="ranking-amount">{{ item.channel === 'crypto' ? '$' : '¥' }}{{ item.amount }}</div>
                       </div>
                     </div>
-                    <el-form-item label="捐赠金额" prop="amount">
-                      <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
-                        placeholder="请输入USDT金额" style="width: 100%" controls-position="right" />
-                    </el-form-item>
-                    <el-form-item label="交易哈希" prop="transaction_hash">
-                      <el-input v-model="formData.transaction_hash" placeholder="请输入交易哈希值" clearable>
-                        <template #prefix><i class="fas fa-hashtag"></i></template>
-                      </el-input>
-                    </el-form-item>
-                  </div>
 
-                  <div v-else-if="selectedChannel === 'wechat' || selectedChannel === 'alipay'">
-                    <el-form-item label="捐赠金额" prop="amount">
-                      <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
-                        placeholder="请输入捐赠金额" style="width: 100%" controls-position="right" />
-                    </el-form-item>
-                    <el-form-item label="订单号" prop="order_no">
-                      <el-input v-model="formData.order_no" placeholder="请输入支付订单号" clearable>
-                        <template #prefix><i class="fas fa-receipt"></i></template>
-                      </el-input>
-                    </el-form-item>
-                  </div>
-
-                  <div class="step-actions">
-                    <el-button @click="prevStep">
-                      <i class="fas fa-chevron-left"></i>
-                      <span>上一步</span>
-                    </el-button>
-                    <el-button type="primary" @click="nextStep">
-                      <span>下一步</span>
-                      <i class="fas fa-chevron-right"></i>
-                    </el-button>
-                  </div>
-                </div>
-
-                <!-- 步骤3: 可选信息 -->
-                <div v-show="currentStep === 2" class="form-step-section">
-                  <div class="optional-section">
-                    <el-collapse-transition>
-                      <div v-show="showOptional" class="optional-content">
-                        <el-form-item prop="donor_name">
-                          <template #label>
-                            <span class="label-with-badge">
-                              您的昵称
-                              <span class="optional-badge">可选</span>
-                            </span>
-                          </template>
-                          <el-input v-model="formData.donor_name" placeholder="如：小明、张三" clearable>
-                            <template #prefix><i class="fas fa-user"></i></template>
-                          </el-input>
-                          <div class="field-tip">
-                            <i class="fas fa-lightbulb"></i>
-                            <span>填写后将在捐赠榜上显示您的昵称</span>
+                    <!-- 最近捐赠 -->
+                    <div v-show="activeTab === 'recent'" class="recent-list">
+                      <div v-for="item in recentDonations" :key="item.id"
+                        class="recent-item animate__animated animate__fadeInLeft animate__fast"
+                        :style="`animation-delay: ${recentDonations.indexOf(item) * 0.15}s;`">
+                        <div class="recent-avatar" :class="{ anonymous: item.is_anonymous }">
+                          <i v-if="item.is_anonymous" class="fas fa-user-secret"></i>
+                          <span v-else>{{ item.name.charAt(0) }}</span>
+                        </div>
+                        <div class="recent-info">
+                          <div class="recent-name">
+                            {{ item.is_anonymous ? '匿名用户' : item.name }}
+                            <i v-if="item.email" class="fas fa-envelope-circle-check" title="已留邮箱"></i>
                           </div>
-                        </el-form-item>
-
-                        <el-form-item prop="email">
-                          <template #label>
-                            <span class="label-with-badge">
-                              邮箱地址
-                              <span class="optional-badge">可选</span>
+                          <div class="recent-meta">
+                            <span class="recent-channel" :class="`channel-${item.channel}`">
+                              <i v-if="item.channel === 'cardkey'" class="fas fa-key"></i>
+                              <i v-else-if="item.channel === 'crypto'" class="fab fa-bitcoin"></i>
+                              <i v-else-if="item.channel === 'alipay'" class="fab fa-alipay"></i>
+                              <i v-else-if="item.channel === 'wechat'" class="fab fa-weixin"></i>
                             </span>
-                          </template>
-                          <el-input v-model="formData.email" placeholder="用于接收捐赠记录" clearable>
-                            <template #prefix><i class="fas fa-envelope"></i></template>
-                          </el-input>
-                          <div class="field-tip">
-                            <i class="fas fa-lightbulb"></i>
-                            <span>我们将发送捐赠凭证到您的邮箱</span>
-                          </div>
-                        </el-form-item>
-
-                        <el-form-item prop="remark">
-                          <template #label>
-                            <span class="label-with-badge">
-                              留言
-                              <span class="optional-badge">可选</span>
+                            <span class="recent-time">
+                              <i class="fas fa-clock"></i>
+                              {{ item.time }}
                             </span>
-                          </template>
-                          <el-input v-model="formData.remark" type="textarea" placeholder="分享您的想法或祝福" :rows="3"
-                            :maxlength="200" show-word-limit />
-                          <div class="field-tip">
-                            <i class="fas fa-lightbulb"></i>
-                            <span>您的留言可能会在捐赠列表中展示</span>
                           </div>
-                        </el-form-item>
+                        </div>
+                        <div class="recent-amount">{{ item.channel === 'crypto' ? '$' : '¥' }}{{ item.amount }}</div>
                       </div>
-                    </el-collapse-transition>
-                  </div>
-
-                  <div class="privacy-options">
-                    <el-checkbox v-model="formData.is_anonymous" :true-label="1" :false-label="0">
-                      <span class="option-label"><i class="fas fa-user-secret"></i>匿名捐赠</span>
-                    </el-checkbox>
-                    <el-checkbox v-model="formData.is_public" :true-label="1" :false-label="0">
-                      <span class="option-label"><i class="fas fa-globe"></i>公开展示</span>
-                    </el-checkbox>
-                  </div>
-
-                  <div class="step-actions">
-                    <el-button @click="prevStep">
-                      <i class="fas fa-chevron-left"></i>
-                      <span>上一步</span>
-                    </el-button>
-                    <el-button type="primary" :loading="submitting" @click="handleSubmit">
-                      <span>{{ submitting ? '提交中...' : '提交捐赠' }}</span>
-                      <i v-if="!submitting" class="fas fa-paper-plane"></i>
-                    </el-button>
-                  </div>
-                </div>
-              </el-form>
-            </div>
-            
-            <div class="donation-info-section">
-          <!-- 统计卡片 -->
-          <div class="sidebar-widget stats-widget">
-            <div class="widget-header">
-              <i class="fas fa-chart-line"></i>
-              <span>捐赠数据</span>
-            </div>
-            <div class="stats-grid">
-              <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.2s;">
-                <div class="stat-icon"
-                  style="background: linear-gradient(135deg, rgba(22, 119, 255, 0.1), rgba(22, 119, 255, 0.2)); color: #1677ff;">
-                  <i class="fas fa-users"></i>
-                </div>
-                <div class="stat-info">
-                  <div class="stat-value">1,234</div>
-                  <div class="stat-label">支持者</div>
-                </div>
-              </div>
-              <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.35s;">
-                <div class="stat-icon"
-                  style="background: linear-gradient(135deg, rgba(82, 196, 26, 0.1), rgba(82, 196, 26, 0.2)); color: #52c41a;">
-                  <i class="fas fa-coins"></i>
-                </div>
-                <div class="stat-info">
-                  <div class="stat-value">￥56,789</div>
-                  <div class="stat-label">累计金额</div>
-                </div>
-              </div>
-              <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.5s;">
-                <div class="stat-icon"
-                  style="background: linear-gradient(135deg, rgba(250, 140, 22, 0.1), rgba(250, 140, 22, 0.2)); color: #fa8c16;">
-                  <i class="fas fa-calendar-check"></i>
-                </div>
-                <div class="stat-info">
-                  <div class="stat-value">328</div>
-                  <div class="stat-label">本月捐赠</div>
-                </div>
-              </div>
-              <div class="stat-item animate__animated animate__zoomIn animate__fast" style="animation-delay: 0.65s;">
-                <div class="stat-icon"
-                  style="background: linear-gradient(135deg, rgba(114, 46, 209, 0.1), rgba(114, 46, 209, 0.2)); color: #722ed1;">
-                  <i class="fas fa-trophy"></i>
-                </div>
-                <div class="stat-info">
-                  <div class="stat-value">¥1,888</div>
-                  <div class="stat-label">最高单笔</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 捐赠榜/最近捐赠 - Tab切换 -->
-          <div class="sidebar-widget activity-widget">
-            <div class="activity-tabs">
-              <div class="tab-item" :class="{ active: activeTab === 'ranking' }" @click="activeTab = 'ranking'">
-                <i class="fas fa-crown"></i>
-                <span>捐赠榜</span>
-              </div>
-              <div class="tab-item" :class="{ active: activeTab === 'recent' }" @click="activeTab = 'recent'">
-                <i class="fas fa-history"></i>
-                <span>最近捐赠</span>
-              </div>
-            </div>
-
-            <div class="activity-content">
-              <!-- 捐赠榜 -->
-              <div v-show="activeTab === 'ranking'" class="ranking-list">
-                <div v-for="(item, index) in topDonors" :key="item.id"
-                  class="ranking-item animate__animated animate__fadeInLeft animate__fast"
-                  :style="`animation-delay: ${index * 0.15}s;`">
-                  <div class="ranking-badge" :class="`rank-${index + 1}`">
-                    <span v-if="index < 3">
-                      <i v-if="index === 0" class="fas fa-crown"></i>
-                      <i v-else-if="index === 1" class="fas fa-medal"></i>
-                      <i v-else class="fas fa-award"></i>
-                    </span>
-                    <span v-else>{{ index + 1 }}</span>
-                  </div>
-                  <div class="ranking-avatar" :class="{ anonymous: item.is_anonymous }">
-                    <i v-if="item.is_anonymous" class="fas fa-user-secret"></i>
-                    <span v-else>{{ item.name.charAt(0) }}</span>
-                  </div>
-                  <div class="ranking-info">
-                    <div class="ranking-name">
-                      {{ item.is_anonymous ? '匿名用户' : item.name }}
-                      <i v-if="item.email" class="fas fa-envelope-circle-check" title="已留邮箱"></i>
-                    </div>
-                    <div class="ranking-channel">
-                      <i v-if="item.channel === 'cardkey'" class="fas fa-key"></i>
-                      <i v-else-if="item.channel === 'crypto'" class="fab fa-bitcoin"></i>
-                      <i v-else-if="item.channel === 'alipay'" class="fab fa-alipay"></i>
-                      <i v-else-if="item.channel === 'wechat'" class="fab fa-weixin"></i>
-                      <span>{{ getChannelName(item.channel) }}</span>
                     </div>
                   </div>
-                  <div class="ranking-amount">{{ item.channel === 'crypto' ? '$' : '¥' }}{{ item.amount }}</div>
-                </div>
-              </div>
-
-              <!-- 最近捐赠 -->
-              <div v-show="activeTab === 'recent'" class="recent-list">
-                <div v-for="item in recentDonations" :key="item.id"
-                  class="recent-item animate__animated animate__fadeInLeft animate__fast"
-                  :style="`animation-delay: ${recentDonations.indexOf(item) * 0.15}s;`">
-                  <div class="recent-avatar" :class="{ anonymous: item.is_anonymous }">
-                    <i v-if="item.is_anonymous" class="fas fa-user-secret"></i>
-                    <span v-else>{{ item.name.charAt(0) }}</span>
-                  </div>
-                  <div class="recent-info">
-                    <div class="recent-name">
-                      {{ item.is_anonymous ? '匿名用户' : item.name }}
-                      <i v-if="item.email" class="fas fa-envelope-circle-check" title="已留邮箱"></i>
-                    </div>
-                    <div class="recent-meta">
-                      <span class="recent-channel" :class="`channel-${item.channel}`">
-                        <i v-if="item.channel === 'cardkey'" class="fas fa-key"></i>
-                        <i v-else-if="item.channel === 'crypto'" class="fab fa-bitcoin"></i>
-                        <i v-else-if="item.channel === 'alipay'" class="fab fa-alipay"></i>
-                        <i v-else-if="item.channel === 'wechat'" class="fab fa-weixin"></i>
-                      </span>
-                      <span class="recent-time">
-                        <i class="fas fa-clock"></i>
-                        {{ item.time }}
-                      </span>
-                    </div>
-                  </div>
-                  <div class="recent-amount">{{ item.channel === 'crypto' ? '$' : '¥' }}{{ item.amount }}</div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        </div>
           </a-card>
         </div>
       </div>
@@ -750,12 +755,12 @@ const testInfo = () => {
       display: block;
     }
   }
-  
+
   .form-and-sidebar-wrapper {
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
-    
+
     @media (min-width: 1024px) {
       grid-template-columns: 1fr 320px;
       gap: 24px;
@@ -1070,43 +1075,43 @@ const testInfo = () => {
       }
     }
 
-      .qrcode-item {
-        cursor: pointer;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 14px;
-        background: var(--el-fill-color-blank);
-        border: 2px solid var(--el-border-color-light);
-        border-radius: 12px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-        overflow: hidden;
+    .qrcode-item {
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px;
+      background: var(--el-fill-color-blank);
+      border: 2px solid var(--el-border-color-light);
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+      overflow: hidden;
+
+      @media (max-width: 768px) {
+        padding: 10px;
+        border-radius: 10px;
+      }
+
+      &:hover {
+        border-color: var(--el-color-primary-light-7);
+        box-shadow: 0 6px 24px var(--theme-orange-border-2), 0 2px 8px var(--theme-orange-bg-3);
+        transform: translateY(-4px);
 
         @media (max-width: 768px) {
-          padding: 10px;
-          border-radius: 10px;
-        }
-
-        &:hover {
-          border-color: var(--el-color-primary-light-7);
-          box-shadow: 0 6px 24px var(--theme-orange-border-2), 0 2px 8px var(--theme-orange-bg-3);
-          transform: translateY(-4px);
-
-          @media (max-width: 768px) {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px var(--theme-orange-border-2);
-          }
-        }
-
-        &.active {
-          border-color: var(--el-color-primary);
-          box-shadow: 0 6px 24px var(--theme-orange-shadow), 
-                      0 2px 8px var(--theme-orange-border-2),
-                      0 0 0 4px var(--theme-orange-bg-3);
           transform: translateY(-2px);
+          box-shadow: 0 4px 16px var(--theme-orange-border-2);
         }
+      }
+
+      &.active {
+        border-color: var(--el-color-primary);
+        box-shadow: 0 6px 24px var(--theme-orange-shadow),
+          0 2px 8px var(--theme-orange-border-2),
+          0 0 0 4px var(--theme-orange-bg-3);
+        transform: translateY(-2px);
+      }
 
       .qrcode-container {
         position: relative;
@@ -1120,7 +1125,7 @@ const testInfo = () => {
 
         :deep(.ant-qrcode) {
           display: block;
-          
+
           canvas {
             display: block !important;
           }
@@ -2112,13 +2117,13 @@ const testInfo = () => {
 
   // ==================== 深色模式适配 ====================
   html.dark & {
-    
+
     // 二维码容器深色模式 - 添加白色背景以便扫描
     .qrcode-container {
       background: #fff !important;
       padding: 8px !important;
       border-radius: 8px !important;
-      
+
       :deep(.ant-qrcode) {
         canvas {
           background: #fff !important;

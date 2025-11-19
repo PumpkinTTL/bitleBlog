@@ -7,7 +7,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AAlert: typeof import('ant-design-vue/es')['Alert']
     AAvatar: typeof import('ant-design-vue/es')['Avatar']
+    ABadge: typeof import('ant-design-vue/es')['Badge']
     AboutContact: typeof import('./src/components/about/AboutContact.vue')['default']
     AboutHistory: typeof import('./src/components/about/AboutHistory.vue')['default']
     AboutPage: typeof import('./src/components/about/AboutPage.vue')['default']
@@ -30,6 +32,7 @@ declare module 'vue' {
     AiAssistant: typeof import('./src/components/AiAssistant.vue')['default']
     AInput: typeof import('ant-design-vue/es')['Input']
     AInputNumber: typeof import('ant-design-vue/es')['InputNumber']
+    AInputPassword: typeof import('ant-design-vue/es')['InputPassword']
     AInputSearch: typeof import('ant-design-vue/es')['InputSearch']
     AMenu: typeof import('ant-design-vue/es')['Menu']
     AMenuItem: typeof import('ant-design-vue/es')['MenuItem']

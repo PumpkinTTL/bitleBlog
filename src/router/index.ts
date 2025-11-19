@@ -56,6 +56,13 @@ const routes: RouteRecordRaw[] = [
            
         },
     },
+    { path: '/resetPassword', name: 'resetPassword', component: () => import('@/views/ResetPassword.vue'),
+        meta: { 
+            header: false,
+            footer: false,
+            title: '重置密码'
+        },
+    },
     { path: '/premium', name: 'premium', component: () => import('@/views/Premium.vue'),
         meta: { 
             header:false,
