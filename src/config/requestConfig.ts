@@ -27,6 +27,11 @@ export const whiteList: string[] = [
   '/api/v1/auth/refresh',      // Token续签
   '/api/v1/user/register',     // 用户注册（如果有）
   
+  // ============ 密码重置相关 ============
+  '/api/v1/user/requestPasswordReset',   // 请求密码重置（发送邮件）
+  '/api/v1/user/verifyResetToken',       // 验证重置Token
+  '/api/v1/user/resetPassword',          // 重置密码
+  
   // ============ 公开接口 ============
   '/api/v1/article/getArticleList',      // 获取文章列表（公开）
   '/api/v1/article/selectArticleById',   // 获取文章详情（公开）

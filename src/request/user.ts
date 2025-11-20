@@ -37,3 +37,30 @@ export const logoutR = () => {
        
     })
 }
+
+// 请求密码重置（发送重置邮件）
+export const requestPasswordResetR = (params: { email: string }) => {
+    return Axios({
+        method: 'POST',
+        url: '/api/v1/user/requestPasswordReset',
+        data: params
+    })
+}
+
+// 验证重置Token是否有效
+export const verifyResetTokenR = (params: { token: string }) => {
+    return Axios({
+        method: 'POST',
+        url: '/api/v1/user/verifyResetToken',
+        data: params
+    })
+}
+
+// 重置密码
+export const resetPasswordR = (params: { token: string; new_password: string }) => {
+    return Axios({
+        method: 'POST',
+        url: '/api/v1/user/resetPassword',
+        data: params
+    })
+}

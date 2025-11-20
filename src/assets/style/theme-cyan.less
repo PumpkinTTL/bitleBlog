@@ -88,3 +88,99 @@ html.dark {
 @theme-orange-border-1: var(--theme-orange-border-1);
 @theme-orange-border-2: var(--theme-orange-border-2);
 @theme-orange-border-3: var(--theme-orange-border-3);
+
+// ================================================
+// Ant Design 组件样式覆盖 - 青色主题
+// ================================================
+
+// Modal 对话框
+.ant-modal {
+  .ant-modal-header {
+    background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
+    border-bottom: 1px solid var(--theme-orange-border-2);
+    
+    .ant-modal-title {
+      color: white;
+      font-weight: 600;
+    }
+  }
+  
+  .ant-modal-content {
+    border-radius: 12px;
+  }
+  
+  .ant-modal-footer {
+    border-top: 1px solid var(--theme-orange-border-1);
+    
+    .ant-btn-primary {
+      background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
+      border: none;
+      box-shadow: 0 2px 8px var(--theme-orange-shadow);
+      
+      &:hover {
+        background: linear-gradient(135deg, @primary-light-1, @primary-light-3);
+        box-shadow: 0 4px 12px var(--theme-orange-glow);
+      }
+    }
+  }
+}
+
+// Button 按钮
+.ant-btn-primary {
+  background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
+  border: none;
+  box-shadow: 0 2px 4px var(--theme-orange-shadow);
+  
+  &:hover, &:focus {
+    background: linear-gradient(135deg, @primary-light-1, @primary-light-3);
+    box-shadow: 0 4px 8px var(--theme-orange-glow);
+  }
+}
+
+// Message 消息提示
+.ant-message {
+  .ant-message-success .anticon {
+    color: var(--theme-purple-primary);
+  }
+}
+
+// Input 输入框
+.ant-input:focus,
+.ant-input-focused {
+  border-color: var(--theme-purple-primary);
+  box-shadow: 0 0 0 2px var(--theme-orange-overlay);
+}
+
+// Checkbox 复选框
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: var(--theme-purple-primary);
+  border-color: var(--theme-purple-primary);
+}
+
+.ant-checkbox-wrapper:hover .ant-checkbox-inner,
+.ant-checkbox:hover .ant-checkbox-inner {
+  border-color: var(--theme-purple-primary);
+}
+
+// Radio 单选框
+.ant-radio-checked .ant-radio-inner {
+  border-color: var(--theme-purple-primary);
+  
+  &::after {
+    background-color: var(--theme-purple-primary);
+  }
+}
+
+// Switch 开关
+.ant-switch-checked {
+  background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
+}
+
+// Link 链接
+.ant-btn-link {
+  color: var(--theme-purple-primary);
+  
+  &:hover, &:focus {
+    color: var(--theme-purple-secondary);
+  }
+}

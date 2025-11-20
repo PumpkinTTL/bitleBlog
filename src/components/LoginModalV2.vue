@@ -38,7 +38,7 @@
             @click="isEmailLogin = true"
           >
             <i class="fas fa-envelope"></i>
-            <span>邮箱登录</span>
+            <span>验证码登录</span>
           </div>
           <div class="tab-indicator" :class="{ 'move-right': isEmailLogin }"></div>
         </div>
@@ -164,11 +164,11 @@
             </el-form-item>
             
             <!-- 记住我和忘记密码 -->
-            <div v-if="!isRegisterMode && !isEmailLogin" class="form-options">
-              <el-checkbox v-model="formState.remember" class="remember-checkbox">
+            <div v-if="!isRegisterMode" class="form-options">
+              <el-checkbox v-if="!isEmailLogin" v-model="formState.remember" class="remember-checkbox">
                 记住我
               </el-checkbox>
-              <a href="javascript:;" class="forgot-link">忘记密码？</a>
+              <a href="javascript:;" class="forgot-link" @click="handleForgotPassword">忘记密码？</a>
             </div>
             
             <!-- 提交按钮 -->
@@ -257,8 +257,8 @@
 <script setup lang="ts">
 import { ref, computed, reactive, onMounted, onUnmounted } from 'vue'
 import { useStore } from '../store'
-import { message } from 'ant-design-vue'
-import { loginR } from '../request/user'
+import { message, Modal } from 'ant-design-vue'
+import { loginR, requestPasswordResetR } from '../request/user'
 import { setToken } from '../util/Auth'
 import UserAgreement from './platform/UserAgreement.vue'
 import PrivacyPolicy from './platform/PrivacyPolicy.vue'
@@ -539,6 +539,81 @@ const openUserAgreement = () => {
 
 const openPrivacyPolicy = () => {
   showPrivacyPolicy.value = true
+}
+
+// 邮箱格式验证
+const isValidEmail = (email: string): boolean => {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  return emailRegex.test(email)
+}
+
+// 忘记密码功能
+const handleForgotPassword = async () => {
+  // 获取当前输入的邮箱或用户名，并去除前后空格
+  const currentInput = (isEmailLogin.value ? formState.email : formState.username).trim()
+  
+  if (!currentInput) {
+    message.error('请先输入邮箱或用户名')
+    return
+  }
+  
+  let emailToSend = currentInput
+  
+  // 如果是用户名模式，检查输入的是否是邮箱格式
+  if (!isEmailLogin.value) {
+    // 如果输入的不是邮箱格式，提示用户
+    if (!isValidEmail(currentInput)) {
+      message.error('请在账号输入框中输入邮箱地址，然后点击忘记密码')
+      return
+    }
+    emailToSend = currentInput
+  } else {
+    // 验证邮箱格式
+    if (!isValidEmail(currentInput)) {
+      message.error('请输入正确的邮箱地址')
+      return
+    }
+  }
+  
+  // 弹出确认对话框
+  Modal.confirm({
+    title: '发送密码重置邮件',
+    content: `系统将发送重置链接至 ${emailToSend} 邮箱，以供您重置密码。确认发送重置邮件吗？`,
+    okText: '确认发送',
+    cancelText: '取消',
+    centered: true,  // 居中显示
+    onOk: async () => {
+      await sendResetEmail(emailToSend)
+    }
+  })
+}
+
+// 发送重置邮件
+const sendResetEmail = async (email: string) => {
+  try {
+    const response = await requestPasswordResetR({
+      email: email
+    });
+    
+    if (response.code === 200) {
+      // 成功提示
+      Modal.success({
+        title: '发送成功',
+        content: '重置链接已发送到您的邮箱，请在10分钟内完成密码重置。',
+        centered: true,
+        okText: '知道了'
+      })
+      // 不关闭登录模态框，让用户可以继续操作
+    } else {
+      message.error(response.info || response.msg || '发送失败，请稍后重试')
+    }
+  } catch (error: any) {
+    if (error.response?.data?.code === 404) {
+      message.error(error.response.data.info || '该邮箱未注册，请检查邮箱地址或先注册账号')
+    } else {
+      message.error(error.response?.data?.info || error.response?.data?.msg || '发送失败，请稍后重试')
+    }
+  }
 }
 </script>
 

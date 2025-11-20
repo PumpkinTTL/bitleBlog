@@ -25,3 +25,15 @@
 // 基础样式变量
 @link-color: var(--theme-primary); // 使用主题色作为链接色
 @border-radius-base: 4px;
+
+// ================================================
+// Ant Design Modal 层级设置
+// ================================================
+// 确保 Modal 确认对话框在 Element Plus Dialog 之上
+.ant-modal-wrap {
+  z-index: 3000 !important;
+}
+
+.ant-modal-mask {
+  z-index: 3000 !important;
+}
