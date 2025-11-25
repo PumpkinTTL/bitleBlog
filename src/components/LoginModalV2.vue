@@ -205,24 +205,7 @@
             <a href="javascript:;" @click="openPrivacyPolicy">《隐私政策》</a>
           </div>
           
-          <!-- 第三方登录 -->
-          <!-- <div class="social-login">
-            <div class="divider-line">
-              <span>其他登录方式</span>
-            </div>
-            <div class="social-buttons">
-              <button class="social-btn wechat" title="微信登录">
-                <i class="fab fa-weixin"></i>
-              </button>
-              <button class="social-btn qq" title="QQ登录">
-                <i class="fab fa-qq"></i>
-              </button>
-              <button class="social-btn github" title="GitHub登录">
-                <i class="fab fa-github"></i>
-              </button>
-            </div>
-          </div> -->
-        </div>
+          </div>
       </div>
     </el-dialog>
     
@@ -328,10 +311,25 @@ const codeButtonText = ref('获取验证码')
 const countdown = ref(60)
 let timer: any = null
 
+// 清理验证码定时器
+const clearTimer = () => {
+  if (timer) {
+    clearInterval(timer)
+    timer = null
+    codeButtonDisabled.value = false
+    codeButtonText.value = '获取验证码'
+  }
+}
+
+// 邮箱格式验证
+const isValidEmail = (email: string): boolean => {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  return emailRegex.test(email)
+}
+
 // 发送验证码
 const sendVerificationCode = () => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailRegex.test(formState.email)) {
+  if (!isValidEmail(formState.email)) {
     smartMessage.error('请输入有效的邮箱地址')
     return
   }
@@ -409,27 +407,8 @@ const resetForm = () => {
   formState.verificationCode = ''
   formState.inviteCode = ''
   formState.remember = false
-  
-  if (timer) {
-    clearInterval(timer)
-    codeButtonDisabled.value = false
-    codeButtonText.value = '获取验证码'
-  }
-}
 
-// 保存用户信息到本地存储
-const saveUserToLocalStorage = (userInfo: any) => {
-  localStorage.setItem('userInfo', JSON.stringify(userInfo))
-  localStorage.setItem('isLogin', 'true')
-  
-  if (formState.remember) {
-    localStorage.setItem('loginCredentials', JSON.stringify({
-      username: formState.username,
-      token: userInfo.token
-    }))
-  } else {
-    localStorage.removeItem('loginCredentials')
-  }
+  clearTimer()
 }
 
 // 提交表单
@@ -528,10 +507,8 @@ const closeDialog = () => {
   resetForm()
   isRegisterMode.value = false
   isEmailLogin.value = false
-  
-  if (timer) {
-    clearInterval(timer)
-  }
+
+  clearTimer()
 }
 
 const openUserAgreement = () => {
@@ -540,12 +517,6 @@ const openUserAgreement = () => {
 
 const openPrivacyPolicy = () => {
   showPrivacyPolicy.value = true
-}
-
-// 邮箱格式验证
-const isValidEmail = (email: string): boolean => {
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-  return emailRegex.test(email)
 }
 
 // 忘记密码功能
@@ -1077,156 +1048,6 @@ const sendResetEmail = async (email: string) => {
   }
 }
 
-// 第三方登录
-.social-login {
-  .divider-line {
-    position: relative;
-    text-align: center;
-    margin-bottom: 14px;
-    
-    &::before,
-    &::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      width: calc(50% - 60px);
-      height: 1px;
-      background: var(--el-border-color-lighter);
-    }
-    
-    &::before {
-      left: 0;
-    }
-    
-    &::after {
-      right: 0;
-    }
-    
-    span {
-      font-size: 12px;
-      color: var(--el-text-color-placeholder);
-      padding: 0 8px;
-      background: var(--el-bg-color);
-    }
-  }
-  
-  .social-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    
-    .social-btn {
-      width: 44px;
-      height: 44px;
-      border: 1.5px solid var(--el-border-color-light);
-      background: white;
-      border-radius: 10px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-      
-      i {
-        position: relative;
-        z-index: 2;
-        transition: all 0.3s ease;
-      }
-      
-      &.wechat {
-        &::before {
-          background: #07c160;
-        }
-        
-        i {
-          color: #07c160;
-        }
-        
-        &:hover {
-          border-color: #07c160;
-          
-          &::before {
-            opacity: 1;
-          }
-          
-          i {
-            color: white;
-            transform: scale(1.1);
-          }
-        }
-      }
-      
-      &.qq {
-        &::before {
-          background: #12b7f5;
-        }
-        
-        i {
-          color: #12b7f5;
-        }
-        
-        &:hover {
-          border-color: #12b7f5;
-          
-          &::before {
-            opacity: 1;
-          }
-          
-          i {
-            color: white;
-            transform: scale(1.1);
-          }
-        }
-      }
-      
-      &.github {
-        &::before {
-          background: #24292f;
-        }
-        
-        i {
-          color: #24292f;
-        }
-        
-        &:hover {
-          border-color: #24292f;
-          
-          &::before {
-            opacity: 1;
-          }
-          
-          i {
-            color: white;
-            transform: scale(1.1);
-          }
-        }
-      }
-      
-      &:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-      }
-      
-      &:active {
-        transform: translateY(-1px);
-      }
-    }
-  }
-}
 
 // 暗色模式适配
 html.dark {
@@ -1262,12 +1083,7 @@ html.dark {
         }
       }
     }
-    
-    .social-login .social-buttons .social-btn {
-      background: var(--el-fill-color-dark);
-      border-color: var(--el-border-color);
     }
-  }
 }
 
 // 响应式设计
@@ -1327,12 +1143,6 @@ html.dark {
     height: 44px;
     font-size: 14px;
   }
-  
-  .social-login .social-buttons .social-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
   }
-}
 </style>
 
