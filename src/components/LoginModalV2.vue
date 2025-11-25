@@ -257,7 +257,8 @@
 <script setup lang="ts">
 import { ref, computed, reactive, onMounted, onUnmounted } from 'vue'
 import { useStore } from '../store'
-import { message, Modal } from 'ant-design-vue'
+import { Modal } from 'ant-design-vue'
+import { smartMessage } from '@/components/modal'
 import { loginR, requestPasswordResetR } from '../request/user'
 import { setToken } from '../util/Auth'
 import UserAgreement from './platform/UserAgreement.vue'
@@ -331,11 +332,11 @@ let timer: any = null
 const sendVerificationCode = () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(formState.email)) {
-    message.error('请输入有效的邮箱地址')
+    smartMessage.error('请输入有效的邮箱地址')
     return
   }
   
-  message.success('验证码已发送到您的邮箱')
+  smartMessage.success('验证码已发送到您的邮箱')
   codeButtonDisabled.value = true
   countdown.value = 60
   codeButtonText.value = `${countdown.value}秒后重新获取`
@@ -441,7 +442,7 @@ const handleSubmit = async () => {
     
     if (isRegisterMode.value) {
       // 注册逻辑
-      message.success('注册成功')
+      smartMessage.success('注册成功')
       isRegisterMode.value = false
       loading.value = false
     } else {
@@ -473,10 +474,14 @@ const handleSubmit = async () => {
             })
           })
           
+          // 从响应中获取token和过期时间（可能在res或res.data中）
+          const token = res.token || res.data?.token || userInfo.token
+          const expireTime = res.expireTime || res.data?.expireTime || userInfo.expireTime
+          
           // 构建单Token数据结构（按照API文档要求）
           const tokenData = {
-            token: res.token,
-            expires: res.expireTime * 1000, // 后端返回秒级时间戳，转换为毫秒
+            token: token,
+            expires: expireTime * 1000, // 后端返回秒级时间戳，转换为毫秒
             id: userInfo.id,
             username: userInfo.username,
             nickname: userInfo.nickname,
@@ -499,18 +504,14 @@ const handleSubmit = async () => {
           }
           localStorage.setItem('isLogin', 'true')
           
-          console.log('[Login] 登录成功')
-          console.log('[Login] Token过期时间:', new Date(tokenData.expires))
-          console.log('[Login] 用户信息:', { id: userInfo.id, username: userInfo.username, roles })
-          
-          message.success('登录成功')
+          smartMessage.success('登录成功')
           closeDialog()
         } else {
-          message.error(res.msg || '登录失败，请检查用户名和密码')
+          smartMessage.error(res.msg || '登录失败，请检查用户名和密码')
         }
       } catch (error) {
         console.error('登录失败:', error)
-        message.error('登录请求失败，请稍后再试')
+        smartMessage.error('登录请求失败，请稍后再试')
       } finally {
         loading.value = false
       }
@@ -553,7 +554,7 @@ const handleForgotPassword = async () => {
   const currentInput = (isEmailLogin.value ? formState.email : formState.username).trim()
   
   if (!currentInput) {
-    message.error('请先输入邮箱或用户名')
+    smartMessage.error('请先输入邮箱或用户名')
     return
   }
   
@@ -563,14 +564,14 @@ const handleForgotPassword = async () => {
   if (!isEmailLogin.value) {
     // 如果输入的不是邮箱格式，提示用户
     if (!isValidEmail(currentInput)) {
-      message.error('请在账号输入框中输入邮箱地址，然后点击忘记密码')
+      smartMessage.error('请在账号输入框中输入邮箱地址，然后点击忘记密码')
       return
     }
     emailToSend = currentInput
   } else {
     // 验证邮箱格式
     if (!isValidEmail(currentInput)) {
-      message.error('请输入正确的邮箱地址')
+      smartMessage.error('请输入正确的邮箱地址')
       return
     }
   }
@@ -605,13 +606,13 @@ const sendResetEmail = async (email: string) => {
       })
       // 不关闭登录模态框，让用户可以继续操作
     } else {
-      message.error(response.info || response.msg || '发送失败，请稍后重试')
+      smartMessage.error(response.info || response.msg || '发送失败，请稍后重试')
     }
   } catch (error: any) {
     if (error.response?.data?.code === 404) {
-      message.error(error.response.data.info || '该邮箱未注册，请检查邮箱地址或先注册账号')
+      smartMessage.error(error.response.data.info || '该邮箱未注册，请检查邮箱地址或先注册账号')
     } else {
-      message.error(error.response?.data?.info || error.response?.data?.msg || '发送失败，请稍后重试')
+      smartMessage.error(error.response?.data?.info || error.response?.data?.msg || '发送失败，请稍后重试')
     }
   }
 }

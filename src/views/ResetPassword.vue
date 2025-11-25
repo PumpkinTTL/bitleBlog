@@ -89,45 +89,6 @@
       <!-- 右侧内容 -->
       <el-col :xs="24" :sm="24" :md="12" :lg="14" :xl="16" class="right-content">
         <div class="page-container">
-
-        <!-- 测试按钮 - 开发时使用 -->
-        <div class="test-buttons">
-          <div class="test-title">🔧 状态测试</div>
-          <div class="test-btn-group">
-            <button @click="pageState = 'loading'" class="test-btn" :class="{ active: pageState === 'loading' }">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" opacity="0.25" />
-                <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
-              </svg>
-              Loading
-            </button>
-            <button @click="pageState = 'form'" class="test-btn" :class="{ active: pageState === 'form' }">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
-              </svg>
-              Form
-            </button>
-            <button @click="pageState = 'success'" class="test-btn" :class="{ active: pageState === 'success' }">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-              </svg>
-              Success
-            </button>
-            <button @click="pageState = 'error'" class="test-btn" :class="{ active: pageState === 'error' }">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 12 2zm3.5 6L12 10.5 8.5 8 7 9.5 10.5 12 7 14.5 8.5 16 12 13.5 15.5 16 17 14.5 13.5 12 17 9.5 15.5 8z" />
-              </svg>
-              Error
-            </button>
-            <button @click="pageState = 'invalid'" class="test-btn" :class="{ active: pageState === 'invalid' }">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-              </svg>
-              Invalid
-            </button>
-          </div>
-        </div>
-
         <!-- Loading 状态 -->
         <div v-if="pageState === 'loading'" class="state-content loading-state">
           <div class="header">
@@ -357,7 +318,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { verifyResetTokenR, resetPasswordR } from '@/request/user';
 
@@ -375,18 +336,6 @@ const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 const userEmail = ref<string>('');
 const username = ref<string>('');
-
-// 脱敏邮箱
-const maskedEmail = computed(() => {
-  if (!userEmail.value) return '***@***';
-  const [username, domain] = userEmail.value.split('@');
-  if (!username || !domain) return '***@***';
-  
-  if (username.length <= 2) {
-    return `${username[0]}***@${domain}`;
-  }
-  return `${username.slice(0, 2)}***${username.slice(-1)}@${domain}`;
-});
 
 const formData = reactive({
   password: '',
@@ -1627,9 +1576,7 @@ onMounted(async () => {
 
 /* 栅格系统样式 */
 
-.right-content {
-  background: #f8fafc;
-}
+
 
 /* 移动端优化 */
 @media (max-width: 768px) {
@@ -2037,7 +1984,6 @@ onMounted(async () => {
     gap: 10px;
   }
   
-  .request-btn,
   .invalid-actions .home-btn {
     height: 44px;
     font-size: 14px;
@@ -2128,116 +2074,11 @@ onMounted(async () => {
   
   .success-btn,
   .retry-btn,
-  .home-btn,
-  .request-btn {
+  .home-btn {
     width: 100%;
     height: 42px;
     font-size: 13px;
   }
-}
-
-/* 按钮loading动画 */
-.spinner {
-  animation: spin 1s linear infinite;
-  width: 16px;
-  height: 16px;
-  margin-right: 8px;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.loading {
-  display: flex;
-  align-items: center;
-}
-
-/* 测试按钮样式 */
-.test-buttons {
-  margin-bottom: 24px;
-  padding: 16px;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border: 1px solid #dee2e6;
-  border-radius: 10px;
-  position: relative;
-  z-index: 1;
-}
-
-.test-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #495057;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.test-btn-group {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.test-btn {
-  flex: 1;
-  min-width: 80px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 0 12px;
-  background: white;
-  color: #6c757d;
-  border: 1.5px solid #ced4da;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.test-btn svg {
-  width: 14px;
-  height: 14px;
-  transition: transform 0.2s ease;
-}
-
-.test-btn:hover {
-  background: #f8f9fa;
-  border-color: var(--theme-purple-primary);
-  color: var(--theme-purple-primary);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.test-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.test-btn.active {
-  background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
-  color: white;
-  border-color: var(--theme-purple-primary);
-  box-shadow: 0 2px 8px var(--theme-orange-shadow);
-}
-
-.test-btn.active svg {
-  animation: bounce 0.6s ease;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.2); }
 }
 
 /* 暗色模式适配 */
@@ -2345,27 +2186,6 @@ html.dark {
     opacity: 0.3;
   }
 
-  /* 测试按钮 */
-  .test-buttons {
-    background: linear-gradient(135deg, var(--el-fill-color) 0%, var(--el-fill-color-light) 100%);
-    border-color: var(--el-border-color);
-  }
-
-  .test-title {
-    color: var(--el-text-color-primary);
-  }
-
-  .test-btn {
-    background: var(--el-bg-color);
-    color: var(--el-text-color-regular);
-    border-color: var(--el-border-color);
-  }
-
-  .test-btn:hover {
-    background: var(--el-fill-color-light);
-    color: var(--theme-purple-primary);
-  }
-
   /* 表单状态 */
   .header .desc {
     color: var(--el-text-color-secondary);
@@ -2465,49 +2285,6 @@ html.dark {
 
   .home-btn-full:hover {
     box-shadow: 0 5px 16px rgba(139, 92, 246, 0.4);
-  }
-}
-
-/* 移动端测试按钮优化 */
-@media (max-width: 768px) {
-  .test-buttons {
-    padding: 12px;
-    margin-bottom: 20px;
-  }
-  
-  .test-title {
-    font-size: 12px;
-    margin-bottom: 10px;
-  }
-  
-  .test-btn-group {
-    gap: 6px;
-  }
-  
-  .test-btn {
-    min-width: 70px;
-    height: 32px;
-    padding: 0 10px;
-    font-size: 11px;
-    gap: 4px;
-  }
-  
-  .test-btn svg {
-    width: 12px;
-    height: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .test-btn-group {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-  }
-  
-  .test-btn {
-    min-width: unset;
-    flex: unset;
   }
 }
 

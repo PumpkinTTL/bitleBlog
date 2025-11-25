@@ -11,7 +11,7 @@ const defaultOptions: Partial<MessageOptions> = {
   closable: true,
   showIcon: true,
   type: 'info',
-  borderRadius: 100
+  borderRadius: 8
 };
 
 // 生成唯一ID
