@@ -398,8 +398,6 @@ const logout = () => {
   // 重新加载页面确保状态清除
   setTimeout(() => window.location.reload(), 100)
 }
-
-
 </script>
 
 <style scoped lang="less">
@@ -408,6 +406,8 @@ const logout = () => {
 @header-height-mobile: 54px;
 @primary-color: var(--theme-purple-primary);
 @secondary-color: var(--theme-purple-secondary);
+@primary-light-2: var(--theme-purple-light-3);
+@primary-dark-1: var(--theme-purple-primary);
 @theme-orange-shadow: var(--theme-orange-shadow);
 @theme-orange-glow: var(--theme-orange-glow);
 
@@ -686,19 +686,6 @@ const logout = () => {
     padding: 8px 10px;
     min-width: 36px;
     justify-content: center;
-  }
-}
-
-// 心跳动画
-@keyframes heartbeat {
-  0%, 100% {
-    transform: scale(1);
-  }
-  10%, 30% {
-    transform: scale(1.1);
-  }
-  20%, 40% {
-    transform: scale(1);
   }
 }
 
@@ -1728,4 +1715,3 @@ html.dark {
   }
 }
 </style>
-
