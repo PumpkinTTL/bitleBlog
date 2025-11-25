@@ -272,7 +272,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useStore } from '@/store'
@@ -399,10 +399,6 @@ const logout = () => {
   setTimeout(() => window.location.reload(), 100)
 }
 
-// 初始化
-onMounted(() => {
-  // 组件初始化
-})
 
 </script>
 
@@ -412,8 +408,6 @@ onMounted(() => {
 @header-height-mobile: 54px;
 @primary-color: var(--theme-purple-primary);
 @secondary-color: var(--theme-purple-secondary);
-@primary-light-2: var(--theme-purple-light-3);
-@primary-dark-1: var(--theme-purple-primary);
 @theme-orange-shadow: var(--theme-orange-shadow);
 @theme-orange-glow: var(--theme-orange-glow);
 
