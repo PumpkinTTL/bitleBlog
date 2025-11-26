@@ -2,7 +2,7 @@
   <div class="person-info-card">
     <!-- 卡片头部 -->
     <div class="card-header">
-      <span class="uid-label">UID: <span class="uid-number">1008611</span></span>
+      <span class="uid-label">UID: <span class="uid-number">{{ userInfo.id || '1008611' }}</span></span>
     </div>
 
     <!-- 卡片内容 -->
@@ -13,8 +13,13 @@
           <div class="avatar-ring"></div>
           <img :src="userInfo.avatar" :alt="userInfo.username" class="avatar" />
           <div class="avatar-status" :class="{ online: userInfo.isOnline }"></div>
+          <!-- VIP徽章 -->
           <div v-if="userInfo.isVip" class="vip-badge">
             <i class="fas fa-crown"></i>
+          </div>
+          <!-- 普通用户徽章 -->
+          <div v-else class="user-badge">
+            <i class="fas fa-user"></i>
           </div>
         </div>
       </div>
@@ -23,6 +28,7 @@
       <div class="user-info">
         <div class="username-row">
           <h3 class="username">{{ userInfo.username }}</h3>
+          <span v-if="userInfo.isVip" class="vip-tag">VIP</span>
           <span class="level-badge">Lv.{{ userInfo.level }}</span>
         </div>
         <p class="bio">{{ userInfo.bio }}</p>
@@ -32,12 +38,12 @@
       <div class="info-bar">
         <div class="info-item">
           <i class="fas fa-calendar-check"></i>
-          <span>加入 365 天</span>
+          <span>加入 {{ userInfo.joinDays || 365 }} 天</span>
         </div>
         <div class="info-divider"></div>
         <div class="info-item">
           <i class="fas fa-feather-alt"></i>
-          <span>128 篇文章</span>
+          <span>{{ userInfo.posts || 0 }} 篇文章</span>
         </div>
       </div>
 
@@ -52,6 +58,18 @@
           <div class="vip-privileges">
             <i class="fas fa-check-circle"></i>
             <span>享有 8 项专属特权</span>
+          </div>
+        </div>
+
+        <!-- 普通用户信息 -->
+        <div v-else class="normal-user-info compact">
+          <div class="normal-user-header">
+            <i class="fas fa-medal"></i>
+            <span class="normal-user-title">潜力用户</span>
+          </div>
+          <div class="normal-user-privileges">
+            <i class="fas fa-chart-line"></i>
+            <span>继续创作，提升等级解锁更多权限</span>
           </div>
         </div>
 
@@ -71,45 +89,97 @@
         </div>
       </div>
 
+      <!-- 等级展示区域 -->
+      <div class="level-display-section">
+        <div class="level-header">
+          <i class="fas fa-trophy"></i>
+          <span class="level-title">等级</span>
+        </div>
+        <div class="level-cards">
+          <div v-for="level in levelData" :key="level.target_type" class="level-card" :class="level.type">
+            <div class="level-icon">
+              <i :class="level.icon"></i>
+            </div>
+            <div class="level-info">
+              <div class="level-name">{{ level.name }}</div>
+              <div class="level-details">
+                <span class="level-number">Lv.{{ level.current_level }}</span>
+                <span class="level-exp">{{ level.experience_in_level }}/{{ getNextLevelExp(level.total_experience, level.current_level) }} EXP</span>
+              </div>
+              <div class="level-progress-bar">
+                <div class="level-progress-fill" :style="{ width: getLevelProgress(level.experience_in_level, level.current_level) + '%' }"></div>
+              </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
       <!-- 荣誉徽章 -->
       <div class="badges-section">
-        <div class="badge-item">
-          <div class="badge-icon trophy">
-            <i class="fas fa-trophy"></i>
-          </div>
-          <span>原创作者</span>
+        <div class="badges-header">
+          <i class="fas fa-award"></i>
+          <span class="badges-title">荣誉徽章</span>
         </div>
-        <div class="badge-item">
-          <div class="badge-icon star">
-            <i class="fas fa-star"></i>
+        <div class="badge-items">
+          <div class="badge-item">
+            <div class="badge-icon trophy">
+              <i class="fas fa-trophy"></i>
+            </div>
+            <span>原创作者</span>
           </div>
-          <span>优秀博主</span>
-        </div>
-        <div class="badge-item">
-          <div class="badge-icon fire">
-            <i class="fas fa-fire"></i>
+          <div class="badge-item">
+            <div class="badge-icon star">
+              <i class="fas fa-star"></i>
+            </div>
+            <span>优秀博主</span>
           </div>
-          <span>活跃用户</span>
+          <div class="badge-item">
+            <div class="badge-icon fire">
+              <i class="fas fa-fire"></i>
+            </div>
+            <span>活跃用户</span>
+          </div>
         </div>
       </div>
 
       <!-- 社交媒体 -->
       <div class="social-links">
-        <a href="#" class="social-icon github" title="GitHub">
-          <i class="fab fa-github"></i>
-        </a>
-        <a href="#" class="social-icon twitter" title="Twitter">
-          <i class="fab fa-twitter"></i>
-        </a>
-        <a href="#" class="social-icon weixin" title="微信">
-          <i class="fab fa-weixin"></i>
-        </a>
-        <a href="#" class="social-icon weibo" title="微博">
-          <i class="fab fa-weibo"></i>
-        </a>
-        <a href="#" class="social-icon email" title="邮箱">
-          <i class="fas fa-envelope"></i>
-        </a>
+        <div class="social-header">
+          <i class="fas fa-share-alt"></i>
+          <span class="social-title">社交方式</span>
+        </div>
+        <div class="social-icons">
+          <a v-if="userInfo.github" :href="userInfo.github" class="social-icon github" title="GitHub" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+          <a v-else href="#" class="social-icon github" title="GitHub" onclick="return false;">
+            <i class="fab fa-github"></i>
+          </a>
+          <a v-if="userInfo.twitter" :href="userInfo.twitter" class="social-icon twitter" title="Twitter" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a v-else href="#" class="social-icon twitter" title="Twitter" onclick="return false;">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a v-if="userInfo.wechat" class="social-icon weixin" title="微信">
+            <i class="fab fa-weixin"></i>
+          </a>
+          <a v-else href="#" class="social-icon weixin" title="微信" onclick="return false;">
+            <i class="fab fa-weixin"></i>
+          </a>
+          <a v-if="userInfo.weibo" :href="userInfo.weibo" class="social-icon weibo" title="微博" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+          <a v-else href="#" class="social-icon weibo" title="微博" onclick="return false;">
+            <i class="fab fa-weibo"></i>
+          </a>
+          <a v-if="userInfo.email" :href="`mailto:${userInfo.email}`" class="social-icon email" title="邮箱">
+            <i class="fas fa-envelope"></i>
+          </a>
+          <a v-else href="#" class="social-icon email" title="邮箱" onclick="return false;">
+            <i class="fas fa-envelope"></i>
+          </a>
+        </div>
       </div>
 
     </div>
@@ -117,7 +187,11 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useStore } from '@/store'
+
 interface UserInfo {
+  id?: number
   avatar: string
   username: string
   bio: string
@@ -125,6 +199,21 @@ interface UserInfo {
   isVip: boolean
   isOnline: boolean
   tags: string[]
+  email?: string
+  phone?: string
+  roles?: any[]
+  permissions?: string[]
+  last_login?: string
+  gender?: number
+  create_time?: string
+  posts?: number
+  followers?: number
+  following?: number
+  joinDays?: number
+  github?: string
+  twitter?: string
+  wechat?: string
+  weibo?: string
 }
 
 const levelProgress = 78 // 等级进度百分比
@@ -132,6 +221,160 @@ const expNeeded = 220 // 还需经验
 
 interface Props {
   userInfo?: UserInfo
+}
+
+// 获取store中的用户信息
+const store = useStore()
+
+// 从store获取用户信息或使用props传入的数据
+const userInfo = computed(() => {
+  const storeUser = store.userInfo as any
+  if (storeUser) {
+    return {
+      id: storeUser.id,
+      avatar: storeUser.avatar || 'https://picsum.photos/200/200?random=1',
+      username: storeUser.nickname || storeUser.username || '未知用户',
+      bio: storeUser.signature || '这个人很懒，什么都没有留下~',
+      level: storeUser.level || 1,
+      isVip: storeUser.premium !== null, // 如果premium不为null说明是会员
+      isOnline: storeUser.status !== undefined ? storeUser.status : true,
+      email: storeUser.email || '',
+      phone: storeUser.phone || '',
+      roles: storeUser.roles || [],
+      permissions: storeUser.permissions || [],
+      last_login: storeUser.last_login || '',
+      gender: storeUser.gender || 0,
+      create_time: storeUser.create_time || '',
+      // 保留虚拟数据字段（后端没有的）
+      posts: 128,
+      followers: 0,
+      following: 0,
+      joinDays: 365,
+      github: '',
+      twitter: '',
+      wechat: '',
+      weibo: ''
+    }
+  }
+
+  // 如果store中没有数据，使用props中的数据
+  return props.userInfo
+})
+
+// 等级数据处理
+const levelData = computed(() => {
+  const storeUser = store.userInfo as any
+  if (storeUser?.level_records) {
+    return storeUser.level_records.map((record: any) => {
+      const config = getLevelConfig(record.target_type)
+      return {
+        target_type: record.target_type,
+        current_level: record.current_level,
+        total_experience: record.total_experience,
+        experience_in_level: record.experience_in_level,
+        level_up_count: record.level_up_count,
+        ...config
+      }
+    }).sort((a: any, b: any) => a.sort - b.sort)
+  }
+
+  // 默认虚拟数据
+  return [
+    {
+      target_type: 'user',
+      current_level: 1,
+      total_experience: 0,
+      experience_in_level: 0,
+      level_up_count: 0,
+      name: '综合等级',
+      type: 'user',
+      icon: 'fas fa-user-shield',
+      color: '#8b5cf6',
+      sort: 1
+    },
+    {
+      target_type: 'writer',
+      current_level: 1,
+      total_experience: 0,
+      experience_in_level: 0,
+      level_up_count: 0,
+      name: '作者等级',
+      type: 'writer',
+      icon: 'fas fa-pen-fancy',
+      color: '#f59e0b',
+      sort: 2
+    },
+    {
+      target_type: 'reader',
+      current_level: 1,
+      total_experience: 0,
+      experience_in_level: 0,
+      level_up_count: 0,
+      name: '读者等级',
+      type: 'reader',
+      icon: 'fas fa-book-reader',
+      color: '#10b981',
+      sort: 3
+    },
+    {
+      target_type: 'interaction',
+      current_level: 1,
+      total_experience: 0,
+      experience_in_level: 0,
+      level_up_count: 0,
+      name: '互动等级',
+      type: 'interaction',
+      icon: 'fas fa-comments',
+      color: '#06b6d4',
+      sort: 4
+    }
+  ]
+})
+
+// 获取等级配置
+function getLevelConfig(targetType: string) {
+  const configs: Record<string, any> = {
+    user: {
+      name: '综合等级',
+      type: 'user',
+      icon: 'fas fa-user-shield',
+      color: '#8b5cf6',
+      sort: 1
+    },
+    writer: {
+      name: '作者等级',
+      type: 'writer',
+      icon: 'fas fa-pen-fancy',
+      color: '#f59e0b',
+      sort: 2
+    },
+    reader: {
+      name: '读者等级',
+      type: 'reader',
+      icon: 'fas fa-book-reader',
+      color: '#10b981',
+      sort: 3
+    },
+    interaction: {
+      name: '互动等级',
+      type: 'interaction',
+      icon: 'fas fa-comments',
+      color: '#06b6d4',
+      sort: 4
+    }
+  }
+  return configs[targetType] || configs.user
+}
+
+// 计算等级进度
+function getLevelProgress(expInLevel: number, currentLevel: number) {
+  if (expInLevel === 0 || currentLevel === 1) return 0
+  return Math.min((expInLevel / (currentLevel * 100)) * 100, 100)
+}
+
+// 计算下一级所需经验
+function getNextLevelExp(totalExp: number, currentLevel: number) {
+  return currentLevel * 100
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -255,6 +498,26 @@ const props = withDefaults(defineProps<Props>(), {
         color: white;
       }
     }
+
+    .user-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 18px;
+      height: 18px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
+      z-index: 2;
+
+      i {
+        font-size: 9px;
+        color: white;
+      }
+    }
   }
 }
 
@@ -276,6 +539,17 @@ const props = withDefaults(defineProps<Props>(), {
       color: var(--el-text-color-primary);
       margin: 0;
       font-family: 'OPPO Sans', sans-serif;
+    }
+
+    .vip-tag {
+      padding: 2px 8px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: white;
+      font-size: 10px;
+      font-weight: 600;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(251, 191, 36, 0.3);
+      letter-spacing: 0.5px;
     }
 
     .level-badge {
@@ -300,10 +574,32 @@ const props = withDefaults(defineProps<Props>(), {
 
 // 荣誉徽章
 .badges-section {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
   margin-bottom: 12px;
+
+  .badges-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 0 4px;
+
+    i {
+      font-size: 14px;
+      color: #f59e0b;
+    }
+
+    .badges-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--el-text-color-primary);
+    }
+  }
+
+  .badge-items {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
 
   .badge-item {
     display: flex;
@@ -411,51 +707,70 @@ const props = withDefaults(defineProps<Props>(), {
     flex: 1;
     margin-top: 0;
     padding: 10px;
-    background: var(--el-fill-color-extra-light);
-    border: 1px solid var(--el-border-color-extra-light);
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 1px solid #fcd34d;
     border-radius: 8px;
     min-width: 0;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(251, 191, 36, 0.1) 50%, transparent 70%);
+      pointer-events: none;
+    }
 
     .vip-header {
       display: flex;
       align-items: center;
-      gap: 4px;
-      margin-bottom: 6px;
+      gap: 6px;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
 
       i {
-        font-size: 11px;
-        color: #ca8a04;
+        font-size: 12px;
+        color: #d97706;
         flex-shrink: 0;
       }
 
       .vip-title {
-        font-size: 11px;
-        font-weight: 600;
-        color: #a16207;
+        font-size: 12px;
+        font-weight: 700;
+        color: #92400e;
         flex: 1;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        letter-spacing: 0.3px;
       }
 
       .vip-expire {
-        font-size: 9px;
-        color: #a16207;
+        font-size: 10px;
+        color: #92400e;
         white-space: nowrap;
         flex-shrink: 0;
+        font-weight: 500;
       }
     }
 
     .vip-privileges {
       display: flex;
       align-items: center;
-      gap: 4px;
-      font-size: 9px;
-      color: #a16207;
+      gap: 6px;
+      font-size: 10px;
+      color: #78350f;
+      position: relative;
+      z-index: 1;
 
       i {
-        font-size: 9px;
-        color: #ca8a04;
+        font-size: 10px;
+        color: #f59e0b;
         flex-shrink: 0;
       }
 
@@ -463,6 +778,80 @@ const props = withDefaults(defineProps<Props>(), {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-weight: 500;
+      }
+    }
+  }
+
+  // 普通用户信息 - 紧凑样式
+  .normal-user-info.compact {
+    flex: 1;
+    margin-top: 0;
+    padding: 10px;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    min-width: 0;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(16, 185, 129, 0.05) 50%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .normal-user-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+
+      i {
+        font-size: 12px;
+        color: #059669;
+        flex-shrink: 0;
+      }
+
+      .normal-user-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: #047857;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        letter-spacing: 0.3px;
+      }
+    }
+
+    .normal-user-privileges {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: #065f46;
+      position: relative;
+      z-index: 1;
+
+      i {
+        font-size: 10px;
+        color: #10b981;
+        flex-shrink: 0;
+      }
+
+      span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 500;
       }
     }
   }
@@ -525,12 +914,222 @@ const props = withDefaults(defineProps<Props>(), {
   }
 }
 
+// 等级展示区域
+.level-display-section {
+  margin-bottom: 14px;
+  padding: 0 2px;
+
+  .level-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 0 4px;
+
+    i {
+      font-size: 14px;
+      color: var(--theme-purple-primary);
+    }
+
+    .level-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--el-text-color-primary);
+    }
+  }
+
+  .level-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .level-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px;
+    background: var(--el-fill-color-extra-light);
+    border: 1px solid var(--el-border-color-extra-light);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, transparent 0%, rgba(0, 0, 0, 0.02) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover {
+      border-color: var(--el-border-color-light);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      transform: translateY(-2px);
+
+      &::before {
+        opacity: 1;
+      }
+    }
+
+    .level-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 6px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+      }
+
+      i {
+        font-size: 14px;
+        color: white;
+        position: relative;
+        z-index: 2;
+      }
+    }
+
+    .level-info {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+      z-index: 1;
+
+      .level-name {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--el-text-color-primary);
+        margin-bottom: 4px;
+        line-height: 1.2;
+      }
+
+      .level-details {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+
+        .level-number {
+          font-size: 10px;
+          font-weight: 600;
+          color: var(--el-text-color-regular);
+        }
+
+        .level-exp {
+          font-size: 9px;
+          color: var(--el-text-color-secondary);
+        }
+      }
+
+      .level-progress-bar {
+        width: 100%;
+        height: 4px;
+        background: var(--el-fill-color);
+        border-radius: 2px;
+        margin-bottom: 6px;
+        overflow: hidden;
+
+        .level-progress-fill {
+          height: 100%;
+          border-radius: 2px;
+          transition: width 0.6s ease;
+          background: linear-gradient(90deg, var(--el-color-primary), var(--el-color-primary-light-3));
+        }
+      }
+
+      .level-stats {
+        display: flex;
+        justify-content: space-between;
+        font-size: 8px;
+        color: var(--el-text-color-placeholder);
+
+        .total-exp, .level-count {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
+    // 不同类型的等级卡片颜色
+    &.user .level-icon {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    }
+
+    &.user .level-progress-fill {
+      background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+    }
+
+    &.writer .level-icon {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    &.writer .level-progress-fill {
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    }
+
+    &.reader .level-icon {
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    &.reader .level-progress-fill {
+      background: linear-gradient(90deg, #10b981, #34d399);
+    }
+
+    &.interaction .level-icon {
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+    }
+
+    &.interaction .level-progress-fill {
+      background: linear-gradient(90deg, #06b6d4, #22d3ee);
+    }
+  }
+}
+
 // 社交媒体
 .social-links {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
   margin-bottom: 0;
+
+  .social-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 0 4px;
+
+    i {
+      font-size: 14px;
+      color: var(--theme-purple-primary);
+    }
+
+    .social-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--el-text-color-primary);
+    }
+  }
+
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
 
   .social-icon {
     width: 32px;

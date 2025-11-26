@@ -16,14 +16,14 @@
               <i class="fas fa-blog"></i>
             </div>
             <div class="logo-text">
-              <h2>{{ isRegisterMode ? '创建账号' : '欢迎回来' }}</h2>
-              <p>{{ isRegisterMode ? '加入我们，开启精彩之旅' : '登录以继续使用' }}</p>
+              <h2>欢迎回来</h2>
+              <p>登录以继续使用</p>
             </div>
           </div>
         </div>
         
         <!-- 登录方式标签 -->
-        <div class="login-tabs" v-if="!isRegisterMode">
+        <div class="login-tabs">
           <div 
             class="tab-item"
             :class="{ active: !isEmailLogin }"
@@ -32,7 +32,7 @@
             <i class="fas fa-user"></i>
             <span>账号登录</span>
           </div>
-          <div 
+          <div
             class="tab-item"
             :class="{ active: isEmailLogin }"
             @click="isEmailLogin = true"
@@ -51,10 +51,16 @@
             :rules="formRules"
             class="modern-form"
           >
-            <!-- 注册模式安全提示 -->
-            <div v-if="isRegisterMode" class="security-notice">
+            <!-- 账号密码登录说明 -->
+            <div v-if="!isEmailLogin" class="security-notice">
               <i class="fas fa-info-circle"></i>
-              <span>注册需要有效的邀请码</span>
+              <span>如果您未拥有账号请使用验证码登录自动注册</span>
+            </div>
+
+            <!-- 验证码登录说明 -->
+            <div v-if="isEmailLogin" class="security-notice">
+              <i class="fas fa-info-circle"></i>
+              <span>若您的邮箱不存在将会自动注册但您需要填写注册邀请码</span>
             </div>
             
             <!-- 账号密码登录 -->
@@ -112,59 +118,44 @@
                     <i class="fas fa-key"></i>
                   </div>
                   <el-input
-                    v-model="formState.verificationCode"
+                    v-model="formState.verification_code"
                     placeholder="请输入验证码"
                     clearable
                     class="modern-input"
                   >
                     <template #append>
-                      <button 
+                      <button
                         class="code-btn"
                         :disabled="codeButtonDisabled"
+                        :class="{ loading: codeButtonLoading }"
                         @click.prevent="sendVerificationCode"
                       >
-                        {{ codeButtonText }}
+                        <i v-if="codeButtonLoading" class="fas fa-spinner fa-spin"></i>
+                        <span v-else>{{ codeButtonText }}</span>
                       </button>
                     </template>
                   </el-input>
                 </div>
               </el-form-item>
+
+              <!-- 邀请码（可选） -->
+              <el-form-item prop="inviteCode" class="form-item-modern">
+                <div class="input-wrapper">
+                  <div class="input-icon">
+                    <i class="fas fa-ticket-alt"></i>
+                  </div>
+                  <el-input
+                    v-model="formState.invite_code"
+                    placeholder="邀请码（可选）"
+                    clearable
+                    class="modern-input"
+                  />
+                </div>
+              </el-form-item>
             </template>
-            
-            <!-- 注册时的确认密码 -->
-            <el-form-item v-if="isRegisterMode" prop="confirmPassword" class="form-item-modern">
-              <div class="input-wrapper">
-                <div class="input-icon">
-                  <i class="fas fa-lock"></i>
-                </div>
-                <el-input
-                  v-model="formState.confirmPassword"
-                  type="password"
-                  placeholder="确认密码"
-                  show-password
-                  clearable
-                  class="modern-input"
-                />
-              </div>
-            </el-form-item>
-            
-            <!-- 注册邀请码 -->
-            <el-form-item v-if="isRegisterMode" prop="inviteCode" class="form-item-modern">
-              <div class="input-wrapper">
-                <div class="input-icon">
-                  <i class="fas fa-ticket-alt"></i>
-                </div>
-                <el-input
-                  v-model="formState.inviteCode"
-                  placeholder="请输入注册邀请码"
-                  clearable
-                  class="modern-input"
-                />
-              </div>
-            </el-form-item>
-            
+              
             <!-- 记住我和忘记密码 -->
-            <div v-if="!isRegisterMode" class="form-options">
+            <div class="form-options">
               <el-checkbox v-if="!isEmailLogin" v-model="formState.remember" class="remember-checkbox">
                 记住我
               </el-checkbox>
@@ -182,21 +173,14 @@
                 <span class="btn-content">
                   <i v-if="loading" class="fas fa-spinner fa-spin"></i>
                   <i v-else class="fas fa-arrow-right"></i>
-                  <span>{{ isRegisterMode ? '立即注册' : '立即登录' }}</span>
+                  <span>立即登录</span>
                 </span>
                 <span class="btn-effect"></span>
               </button>
             </div>
           </el-form>
           
-          <!-- 切换登录/注册 -->
-          <div class="mode-switch">
-            <span>{{ isRegisterMode ? '已有账号？' : '还没有账号？' }}</span>
-            <a href="javascript:;" @click="toggleMode">
-              {{ isRegisterMode ? '立即登录' : '立即注册' }}
-            </a>
-          </div>
-          
+            
           <!-- 协议提示 -->
           <div class="agreement-text">
             <span>登录即表示同意</span>
@@ -242,16 +226,20 @@ import { ref, computed, reactive, onMounted, onUnmounted } from 'vue'
 import { useStore } from '../store'
 import { Modal } from 'ant-design-vue'
 import { smartMessage } from '@/components/modal'
-import { loginR, requestPasswordResetR } from '../request/user'
+import { loginR, requestPasswordResetR, sendEmailCodeR } from '../request/user'
 import { setToken } from '../util/Auth'
 import UserAgreement from './platform/UserAgreement.vue'
 import PrivacyPolicy from './platform/PrivacyPolicy.vue'
 
 const store = useStore()
 
-// 登录/注册模式
-const isRegisterMode = ref(false)
-const isEmailLogin = ref(false)
+// 登录模式：false=账号密码登录，true=邮箱验证码登录
+const isEmailLogin = computed({
+  get: () => formState.action === 'code',
+  set: (val) => {
+    formState.action = val ? 'code' : 'pwd'
+  }
+})
 
 // 弹窗可见性
 const dialogVisible = computed({
@@ -298,15 +286,17 @@ onUnmounted(() => {
 const formState = reactive({
   username: '',
   password: '',
-  confirmPassword: '',
   email: '',
-  verificationCode: '',
-  inviteCode: '',
+  account: '',           // 添加account字段
+  verification_code: '', // 使用下划线命名
+  invite_code: '',       // 使用下划线命名
+  action: 'pwd',         // 添加action字段
   remember: false
 })
 
 // 验证码按钮状态
 const codeButtonDisabled = ref(false)
+const codeButtonLoading = ref(false)
 const codeButtonText = ref('获取验证码')
 const countdown = ref(60)
 let timer: any = null
@@ -317,6 +307,7 @@ const clearTimer = () => {
     clearInterval(timer)
     timer = null
     codeButtonDisabled.value = false
+    codeButtonLoading.value = false
     codeButtonText.value = '获取验证码'
   }
 }
@@ -328,27 +319,51 @@ const isValidEmail = (email: string): boolean => {
 }
 
 // 发送验证码
-const sendVerificationCode = () => {
+const sendVerificationCode = async () => {
   if (!isValidEmail(formState.email)) {
     smartMessage.error('请输入有效的邮箱地址')
     return
   }
-  
-  smartMessage.success('验证码已发送到您的邮箱')
-  codeButtonDisabled.value = true
-  countdown.value = 60
-  codeButtonText.value = `${countdown.value}秒后重新获取`
-  
-  timer = setInterval(() => {
-    countdown.value--
-    codeButtonText.value = `${countdown.value}秒后重新获取`
-    
-    if (countdown.value <= 0) {
-      clearInterval(timer)
+
+  try {
+    // 开启loading
+    codeButtonLoading.value = true
+    codeButtonDisabled.value = true
+    codeButtonText.value = '发送中...'
+
+    const response = await sendEmailCodeR({
+      email: formState.email
+    })
+
+    if (response.code === 200) {
+      smartMessage.success(response.msg || '验证码已发送到您的邮箱')
+      countdown.value = 60
+      codeButtonText.value = `${countdown.value}秒后重新获取`
+
+      timer = setInterval(() => {
+        countdown.value--
+        codeButtonText.value = `${countdown.value}秒后重新获取`
+
+        if (countdown.value <= 0) {
+          clearInterval(timer)
+          codeButtonDisabled.value = false
+          codeButtonText.value = '获取验证码'
+        }
+      }, 1000)
+    } else {
+      smartMessage.error(response.msg || '验证码发送失败')
       codeButtonDisabled.value = false
       codeButtonText.value = '获取验证码'
     }
-  }, 1000)
+  } catch (error: any) {
+    console.error('发送验证码失败:', error)
+    smartMessage.error(error.response?.data?.msg || error.response?.data?.info || '验证码发送失败，请稍后重试')
+    codeButtonDisabled.value = false
+    codeButtonText.value = '获取验证码'
+  } finally {
+    // 关闭loading
+    codeButtonLoading.value = false
+  }
 }
 
 // 表单规则
@@ -361,51 +376,28 @@ const formRules = {
     { required: true, message: '请输入密码', trigger: 'blur' },
     { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
   ],
-  confirmPassword: [
-    { required: true, message: '请确认密码', trigger: 'blur' },
-    { 
-      validator: (rule: any, value: any, callback: any) => {
-        if (value !== formState.password) {
-          callback(new Error('两次输入密码不一致'))
-        } else {
-          callback()
-        }
-      }, 
-      trigger: 'blur' 
-    }
-  ],
   email: [
     { required: true, message: '请输入邮箱', trigger: 'blur' },
     { type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur' }
   ],
-  verificationCode: [
+  verification_code: [
     { required: true, message: '请输入验证码', trigger: 'blur' },
     { min: 4, max: 6, message: '验证码长度不正确', trigger: 'blur' }
-  ],
-  inviteCode: [
-    { required: true, message: '请输入注册邀请码', trigger: 'blur' },
-    { min: 6, max: 20, message: '邀请码长度在 6 到 20 个字符', trigger: 'blur' }
   ]
 }
 
 const formRef = ref(null)
 const loading = ref(false)
 
-// 切换登录/注册模式
-const toggleMode = () => {
-  isRegisterMode.value = !isRegisterMode.value
-  isEmailLogin.value = false
-  resetForm()
-}
-
 // 重置表单
 const resetForm = () => {
   formState.username = ''
   formState.password = ''
-  formState.confirmPassword = ''
   formState.email = ''
-  formState.verificationCode = ''
-  formState.inviteCode = ''
+  formState.account = ''
+  formState.verification_code = ''
+  formState.invite_code = ''
+  formState.action = 'pwd'
   formState.remember = false
 
   clearTimer()
@@ -418,82 +410,86 @@ const handleSubmit = async () => {
   try {
     await (formRef.value as any).validate()
     loading.value = true
-    
-    if (isRegisterMode.value) {
-      // 注册逻辑
-      smartMessage.success('注册成功')
-      isRegisterMode.value = false
-      loading.value = false
-    } else {
-      // 登录逻辑
-      try {
-        const params = {
-          account: formState.username,
-          password: formState.password,
-          action: 'pwd'
-        }
-        
-        const res: any = await loginR(params)
-        
-        if (res.code === 200) {
-          const userInfo = res.data
-          
-          // 更新store
-          store.isLogin = true
-          store.userInfo = userInfo
-          
-          // 提取角色和权限（根据文档结构）
-          const roles = userInfo.roles?.map((r: any) => r.iden) || []
-          const permissions: string[] = []
-          userInfo.roles?.forEach((role: any) => {
-            role.permissions?.forEach((perm: any) => {
-              if (perm.name && !permissions.includes(perm.name)) {
-                permissions.push(perm.name)
-              }
-            })
-          })
-          
-          // 从响应中获取token和过期时间（可能在res或res.data中）
-          const token = res.token || res.data?.token || userInfo.token
-          const expireTime = res.expireTime || res.data?.expireTime || userInfo.expireTime
-          
-          // 构建单Token数据结构（按照API文档要求）
-          const tokenData = {
-            token: token,
-            expires: expireTime * 1000, // 后端返回秒级时间戳，转换为毫秒
-            id: userInfo.id,
-            username: userInfo.username,
-            nickname: userInfo.nickname,
-            avatar: userInfo.avatar,
-            email: userInfo.email,
-            roles: roles,
-            permissions: permissions,
-            // 保存完整的用户信息
-            ...userInfo
-          }
-          
-          // 使用新的单Token管理：同时保存到authorized-token cookie和user-info localStorage
-          setToken(tokenData)
-          
-          // 兼容旧的localStorage字段（如果后端返回）
-          if (formState.remember && userInfo.username) {
-            localStorage.setItem('loginCredentials', JSON.stringify({
-              username: userInfo.username
-            }))
-          }
-          localStorage.setItem('isLogin', 'true')
-          
-          smartMessage.success('登录成功')
-          closeDialog()
-        } else {
-          smartMessage.error(res.msg || '登录失败，请检查用户名和密码')
-        }
-      } catch (error) {
-        console.error('登录失败:', error)
-        smartMessage.error('登录请求失败，请稍后再试')
-      } finally {
-        loading.value = false
+
+    // 登录逻辑
+    try {
+      // 根据登录模式设置account和password字段
+      if (isEmailLogin.value) {
+        formState.account = formState.email
+        formState.password = formState.verification_code
+      } else {
+        formState.account = formState.username
+        // password已经是正确的值
       }
+
+      const res: any = await loginR(formState)
+
+      if (res.code === 200) {
+        const userInfo = res.data
+
+        // 更新store
+        store.isLogin = true
+        store.userInfo = userInfo
+
+        // 提取角色和权限（根据文档结构）
+        const roles = userInfo.roles?.map((r: any) => r.iden) || []
+        const permissions: string[] = []
+        userInfo.roles?.forEach((role: any) => {
+          role.permissions?.forEach((perm: any) => {
+            if (perm.name && !permissions.includes(perm.name)) {
+              permissions.push(perm.name)
+            }
+          })
+        })
+
+        // 从响应中获取token和过期时间（可能在res或res.data中）
+        const token = res.token || res.data?.token || userInfo.token
+        const expireTime = res.expireTime || res.data?.expireTime || userInfo.expireTime
+
+        // 构建单Token数据结构（按照API文档要求）
+        const tokenData = {
+          token: token,
+          expires: expireTime * 1000, // 后端返回秒级时间戳，转换为毫秒
+          id: userInfo.id,
+          username: userInfo.username,
+          nickname: userInfo.nickname,
+          avatar: userInfo.avatar,
+          email: userInfo.email,
+          roles: roles,
+          permissions: permissions,
+          // 保存完整的用户信息
+          ...userInfo
+        }
+
+        // 使用新的单Token管理：同时保存到authorized-token cookie和user-info localStorage
+        setToken(tokenData)
+
+        // 兼容旧的localStorage字段（如果后端返回）
+        if (formState.remember && userInfo.username) {
+          localStorage.setItem('loginCredentials', JSON.stringify({
+            username: userInfo.username
+          }))
+        }
+        localStorage.setItem('isLogin', 'true')
+
+        // 根据登录方式显示不同成功消息
+        if (isEmailLogin.value) {
+          smartMessage.success(res.msg || (userInfo.isNewUser ? '注册成功并登录' : '登录成功'))
+        } else {
+          smartMessage.success('登录成功')
+        }
+        closeDialog()
+      } else {
+        smartMessage.error(res.msg || '登录失败，请检查输入信息')
+      }
+    } catch (error) {
+      console.error('登录失败:', error)
+      const errorMessage = isEmailLogin.value
+        ? '验证码登录失败，请检查邮箱和验证码'
+        : '登录失败，请检查用户名和密码'
+      smartMessage.error(errorMessage)
+    } finally {
+      loading.value = false
     }
   } catch (e) {
     console.error('Validation failed:', e)
@@ -505,7 +501,6 @@ const handleSubmit = async () => {
 const closeDialog = () => {
   store.showLoginModal = false
   resetForm()
-  isRegisterMode.value = false
   isEmailLogin.value = false
 
   clearTimer()
@@ -887,6 +882,14 @@ const sendResetEmail = async (email: string) => {
           &:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+          }
+
+          &.loading {
+            padding: 0 20px;
+
+            i {
+              font-size: 12px;
+            }
           }
         }
       }
