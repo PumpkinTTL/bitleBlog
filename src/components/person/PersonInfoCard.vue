@@ -396,7 +396,7 @@ function getLevelProgress(expInLevel: number, currentLevel: number) {
 }
 
 // 计算下一级所需经验
-function getNextLevelExp(totalExp: number, currentLevel: number) {
+function getNextLevelExp(_totalExp: number, currentLevel: number) {
   return currentLevel * 100
 }
 
@@ -756,28 +756,25 @@ const props = withDefaults(defineProps<Props>(), {
     flex: 1;
     margin-top: 0;
     padding: 12px;
-    background: linear-gradient(135deg, #fef7e6 0%, #fcd34d 100%);
-    border: 2px solid transparent;
-    border-radius: 12px;
+    border-radius: 8px;
     min-width: 0;
     position: relative;
     overflow: hidden;
-    box-shadow:
-      0 4px 20px rgba(252, 211, 177, 0.15),
-      0 8px 30px rgba(252, 211, 177, 0.1),
-      0 16px 40px rgba(252, 211, 177, 0.08);
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.15) 50%, transparent 70%);
-      pointer-events: none;
+    transition: all 0.3s ease;
+    
+    // 亮色模式
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border: 1px solid #f3d078;
+    box-shadow: 0 1px 4px rgba(251, 191, 36, 0.08);
+    
+    // 深色模式
+    [data-theme='dark'] & {
+      background: var(--el-bg-color);
+      border: 1px solid var(--el-border-color-light);
+      box-shadow: 0 1px 4px var(--el-box-shadow-light);
     }
 
+    // 高级光泽效果
     &::before {
       content: '';
       position: absolute;
@@ -785,8 +782,12 @@ const props = withDefaults(defineProps<Props>(), {
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(45deg, transparent 30%, rgba(251, 191, 36, 0.1) 50%, transparent 70%);
+      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
       pointer-events: none;
+      
+      [data-theme='dark'] & {
+        background: linear-gradient(45deg, transparent 30%, var(--el-fill-color-light) 50%, transparent 70%);
+      }
     }
 
     .vip-header {
@@ -799,27 +800,39 @@ const props = withDefaults(defineProps<Props>(), {
 
       i {
         font-size: 12px;
-        color: var(--el-color-warning);
+        color: #d97706;
         flex-shrink: 0;
+        
+        [data-theme='dark'] & {
+          color: var(--el-color-warning);
+        }
       }
 
       .vip-title {
         font-size: 12px;
         font-weight: 700;
-        color: var(--el-text-color-primary);
         flex: 1;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         letter-spacing: 0.3px;
+        color: #a16207;
+        
+        [data-theme='dark'] & {
+          color: var(--el-text-color-primary);
+        }
       }
 
       .vip-expire {
         font-size: 10px;
-        color: var(--el-text-color-regular);
         white-space: nowrap;
         flex-shrink: 0;
         font-weight: 500;
+        color: #92400e;
+        
+        [data-theme='dark'] & {
+          color: var(--el-text-color-regular);
+        }
       }
     }
 
@@ -828,21 +841,21 @@ const props = withDefaults(defineProps<Props>(), {
       align-items: center;
       gap: 6px;
       font-size: 10px;
-      color: #78350f;
       position: relative;
       z-index: 1;
-
+      color: #92400e;
+      
       [data-theme='dark'] & {
-        color: #fef3c7;
+        color: var(--el-text-color-regular);
       }
 
       i {
         font-size: 10px;
-        color: #f59e0b;
+        color: #d97706;
         flex-shrink: 0;
 
         [data-theme='dark'] & {
-          color: #fbbf24;
+          color: var(--el-color-warning);
         }
       }
 
@@ -851,10 +864,6 @@ const props = withDefaults(defineProps<Props>(), {
         overflow: hidden;
         text-overflow: ellipsis;
         font-weight: 500;
-
-        [data-theme='dark'] & {
-          color: #fed7aa;
-        }
       }
     }
   }
