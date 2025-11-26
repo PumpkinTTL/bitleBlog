@@ -4,7 +4,7 @@
       <a-card class="profile-header" :bordered="false">
         <div class="profile-header-content">
           <div class="profile-avatar-section">
-            <a-avatar :size="120" :src="userInfo.avatar" class="animate__animated animate__fadeIn">
+            <a-avatar :size="120" :src="userInfo.value.avatar" class="animate__animated animate__fadeIn">
               <template #icon><UserOutlined /></template>
             </a-avatar>
             <div class="profile-edit-avatar">
@@ -15,24 +15,24 @@
           </div>
           
           <div class="profile-info-section animate__animated animate__fadeInRight">
-            <h1 class="profile-name">{{ userInfo.name }}</h1>
-            <p class="profile-bio">{{ userInfo.bio }}</p>
+            <h1 class="profile-name">{{ userInfo.value.nickname || userInfo.value.username }}</h1>
+            <p class="profile-bio">{{ userInfo.value.bio }}</p>
             <div class="profile-tags">
-              <a-tag v-for="(tag, index) in userInfo.tags" :key="index" :color="tagColors[index % tagColors.length]">
-                {{ tag }}
+              <a-tag v-for="(role, index) in userInfo.value.roles" :key="index" :color="tagColors[index % tagColors.length]">
+                {{ role.iden || role.name }}
               </a-tag>
             </div>
             <div class="profile-stats">
               <div class="stat-item animate__animated animate__fadeIn" v-motion-pop>
-                <h3>{{ userInfo.posts }}</h3>
+                <h3>{{ userInfo.value.posts || 0 }}</h3>
                 <p>文章</p>
               </div>
               <div class="stat-item animate__animated animate__fadeIn" v-motion-pop-delay="0.1">
-                <h3>{{ userInfo.followers }}</h3>
+                <h3>{{ userInfo.value.followers || 0 }}</h3>
                 <p>粉丝</p>
               </div>
               <div class="stat-item animate__animated animate__fadeIn" v-motion-pop-delay="0.2">
-                <h3>{{ userInfo.following }}</h3>
+                <h3>{{ userInfo.value.following || 0 }}</h3>
                 <p>关注</p>
               </div>
             </div>
@@ -286,99 +286,41 @@
     </div>
   </template>
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
-import { 
-  UserOutlined, EditOutlined, MailOutlined, PhoneOutlined, 
-  EnvironmentOutlined, GlobalOutlined, GithubOutlined, 
+import { ref, reactive, computed } from 'vue';
+import {
+  UserOutlined, EditOutlined, MailOutlined, PhoneOutlined,
+  EnvironmentOutlined, GlobalOutlined, GithubOutlined,
   TwitterOutlined, LinkedinOutlined, InstagramOutlined,
-  TrophyOutlined, FileTextOutlined, ProjectOutlined, 
+  TrophyOutlined, FileTextOutlined, ProjectOutlined,
   SettingOutlined, EyeOutlined, LikeOutlined, MessageOutlined,
   ShareAltOutlined, StarOutlined, LockOutlined, SafetyOutlined,
   BulbOutlined, BulbFilled, DesktopOutlined, CameraOutlined
 } from '@ant-design/icons-vue';
 import { useMotion } from '@vueuse/motion';
+import { useStore } from '../store';
 
-// 用户信息数据
-const userInfo = reactive({
-  name: '张明',
-  avatar: 'https://randomuser.me/api/portraits/men/85.jpg',
-  bio: '全栈开发工程师，热爱技术创新与分享，专注于Vue.js和Node.js生态系统。',
-  email: 'zhang.ming@example.com',
-  phone: '138****5678',
-  location: '上海市浦东新区',
-  website: 'https://zhangming.dev',
-  tags: ['前端开发', 'Vue.js', 'Node.js', 'UI设计', '技术博主'],
-  posts: 42,
-  followers: 1280,
-  following: 125,
-  skills: [
-    { name: 'Vue.js', level: 95 },
-    { name: 'JavaScript', level: 90 },
-    { name: 'Node.js', level: 85 },
-    { name: 'UI/UX设计', level: 75 },
-    { name: 'DevOps', level: 65 }
-  ],
-  recentPosts: [
-    {
-      id: 1,
-      title: 'Vue 3组合式API最佳实践',
-      date: '2023-11-15',
-      category: '前端开发',
-      excerpt: 'Vue 3的组合式API为我们提供了更灵活的代码组织方式，本文将分享在实际项目中的最佳实践和常见陷阱...',
-      cover: 'https://picsum.photos/id/1/300/200',
-      views: 2456,
-      likes: 189,
-      comments: 42,
-      shares: 78
-    },
-    {
-      id: 2,
-      title: 'Pinia状态管理进阶指南',
-      date: '2023-10-22',
-      category: 'Vue生态',
-      excerpt: 'Pinia作为Vue官方推荐的状态管理方案，如何在大型应用中高效使用？本文将深入探讨Pinia的高级特性...',
-      cover: 'https://picsum.photos/id/20/300/200',
-      views: 1832,
-      likes: 156,
-      comments: 36,
-      shares: 64
-    },
-    {
-      id: 3,
-      title: '构建高性能Vue应用：优化策略',
-      date: '2023-09-18',
-      category: '性能优化',
-      excerpt: '随着应用规模增长，性能问题逐渐显现。本文将分享一系列Vue应用性能优化策略，从打包体积到运行时优化...',
-      cover: 'https://picsum.photos/id/48/300/200',
-      views: 3211,
-      likes: 245,
-      comments: 53,
-      shares: 92
-    }
-  ],
-  projects: [
-    {
-      name: 'VueShop电商平台',
-      description: '基于Vue 3和Element Plus的现代电商解决方案',
-      cover: 'https://picsum.photos/id/26/400/200',
-      icon: 'https://picsum.photos/id/26/40/40',
-      technologies: ['Vue 3', 'Pinia', 'Element Plus']
-    },
-    {
-      name: 'MarkFlow笔记应用',
-      description: '支持Markdown的协作式笔记工具',
-      cover: 'https://picsum.photos/id/42/400/200',
-      icon: 'https://picsum.photos/id/42/40/40',
-      technologies: ['Vue 3', 'Vditor', 'IndexedDB']
-    },
-    {
-      name: 'DevDash开发者仪表盘',
-      description: '为开发者设计的项目管理与数据可视化平台',
-      cover: 'https://picsum.photos/id/180/400/200',
-      icon: 'https://picsum.photos/id/180/40/40',
-      technologies: ['Vue 3', 'ECharts', 'Ant Design Vue']
-    }
-  ]
+// 获取store中的用户信息
+const store = useStore();
+
+// 从store获取用户信息
+const userInfo = computed(() => {
+  const user = store.userInfo;
+  return user || {
+    id: 0,
+    username: '未知用户',
+    nickname: '未设置昵称',
+    avatar: '',
+    email: '',
+    phone: '',
+    location: '',
+    website: '',
+    bio: '这个人很懒，什么都没有留下~',
+    posts: 0,
+    followers: 0,
+    following: 0,
+    roles: [],
+    permissions: []
+  };
 });
 
 // 用户设置

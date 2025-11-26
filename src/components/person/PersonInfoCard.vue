@@ -10,8 +10,10 @@
       <!-- 头像区域 -->
       <div class="avatar-section">
         <div class="avatar-container">
-          <div class="avatar-ring"></div>
-          <img :src="userInfo.avatar" :alt="userInfo.username" class="avatar" />
+          <div class="avatar-ring" :class="{ 'vip-ring': userInfo.isVip, 'normal-ring': !userInfo.isVip }"></div>
+          <el-avatar :size="60" :src="userAvatar" class="avatar">
+            {{ userInitial }}
+          </el-avatar>
           <div class="avatar-status" :class="{ online: userInfo.isOnline }"></div>
           <!-- VIP徽章 -->
           <div v-if="userInfo.isVip" class="vip-badge">
@@ -29,7 +31,7 @@
         <div class="username-row">
           <h3 class="username">{{ userInfo.username }}</h3>
           <span v-if="userInfo.isVip" class="vip-tag">VIP</span>
-          <span class="level-badge">Lv.{{ userInfo.level }}</span>
+          <span class="level-badge" :class="{ 'vip-level': userInfo.isVip, 'normal-level': !userInfo.isVip }">Lv.{{ userInfo.level }}</span>
         </div>
         <p class="bio">{{ userInfo.bio }}</p>
       </div>
@@ -38,7 +40,7 @@
       <div class="info-bar">
         <div class="info-item">
           <i class="fas fa-calendar-check"></i>
-          <span>加入 {{ userInfo.joinDays || 365 }} 天</span>
+          <span>加入 {{ joinDays }} 天</span>
         </div>
         <div class="info-divider"></div>
         <div class="info-item">
@@ -65,7 +67,7 @@
         <div v-else class="normal-user-info compact">
           <div class="normal-user-header">
             <i class="fas fa-medal"></i>
-            <span class="normal-user-title">潜力用户</span>
+            <span class="normal-user-title">普通用户</span>
           </div>
           <div class="normal-user-privileges">
             <i class="fas fa-chart-line"></i>
@@ -219,6 +221,27 @@ interface UserInfo {
 const levelProgress = 78 // 等级进度百分比
 const expNeeded = 220 // 还需经验
 
+// 计算加入天数
+const joinDays = computed(() => {
+  const storeUser = store.userInfo as any
+  if (storeUser?.create_time) {
+    const createTime = new Date(storeUser.create_time)
+    const now = new Date()
+    const diffTime = Math.abs(now.getTime() - createTime.getTime())
+    const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+    return days >= 1 ? days : 1 // 不足一天当做一天
+  }
+  return 1 // 默认值
+})
+
+// 头像处理逻辑
+const userAvatar = computed(() => {
+  const storeUser = store.userInfo as any
+  return storeUser?.avatar || storeUser?.headImg || ''
+})
+
+const userInitial = computed(() => userInfo.value.username.charAt(0))
+
 interface Props {
   userInfo?: UserInfo
 }
@@ -232,7 +255,7 @@ const userInfo = computed(() => {
   if (storeUser) {
     return {
       id: storeUser.id,
-      avatar: storeUser.avatar || 'https://picsum.photos/200/200?random=1',
+      avatar: storeUser.avatar || storeUser.headImg || '',
       username: storeUser.nickname || storeUser.username || '未知用户',
       bio: storeUser.signature || '这个人很懒，什么都没有留下~',
       level: storeUser.level || 1,
@@ -408,7 +431,7 @@ const props = withDefaults(defineProps<Props>(), {
   align-items: center;
   justify-content: center;
   padding: 10px;
-  background: var(--el-fill-color-extra-light);
+  background: var(--el-bg-color);
   border-bottom: 1px solid var(--el-border-color-extra-light);
 
   .uid-label {
@@ -447,19 +470,30 @@ const props = withDefaults(defineProps<Props>(), {
       inset: -4px;
       border-radius: 50%;
       border: 2px solid transparent;
-      border-top-color: var(--theme-purple-primary);
-      border-right-color: var(--theme-purple-light-3);
       animation: rotate 3s linear infinite;
+
+      &.vip-ring {
+        border-top-color: var(--theme-purple-primary);
+        border-right-color: var(--theme-purple-light-3);
+      }
+
+      &.normal-ring {
+        border-top-color: #3b82f6;
+        border-right-color: #60a5fa;
+      }
     }
 
     .avatar {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      object-fit: cover;
       border: 2px solid var(--el-bg-color);
       position: relative;
       z-index: 1;
+
+      :deep(.el-avatar) {
+        width: 60px !important;
+        height: 60px !important;
+        border-radius: 50%;
+        object-fit: cover;
+      }
     }
 
     .avatar-status {
@@ -474,8 +508,8 @@ const props = withDefaults(defineProps<Props>(), {
       z-index: 2;
 
       &.online {
-        background: #10b981;
-        box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+        background: #3b82f6;
+        box-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
       }
     }
 
@@ -505,12 +539,12 @@ const props = withDefaults(defineProps<Props>(), {
       right: -2px;
       width: 18px;
       height: 18px;
-      background: linear-gradient(135deg, #10b981, #059669);
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
+      box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
       z-index: 2;
 
       i {
@@ -554,12 +588,21 @@ const props = withDefaults(defineProps<Props>(), {
 
     .level-badge {
       padding: 2px 8px;
-      background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
-      color: white;
       font-size: 10px;
       font-weight: 600;
       border-radius: 10px;
-      box-shadow: 0 2px 4px var(--theme-orange-shadow);
+
+      &.vip-level {
+        background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
+        color: white;
+        box-shadow: 0 2px 4px var(--theme-orange-shadow);
+      }
+
+      &.normal-level {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        color: white;
+        box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+      }
     }
   }
 
@@ -607,7 +650,7 @@ const props = withDefaults(defineProps<Props>(), {
     align-items: center;
     gap: 4px;
     padding: 8px 10px;
-    background: var(--el-fill-color-extra-light);
+    background: var(--el-bg-color);
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -707,8 +750,8 @@ const props = withDefaults(defineProps<Props>(), {
     flex: 1;
     margin-top: 0;
     padding: 10px;
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    border: 1px solid #fcd34d;
+    background: var(--el-bg-color);
+    border: 1px solid var(--el-border-color-lighter);
     border-radius: 8px;
     min-width: 0;
     position: relative;
@@ -735,14 +778,14 @@ const props = withDefaults(defineProps<Props>(), {
 
       i {
         font-size: 12px;
-        color: #d97706;
+        color: var(--el-color-warning);
         flex-shrink: 0;
       }
 
       .vip-title {
         font-size: 12px;
         font-weight: 700;
-        color: #92400e;
+        color: var(--el-text-color-primary);
         flex: 1;
         white-space: nowrap;
         overflow: hidden;
@@ -752,7 +795,7 @@ const props = withDefaults(defineProps<Props>(), {
 
       .vip-expire {
         font-size: 10px;
-        color: #92400e;
+        color: var(--el-text-color-regular);
         white-space: nowrap;
         flex-shrink: 0;
         font-weight: 500;
@@ -768,10 +811,18 @@ const props = withDefaults(defineProps<Props>(), {
       position: relative;
       z-index: 1;
 
+      [data-theme='dark'] & {
+        color: #fef3c7;
+      }
+
       i {
         font-size: 10px;
         color: #f59e0b;
         flex-shrink: 0;
+
+        [data-theme='dark'] & {
+          color: #fbbf24;
+        }
       }
 
       span {
@@ -779,6 +830,10 @@ const props = withDefaults(defineProps<Props>(), {
         overflow: hidden;
         text-overflow: ellipsis;
         font-weight: 500;
+
+        [data-theme='dark'] & {
+          color: #fed7aa;
+        }
       }
     }
   }
@@ -788,12 +843,17 @@ const props = withDefaults(defineProps<Props>(), {
     flex: 1;
     margin-top: 0;
     padding: 10px;
-    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
-    border: 1px solid #e5e7eb;
+    background: var(--el-bg-color);
+    border: 1px solid var(--el-border-color-lighter);
     border-radius: 8px;
     min-width: 0;
     position: relative;
     overflow: hidden;
+
+    [data-theme='dark'] & {
+      background: var(--el-bg-color);
+      border: 1px solid var(--el-border-color);
+    }
 
     &::before {
       content: '';
@@ -802,7 +862,7 @@ const props = withDefaults(defineProps<Props>(), {
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(45deg, transparent 30%, rgba(107, 114, 128, 0.05) 50%, transparent 70%);
+      background: linear-gradient(45deg, transparent 30%, rgba(59, 130, 246, 0.05) 50%, transparent 70%);
       pointer-events: none;
     }
 
@@ -816,14 +876,14 @@ const props = withDefaults(defineProps<Props>(), {
 
       i {
         font-size: 12px;
-        color: #6b7280;
+        color: var(--el-color-primary);
         flex-shrink: 0;
       }
 
       .normal-user-title {
         font-size: 12px;
         font-weight: 700;
-        color: #4b5563;
+        color: var(--el-text-color-primary);
         flex: 1;
         white-space: nowrap;
         overflow: hidden;
@@ -837,13 +897,13 @@ const props = withDefaults(defineProps<Props>(), {
       align-items: center;
       gap: 6px;
       font-size: 10px;
-      color: #374151;
+      color: var(--el-text-color-regular);
       position: relative;
       z-index: 1;
 
       i {
         font-size: 10px;
-        color: #9ca3af;
+        color: var(--el-color-primary);
         flex-shrink: 0;
       }
 
@@ -861,8 +921,8 @@ const props = withDefaults(defineProps<Props>(), {
     flex: 1;
     margin-top: 0;
     padding: 10px;
-    background: var(--el-fill-color-extra-light);
-    border: 1px solid var(--el-border-color-extra-light);
+    background: var(--el-bg-color);
+    border: 1px solid var(--el-border-color-lighter);
     border-radius: 8px;
     min-width: 0;
 
@@ -901,7 +961,7 @@ const props = withDefaults(defineProps<Props>(), {
 
       i {
         font-size: 9px;
-        color: #fbbf24;
+        color: var(--el-color-warning);
         flex-shrink: 0;
       }
 
@@ -911,7 +971,8 @@ const props = withDefaults(defineProps<Props>(), {
         text-overflow: ellipsis;
       }
     }
-  }
+
+      }
 }
 
 // 等级展示区域
@@ -949,8 +1010,8 @@ const props = withDefaults(defineProps<Props>(), {
     align-items: flex-start;
     gap: 8px;
     padding: 10px;
-    background: var(--el-fill-color-extra-light);
-    border: 1px solid var(--el-border-color-extra-light);
+    background: var(--el-bg-color);
+    border: 1px solid var(--el-border-color-lighter);
     border-radius: 8px;
     transition: all 0.3s ease;
     position: relative;
@@ -1085,11 +1146,11 @@ const props = withDefaults(defineProps<Props>(), {
     }
 
     &.reader .level-icon {
-      background: linear-gradient(135deg, #10b981, #059669);
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     }
 
     &.reader .level-progress-fill {
-      background: linear-gradient(90deg, #10b981, #34d399);
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
     }
 
     &.interaction .level-icon {
@@ -1260,7 +1321,7 @@ const props = withDefaults(defineProps<Props>(), {
 .level-progress {
   margin-top: 14px;
   padding: 12px;
-  background: var(--el-fill-color-extra-light);
+  background: var(--el-bg-color);
   border-radius: 10px;
   border: 1px solid var(--el-border-color-extra-light);
 

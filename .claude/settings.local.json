@@ -4,7 +4,9 @@
       "Bash(git push:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(npm run dev:build:*)"
+      "Bash(npm run dev:build:*)",
+      "Bash(npm run dev)",
+      "Bash(git reset:*)"
     ],
     "deny": [],
     "ask": []
