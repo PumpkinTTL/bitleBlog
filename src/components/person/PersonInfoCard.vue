@@ -788,8 +788,8 @@ const props = withDefaults(defineProps<Props>(), {
     flex: 1;
     margin-top: 0;
     padding: 10px;
-    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-    border: 1px solid #bbf7d0;
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    border: 1px solid #e5e7eb;
     border-radius: 8px;
     min-width: 0;
     position: relative;
@@ -802,7 +802,7 @@ const props = withDefaults(defineProps<Props>(), {
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(45deg, transparent 30%, rgba(16, 185, 129, 0.05) 50%, transparent 70%);
+      background: linear-gradient(45deg, transparent 30%, rgba(107, 114, 128, 0.05) 50%, transparent 70%);
       pointer-events: none;
     }
 
@@ -816,14 +816,14 @@ const props = withDefaults(defineProps<Props>(), {
 
       i {
         font-size: 12px;
-        color: #059669;
+        color: #6b7280;
         flex-shrink: 0;
       }
 
       .normal-user-title {
         font-size: 12px;
         font-weight: 700;
-        color: #047857;
+        color: #4b5563;
         flex: 1;
         white-space: nowrap;
         overflow: hidden;
@@ -837,13 +837,13 @@ const props = withDefaults(defineProps<Props>(), {
       align-items: center;
       gap: 6px;
       font-size: 10px;
-      color: #065f46;
+      color: #374151;
       position: relative;
       z-index: 1;
 
       i {
         font-size: 10px;
-        color: #10b981;
+        color: #9ca3af;
         flex-shrink: 0;
       }
 
