@@ -67,7 +67,7 @@
         <div v-else class="normal-user-info compact">
           <div class="normal-user-header">
             <i class="fas fa-medal"></i>
-            <span class="normal-user-title">普通用户</span>
+            <span class="normal-user-title">潜力用户</span>
           </div>
           <div class="normal-user-privileges">
             <i class="fas fa-chart-line"></i>
@@ -515,21 +515,27 @@ const props = withDefaults(defineProps<Props>(), {
 
     .vip-badge {
       position: absolute;
-      top: -2px;
-      right: -2px;
-      width: 18px;
-      height: 18px;
-      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      top: -3px;
+      right: -3px;
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #ffd700, #ffb300);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 6px rgba(251, 191, 36, 0.4);
+      box-shadow:
+        0 4px 12px rgba(255, 215, 0, 0.2),
+        0 8px 24px rgba(255, 215, 0, 0.15),
+        0 12px 48px rgba(255, 215, 0, 0.08);
       z-index: 2;
+      animation: vipPulse 2s ease-in-out infinite;
 
       i {
-        font-size: 9px;
+        font-size: 12px;
         color: white;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        flex-shrink: 0;
       }
     }
 
@@ -667,7 +673,7 @@ const props = withDefaults(defineProps<Props>(), {
       transition: all 0.3s ease;
 
       &.trophy {
-        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        background: linear-gradient(135deg, #fef8f8, #fbc02d);
         color: #d97706;
       }
 
@@ -749,13 +755,28 @@ const props = withDefaults(defineProps<Props>(), {
   .vip-info.compact {
     flex: 1;
     margin-top: 0;
-    padding: 10px;
-    background: var(--el-bg-color);
-    border: 1px solid var(--el-border-color-lighter);
-    border-radius: 8px;
+    padding: 12px;
+    background: linear-gradient(135deg, #fef7e6 0%, #fcd34d 100%);
+    border: 2px solid transparent;
+    border-radius: 12px;
     min-width: 0;
     position: relative;
     overflow: hidden;
+    box-shadow:
+      0 4px 20px rgba(252, 211, 177, 0.15),
+      0 8px 30px rgba(252, 211, 177, 0.1),
+      0 16px 40px rgba(252, 211, 177, 0.08);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.15) 50%, transparent 70%);
+      pointer-events: none;
+    }
 
     &::before {
       content: '';
@@ -843,12 +864,27 @@ const props = withDefaults(defineProps<Props>(), {
     flex: 1;
     margin-top: 0;
     padding: 10px;
-    background: var(--el-bg-color);
-    border: 1px solid var(--el-border-color-lighter);
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border: 1px solid #bfdbfe;
     border-radius: 8px;
     min-width: 0;
     position: relative;
     overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(59, 130, 246, 0.08) 50%, transparent 70%);
+      pointer-events: none;
+    }
+
+    [data-theme='dark'] & {
+      background: linear-gradient(45deg, transparent 30%, rgba(240, 147, 87, 0.12) 50%, transparent 70%);
+    }
 
     [data-theme='dark'] & {
       background: var(--el-bg-color);
