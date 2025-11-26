@@ -1,26 +1,26 @@
 <template>
-  <div class="person-info-card">
+  <div class="person-info-card animate__animated animate__fadeIn">
     <!-- 卡片头部 -->
-    <div class="card-header">
+    <div class="card-header animate__animated animate__fadeInDown" style="animation-delay: 0.05s">
       <span class="uid-label">UID: <span class="uid-number">{{ userInfo.id || '1008611' }}</span></span>
     </div>
 
     <!-- 卡片内容 -->
     <div class="card-body">
       <!-- 头像区域 -->
-      <div class="avatar-section">
+      <div class="avatar-section animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
         <div class="avatar-container">
           <div class="avatar-ring" :class="{ 'vip-ring': userInfo.isVip, 'normal-ring': !userInfo.isVip }"></div>
-          <el-avatar :size="60" :src="userAvatar" class="avatar">
+          <el-avatar :size="60" :src="userAvatar" class="avatar animate__animated animate__fadeIn" style="animation-delay: 0.15s">
             {{ userInitial }}
           </el-avatar>
-          <div class="avatar-status" :class="{ online: userInfo.isOnline }"></div>
+          <div class="avatar-status animate__animated animate__fadeIn" :class="{ online: userInfo.isOnline }" style="animation-delay: 0.2s"></div>
           <!-- VIP徽章 -->
-          <div v-if="userInfo.isVip" class="vip-badge">
+          <div v-if="userInfo.isVip" class="vip-badge animate__animated animate__fadeIn" style="animation-delay: 0.25s">
             <i class="fas fa-crown"></i>
           </div>
           <!-- 普通用户徽章 -->
-          <div v-else class="user-badge">
+          <div v-else class="user-badge animate__animated animate__fadeIn" style="animation-delay: 0.25s">
             <i class="fas fa-user"></i>
           </div>
         </div>
@@ -28,63 +28,63 @@
 
       <!-- 用户信息 -->
       <div class="user-info">
-        <div class="username-row">
+        <div class="username-row animate__animated animate__fadeInLeft" style="animation-delay: 0.3s">
           <h3 class="username">{{ userInfo.username }}</h3>
           <span v-if="userInfo.isVip" class="vip-tag">VIP</span>
-          <span class="level-badge" :class="{ 'vip-level': userInfo.isVip, 'normal-level': !userInfo.isVip }">Lv.{{ userInfo.level }}</span>
+          <span class="level-badge animate__animated animate__flipInX" :class="{ 'vip-level': userInfo.isVip, 'normal-level': !userInfo.isVip }" style="animation-delay: 0.35s">Lv.{{ userInfo.level }}</span>
         </div>
-        <p class="bio">{{ userInfo.bio }}</p>
+        <p class="bio animate__animated animate__fadeInUp" style="animation-delay: 0.4s">{{ userInfo.bio }}</p>
       </div>
 
       <!-- 信息栏 -->
-      <div class="info-bar">
-        <div class="info-item">
+      <div class="info-bar animate__animated animate__fadeInUp" style="animation-delay: 0.45s">
+        <div class="info-item animate__animated animate__slideInLeft" style="animation-delay: 0.5s">
           <i class="fas fa-calendar-check"></i>
           <span>加入 {{ joinDays }} 天</span>
         </div>
         <div class="info-divider"></div>
-        <div class="info-item">
+        <div class="info-item animate__animated animate__slideInRight" style="animation-delay: 0.55s">
           <i class="fas fa-feather-alt"></i>
           <span>{{ userInfo.posts || 0 }} 篇文章</span>
         </div>
       </div>
 
       <!-- 会员信息 & 等级进度 -->
-      <div class="compact-info-row">
+      <div class="compact-info-row animate__animated animate__fadeInUp" style="animation-delay: 0.6s">
         <!-- 会员信息 -->
-        <div v-if="userInfo.isVip" class="vip-info compact">
-          <div class="vip-header">
-            <i class="fas fa-crown"></i>
-            <span class="vip-title">Premium 会员</span>
+        <div v-if="userInfo.isVip" class="vip-info compact animate__animated animate__fadeInLeft" style="animation-delay: 0.65s">
+          <div class="vip-header animate__animated animate__bounceIn" style="animation-delay: 0.7s">
+            <i class="fas fa-crown animate__animated animate__swing animate__infinite"></i>
+            <span class="vip-title animate__animated animate__fadeInRight" style="animation-delay: 0.75s">Premium 会员</span>
           </div>
-          <div class="vip-privileges">
+          <div class="vip-privileges animate__animated animate__slideInUp" style="animation-delay: 0.8s">
             <i class="fas fa-check-circle"></i>
             <span>享有 8 项专属特权</span>
           </div>
         </div>
 
         <!-- 普通用户信息 -->
-        <div v-else class="normal-user-info compact">
-          <div class="normal-user-header">
+        <div v-else class="normal-user-info compact animate__animated animate__fadeInLeft" style="animation-delay: 0.65s">
+          <div class="normal-user-header animate__animated animate__bounceIn" style="animation-delay: 0.7s">
             <i class="fas fa-medal"></i>
-            <span class="normal-user-title">潜力用户</span>
+            <span class="normal-user-title animate__animated animate__fadeInRight" style="animation-delay: 0.75s">潜力用户</span>
           </div>
-          <div class="normal-user-privileges">
+          <div class="normal-user-privileges animate__animated animate__slideInUp" style="animation-delay: 0.8s">
             <i class="fas fa-chart-line"></i>
             <span>继续创作，提升等级解锁更多权限</span>
           </div>
         </div>
 
         <!-- 等级进度 -->
-        <div class="level-progress compact">
-          <div class="progress-header">
-            <span class="current-level">Lv.{{ userInfo.level }}</span>
-            <span class="progress-text">{{ levelProgress }}% → Lv.{{ userInfo.level + 1 }}</span>
+        <div class="level-progress compact animate__animated animate__fadeInRight" style="animation-delay: 0.85s">
+          <div class="progress-header animate__animated animate__fadeInDown" style="animation-delay: 0.9s">
+            <span class="current-level animate__animated animate__zoomIn" style="animation-delay: 0.95s">Lv.{{ userInfo.level }}</span>
+            <span class="progress-text animate__animated animate__fadeInRight" style="animation-delay: 1.0s">{{ levelProgress }}% → Lv.{{ userInfo.level + 1 }}</span>
           </div>
-          <div class="progress-bar">
-            <div class="progress-fill" :style="{ width: levelProgress + '%' }"></div>
+          <div class="progress-bar animate__animated animate__slideInUp" style="animation-delay: 1.05s">
+            <div class="progress-fill animate__animated animate__slideInLeft" :style="{ width: levelProgress + '%', animationDelay: '1.1s' }"></div>
           </div>
-          <div class="progress-tip">
+          <div class="progress-tip animate__animated animate__fadeInUp" style="animation-delay: 1.15s">
             <i class="fas fa-star"></i>
             <span>还需 {{ expNeeded }} 经验升级</span>
           </div>
@@ -92,24 +92,35 @@
       </div>
 
       <!-- 等级展示区域 -->
-      <div class="level-display-section">
-        <div class="level-header">
-          <i class="fas fa-trophy"></i>
-          <span class="level-title">等级</span>
+      <div class="level-display-section animate__animated animate__fadeIn" style="animation-delay: 1.2s">
+        <div class="level-header animate__animated animate__fadeInUp" style="animation-delay: 1.25s">
+          <i class="fas fa-trophy animate__animated animate__pulse animate__infinite"></i>
+          <span class="level-title animate__animated animate__fadeIn" style="animation-delay: 1.3s">等级</span>
         </div>
         <div class="level-cards">
-          <div v-for="level in levelData" :key="level.target_type" class="level-card" :class="level.type">
-            <div class="level-icon">
+          <div v-for="(level, index) in levelData" :key="level.target_type"
+               class="level-card animate__animated animate__zoomIn"
+               :class="level.type"
+               :style="{ animationDelay: `${0.7 + index * 0.1}s` }">
+            <div class="level-icon animate__animated animate__zoomIn"
+                 :style="{ animationDelay: `${0.75 + index * 0.1}s` }">
               <i :class="level.icon"></i>
             </div>
-            <div class="level-info">
-              <div class="level-name">{{ level.name }}</div>
-              <div class="level-details">
-                <span class="level-number">Lv.{{ level.current_level }}</span>
-                <span class="level-exp">{{ level.experience_in_level }}/{{ getNextLevelExp(level.total_experience, level.current_level) }} EXP</span>
+            <div class="level-info animate__animated animate__fadeIn"
+                 :style="{ animationDelay: `${0.8 + index * 0.1}s` }">
+              <div class="level-name animate__animated animate__fadeIn"
+                   :style="{ animationDelay: `${0.85 + index * 0.1}s` }">{{ level.name }}</div>
+              <div class="level-details animate__animated animate__fadeIn"
+                   :style="{ animationDelay: `${0.9 + index * 0.1}s` }">
+                <span class="level-number animate__animated animate__fadeIn"
+                      :style="{ animationDelay: `${0.95 + index * 0.1}s` }">Lv.{{ level.current_level }}</span>
+                <span class="level-exp animate__animated animate__fadeIn"
+                      :style="{ animationDelay: `${1.0 + index * 0.1}s` }">{{ level.experience_in_level }}/{{ getNextLevelExp(level.total_experience, level.current_level) }} EXP</span>
               </div>
-              <div class="level-progress-bar">
-                <div class="level-progress-fill" :style="{ width: getLevelProgress(level.experience_in_level, level.current_level) + '%' }"></div>
+              <div class="level-progress-bar animate__animated animate__fadeIn"
+                   :style="{ animationDelay: `${1.05 + index * 0.1}s` }">
+                <div class="level-progress-fill animate__animated animate__fadeIn"
+                     :style="{ width: getLevelProgress(level.experience_in_level, level.current_level) + '%', animationDelay: `${1.1 + index * 0.1}s` }"></div>
               </div>
               </div>
           </div>
@@ -117,59 +128,59 @@
       </div>
 
       <!-- 荣誉徽章 -->
-      <div class="badges-section">
-        <div class="badges-header">
-          <i class="fas fa-award"></i>
-          <span class="badges-title">荣誉徽章</span>
+      <div class="badges-section animate__animated animate__fadeIn" style="animation-delay: 1.0s">
+        <div class="badges-header animate__animated animate__fadeInUp" style="animation-delay: 1.05s">
+          <i class="fas fa-award animate__animated animate__pulse animate__infinite"></i>
+          <span class="badges-title animate__animated animate__fadeIn" style="animation-delay: 1.1s">荣誉徽章</span>
         </div>
         <div class="badge-items">
-          <div class="badge-item">
-            <div class="badge-icon trophy">
+          <div class="badge-item animate__animated animate__fadeIn" style="animation-delay: 1.15s">
+            <div class="badge-icon trophy animate__animated animate__fadeIn" style="animation-delay: 1.2s">
               <i class="fas fa-trophy"></i>
             </div>
-            <span>原创作者</span>
+            <span class="animate__animated animate__fadeIn" style="animation-delay: 1.25s">原创作者</span>
           </div>
-          <div class="badge-item">
-            <div class="badge-icon star">
+          <div class="badge-item animate__animated animate__fadeIn" style="animation-delay: 1.3s">
+            <div class="badge-icon star animate__animated animate__fadeIn" style="animation-delay: 1.35s">
               <i class="fas fa-star"></i>
             </div>
-            <span>优秀博主</span>
+            <span class="animate__animated animate__fadeIn" style="animation-delay: 1.4s">优秀博主</span>
           </div>
-          <div class="badge-item">
-            <div class="badge-icon fire">
+          <div class="badge-item animate__animated animate__fadeIn" style="animation-delay: 1.45s">
+            <div class="badge-icon fire animate__animated animate__fadeIn" style="animation-delay: 1.5s">
               <i class="fas fa-fire"></i>
             </div>
-            <span>活跃用户</span>
+            <span class="animate__animated animate__fadeIn" style="animation-delay: 1.55s">活跃用户</span>
           </div>
         </div>
       </div>
 
       <!-- 社交媒体 -->
-      <div class="social-links">
-        <div class="social-header">
-          <i class="fas fa-share-alt"></i>
-          <span class="social-title">社交方式</span>
+      <div class="social-links animate__animated animate__fadeIn" style="animation-delay: 1.6s">
+        <div class="social-header animate__animated animate__fadeInUp" style="animation-delay: 1.65s">
+          <i class="fas fa-share-alt animate__animated animate__pulse animate__infinite"></i>
+          <span class="social-title animate__animated animate__fadeIn" style="animation-delay: 1.7s">社交方式</span>
         </div>
         <div class="social-icons">
-          <a v-if="userInfo.github" :href="userInfo.github" class="social-icon github" title="GitHub" target="_blank">
+          <a v-if="userInfo.github" :href="userInfo.github" class="social-icon github animate__animated animate__bounceIn" title="GitHub" target="_blank" style="animation-delay: 1.75s">
             <i class="fab fa-github"></i>
           </a>
-          <a v-else href="#" class="social-icon github" title="GitHub" onclick="return false;">
+          <a v-else href="#" class="social-icon github animate__animated animate__bounceIn" title="GitHub" onclick="return false;" style="animation-delay: 1.75s">
             <i class="fab fa-github"></i>
           </a>
-          <a v-if="userInfo.twitter" :href="userInfo.twitter" class="social-icon twitter" title="Twitter" target="_blank">
+          <a v-if="userInfo.twitter" :href="userInfo.twitter" class="social-icon twitter animate__animated animate__bounceIn" title="Twitter" target="_blank" style="animation-delay: 1.8s">
             <i class="fab fa-twitter"></i>
           </a>
-          <a v-else href="#" class="social-icon twitter" title="Twitter" onclick="return false;">
+          <a v-else href="#" class="social-icon twitter animate__animated animate__bounceIn" title="Twitter" onclick="return false;" style="animation-delay: 1.8s">
             <i class="fab fa-twitter"></i>
           </a>
-          <a v-if="userInfo.wechat" class="social-icon weixin" title="微信">
+          <a v-if="userInfo.wechat" class="social-icon weixin animate__animated animate__bounceIn" title="微信" style="animation-delay: 1.85s">
             <i class="fab fa-weixin"></i>
           </a>
-          <a v-else href="#" class="social-icon weixin" title="微信" onclick="return false;">
+          <a v-else href="#" class="social-icon weixin animate__animated animate__bounceIn" title="微信" onclick="return false;" style="animation-delay: 1.85s">
             <i class="fab fa-weixin"></i>
           </a>
-          <a v-if="userInfo.weibo" :href="userInfo.weibo" class="social-icon weibo" title="微博" target="_blank">
+          <a v-if="userInfo.weibo" :href="userInfo.weibo" class="social-icon weibo animate__animated animate__bounceIn" title="微博" target="_blank" style="animation-delay: 1.9s">
             <i class="fab fa-weibo"></i>
           </a>
           <a v-else href="#" class="social-icon weibo" title="微博" onclick="return false;">
