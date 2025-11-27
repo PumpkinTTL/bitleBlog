@@ -41,9 +41,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { useStore } from '@/store'
+import { smartMessage } from '@/components/modal'
+
+// 获取smartMessage，优先使用全局属性，fallback到导入的函数
+const getSmartMessage = () => {
+  const instance = getCurrentInstance()
+  return instance?.proxy?.$smartMessage || (window as any).$smartMessage || smartMessage
+}
 
 // 导入组件
 import PersonInfoCard from '@/components/person/PersonInfoCard.vue'
@@ -53,6 +60,7 @@ import FavoritesList from '@/components/person/FavoritesList.vue'
 import AccountSettings from '@/components/person/AccountSettings.vue'
 
 const router = useRouter()
+const store = useStore()
 const activeTab = ref('articles')
 
 // 文章相关事件
@@ -65,7 +73,7 @@ const handleEditArticle = (article: any) => {
 }
 
 const handleDeleteArticle = (article: any) => {
-  ElMessage.warning(`删除文章: ${article.title}`)
+  getSmartMessage().warning(`删除文章: ${article.title}`)
 }
 
 const handleCreateArticle = () => {
@@ -74,15 +82,15 @@ const handleCreateArticle = () => {
 
 // 收藏相关事件
 const handleViewFavorite = (favorite: any) => {
-  ElMessage.info(`查看收藏: ${favorite.title}`)
+  getSmartMessage().info(`查看收藏: ${favorite.title}`)
 }
 
 const handleUncollect = (favorite: any) => {
-  ElMessage.success(`已取消收藏: ${favorite.title}`)
+  getSmartMessage().success(`已取消收藏: ${favorite.title}`)
 }
 
 const handleShare = (favorite: any) => {
-  ElMessage.info(`分享: ${favorite.title}`)
+  getSmartMessage().info(`分享: ${favorite.title}`)
 }
 
 const handleBrowse = () => {
@@ -91,12 +99,26 @@ const handleBrowse = () => {
 
 // 打卡相关事件
 const handleCheckIn = () => {
-  ElMessage.success('打卡成功！获得 +5 积分')
+  getSmartMessage().success('打卡成功！获得 +5 积分')
 }
 
 // 设置相关事件
 const handleSaveSettings = (data: any) => {
   console.log('保存设置:', data)
+
+  // 更新store中的用户信息
+  if (data.form) {
+    const userInfo = store.userInfo as any
+    if (userInfo) {
+      userInfo.nickname = data.form.username
+      userInfo.username = data.form.username
+      userInfo.email = data.form.email
+      userInfo.signature = data.form.bio
+      userInfo.avatar = data.form.avatar
+      userInfo.headImg = data.form.avatar
+      userInfo.gender = data.form.gender
+    }
+  }
 }
 </script>
 
