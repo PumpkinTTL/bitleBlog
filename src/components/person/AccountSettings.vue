@@ -1,10 +1,7 @@
 <template>
   <div class="account-settings-container animate__animated animate__fadeInLeft animate__faster">
     <!-- 个人资料设置 -->
-    <div
-      class="setting-card animate__animated animate__fadeInUp animate__faster"
-      style="animation-delay: 0.08s"
-    >
+    <div class="setting-card animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.08s">
       <div class="card-main">
         <div class="card-info">
           <div class="title-wrapper">
@@ -19,19 +16,14 @@
               <div class="avatar-upload-wrapper">
                 <div class="avatar-preview-small" @click="triggerAvatarUpload">
                   <el-avatar :size="64" :src="avatarPreviewUrl || form.avatar" class="profile-avatar">
-                    {{ form.username ? form.username.charAt(0) : 'U' }}
+                    {{ form.nickname ? form.nickname.charAt(0) : 'U' }}
                   </el-avatar>
                   <div class="avatar-edit-overlay">
                     <i class="fas fa-camera"></i>
                   </div>
                 </div>
-                <input
-                  ref="avatarInput"
-                  type="file"
-                  accept="image/*"
-                  style="display: none"
-                  @change="handleAvatarChange"
-                />
+                <input ref="avatarInput" type="file" accept="image/*" style="display: none"
+                  @change="handleAvatarChange" />
                 <div class="avatar-tips-compact">
                   <i class="fas fa-info-circle"></i>
                   <span>JPG/PNG，最大2MB</span>
@@ -40,7 +32,7 @@
                   <button class="btn-save-small" @click="saveAvatar" :disabled="uploading">
                     <i v-if="!uploading" class="fas fa-check"></i>
                     <i v-else class="fas fa-spinner fa-spin"></i>
-                    {{ uploading ? '上传中...' : '确认上传' }}
+                    {{ uploading ? '上传中...' : '确认上传修改' }}
                   </button>
                   <button class="btn-cancel-small" @click="cancelAvatar" :disabled="uploading">
                     <i class="fas fa-times"></i>
@@ -54,54 +46,45 @@
             <div class="profile-form-section">
               <div class="input-group-compact animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
                 <div class="input-row">
-                  <div class="input-wrapper-compact animate__animated animate__fadeInLeft" style="animation-delay: 0.2s">
-                    <label class="input-label-compact">用户名</label>
-                    <input
-                      v-model="form.username"
-                      type="text"
-                      class="setting-input-compact"
-                      placeholder="请输入用户名"
-                      maxlength="20"
-                    />
-                    <span class="input-counter-compact">{{ form.username.length }}/20</span>
+                  <div class="input-wrapper-compact animate__animated animate__fadeInLeft"
+                    style="animation-delay: 0.2s">
+                    <label class="input-label-compact">昵称</label>
+                    <input v-model="form.nickname" type="text" class="setting-input-compact" placeholder="请输入昵称"
+                      maxlength="20" />
+                    <span class="input-counter-compact">{{ form.nickname.length }}/20</span>
                   </div>
-                  <div class="input-wrapper-compact animate__animated animate__fadeInRight" style="animation-delay: 0.2s">
+                  <div class="input-wrapper-compact animate__animated animate__fadeInRight"
+                    style="animation-delay: 0.2s">
                     <label class="input-label-compact">邮箱地址</label>
-                    <input
-                      v-model="form.email"
-                      type="email"
-                      class="setting-input-compact"
-                      placeholder="请输入邮箱地址"
-                    />
+                    <input v-model="form.email" type="email" class="setting-input-compact" placeholder="请输入邮箱地址"
+                      disabled style="opacity: 0.6; cursor: not-allowed;" />
                   </div>
                 </div>
 
                 <div class="input-wrapper-compact animate__animated animate__fadeInLeft" style="animation-delay: 0.3s">
                   <label class="input-label-compact">个人简介</label>
-                  <textarea
-                    v-model="form.bio"
-                    class="setting-textarea-compact"
-                    placeholder="介绍一下自己吧..."
-                    rows="2"
-                    maxlength="200"
-                  ></textarea>
-                  <span class="input-counter-compact">{{ form.bio.length }}/200</span>
+                  <textarea v-model="form.signature" class="setting-textarea-compact" placeholder="介绍一下自己吧..." rows="2"
+                    maxlength="200"></textarea>
+                  <span class="input-counter-compact">{{ form.signature.length }}/200</span>
                 </div>
 
                 <div class="input-wrapper-compact animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
                   <label class="input-label-compact">性别</label>
                   <div class="gender-options-compact">
-                    <label class="gender-option-compact animate__animated animate__fadeIn" :class="{ active: form.gender === 1 }" style="animation-delay: 0.5s">
+                    <label class="gender-option-compact animate__animated animate__fadeIn"
+                      :class="{ active: form.gender === 1 }" style="animation-delay: 0.5s">
                       <input type="radio" v-model="form.gender" :value="1" />
                       <i class="fas fa-mars"></i>
                       <span>男</span>
                     </label>
-                    <label class="gender-option-compact animate__animated animate__fadeIn" :class="{ active: form.gender === 2 }" style="animation-delay: 0.6s">
+                    <label class="gender-option-compact animate__animated animate__fadeIn"
+                      :class="{ active: form.gender === 2 }" style="animation-delay: 0.6s">
                       <input type="radio" v-model="form.gender" :value="2" />
                       <i class="fas fa-venus"></i>
                       <span>女</span>
                     </label>
-                    <label class="gender-option-compact animate__animated animate__fadeIn" :class="{ active: form.gender === 0 }" style="animation-delay: 0.7s">
+                    <label class="gender-option-compact animate__animated animate__fadeIn"
+                      :class="{ active: form.gender === 0 }" style="animation-delay: 0.7s">
                       <input type="radio" v-model="form.gender" :value="0" />
                       <i class="fas fa-genderless"></i>
                       <span>保密</span>
@@ -109,7 +92,7 @@
                   </div>
                 </div>
 
-                  </div>
+              </div>
             </div>
           </div>
         </div>
@@ -117,14 +100,12 @@
     </div>
 
     <!-- 隐私设置 -->
-    <div 
-      class="setting-card animate__animated animate__fadeInUp animate__faster"
-      style="animation-delay: 0.16s"
-    >
+    <div class="setting-card animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.16s">
       <div class="card-main">
         <div class="card-info">
           <div class="title-wrapper">
-            <div class="title-icon privacy animate__animated animate__zoomIn animate__faster" style="animation-delay: 0.23s">
+            <div class="title-icon privacy animate__animated animate__zoomIn animate__faster"
+              style="animation-delay: 0.23s">
               <i class="fas fa-shield-alt"></i>
             </div>
             <h4 class="setting-title">隐私设置</h4>
@@ -148,14 +129,12 @@
     </div>
 
     <!-- 通知设置 -->
-    <div 
-      class="setting-card animate__animated animate__fadeInUp animate__faster"
-      style="animation-delay: 0.24s"
-    >
+    <div class="setting-card animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.24s">
       <div class="card-main">
         <div class="card-info">
           <div class="title-wrapper">
-            <div class="title-icon notification animate__animated animate__zoomIn animate__faster" style="animation-delay: 0.31s">
+            <div class="title-icon notification animate__animated animate__zoomIn animate__faster"
+              style="animation-delay: 0.31s">
               <i class="fas fa-bell"></i>
             </div>
             <h4 class="setting-title">通知设置</h4>
@@ -203,13 +182,14 @@
 import { ref, reactive, onMounted, watch } from 'vue'
 import { useStore } from '@/store'
 import { ElAvatar } from 'element-plus'
-import { uploadUserAvatarR } from '@/request/upload'
+import { uploadSingleFileR } from '@/request/upload'
+import { updateUserProfileR } from '@/request/user'
 import { smartMessage } from '@/components/modal'
 
 interface FormData {
-  username: string
+  nickname: string
   email: string
-  bio: string
+  signature: string
   avatar: string
   gender: number
 }
@@ -223,9 +203,9 @@ const avatarPreviewUrl = ref('')
 const initFormData = () => {
   const userInfo = store.userInfo as any
   return {
-    username: userInfo?.username || userInfo?.nickname || '',
+    nickname: userInfo?.nickname || userInfo?.username || '',
     email: userInfo?.email || '',
-    bio: userInfo?.signature || userInfo?.bio || '',
+    signature: userInfo?.signature || '',
     avatar: userInfo?.avatar || userInfo?.headImg || '',
     gender: userInfo?.gender || 0
   }
@@ -233,32 +213,27 @@ const initFormData = () => {
 
 const form = reactive<FormData>(initFormData())
 
-// 监听store中用户信息的变化
-watch(() => store.userInfo, (newUserInfo) => {
-  if (newUserInfo) {
-    const userInfo = newUserInfo as any
-    Object.assign(form, {
-      username: userInfo?.username || userInfo?.nickname || '',
-      email: userInfo?.email || '',
-      bio: userInfo?.signature || userInfo?.bio || '',
-      avatar: userInfo?.avatar || userInfo?.headImg || '',
-      gender: userInfo?.gender || 0
-    })
+// 使用computed直接从store读取数据，不需要watch
+// form现在直接绑定到store，实现双向同步
+const syncFormWithStore = () => {
+  if (store.userInfo) {
+    const userInfo = store.userInfo as any
+    form.nickname = userInfo?.nickname || userInfo?.username || ''
+    form.email = userInfo?.email || ''
+    form.signature = userInfo?.signature || ''
+    form.avatar = userInfo?.avatar || userInfo?.headImg || ''
+    form.gender = userInfo?.gender || 0
   }
+}
+
+// 监听store变化，同步到表单
+watch(() => store.userInfo, () => {
+  syncFormWithStore()
 }, { immediate: true, deep: true })
 
 // 组件挂载时重新加载数据
 onMounted(() => {
-  const userInfo = store.userInfo as any
-  if (userInfo) {
-    Object.assign(form, {
-      username: userInfo?.username || userInfo?.nickname || '',
-      email: userInfo?.email || '',
-      bio: userInfo?.signature || userInfo?.bio || '',
-      avatar: userInfo?.avatar || userInfo?.headImg || '',
-      gender: userInfo?.gender || 0
-    })
-  }
+  syncFormWithStore()
 })
 
 // 头像相关方法
@@ -290,38 +265,100 @@ const saveAvatar = async () => {
     const userInfo = store.userInfo as any
     const userId = userInfo?.id
 
-    // 使用封装的上传方法
-    const response = await uploadUserAvatarR(avatarInput.value.files[0], userId) as any
-    
-    // 调试信息
-    console.log('上传响应:', response)
+    // 直接使用uploadSingleFileR上传文件
+    const uploadResponse = await uploadSingleFileR(avatarInput.value.files[0], {
+      user_id: userId,
+      storage_type: 0, // 本地存储
+      remark: '用户头像上传'
+    }) as any
 
-    // 根据API文档返回格式处理响应
-    // Axios拦截器已经返回了response.data，所以直接使用response
-    // code 200: 新文件上传成功
-    // code 201: 文件已存在，使用现有文件
-    if (response.code === 200 || response.code === 201) {
-      // data是数组，取第一个文件的url
-      const uploadedFile = response.data[0]
-      console.log('上传文件信息:', uploadedFile)
-      
-      if (uploadedFile && uploadedFile.url) {
-        form.avatar = uploadedFile.url
-        // 根据是否重复文件显示不同消息
-        if (uploadedFile.is_duplicate || response.code === 201||response.code === 200) {
-          smartMessage.success('头像更新成功')
-        } 
-        avatarPreviewUrl.value = ''
+    console.log('上传响应:', uploadResponse)
 
-        // 触发保存事件，通知父组件更新数据
-        emit('save', { form, privacy, notifications })
-      } else {
-        console.error('文件信息不完整:', uploadedFile)
-        throw new Error('上传响应格式错误')
-      }
-    } else {
-      console.error('上传失败，状态码:', response.code, '消息:', response.msg)
-      throw new Error(response.msg || '上传失败')
+    // 根据新的接口文档处理响应
+    switch (uploadResponse.code) {
+      case 200:
+      // 全部新文件上传成功
+      case 201:
+      // 文件已存在，无需重复上传
+      case 202:
+        // 部分文件上传成功
+        {
+          const uploadedFile = uploadResponse.data[0]
+          console.log('上传文件信息:', uploadedFile)
+
+          if (uploadedFile && uploadedFile.url) {
+            // 头像上传成功，现在更新用户资料
+            try {
+              const updateResponse = await updateUserProfileR({
+                avatar: uploadedFile.url
+              }) as any
+
+              console.log('用户资料更新响应:', updateResponse)
+
+              if (updateResponse.code === 200) {
+                // 只更新头像字段
+                if (updateResponse.data && store.userInfo) {
+                  console.log('头像更新：API返回的数据:', updateResponse.data)
+                  const currentUserInfo = store.userInfo as any
+                  const updatedUserInfo = {
+                    ...currentUserInfo,
+                    avatar: updateResponse.data.avatar,
+               
+                  }
+                  console.log('头像更新：更新后的数据:', updatedUserInfo)
+                  store.setUserInfo(updatedUserInfo)
+                } else {
+                  // 备用方案：手动更新头像字段
+                  console.log('头像更新：使用备用方案更新store')
+                  if (store.userInfo) {
+                    const updatedUserInfo = Object.assign({}, store.userInfo)
+                      ; (updatedUserInfo as any).avatar = uploadedFile.url
+                      ; (updatedUserInfo as any).headImg = uploadedFile.url
+                    store.setUserInfo(updatedUserInfo)
+                  }
+                  // watch会自动更新form.avatar
+                }
+
+                // 清空预览
+                avatarPreviewUrl.value = ''
+
+                // 根据上传状态显示不同消息
+                if (uploadResponse.code === 201) {
+                  smartMessage.success('头像更新成功（使用已存在文件）')
+                } else if (uploadResponse.code === 202) {
+                  const newFiles = uploadResponse.data.filter((file: any) => !file.is_duplicate)
+                  if (newFiles.length > 0) {
+                    smartMessage.success('头像上传并更新成功')
+                  } else {
+                    smartMessage.success('头像更新成功（使用已存在文件）')
+                  }
+                } else {
+                  smartMessage.success('头像上传并更新成功')
+                }
+              } else {
+                // 头像上传成功但更新资料失败
+                form.avatar = uploadedFile.url
+                avatarPreviewUrl.value = ''
+                smartMessage.warning('头像上传成功，但更新用户信息失败：' + (updateResponse.msg || '未知错误'))
+              }
+            } catch (updateError: any) {
+              // 头像上传成功但更新资料失败
+              form.avatar = uploadedFile.url
+              avatarPreviewUrl.value = ''
+              smartMessage.warning('头像上传成功，但更新用户信息失败：' + (updateError.message || '网络错误'))
+            }
+          } else {
+            console.error('文件信息不完整:', uploadedFile)
+            throw new Error('上传响应格式错误')
+          }
+          break
+        }
+      case 400:
+        throw new Error(uploadResponse.msg || '没有有效的文件被上传')
+      case 500:
+        throw new Error(uploadResponse.msg || '服务器错误')
+      default:
+        throw new Error('未知响应状态')
     }
   } catch (error: any) {
     smartMessage.error(error.message || '头像上传失败')
@@ -355,25 +392,53 @@ const notifications = reactive({
 
 const saving = ref(false)
 
-const emit = defineEmits<{
-  save: [data: { form: FormData; privacy: typeof privacy; notifications: typeof notifications }]
-  message: [type: 'success' | 'info', text: string]
-}>()
-
-const handleSave = () => {
+const handleSave = async () => {
   saving.value = true
 
-  setTimeout(() => {
+  try {
+    // 打印提交前的表单数据
+    console.log('提交前的表单数据:', {
+      nickname: form.nickname,
+      gender: form.gender,
+      signature: form.signature,
+      avatar: form.avatar
+    })
+
+    // 调用v2 API更新用户资料
+    const updateResponse = await updateUserProfileR({
+      nickname: form.nickname,
+      gender: form.gender,
+      signature: form.signature,
+      avatar: form.avatar
+    }) as any
+
+    if (updateResponse.code === 200) {
+      // 创建新对象，只修改4个字段
+      const { nickname, gender, signature, avatar } = updateResponse.data
+
+      console.log('更新后的数据:', { nickname, gender, signature, avatar })
+      store.$patch((state: any) => {
+        state.userInfo.nickname = nickname
+        state.userInfo.gender = gender
+        state.userInfo.signature = signature
+        state.userInfo.avatar = avatar
+      })
+      
+      smartMessage.success('个人资料保存成功')
+    }
+  }
+  catch (error: any) {
+    console.error('保存用户资料失败:', error)
+    smartMessage.error('个人资料保存失败：' + (error.message || '网络错误'))
+  } finally {
     saving.value = false
-    emit('message', 'success', '个人资料保存成功')
-    emit('save', { form, privacy, notifications })
-  }, 1000)
+  }
 }
 
 const handleReset = () => {
-  form.username = 'BitlE开发者'
+  form.nickname = 'BitlE开发者'
   form.email = 'dev@example.com'
-  form.bio = '热爱技术,专注前端开发'
+  form.signature = '热爱技术,专注前端开发'
 
   privacy.publicProfile = true
   privacy.showEmail = false
@@ -384,7 +449,7 @@ const handleReset = () => {
   notifications.follows = true
   notifications.system = true
 
-  emit('message', 'info', '已重置为默认设置')
+  smartMessage.info('已重置为默认设置')
 }
 </script>
 
@@ -408,7 +473,7 @@ const handleReset = () => {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 
-  
+
   @media (max-width: 768px) {
     padding: 12px;
   }
@@ -608,7 +673,7 @@ const handleReset = () => {
     opacity: 0.7;
     cursor: not-allowed;
     transform: none !important;
-    
+
     .fa-spinner {
       animation: spin 1s linear infinite;
     }
@@ -626,7 +691,7 @@ const handleReset = () => {
     transform: translateY(-1px);
     box-shadow: 0 1px 4px rgba(239, 68, 68, 0.2);
   }
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -1153,7 +1218,7 @@ const handleReset = () => {
   &:hover {
     background: var(--el-fill-color);
     border-color: var(--el-border-color);
-    
+
     .switch-text {
       color: var(--theme-purple-primary);
     }
@@ -1288,11 +1353,11 @@ const handleReset = () => {
     border: 1px solid var(--el-border-color-light) !important;
     transform: none !important;
     box-shadow: none !important;
-    
+
     .btn-content {
       opacity: 0.8;
     }
-    
+
     .fa-spinner {
       animation: spin 1s linear infinite;
     }
@@ -1312,11 +1377,11 @@ const handleReset = () => {
     transform: translateY(-1px);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
-  
+
   &:active:not(:disabled) {
     transform: translateY(0);
   }
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -1331,6 +1396,7 @@ const handleReset = () => {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

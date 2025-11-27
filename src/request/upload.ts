@@ -33,27 +33,6 @@ export const uploadSingleFileR = (file: File, options?: UploadOptions) => {
   });
 };
 
-// 上传用户头像 - 封装方法
-export const uploadUserAvatarR = (file: File, userId?: number) => {
-  // 验证文件类型和大小
-  const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'image/svg'];
-  const maxSize = 8 * 1024 * 1024; // 8MB（根据文档限制）
-
-  if (!validTypes.includes(file.type)) {
-    return Promise.reject(new Error('请选择JPG/PNG/GIF等格式的图片文件'));
-  }
-
-  if (file.size > maxSize) {
-    return Promise.reject(new Error('图片大小不能超过8MB'));
-  }
-
-  // 调用基础上传方法，添加头像特定的配置
-  return uploadSingleFileR(file, {
-    user_id: userId,
-    storage_type: 0, // 默认本地存储
-    remark: '用户头像上传'
-  });
-};
 
 // 上传多个文件
 export const uploadMultipleFilesR = (files: File[]) => {

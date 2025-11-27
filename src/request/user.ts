@@ -86,3 +86,73 @@ export const sendEmailCodeR = (params: { email: string }) => {
         data: params
     })
 }
+
+// ==================== V2版本API接口 ====================
+
+// 1. 获取当前用户信息
+export const getUserProfileR = () => {
+    return Axios({
+        method: 'GET',
+        url: '/api/v2/user/profile'
+    })
+}
+
+// 2. 更新用户资料
+export const updateUserProfileR = (params: {
+    nickname?: string;
+    gender?: number;
+    signature?: string;
+    avatar?: string;
+}) => {
+    return Axios({
+        method: 'PUT',
+        url: '/api/v2/user/update',
+        data: params
+    })
+}
+
+// 3. 检查用户名是否可用
+export const checkUsernameR = (params: { username: string }) => {
+    return Axios({
+        method: 'POST',
+        url: '/api/v2/user/checkUsername',
+        data: params
+    })
+}
+
+// 4. 检查邮箱是否可用
+export const checkEmailR = (params: { email: string }) => {
+    return Axios({
+        method: 'POST',
+        url: '/api/v2/user/checkEmail',
+        data: params
+    })
+}
+
+// 5. 获取会员状态
+export const getUserMembershipR = () => {
+    return Axios({
+        method: 'GET',
+        url: '/api/v2/user/membership'
+    })
+}
+
+// 6. 退出登录
+export const logoutV2R = () => {
+    return Axios({
+        method: 'POST',
+        url: '/api/v2/user/logout'
+    })
+}
+
+// 7. 注销账号
+export const deleteUserAccountR = (params: {
+    password: string;
+    confirmation: string;
+}) => {
+    return Axios({
+        method: 'DELETE',
+        url: '/api/v2/user/delete',
+        data: params
+    })
+}

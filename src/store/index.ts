@@ -24,6 +24,19 @@ export const useStore = defineStore('useStore', {
     actions: {
         changeInfo(param: string) {
             this.info = param
+        },
+        // 设置用户信息
+        setUserInfo(userInfo: any) {
+            this.userInfo = userInfo
+        },
+        // 清除用户信息
+        clearUserInfo() {
+            this.userInfo = undefined
+            this.isLogin = false
+        },
+        // 设置登录状态
+        setLoginStatus(status: boolean) {
+            this.isLogin = status
         }
     }
 })

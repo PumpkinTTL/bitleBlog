@@ -203,31 +203,66 @@
 import { computed } from 'vue'
 import { useStore } from '@/store'
 
-interface UserInfo {
-  id?: number
-  avatar: string
-  username: string
-  bio: string
-  level: number
-  isVip: boolean
-  isOnline: boolean
-  tags: string[]
-  email?: string
-  phone?: string
-  roles?: any[]
-  permissions?: string[]
-  last_login?: string
-  gender?: number
-  create_time?: string
-  posts?: number
-  followers?: number
-  following?: number
-  joinDays?: number
-  github?: string
-  twitter?: string
-  wechat?: string
-  weibo?: string
-}
+// 获取store中的用户信息
+const store = useStore()
+
+// 从store获取用户信息
+const userInfo = computed(() => {
+  const storeUser = store.userInfo as any
+  if (storeUser) {
+    return {
+      id: storeUser.id,
+      avatar: storeUser.avatar || storeUser.headImg || '',
+      username: storeUser.nickname || storeUser.username || '未知用户',
+      bio: storeUser.signature || storeUser.bio || '这个人很懒，什么都没有留下~',
+      level: storeUser.level || 1,
+      isVip: storeUser.premium !== null, // 如果premium不为null说明是会员
+      isOnline: storeUser.status !== undefined ? storeUser.status : true,
+      email: storeUser.email || '',
+      phone: storeUser.phone || '',
+      roles: storeUser.roles || [],
+      permissions: storeUser.permissions || [],
+      last_login: storeUser.last_login || '',
+      gender: storeUser.gender || 0,
+      create_time: storeUser.create_time || '',
+      // 保留虚拟数据字段（后端没有的）
+      posts: 128,
+      followers: 0,
+      following: 0,
+      joinDays: 365,
+      github: '',
+      twitter: '',
+      wechat: '',
+      weibo: ''
+    }
+  }
+
+  // 默认数据
+  return {
+    id: 0,
+    avatar: '',
+    username: '未知用户',
+    bio: '这个人很懒，什么都没有留下~',
+    level: 1,
+    isVip: false,
+    isOnline: false,
+    email: '',
+    phone: '',
+    roles: [],
+    permissions: [],
+    last_login: '',
+    gender: 0,
+    create_time: '',
+    posts: 0,
+    followers: 0,
+    following: 0,
+    joinDays: 1,
+    github: '',
+    twitter: '',
+    wechat: '',
+    weibo: ''
+  }
+})
 
 const levelProgress = 78 // 等级进度百分比
 const expNeeded = 220 // 还需经验
@@ -251,48 +286,9 @@ const userAvatar = computed(() => {
   return storeUser?.avatar || storeUser?.headImg || ''
 })
 
-const userInitial = computed(() => userInfo.value.username.charAt(0))
-
-interface Props {
-  userInfo?: UserInfo
-}
-
-// 获取store中的用户信息
-const store = useStore()
-
-// 从store获取用户信息或使用props传入的数据
-const userInfo = computed(() => {
-  const storeUser = store.userInfo as any
-  if (storeUser) {
-    return {
-      id: storeUser.id,
-      avatar: storeUser.avatar || storeUser.headImg || '',
-      username: storeUser.nickname || storeUser.username || '未知用户',
-      bio: storeUser.signature || '这个人很懒，什么都没有留下~',
-      level: storeUser.level || 1,
-      isVip: storeUser.premium !== null, // 如果premium不为null说明是会员
-      isOnline: storeUser.status !== undefined ? storeUser.status : true,
-      email: storeUser.email || '',
-      phone: storeUser.phone || '',
-      roles: storeUser.roles || [],
-      permissions: storeUser.permissions || [],
-      last_login: storeUser.last_login || '',
-      gender: storeUser.gender || 0,
-      create_time: storeUser.create_time || '',
-      // 保留虚拟数据字段（后端没有的）
-      posts: 128,
-      followers: 0,
-      following: 0,
-      joinDays: 365,
-      github: '',
-      twitter: '',
-      wechat: '',
-      weibo: ''
-    }
-  }
-
-  // 如果store中没有数据，使用props中的数据
-  return props.userInfo
+const userInitial = computed(() => {
+  const username = userInfo.value.username
+  return username ? username.charAt(0) : 'U'
 })
 
 // 等级数据处理
@@ -411,17 +407,6 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
   return currentLevel * 100
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  userInfo: () => ({
-    avatar: 'https://picsum.photos/200/200?random=1',
-    username: 'BitlE开发者',
-    bio: '热爱技术，专注前端开发',
-    level: 5,
-    isVip: true,
-    isOnline: true,
-    tags: ['前端开发', 'Vue.js', 'TypeScript']
-  })
-})
 </script>
 
 <style lang="less" scoped>

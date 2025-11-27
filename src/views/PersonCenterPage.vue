@@ -30,7 +30,7 @@
           </el-tab-pane>
           
           <el-tab-pane label="账号设置" name="settings">
-            <AccountSettings @save="handleSaveSettings" />
+            <AccountSettings />
           </el-tab-pane>
         </el-tabs>
           </el-col>
@@ -102,24 +102,7 @@ const handleCheckIn = () => {
   getSmartMessage().success('打卡成功！获得 +5 积分')
 }
 
-// 设置相关事件
-const handleSaveSettings = (data: any) => {
-  console.log('保存设置:', data)
-
-  // 更新store中的用户信息
-  if (data.form) {
-    const userInfo = store.userInfo as any
-    if (userInfo) {
-      userInfo.nickname = data.form.username
-      userInfo.username = data.form.username
-      userInfo.email = data.form.email
-      userInfo.signature = data.form.bio
-      userInfo.avatar = data.form.avatar
-      userInfo.headImg = data.form.avatar
-      userInfo.gender = data.form.gender
-    }
-  }
-}
+// AccountSettings组件已经通过store.$patch直接更新store，不需要父组件处理
 </script>
 
 <style lang="less" scoped>
