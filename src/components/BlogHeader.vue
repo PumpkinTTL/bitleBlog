@@ -233,13 +233,13 @@ const isLoggedIn = computed(() => store.isLogin)
 const userName = computed(() => {
   if (store.userInfo) {
     const userInfo = store.userInfo as any
-    return userInfo.username || userInfo.account || userInfo.name || '用户'
+    return userInfo.nickname || userInfo.username || '用户'
   }
   return '游客'
 })
 const userAvatar = computed(() => {
   const userInfo = store.userInfo as any
-  return userInfo?.avatar || userInfo?.headImg || ''
+  return userInfo?.avatar || ''
 })
 const userInitial = computed(() => userName.value.charAt(0))
 

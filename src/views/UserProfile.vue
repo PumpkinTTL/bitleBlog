@@ -115,7 +115,7 @@
               </div>
               <div class="user-info">
                 <h3 class="user-name">{{ user.username }}</h3>
-                <p class="user-bio">{{ user.bio || '这个人很懒，还没有填写个人介绍~' }}</p>
+                <p class="user-bio">{{ user.signature || '这个人很懒，还没有填写个人介绍~' }}</p>
                 <div class="user-stats">
                   <span class="stat-item">{{ user.articleCount }} 文章</span>
                   <span class="stat-item">{{ user.followerCount }} 粉丝</span>
@@ -141,7 +141,7 @@
               </div>
               <div class="user-info">
                 <h3 class="user-name">{{ user.username }}</h3>
-                <p class="user-bio">{{ user.bio || '这个人很懒，还没有填写个人介绍~' }}</p>
+                <p class="user-bio">{{ user.signature || '这个人很懒，还没有填写个人介绍~' }}</p>
                 <div class="user-stats">
                   <span class="stat-item">{{ user.articleCount }} 文章</span>
                   <span class="stat-item">{{ user.followerCount }} 粉丝</span>

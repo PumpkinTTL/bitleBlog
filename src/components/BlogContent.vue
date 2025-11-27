@@ -263,7 +263,7 @@
                     <span class="text-member-crown">{{ store.userInfo.nickname || store.userInfo.username || '用户' }}</span>
                     <span class="bitle-tag tag-vip">超级会员</span>
                   </div>
-                  <div class="user-bio">{{ store.userInfo.bio || "前端工程师 / UI设计师" }}</div>
+                  <div class="user-bio">{{ store.userInfo.signature || "前端工程师 / UI设计师" }}</div>
                 </div>
                 <div class="user-activity">
                   <div class="activity-item">

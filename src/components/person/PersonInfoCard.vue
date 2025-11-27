@@ -212,9 +212,9 @@ const userInfo = computed(() => {
   if (storeUser) {
     return {
       id: storeUser.id,
-      avatar: storeUser.avatar || storeUser.headImg || '',
+      avatar: storeUser.avatar || '',
       username: storeUser.nickname || storeUser.username || '未知用户',
-      bio: storeUser.signature || storeUser.bio || '这个人很懒，什么都没有留下~',
+      bio: storeUser.signature || '这个人很懒，什么都没有留下~',
       level: storeUser.level || 1,
       isVip: storeUser.premium !== null, // 如果premium不为null说明是会员
       isOnline: storeUser.status !== undefined ? storeUser.status : true,
@@ -283,7 +283,7 @@ const joinDays = computed(() => {
 // 头像处理逻辑
 const userAvatar = computed(() => {
   const storeUser = store.userInfo as any
-  return storeUser?.avatar || storeUser?.headImg || ''
+  return storeUser?.avatar || ''
 })
 
 const userInitial = computed(() => {

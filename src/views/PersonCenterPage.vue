@@ -11,28 +11,20 @@
           </el-col>
           <el-col :xs="24" :sm="24" :md="16" :lg="18" :xl="18">
             <el-tabs v-model="activeTab" class="content-tabs">
-          <el-tab-pane label="我的文章" name="articles">
-            <ArticlesList
-              @view="handleViewArticle"
-              @edit="handleEditArticle"
-              @delete="handleDeleteArticle"
-              @create="handleCreateArticle"
-            />
-          </el-tab-pane>
-          
-          <el-tab-pane label="我的收藏" name="favorites">
-            <FavoritesList
-              @view="handleViewFavorite"
-              @uncollect="handleUncollect"
-              @share="handleShare"
-              @browse="handleBrowse"
-            />
-          </el-tab-pane>
-          
-          <el-tab-pane label="账号设置" name="settings">
-            <AccountSettings />
-          </el-tab-pane>
-        </el-tabs>
+              <el-tab-pane label="我的文章" name="articles">
+                <ArticlesList @view="handleViewArticle" @edit="handleEditArticle" @delete="handleDeleteArticle"
+                  @create="handleCreateArticle" />
+              </el-tab-pane>
+
+              <el-tab-pane label="我的收藏" name="favorites">
+                <FavoritesList @view="handleViewFavorite" @uncollect="handleUncollect" @share="handleShare"
+                  @browse="handleBrowse" />
+              </el-tab-pane>
+
+              <el-tab-pane label="账号设置" name="settings">
+                <AccountSettings />
+              </el-tab-pane>
+            </el-tabs>
           </el-col>
         </el-row>
       </div>
@@ -125,14 +117,14 @@ const handleCheckIn = () => {
 // 内容包装器
 .content-wrapper {
   animation: slideInUp 0.6s ease-out;
-  
+
   @media (max-width: 768px) {
     animation: fadeIn 0.5s ease-out;
-    
+
     // 移动端每个卡片间距
     :deep(.el-col) {
       margin-bottom: 20px;
-      
+
       &:last-child {
         margin-bottom: 0;
       }
@@ -146,7 +138,7 @@ const handleCheckIn = () => {
   border-radius: 8px;
   border: 1px solid var(--el-border-color-lighter);
   overflow: hidden;
-  
+
   :deep(.el-tabs__header) {
     margin: 0;
     padding: 0 20px;
@@ -198,6 +190,7 @@ const handleCheckIn = () => {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -208,6 +201,7 @@ const handleCheckIn = () => {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

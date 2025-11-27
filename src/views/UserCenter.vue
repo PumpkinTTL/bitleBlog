@@ -16,7 +16,7 @@
           
           <div class="profile-info-section animate__animated animate__fadeInRight">
             <h1 class="profile-name">{{ userInfo.value.nickname || userInfo.value.username }}</h1>
-            <p class="profile-bio">{{ userInfo.value.bio }}</p>
+            <p class="profile-bio">{{ userInfo.value.signature }}</p>
             <div class="profile-tags">
               <a-tag v-for="(role, index) in userInfo.value.roles" :key="index" :color="tagColors[index % tagColors.length]">
                 {{ role.iden || role.name }}

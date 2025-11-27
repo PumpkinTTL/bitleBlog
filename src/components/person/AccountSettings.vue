@@ -206,7 +206,7 @@ const initFormData = () => {
     nickname: userInfo?.nickname || userInfo?.username || '',
     email: userInfo?.email || '',
     signature: userInfo?.signature || '',
-    avatar: userInfo?.avatar || userInfo?.headImg || '',
+    avatar: userInfo?.avatar || '',
     gender: userInfo?.gender || 0
   }
 }
@@ -221,7 +221,7 @@ const syncFormWithStore = () => {
     form.nickname = userInfo?.nickname || userInfo?.username || ''
     form.email = userInfo?.email || ''
     form.signature = userInfo?.signature || ''
-    form.avatar = userInfo?.avatar || userInfo?.headImg || ''
+    form.avatar = userInfo?.avatar || ''
     form.gender = userInfo?.gender || 0
   }
 }
@@ -313,7 +313,6 @@ const saveAvatar = async () => {
                   if (store.userInfo) {
                     const updatedUserInfo = Object.assign({}, store.userInfo)
                       ; (updatedUserInfo as any).avatar = uploadedFile.url
-                      ; (updatedUserInfo as any).headImg = uploadedFile.url
                     store.setUserInfo(updatedUserInfo)
                   }
                   // watch会自动更新form.avatar
