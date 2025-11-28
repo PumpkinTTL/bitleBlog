@@ -4,6 +4,7 @@
       <div class="content-wrapper">
         <div class="donation-form-section animate__animated animate__fadeInUp animate__fast">
           <a-card :bordered="false" class="form-card">
+            <!-- 页面头部 -->
             <div class="card-header-custom animate__animated animate__fadeIn animate__fast"
               style="animation-delay: 0.1s;">
               <div class="header-main">
@@ -34,11 +35,12 @@
               </div>
             </div>
 
+            <!-- 表单和侧边栏 -->
             <div class="form-and-sidebar-wrapper">
               <div class="donation-form">
                 <!-- SmartMessage 测试按钮 -->
-                <div style="margin-bottom: 20px; padding: 10px; background: #f5f7fa; border-radius: 8px;">
-                  <div style="margin-bottom: 8px; font-weight: 500; color: #606266;">SmartMessage 测试</div>
+                <div class="smartmessage-test">
+                  <div class="test-title">SmartMessage 测试</div>
                   <el-button type="success" @click="testSuccess">Success</el-button>
                   <el-button type="danger" @click="testError">Error</el-button>
                   <el-button type="warning" @click="testWarning">Warning</el-button>
@@ -48,12 +50,7 @@
                 <el-form ref="formRef" :model="formData" :rules="formRules" label-position="top">
                   <!-- 步骤条 -->
                   <StepForm class="animate__animated animate__fadeIn animate__fast" style="animation-delay: 0.2s;"
-                    :active="currentStep" :steps="[
-                      { title: '选择方式', description: stepDescriptions[0] },
-                      { title: '必填信息', description: stepDescriptions[1] },
-                      { title: '可选信息', description: stepDescriptions[2] },
-                      { title: '完成', description: stepDescriptions[3] || '提交成功' }
-                    ]" />
+                    :active="currentStep" :steps="stepSteps" />
 
                   <!-- 步骤1: 选择捐赠方式 -->
                   <div v-show="currentStep === 0" class="qrcode-section">
@@ -132,6 +129,7 @@
 
                   <!-- 步骤2: 必填信息 -->
                   <div v-show="currentStep === 1" class="form-step-section">
+                    <!-- 卡密输入 -->
                     <div v-if="selectedChannel === 'cardkey'">
                       <el-form-item label="卡密码" prop="card_key_code">
                         <el-input v-model="formData.card_key_code" placeholder="请输入卡密码，格式：ABCD-1234-EFGH-5678"
@@ -141,6 +139,7 @@
                       </el-form-item>
                     </div>
 
+                    <!-- 加密货币输入 -->
                     <div v-else-if="selectedChannel === 'crypto'">
                       <div class="crypto-info-tips">
                         <div class="crypto-badge">
@@ -169,6 +168,7 @@
                       </el-form-item>
                     </div>
 
+                    <!-- 微信/支付宝输入 -->
                     <div v-else-if="selectedChannel === 'wechat' || selectedChannel === 'alipay'">
                       <el-form-item label="捐赠金额" prop="amount">
                         <el-input-number v-model="formData.amount" :min="1" :max="99999" :precision="2"
@@ -342,9 +342,9 @@
                   <div class="activity-content">
                     <!-- 捐赠榜 -->
                     <div v-show="activeTab === 'ranking'" class="ranking-list">
-                      <div v-for="(item, index) in topDonors" :key="item.id"
+                      <div v-for="(item, index) in topDonorsWithDelay" :key="item.id"
                         class="ranking-item animate__animated animate__fadeInLeft animate__fast"
-                        :style="`animation-delay: ${index * 0.15}s;`">
+                        :style="item.animationStyle">
                         <div class="ranking-badge" :class="`rank-${index + 1}`">
                           <span v-if="index < 3">
                             <i v-if="index === 0" class="fas fa-crown"></i>
@@ -376,9 +376,9 @@
 
                     <!-- 最近捐赠 -->
                     <div v-show="activeTab === 'recent'" class="recent-list">
-                      <div v-for="item in recentDonations" :key="item.id"
+                      <div v-for="item in recentDonationsWithDelay" :key="item.id"
                         class="recent-item animate__animated animate__fadeInLeft animate__fast"
-                        :style="`animation-delay: ${recentDonations.indexOf(item) * 0.15}s;`">
+                        :style="item.animationStyle">
                         <div class="recent-avatar" :class="{ anonymous: item.is_anonymous }">
                           <i v-if="item.is_anonymous" class="fas fa-user-secret"></i>
                           <span v-else>{{ item.name.charAt(0) }}</span>
@@ -471,10 +471,12 @@ const channelLabels: Record<string, string> = {
   alipay: '支付宝'
 }
 
-const stepDescriptions = computed(() => [
-  selectedChannel.value ? `当前选择：${channelLabels[selectedChannel.value]}` : '请选择一种捐赠方式',
-  selectedChannel.value ? '填写必要的支付信息' : '等待选择方式',
-  '填写个人信息（可选）'
+// 步骤描述计算属性
+const stepSteps = computed(() => [
+  { title: '选择方式', description: selectedChannel.value ? `当前选择：${channelLabels[selectedChannel.value]}` : '请选择一种捐赠方式' },
+  { title: '必填信息', description: selectedChannel.value ? '填写必要的支付信息' : '等待选择方式' },
+  { title: '可选信息', description: '填写个人信息（可选）' },
+  { title: '完成', description: '提交成功' }
 ])
 
 const formData = reactive<Partial<DonationFormData>>({
@@ -514,6 +516,7 @@ const formRules = computed(() => {
   return rules
 })
 
+// 原始数据
 const recentDonations = ref([
   { id: 1, name: '热心网友', amount: 100, time: '5分钟前', channel: 'wechat', is_anonymous: false, email: true },
   { id: 2, name: '张三', amount: 50, time: '1小时前', channel: 'alipay', is_anonymous: false, email: false },
@@ -529,6 +532,21 @@ const topDonors = ref([
   { id: 4, name: '匿名用户', amount: 1888, channel: 'alipay', is_anonymous: true, email: false },
   { id: 5, name: '刘女士', amount: 999, channel: 'wechat', is_anonymous: false, email: true }
 ])
+
+// 添加动画样式的计算属性
+const topDonorsWithDelay = computed(() =>
+  topDonors.value.map((item, index) => ({
+    ...item,
+    animationStyle: { animationDelay: `${index * 0.15}s` }
+  }))
+)
+
+const recentDonationsWithDelay = computed(() =>
+  recentDonations.value.map((item, index) => ({
+    ...item,
+    animationStyle: { animationDelay: `${index * 0.15}s` }
+  }))
+)
 
 const getChannelName = (channel: string) => {
   const names: Record<string, string> = {
@@ -742,7 +760,6 @@ const testInfo = () => {
     pointer-events: none;
     z-index: 0;
   }
-
 
   .donation-content {
     max-width: 1440px;
@@ -966,7 +983,6 @@ const testInfo = () => {
   }
 
   @keyframes tabIconBounce {
-
     0%,
     100% {
       transform: scale(1);
@@ -985,9 +1001,7 @@ const testInfo = () => {
     }
   }
 
-
   @keyframes iconPulse {
-
     0%,
     100% {
       transform: scale(1);
@@ -1001,7 +1015,6 @@ const testInfo = () => {
   }
 
   @keyframes heartBeat {
-
     0%,
     100% {
       transform: scale(1);
@@ -1018,13 +1031,10 @@ const testInfo = () => {
     }
   }
 
-
-
   // 使用animate.css统一动画 - 快速流畅
   .animate__animated {
     --animate-duration: 0.5s;
   }
-
 
   .form-card,
   .info-card {
@@ -1061,6 +1071,18 @@ const testInfo = () => {
     }
   }
 
+  .smartmessage-test {
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #f5f7fa;
+    border-radius: 8px;
+
+    .test-title {
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #606266;
+    }
+  }
 
   .qrcode-section {
     margin-bottom: var(--spacing-md);
@@ -1739,7 +1761,6 @@ const testInfo = () => {
     }
   }
 
-
   .activity-widget {
     .activity-tabs {
       display: flex;
@@ -2113,7 +2134,6 @@ const testInfo = () => {
       }
     }
   }
-
 
   // ==================== 深色模式适配 ====================
   html.dark & {
