@@ -149,7 +149,6 @@ declare module 'vue' {
     ProfileBanner: typeof import('./src/components/common/ProfileBanner.vue')['default']
     ProfileCard: typeof import('./src/components/index/v2/ProfileCard.vue')['default']
     PromotionCard: typeof import('./src/components/blog/BlogDetail/PromotionCard.vue')['default']
-    PythonDemo: typeof import('./src/components/PythonDemo.vue')['default']
     RankingBoard: typeof import('./src/components/index/RankingBoard.vue')['default']
     RecentActivity: typeof import('./src/components/data/RecentActivity.vue')['default']
     ResourceBanner: typeof import('./src/components/resources/ResourceBanner.vue')['default']

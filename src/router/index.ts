@@ -162,14 +162,6 @@ const routes: RouteRecordRaw[] = [
         },
     },
     {
-        path: '/python-demo', name: 'pythonDemo',
-        component: () => import('@/components/PythonDemo.vue'),
-        meta: { 
-            header: false,
-            footer: true,
-        },
-    },
-    {
         path: '/404', name: '404',
         component: () => import('@/views/404.vue'),
         meta: { 
