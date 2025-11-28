@@ -70,25 +70,43 @@
 
                 <div class="input-wrapper-compact animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
                   <label class="input-label-compact">性别</label>
-                  <div class="gender-options-compact">
-                    <label class="gender-option-compact animate__animated animate__fadeIn"
-                      :class="{ active: form.gender === 1 }" style="animation-delay: 0.5s">
-                      <input type="radio" v-model="form.gender" :value="1" />
-                      <i class="fas fa-mars"></i>
-                      <span>男</span>
-                    </label>
-                    <label class="gender-option-compact animate__animated animate__fadeIn"
-                      :class="{ active: form.gender === 2 }" style="animation-delay: 0.6s">
-                      <input type="radio" v-model="form.gender" :value="2" />
-                      <i class="fas fa-venus"></i>
-                      <span>女</span>
-                    </label>
-                    <label class="gender-option-compact animate__animated animate__fadeIn"
-                      :class="{ active: form.gender === 0 }" style="animation-delay: 0.7s">
-                      <input type="radio" v-model="form.gender" :value="0" />
-                      <i class="fas fa-genderless"></i>
-                      <span>保密</span>
-                    </label>
+                  <div class="gender-row">
+                    <div class="gender-options-compact">
+                      <label class="gender-option-compact animate__animated animate__fadeIn"
+                        :class="{ active: form.gender === 1 }" style="animation-delay: 0.5s">
+                        <input type="radio" v-model="form.gender" :value="1" />
+                        <i class="fas fa-mars"></i>
+                        <span>男</span>
+                      </label>
+                      <label class="gender-option-compact animate__animated animate__fadeIn"
+                        :class="{ active: form.gender === 2 }" style="animation-delay: 0.6s">
+                        <input type="radio" v-model="form.gender" :value="2" />
+                        <i class="fas fa-venus"></i>
+                        <span>女</span>
+                      </label>
+                      <label class="gender-option-compact animate__animated animate__fadeIn"
+                        :class="{ active: form.gender === 0 }" style="animation-delay: 0.7s">
+                        <input type="radio" v-model="form.gender" :value="0" />
+                        <i class="fas fa-genderless"></i>
+                        <span>保密</span>
+                      </label>
+                    </div>
+                    
+                    <!-- 小巧的保存/重置按钮 -->
+                    <transition
+                      enter-active-class="animate__animated animate__bounceIn animate__faster"
+                      leave-active-class="animate__animated animate__zoomOut animate__faster"
+                    >
+                      <div v-if="hasChanges" class="quick-actions">
+                        <button class="quick-btn save" @click="handleSave" :disabled="saving" title="保存修改">
+                          <i v-if="!saving" class="fas fa-check"></i>
+                          <i v-else class="fas fa-spinner fa-spin"></i>
+                        </button>
+                        <button class="quick-btn reset" @click="handleResetForm" :disabled="saving" title="重置">
+                          <i class="fas fa-undo"></i>
+                        </button>
+                      </div>
+                    </transition>
                   </div>
                 </div>
 
@@ -175,11 +193,12 @@
         <span>重置</span>
       </button>
     </div>
+
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, watch } from 'vue'
+import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useStore } from '@/store'
 import { ElAvatar } from 'element-plus'
 import { uploadSingleFileR } from '@/request/upload'
@@ -213,6 +232,16 @@ const initFormData = () => {
 
 const form = reactive<FormData>(initFormData())
 
+// 保存原始数据用于对比
+const originalData = ref<FormData>(initFormData())
+
+// 检测是否有修改
+const hasChanges = computed(() => {
+  return form.nickname !== originalData.value.nickname ||
+         form.signature !== originalData.value.signature ||
+         form.gender !== originalData.value.gender
+})
+
 // 使用computed直接从store读取数据，不需要watch
 // form现在直接绑定到store，实现双向同步
 const syncFormWithStore = () => {
@@ -229,11 +258,14 @@ const syncFormWithStore = () => {
 // 监听store变化，同步到表单
 watch(() => store.userInfo, () => {
   syncFormWithStore()
+  // 同时更新原始数据
+  originalData.value = initFormData()
 }, { immediate: true, deep: true })
 
 // 组件挂载时重新加载数据
 onMounted(() => {
   syncFormWithStore()
+  originalData.value = initFormData()
 })
 
 // 头像相关方法
@@ -424,6 +456,8 @@ const handleSave = async () => {
       })
       
       smartMessage.success('个人资料保存成功')
+      // 保存成功后更新原始数据
+      originalData.value = { ...form }
     }
   }
   catch (error: any) {
@@ -432,6 +466,14 @@ const handleSave = async () => {
   } finally {
     saving.value = false
   }
+}
+
+// 重置表单到原始数据
+const handleResetForm = () => {
+  form.nickname = originalData.value.nickname
+  form.signature = originalData.value.signature
+  form.gender = originalData.value.gender
+  smartMessage.info('已重置修改')
 }
 
 const handleReset = () => {
@@ -1403,5 +1445,84 @@ const handleReset = () => {
 
 .fa-spinner {
   animation: spin 1s linear infinite;
+}
+
+// 性别行布局
+.gender-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+// 快捷操作按钮
+.quick-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.quick-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: 1px solid var(--el-border-color-lighter);
+  border-radius: 6px;
+  background: var(--el-fill-color-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 11px;
+  min-width: 28px;
+  
+  i {
+    font-size: 12px;
+    transition: all 0.2s ease;
+  }
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 5px 8px;
+    font-size: 10px;
+    
+    i {
+      font-size: 11px;
+    }
+  }
+}
+
+.quick-btn.save {
+  background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
+  color: white;
+  border-color: var(--theme-purple-primary);
+  box-shadow: 0 2px 4px var(--theme-orange-shadow);
+  
+  &:hover:not(:disabled) {
+    box-shadow: 0 3px 6px var(--theme-orange-shadow);
+  }
+}
+
+.quick-btn.reset {
+  background: var(--el-fill-color-light);
+  color: var(--el-text-color-regular);
+  border: 1px solid var(--el-border-color-lighter);
+  
+  &:hover:not(:disabled) {
+    background: var(--el-fill-color);
+    color: var(--theme-purple-primary);
+    border-color: var(--theme-purple-primary);
+  }
 }
 </style>
