@@ -4,11 +4,11 @@
     <div class="setting-card animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.08s">
       <div class="card-main">
         <div class="card-info">
-          <div class="title-wrapper">
-            <div class="title-icon animate__animated animate__zoomIn animate__faster" style="animation-delay: 0.15s">
-              <i class="fas fa-user-edit"></i>
+          <div class="section-header">
+            <div class="title-badge">
+              <span class="badge-dot"></span>
+              <h4 class="section-title">个人资料</h4>
             </div>
-            <h4 class="setting-title">个人资料</h4>
           </div>
           <div class="profile-content">
             <!-- 头像区域 -->
@@ -121,12 +121,11 @@
     <div class="setting-card animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.16s">
       <div class="card-main">
         <div class="card-info">
-          <div class="title-wrapper">
-            <div class="title-icon privacy animate__animated animate__zoomIn animate__faster"
-              style="animation-delay: 0.23s">
-              <i class="fas fa-shield-alt"></i>
+          <div class="section-header">
+            <div class="title-badge">
+              <span class="badge-dot orange"></span>
+              <h4 class="section-title">隐私设置</h4>
             </div>
-            <h4 class="setting-title">隐私设置</h4>
           </div>
           <div class="switch-group">
             <!-- 个人信息 -->
@@ -481,29 +480,90 @@ const handleResetForm = () => {
   flex: 1;
 }
 
-.setting-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--el-text-color-primary);
-  margin: 0;
-  letter-spacing: 0.3px;
-  flex: 1;
-
+// 精致圆点风格
+.section-header {
+  margin-bottom: 20px;
+  
   @media (max-width: 768px) {
-    font-size: 14px;
+    margin-bottom: 16px;
   }
 }
 
-.title-wrapper {
-  display: flex;
+.title-badge {
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
-  position: relative;
-
+  gap: 10px;
+  padding: 6px 12px 6px 8px;
+  background: var(--el-fill-color-light);
+  border-radius: 20px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: var(--el-fill-color);
+    
+    .badge-dot {
+      transform: scale(1.2);
+    }
+  }
+  
   @media (max-width: 768px) {
-    margin-bottom: 20px;
-    gap: 10px;
+    gap: 8px;
+    padding: 5px 10px 5px 6px;
+  }
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--theme-purple-primary);
+  flex-shrink: 0;
+  position: relative;
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+  transition: transform 0.2s ease;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--theme-purple-primary);
+    opacity: 0.1;
+  }
+  
+  &.orange {
+    background: #f59e0b;
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+    
+    &::before {
+      background: #f59e0b;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    width: 7px;
+    height: 7px;
+    
+    &::before {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--el-text-color-primary);
+  margin: 0;
+  letter-spacing: 0.5px;
+  
+  @media (max-width: 768px) {
+    font-size: 13px;
   }
 }
 
