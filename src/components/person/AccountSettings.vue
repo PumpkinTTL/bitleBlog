@@ -129,69 +129,43 @@
             <h4 class="setting-title">隐私设置</h4>
           </div>
           <div class="switch-group">
-            <div class="switch-row" @click="privacy.publicProfile = !privacy.publicProfile">
-              <span class="switch-text">公开个人资料</span>
-              <div :class="['switch', { on: privacy.publicProfile }]"></div>
-            </div>
-            <div class="switch-row" @click="privacy.showEmail = !privacy.showEmail">
-              <span class="switch-text">显示邮箱地址</span>
-              <div :class="['switch', { on: privacy.showEmail }]"></div>
-            </div>
-            <div class="switch-row" @click="privacy.allowFollow = !privacy.allowFollow">
-              <span class="switch-text">允许其他人关注</span>
-              <div :class="['switch', { on: privacy.allowFollow }]"></div>
-            </div>
+            <!-- 个人信息 -->
+            <fieldset class="privacy-fieldset">
+              <legend class="privacy-legend">个人信息</legend>
+              <div class="switch-row" @click="privacy.showEmail = !privacy.showEmail">
+                <span class="switch-text">显示邮箱地址</span>
+                <div :class="['switch', { on: privacy.showEmail }]"></div>
+              </div>
+            </fieldset>
+
+            <!-- 社交互动 -->
+            <fieldset class="privacy-fieldset">
+              <legend class="privacy-legend">社交互动</legend>
+              <div class="switch-row" @click="privacy.allowFollow = !privacy.allowFollow">
+                <span class="switch-text">允许其他人关注</span>
+                <div :class="['switch', { on: privacy.allowFollow }]"></div>
+              </div>
+              <div class="switch-row" @click="privacy.allowComment = !privacy.allowComment">
+                <span class="switch-text">允许评论我的文章</span>
+                <div :class="['switch', { on: privacy.allowComment }]"></div>
+              </div>
+            </fieldset>
+
+            <!-- 内容可见性 -->
+            <fieldset class="privacy-fieldset">
+              <legend class="privacy-legend">内容可见性</legend>
+              <div class="switch-row" @click="privacy.publicArticles = !privacy.publicArticles">
+                <span class="switch-text">公开我的文章列表</span>
+                <div :class="['switch', { on: privacy.publicArticles }]"></div>
+              </div>
+              <div class="switch-row" @click="privacy.publicFavorites = !privacy.publicFavorites">
+                <span class="switch-text">公开我的收藏夹</span>
+                <div :class="['switch', { on: privacy.publicFavorites }]"></div>
+              </div>
+            </fieldset>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- 通知设置 -->
-    <div class="setting-card animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.24s">
-      <div class="card-main">
-        <div class="card-info">
-          <div class="title-wrapper">
-            <div class="title-icon notification animate__animated animate__zoomIn animate__faster"
-              style="animation-delay: 0.31s">
-              <i class="fas fa-bell"></i>
-            </div>
-            <h4 class="setting-title">通知设置</h4>
-          </div>
-          <div class="switch-group">
-            <div class="switch-row" @click="notifications.comments = !notifications.comments">
-              <span class="switch-text">评论通知</span>
-              <div :class="['switch', { on: notifications.comments }]"></div>
-            </div>
-            <div class="switch-row" @click="notifications.likes = !notifications.likes">
-              <span class="switch-text">点赞通知</span>
-              <div :class="['switch', { on: notifications.likes }]"></div>
-            </div>
-            <div class="switch-row" @click="notifications.follows = !notifications.follows">
-              <span class="switch-text">关注通知</span>
-              <div :class="['switch', { on: notifications.follows }]"></div>
-            </div>
-            <div class="switch-row" @click="notifications.system = !notifications.system">
-              <span class="switch-text">系统通知</span>
-              <div :class="['switch', { on: notifications.system }]"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 保存按钮 -->
-    <div class="action-bar animate__animated animate__zoomIn animate__faster" style="animation-delay: 0.4s">
-      <button class="btn-save" @click="handleSave" :disabled="saving">
-        <div class="btn-content">
-          <i v-if="!saving" class="fas fa-save"></i>
-          <i v-else class="fas fa-spinner fa-spin"></i>
-          <span>{{ saving ? '保存中...' : '保存设置' }}</span>
-        </div>
-      </button>
-      <button class="btn-reset" @click="handleReset" :disabled="saving">
-        <i class="fas fa-undo"></i>
-        <span>重置</span>
-      </button>
     </div>
 
   </div>
@@ -409,16 +383,11 @@ const cancelAvatar = () => {
 
 
 const privacy = reactive({
-  publicProfile: true,
   showEmail: false,
-  allowFollow: true
-})
-
-const notifications = reactive({
-  comments: true,
-  likes: true,
-  follows: true,
-  system: true
+  allowFollow: true,
+  publicArticles: true,
+  publicFavorites: true,
+  allowComment: true
 })
 
 const saving = ref(false)
@@ -475,23 +444,6 @@ const handleResetForm = () => {
   form.gender = originalData.value.gender
   smartMessage.info('已重置修改')
 }
-
-const handleReset = () => {
-  form.nickname = 'BitlE开发者'
-  form.email = 'dev@example.com'
-  form.signature = '热爱技术,专注前端开发'
-
-  privacy.publicProfile = true
-  privacy.showEmail = false
-  privacy.allowFollow = true
-
-  notifications.comments = true
-  notifications.likes = true
-  notifications.follows = true
-  notifications.system = true
-
-  smartMessage.info('已重置为默认设置')
-}
 </script>
 
 <style lang="less" scoped>
@@ -529,51 +481,59 @@ const handleReset = () => {
   flex: 1;
 }
 
+.setting-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--el-text-color-primary);
+  margin: 0;
+  letter-spacing: 0.3px;
+  flex: 1;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+}
+
 .title-wrapper {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   position: relative;
 
   @media (max-width: 768px) {
-    margin-bottom: 14px;
+    margin-bottom: 20px;
     gap: 10px;
   }
 }
 
 .title-icon {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(167, 139, 250, 0.1));
-  border-radius: 10px;
+  background: var(--el-fill-color-light);
+  border-radius: 8px;
   color: var(--theme-purple-primary);
   font-size: 16px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   flex-shrink: 0;
+  border: 1px solid var(--el-border-color-extra-light);
 
   &.privacy {
-    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(56, 189, 248, 0.1));
+    background: var(--el-fill-color-light);
     color: #0ea5e9;
   }
 
   &.avatar {
-    background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(74, 222, 128, 0.1));
+    background: var(--el-fill-color-light);
     color: #22c55e;
   }
 
-  &.notification {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
-    color: #f59e0b;
-  }
-
   @media (max-width: 768px) {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     font-size: 14px;
   }
 }
@@ -1067,12 +1027,13 @@ const handleReset = () => {
   font-size: 16px;
   font-weight: 600;
   color: var(--el-text-color-primary);
-  margin: 0;
-  letter-spacing: 0.3px;
+  margin: 0 0 20px 0;
+  letter-spacing: 0.2px;
   flex: 1;
 
   @media (max-width: 768px) {
-    font-size: 14px;
+    font-size: 15px;
+    margin-bottom: 16px;
   }
 }
 
@@ -1242,10 +1203,40 @@ const handleReset = () => {
 .switch-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
 }
 
-.switch-row {
+.privacy-fieldset {
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 0;
+  
+  .switch-row {
+    margin-bottom: 8px;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.privacy-legend {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--theme-purple-primary);
+  padding: 0 8px;
+  background: var(--el-bg-color);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  
+  @media (max-width: 768px) {
+    font-size: 10px;
+    padding: 0 6px;
+  }
+}
+
+.switch-row:not(.privacy-card .switch-row) {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1258,7 +1249,6 @@ const handleReset = () => {
 
   &:hover {
     background: var(--el-fill-color);
-    border-color: var(--el-border-color);
 
     .switch-text {
       color: var(--theme-purple-primary);
@@ -1270,6 +1260,13 @@ const handleReset = () => {
   }
 }
 
+.switch-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
 .switch-text {
   font-size: 13px;
   color: var(--el-text-color-regular);
@@ -1278,6 +1275,16 @@ const handleReset = () => {
 
   @media (max-width: 768px) {
     font-size: 12px;
+  }
+}
+
+.switch-desc {
+  font-size: 11px;
+  color: var(--el-text-color-secondary);
+  line-height: 1.4;
+  
+  @media (max-width: 768px) {
+    font-size: 10px;
   }
 }
 
