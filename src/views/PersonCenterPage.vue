@@ -31,17 +31,16 @@
     </div>
 
     <!-- 移动端浮动设置按钮 -->
-    <button class="mobile-settings-btn" @click="drawerVisible = true">
+    <button class="mobile-settings-btn animate__animated animate__fadeInRight" @click="drawerVisible = true">
       <i class="fas fa-cog"></i>
-      <span>设置</span>
     </button>
 
     <!-- 移动端抽屉 -->
     <el-drawer
       v-model="drawerVisible"
       title="账号设置"
-      direction="ltr"
-      :size="320"
+      direction="rtl"
+      size="85%"
       class="mobile-settings-drawer"
     >
       <AccountSettings />
@@ -268,46 +267,96 @@ const handleCheckIn = () => {
   }
 }
 
-// 移动端浮动设置按钮
+// 移动端浮动设置按钮 - 右侧垂直居中贴边
 .mobile-settings-btn {
   display: none;
   position: fixed;
-  right: 20px;
-  bottom: 120px;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 100;
-  padding: 12px 20px;
-  background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
-  color: white;
-  border: none;
-  border-radius: 24px;
-  font-size: 14px;
-  font-weight: 600;
-  box-shadow: 0 4px 12px var(--theme-orange-shadow);
+  width: 42px;
+  height: 56px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-right: none;
+  border-radius: 10px 0 0 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.05);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 20px;
+    background: linear-gradient(180deg, var(--theme-purple-primary), var(--theme-purple-secondary));
+    border-radius: 0 2px 2px 0;
+  }
   
   i {
-    font-size: 16px;
-    animation: rotate 3s linear infinite;
+    font-size: 18px;
+    color: var(--theme-purple-primary);
+    animation: rotate-slow 4s linear infinite;
+    transition: all 0.3s ease;
   }
   
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px var(--theme-orange-shadow);
-  }
-  
+  // 移动端点击效果
   &:active {
-    transform: translateY(0);
+    transform: translateY(-50%) scale(0.92);
+    box-shadow: -1px 0 4px rgba(0, 0, 0, 0.08);
+  }
+  
+  // 只在支持 hover 的设备显示 hover 效果
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: translateY(-50%) translateX(-6px);
+      box-shadow: -4px 0 12px rgba(0, 0, 0, 0.12);
+      border-color: rgba(0, 0, 0, 0.12);
+      
+      &::before {
+        height: 30px;
+      }
+      
+      i {
+        animation: rotate-fast 1s linear infinite;
+        transform: scale(1.1);
+        color: var(--theme-purple-secondary);
+      }
+    }
   }
   
   @media (max-width: 768px) {
-    display: flex;
+    display: flex !important;
   }
 }
 
-@keyframes rotate {
+// 暗色模式适配
+html.dark {
+  .mobile-settings-btn {
+    background: rgba(30, 30, 30, 0.98);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.3);
+    
+    &:hover {
+      box-shadow: -4px 0 12px rgba(0, 0, 0, 0.5);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    
+    &:active {
+      box-shadow: -1px 0 4px rgba(0, 0, 0, 0.4);
+    }
+  }
+}
+
+@keyframes rotate-slow {
   0% {
     transform: rotate(0deg);
   }
@@ -315,6 +364,16 @@ const handleCheckIn = () => {
     transform: rotate(360deg);
   }
 }
+
+@keyframes rotate-fast {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 
 // 移动端抽屉样式
 :deep(.mobile-settings-drawer) {
