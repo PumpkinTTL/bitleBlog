@@ -983,6 +983,7 @@ const testInfo = () => {
   }
 
   @keyframes tabIconBounce {
+
     0%,
     100% {
       transform: scale(1);
@@ -1002,6 +1003,7 @@ const testInfo = () => {
   }
 
   @keyframes iconPulse {
+
     0%,
     100% {
       transform: scale(1);
@@ -1015,6 +1017,7 @@ const testInfo = () => {
   }
 
   @keyframes heartBeat {
+
     0%,
     100% {
       transform: scale(1);
