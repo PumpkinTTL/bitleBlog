@@ -91,12 +91,10 @@
                         <span>保密</span>
                       </label>
                     </div>
-                    
+
                     <!-- 小巧的保存/重置按钮 -->
-                    <transition
-                      enter-active-class="animate__animated animate__bounceIn animate__faster"
-                      leave-active-class="animate__animated animate__zoomOut animate__faster"
-                    >
+                    <transition enter-active-class="animate__animated animate__bounceIn animate__faster"
+                      leave-active-class="animate__animated animate__zoomOut animate__faster">
                       <div v-if="hasChanges" class="quick-actions">
                         <button class="quick-btn save" @click="handleSave" :disabled="saving" title="保存修改">
                           <i v-if="!saving" class="fas fa-check"></i>
@@ -129,35 +127,43 @@
           </div>
           <div class="switch-group">
             <!-- 个人信息 -->
-            <fieldset class="privacy-fieldset animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.2s">
+            <fieldset class="privacy-fieldset animate__animated animate__fadeInUp animate__faster"
+              style="animation-delay: 0.2s">
               <legend class="privacy-legend">个人信息</legend>
-              <div class="switch-row animate__animated animate__fadeInLeft" style="animation-delay: 0.25s" @click="privacy.showEmail = !privacy.showEmail">
+              <div class="switch-row animate__animated animate__fadeInLeft" style="animation-delay: 0.25s"
+                @click="privacy.showEmail = !privacy.showEmail">
                 <span class="switch-text">显示邮箱地址</span>
                 <div :class="['switch', { on: privacy.showEmail }]"></div>
               </div>
             </fieldset>
 
             <!-- 社交互动 -->
-            <fieldset class="privacy-fieldset animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.3s">
+            <fieldset class="privacy-fieldset animate__animated animate__fadeInUp animate__faster"
+              style="animation-delay: 0.3s">
               <legend class="privacy-legend">社交互动</legend>
-              <div class="switch-row animate__animated animate__fadeInLeft" style="animation-delay: 0.35s" @click="privacy.allowFollow = !privacy.allowFollow">
+              <div class="switch-row animate__animated animate__fadeInLeft" style="animation-delay: 0.35s"
+                @click="privacy.allowFollow = !privacy.allowFollow">
                 <span class="switch-text">允许其他人关注</span>
                 <div :class="['switch', { on: privacy.allowFollow }]"></div>
               </div>
-              <div class="switch-row animate__animated animate__fadeInLeft" style="animation-delay: 0.4s" @click="privacy.allowComment = !privacy.allowComment">
+              <div class="switch-row animate__animated animate__fadeInLeft" style="animation-delay: 0.4s"
+                @click="privacy.allowComment = !privacy.allowComment">
                 <span class="switch-text">允许评论我的文章</span>
                 <div :class="['switch', { on: privacy.allowComment }]"></div>
               </div>
             </fieldset>
 
             <!-- 内容可见性 -->
-            <fieldset class="privacy-fieldset animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.45s">
+            <fieldset class="privacy-fieldset animate__animated animate__fadeInUp animate__faster"
+              style="animation-delay: 0.45s">
               <legend class="privacy-legend">内容可见性</legend>
-              <div class="switch-row animate__animated animate__fadeInLeft" style="animation-delay: 0.5s" @click="privacy.publicArticles = !privacy.publicArticles">
+              <div class="switch-row animate__animated animate__fadeInLeft" style="animation-delay: 0.5s"
+                @click="privacy.publicArticles = !privacy.publicArticles">
                 <span class="switch-text">公开我的文章列表</span>
                 <div :class="['switch', { on: privacy.publicArticles }]"></div>
               </div>
-              <div class="switch-row animate__animated animate__fadeInLeft" style="animation-delay: 0.55s" @click="privacy.publicFavorites = !privacy.publicFavorites">
+              <div class="switch-row animate__animated animate__fadeInLeft" style="animation-delay: 0.55s"
+                @click="privacy.publicFavorites = !privacy.publicFavorites">
                 <span class="switch-text">公开我的收藏夹</span>
                 <div :class="['switch', { on: privacy.publicFavorites }]"></div>
               </div>
@@ -211,8 +217,8 @@ const originalData = ref<FormData>(initFormData())
 // 检测是否有修改
 const hasChanges = computed(() => {
   return form.nickname !== originalData.value.nickname ||
-         form.signature !== originalData.value.signature ||
-         form.gender !== originalData.value.gender
+    form.signature !== originalData.value.signature ||
+    form.gender !== originalData.value.gender
 })
 
 // 使用computed直接从store读取数据，不需要watch
@@ -308,7 +314,7 @@ const saveAvatar = async () => {
                   const updatedUserInfo = {
                     ...currentUserInfo,
                     avatar: updateResponse.data.avatar,
-               
+
                   }
                   console.log('头像更新：更新后的数据:', updatedUserInfo)
                   store.setUserInfo(updatedUserInfo)
@@ -422,7 +428,7 @@ const handleSave = async () => {
         state.userInfo.signature = signature
         state.userInfo.avatar = avatar
       })
-      
+
       smartMessage.success('个人资料保存成功')
       // 保存成功后更新原始数据
       originalData.value = { ...form }
@@ -483,7 +489,7 @@ const handleResetForm = () => {
 // 精致圆点风格
 .section-header {
   margin-bottom: 20px;
-  
+
   @media (max-width: 768px) {
     margin-bottom: 16px;
   }
@@ -497,15 +503,15 @@ const handleResetForm = () => {
   background: var(--el-fill-color-light);
   border-radius: 20px;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background: var(--el-fill-color);
-    
+
     .badge-dot {
       transform: scale(1.2);
     }
   }
-  
+
   @media (max-width: 768px) {
     gap: 8px;
     padding: 5px 10px 5px 6px;
@@ -521,7 +527,7 @@ const handleResetForm = () => {
   position: relative;
   box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
   transition: transform 0.2s ease;
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -534,20 +540,20 @@ const handleResetForm = () => {
     background: var(--theme-purple-primary);
     opacity: 0.1;
   }
-  
+
   &.orange {
     background: #f59e0b;
     box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
-    
+
     &::before {
       background: #f59e0b;
     }
   }
-  
+
   @media (max-width: 768px) {
     width: 7px;
     height: 7px;
-    
+
     &::before {
       width: 14px;
       height: 14px;
@@ -561,7 +567,7 @@ const handleResetForm = () => {
   color: var(--el-text-color-primary);
   margin: 0;
   letter-spacing: 0.5px;
-  
+
   @media (max-width: 768px) {
     font-size: 13px;
   }
@@ -1271,10 +1277,10 @@ const handleResetForm = () => {
   border-radius: 8px;
   padding: 16px;
   margin: 0;
-  
+
   .switch-row {
     margin-bottom: 8px;
-    
+
     &:last-child {
       margin-bottom: 0;
     }
@@ -1289,7 +1295,7 @@ const handleResetForm = () => {
   background: var(--el-bg-color);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  
+
   @media (max-width: 768px) {
     font-size: 10px;
     padding: 0 6px;
@@ -1342,7 +1348,7 @@ const handleResetForm = () => {
   font-size: 11px;
   color: var(--el-text-color-secondary);
   line-height: 1.4;
-  
+
   @media (max-width: 768px) {
     font-size: 10px;
   }
@@ -1541,29 +1547,29 @@ const handleResetForm = () => {
   transition: all 0.2s ease;
   font-size: 11px;
   min-width: 28px;
-  
+
   i {
     font-size: 12px;
     transition: all 0.2s ease;
   }
-  
+
   &:hover:not(:disabled) {
     transform: translateY(-1px);
   }
-  
+
   &:active:not(:disabled) {
     transform: translateY(0);
   }
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
-  
+
   @media (max-width: 768px) {
     padding: 5px 8px;
     font-size: 10px;
-    
+
     i {
       font-size: 11px;
     }
@@ -1575,7 +1581,7 @@ const handleResetForm = () => {
   color: white;
   border-color: var(--theme-purple-primary);
   box-shadow: 0 2px 4px var(--theme-orange-shadow);
-  
+
   &:hover:not(:disabled) {
     box-shadow: 0 3px 6px var(--theme-orange-shadow);
   }
@@ -1585,7 +1591,7 @@ const handleResetForm = () => {
   background: var(--el-fill-color-light);
   color: var(--el-text-color-regular);
   border: 1px solid var(--el-border-color-lighter);
-  
+
   &:hover:not(:disabled) {
     background: var(--el-fill-color);
     color: var(--theme-purple-primary);
