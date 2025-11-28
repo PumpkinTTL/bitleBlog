@@ -56,19 +56,14 @@
     <div v-if="isMobileMenuOpen" class="mobile-overlay" @click="handleMobileMenuToggle"></div>
     <!-- 全局滚动指示器 -->
     <ScrollIndicator v-if="showScrollIndicator" />
-    <!-- 回到顶部按钮 -->
-    <BackToTop v-if="showBackToTop" />
 
   </div>
- 
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import HeaderSection from './HeaderSection.vue'
 import ScrollIndicator from '../interactive/ScrollIndicator.vue'
-import BackToTop from '../interactive/BackToTop.vue'
-
 // 布局配置接口
 interface LayoutProps {
   layoutMode?: 'classic' | 'modern' | 'magazine' | 'masonry'
@@ -77,7 +72,6 @@ interface LayoutProps {
   showSearch?: boolean
   showNavigation?: boolean
   showScrollIndicator?: boolean
-  showBackToTop?: boolean
 }
 
 const props = withDefaults(defineProps<LayoutProps>(), {
@@ -86,11 +80,8 @@ const props = withDefaults(defineProps<LayoutProps>(), {
   headerStyle: 'fixed',
   showSearch: true,
   showNavigation: true,
-  showScrollIndicator: true,
-  showBackToTop: true
+  showScrollIndicator: true
 })
-
-// 事件定义
 const emit = defineEmits<{
   search: [query: string]
   mobileMenuToggle: [isOpen: boolean]

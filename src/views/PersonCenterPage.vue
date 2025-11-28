@@ -9,7 +9,7 @@
             <PersonInfoCard />
             <DailyCheckIn style="margin-top: 20px;" @checkIn="handleCheckIn" />
           </el-col>
-          <el-col :xs="24" :sm="24" :md="16" :lg="18" :xl="18">
+          <el-col :xs="24" :sm="24" :md="16" :lg="18" :xl="18" v-if="!isMobile">
             <el-tabs v-model="activeTab" class="content-tabs">
               <el-tab-pane label="我的文章" name="articles">
                 <ArticlesList @view="handleViewArticle" @edit="handleEditArticle" @delete="handleDeleteArticle"
@@ -21,8 +21,7 @@
                   @browse="handleBrowse" />
               </el-tab-pane>
 
-              <!-- PC端显示账号设置标签页 -->
-              <el-tab-pane label="账号设置" name="settings" class="pc-only-tab">
+              <el-tab-pane label="账号设置" name="settings">
                 <AccountSettings />
               </el-tab-pane>
             </el-tabs>
@@ -73,6 +72,12 @@ const router = useRouter()
 const store = useStore()
 const activeTab = ref('articles')
 const drawerVisible = ref(false)
+
+// 检测是否为移动端
+const isMobile = ref(window.innerWidth <= 768)
+window.addEventListener('resize', () => {
+  isMobile.value = window.innerWidth <= 768
+})
 
 // 文章相关事件
 const handleViewArticle = (article: any) => {
@@ -268,7 +273,7 @@ const handleCheckIn = () => {
   display: none;
   position: fixed;
   right: 20px;
-  bottom: 80px;
+  bottom: 120px;
   z-index: 100;
   padding: 12px 20px;
   background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
@@ -312,8 +317,8 @@ const handleCheckIn = () => {
 }
 
 // 移动端抽屉样式
-.mobile-settings-drawer {
-  :deep(.el-drawer__header) {
+:deep(.mobile-settings-drawer) {
+  .el-drawer__header {
     margin-bottom: 16px;
     padding: 16px 20px;
     border-bottom: 1px solid var(--el-border-color-lighter);
@@ -325,13 +330,15 @@ const handleCheckIn = () => {
     }
   }
   
-  :deep(.el-drawer__body) {
-    padding: 0;
+  .el-drawer__body {
+    padding: 0 !important;
     overflow-y: auto;
   }
-  
-  // PC端隐藏抽屉
-  @media (min-width: 769px) {
+}
+
+// PC端隐藏抽屉
+@media (min-width: 769px) {
+  .mobile-settings-drawer {
     display: none;
   }
 }

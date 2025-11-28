@@ -129,35 +129,35 @@
           </div>
           <div class="switch-group">
             <!-- 个人信息 -->
-            <fieldset class="privacy-fieldset">
+            <fieldset class="privacy-fieldset animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.2s">
               <legend class="privacy-legend">个人信息</legend>
-              <div class="switch-row" @click="privacy.showEmail = !privacy.showEmail">
+              <div class="switch-row animate__animated animate__fadeInLeft" style="animation-delay: 0.25s" @click="privacy.showEmail = !privacy.showEmail">
                 <span class="switch-text">显示邮箱地址</span>
                 <div :class="['switch', { on: privacy.showEmail }]"></div>
               </div>
             </fieldset>
 
             <!-- 社交互动 -->
-            <fieldset class="privacy-fieldset">
+            <fieldset class="privacy-fieldset animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.3s">
               <legend class="privacy-legend">社交互动</legend>
-              <div class="switch-row" @click="privacy.allowFollow = !privacy.allowFollow">
+              <div class="switch-row animate__animated animate__fadeInLeft" style="animation-delay: 0.35s" @click="privacy.allowFollow = !privacy.allowFollow">
                 <span class="switch-text">允许其他人关注</span>
                 <div :class="['switch', { on: privacy.allowFollow }]"></div>
               </div>
-              <div class="switch-row" @click="privacy.allowComment = !privacy.allowComment">
+              <div class="switch-row animate__animated animate__fadeInLeft" style="animation-delay: 0.4s" @click="privacy.allowComment = !privacy.allowComment">
                 <span class="switch-text">允许评论我的文章</span>
                 <div :class="['switch', { on: privacy.allowComment }]"></div>
               </div>
             </fieldset>
 
             <!-- 内容可见性 -->
-            <fieldset class="privacy-fieldset">
+            <fieldset class="privacy-fieldset animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.45s">
               <legend class="privacy-legend">内容可见性</legend>
-              <div class="switch-row" @click="privacy.publicArticles = !privacy.publicArticles">
+              <div class="switch-row animate__animated animate__fadeInLeft" style="animation-delay: 0.5s" @click="privacy.publicArticles = !privacy.publicArticles">
                 <span class="switch-text">公开我的文章列表</span>
                 <div :class="['switch', { on: privacy.publicArticles }]"></div>
               </div>
-              <div class="switch-row" @click="privacy.publicFavorites = !privacy.publicFavorites">
+              <div class="switch-row animate__animated animate__fadeInLeft" style="animation-delay: 0.55s" @click="privacy.publicFavorites = !privacy.publicFavorites">
                 <span class="switch-text">公开我的收藏夹</span>
                 <div :class="['switch', { on: privacy.publicFavorites }]"></div>
               </div>

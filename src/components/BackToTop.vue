@@ -1,191 +1,387 @@
 <template>
-  <transition name="fade">
-    <div 
-      v-show="visible" 
-      class="back-to-top animate__animated animate__fadeIn" 
-      @click="scrollToTop"
-      :style="{ bottom: offset + 'px', right: right + 'px' }"
-      v-motion-pop
-    >
-      <i class="fas fa-arrow-up back-to-top-icon"></i>
-      <span v-if="showText" class="back-to-top-text">返回顶部</span>
+  <div 
+    class="back-to-top" 
+    :class="{ 'visible': isVisible, 'scrolling': isScrolling }"
+    @click="scrollToTop"
+    v-show="isVisible"
+  >
+    <div class="btn-container">
+      <div class="btn-icon">
+        <i class="fas fa-arrow-up"></i>
+      </div>
+      <div class="btn-progress" v-if="showProgress">
+        <svg class="progress-ring" width="48" height="48">
+          <circle
+            class="progress-ring-bg"
+            cx="24"
+            cy="24"
+            r="20"
+            fill="transparent"
+            :stroke-width="strokeWidth"
+          />
+          <circle
+            class="progress-ring-fill"
+            cx="24"
+            cy="24"
+            r="20"
+            fill="transparent"
+            :stroke-width="strokeWidth"
+            :stroke-dasharray="circumference"
+            :stroke-dashoffset="strokeDashoffset"
+            transform="rotate(-90 24 24)"
+          />
+        </svg>
+      </div>
     </div>
-  </transition>
+    
+    <!-- 工具提示 -->
+    <div class="tooltip" :class="{ 'show': showTooltip }">
+      回到顶部
+    </div>
+  </div>
 </template>
 
-<script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
-// Props
-const props = defineProps({
-  // 显示阈值，默认滚动400px才显示
-  visibilityHeight: {
-    type: Number,
-    default: 400
-  },
-  // 返回顶部的速度，单位毫秒
-  duration: {
-    type: Number,
-    default: 500
-  },
-  // 按钮位置
-  offset: {
-    type: Number,
-    default: 30
-  },
-  // 按钮右侧的偏移量
-  right: {
-    type: Number,
-    default: 30
-  },
-  // 是否显示文字
-  showText: {
-    type: Boolean,
-    default: false
-  }
+interface BackToTopProps {
+  visibilityHeight?: number
+  showProgress?: boolean
+  duration?: number
+  offset?: number
+  right?: number
+}
+
+const props = withDefaults(defineProps<BackToTopProps>(), {
+  visibilityHeight: 300,
+  showProgress: true,
+  duration: 800,
+  offset: 30,
+  right: 30
 });
 
-// 按钮是否可见
-const visible = ref(false);
+const isVisible = ref(false)
+const isScrolling = ref(false)
+const showTooltip = ref(false)
+const scrollProgress = ref(0)
+const strokeWidth = 2
+const radius = 20
+const circumference = 2 * Math.PI * radius
 
-// 处理滚动事件
-const handleScroll = () => {
-  visible.value = window.pageYOffset > props.visibilityHeight;
-};
+// 计算进度环偏移
+const strokeDashoffset = computed(() => {
+  return circumference - (scrollProgress.value / 100) * circumference
+})
+
+// 更新滚动进度
+const updateScrollProgress = () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  const scrollHeight = document.documentElement.scrollHeight - window.innerHeight
+  
+  if (scrollHeight > 0) {
+    scrollProgress.value = (scrollTop / scrollHeight) * 100
+  }
+  
+  isVisible.value = scrollTop > props.visibilityHeight
+}
 
 // 平滑滚动到顶部
-const scrollToTop = () => {
-  const startPosition = window.pageYOffset;
-  const startTime = performance.now();
+const smoothScrollToTop = () => {
+  const startTime = performance.now()
+  const startPosition = window.pageYOffset
   
-  const animateScroll = (currentTime) => {
-    const elapsedTime = currentTime - startTime;
-    const progress = Math.min(elapsedTime / props.duration, 1);
+  const animateScroll = (currentTime: number) => {
+    const elapsed = currentTime - startTime
+    const progress = Math.min(elapsed / props.duration, 1)
     
-    // 使用easeInOutCubic缓动函数使动画更自然
-    const easeInOutCubic = t => 
-      t < 0.5 
-        ? 4 * t * t * t 
-        : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+    // 使用缓动函数
+    const easeOutCubic = 1 - Math.pow(1 - progress, 3)
+    const position = startPosition * (1 - easeOutCubic)
     
-    const easedProgress = easeInOutCubic(progress);
-    
-    window.scrollTo(0, startPosition * (1 - easedProgress));
+    window.scrollTo(0, position)
     
     if (progress < 1) {
-      window.requestAnimationFrame(animateScroll);
+      requestAnimationFrame(animateScroll)
+    } else {
+      isScrolling.value = false
     }
-  };
+  }
   
-  window.requestAnimationFrame(animateScroll);
-};
+  isScrolling.value = true
+  requestAnimationFrame(animateScroll)
+}
+
+// 滚动到顶部
+const scrollToTop = () => {
+  if (isScrolling.value) return
+  smoothScrollToTop()
+}
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll);
-});
+  window.addEventListener('scroll', updateScrollProgress, { passive: true })
+  updateScrollProgress()
+})
 
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', handleScroll);
+onUnmounted(() => {
+  window.removeEventListener('scroll', updateScrollProgress)
 });
 </script>
 
-<style scoped lang="less">
+<style lang="less" scoped>
 .back-to-top {
   position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.9);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+  }
+  
+  &.scrolling {
+    pointer-events: none;
+    
+    .btn-icon i {
+      animation: scrollingPulse 0.8s ease-in-out infinite;
+    }
+  }
+  
+  &:hover {
+    transform: translateY(-4px) scale(1.05);
+    
+    .btn-container {
+      background: linear-gradient(135deg, 
+        rgba(22, 119, 255, 0.15) 0%,
+        rgba(105, 177, 255, 0.1) 100%
+      );
+      box-shadow: 
+        0 12px 32px rgba(22, 119, 255, 0.25),
+        0 4px 16px rgba(22, 119, 255, 0.15);
+      border-color: rgba(22, 119, 255, 0.3);
+    }
+    
+    .btn-icon {
+      color: var(--el-color-primary);
+      transform: translateY(-2px) scale(1.1);
+    }
+    
+    .progress-ring-fill {
+      stroke: var(--el-color-primary);
+    }
+    
+    .tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(-8px);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+.btn-container {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(248, 250, 252, 0.95) 100%
+  );
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 50px;
-  width: 50px;
-  margin-bottom: env(safe-area-inset-bottom, 0);
-  background: linear-gradient(135deg, #1677FF, #40a9ff);
-  color: white;
-  cursor: pointer;
-  border-radius: 50%;
-  box-shadow: 0 8px 20px rgba(22, 119, 255, 0.5), 
-              0 4px 10px rgba(22, 119, 255, 0.3),
-              inset 0 2px 4px rgba(255, 255, 255, 0.3),
-              inset 0 -2px 4px rgba(30, 58, 138, 0.2);
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  transform: translateZ(0);
-  backface-visibility: hidden;
+  border: 0.5px solid rgba(22, 119, 255, 0.1);
+  box-shadow: 
+    0 8px 24px rgba(22, 119, 255, 0.12),
+    0 2px 8px rgba(22, 119, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   overflow: hidden;
-  z-index: 1000;
   
   &::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+.btn-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--el-text-color-regular);
+  font-size: 16px;
+  transition: all 0.3s ease;
+  z-index: 2;
+  
+  i {
+    display: block;
+    transition: transform 0.3s ease;
+  }
+}
+
+.btn-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  .progress-ring {
+    transform: rotate(-90deg);
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), transparent 60%);
-    pointer-events: none;
   }
   
-  &:hover {
-    transform: scale(1.05) translateZ(0);
-    background: linear-gradient(135deg, #40a9ff, #1677FF);
-    box-shadow: 0 15px 30px rgba(22, 119, 255, 0.6), 
-                0 8px 20px rgba(22, 119, 255, 0.4),
-                inset 0 2px 4px rgba(255, 255, 255, 0.3),
-                inset 0 -2px 4px rgba(30, 58, 138, 0.2);
-    
-    .back-to-top-icon {
-      transform: translateY(-2px);
-    }
-    
-    .back-to-top-text {
-      display: none;
-      margin-left: 6px;
-      opacity: 1;
-      transform: translateX(0);
-    }
+  .progress-ring-bg {
+    stroke: rgba(22, 119, 255, 0.1);
+    stroke-linecap: round;
   }
   
-  &:active {
-    transform: scale(0.95) translateZ(0);
-    background: linear-gradient(145deg, #0958d9, #1677FF);
-    box-shadow: 0 5px 15px rgba(22, 119, 255, 0.4), 
-                inset 0 2px 4px rgba(255, 255, 255, 0.2),
-                inset 0 -2px 4px rgba(30, 58, 138, 0.3);
-  }
-  
-  .back-to-top-icon {
-    font-size: 22px;
-    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-  
-  .back-to-top-text {
-    display: none;
-    font-size: 14px;
-    white-space: nowrap;
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: all 0.3s;
-    font-weight: 500;
+  .progress-ring-fill {
+    stroke: rgba(22, 119, 255, 0.6);
+    stroke-linecap: round;
+    transition: all 0.3s ease;
   }
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  background: var(--el-bg-color);
+  color: var(--el-text-color-primary);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
   opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  border: 0.5px solid var(--el-border-color-lighter);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 8px;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--el-bg-color);
+  }
+  
+  &.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-8px);
+  }
 }
 
-@media (max-width: 767px) {
-  .back-to-top {
-    height: 40px;
-    width: 40px;
+@keyframes scrollingPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+// 暗色模式适配
+html.dark & {
+  .btn-container {
+    background: linear-gradient(135deg, 
+      rgba(28, 28, 30, 0.95) 0%,
+      rgba(44, 44, 46, 0.9) 100%
+    );
+    border-color: rgba(100, 168, 255, 0.15);
+    box-shadow: 
+      0 8px 24px rgba(0, 0, 0, 0.4),
+      0 2px 8px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
     
-    .back-to-top-icon {
-      font-size: 18px;
+    &::before {
+      background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%
+      );
+    }
+  }
+  
+  .back-to-top:hover .btn-container {
+    background: linear-gradient(135deg, 
+      rgba(100, 168, 255, 0.15) 0%,
+      rgba(64, 168, 255, 0.1) 100%
+    );
+    box-shadow: 
+      0 12px 32px rgba(100, 168, 255, 0.3),
+      0 4px 16px rgba(100, 168, 255, 0.2);
+    border-color: rgba(100, 168, 255, 0.4);
+  }
+  
+  .btn-icon {
+    color: rgba(255, 255, 255, 0.7);
+    
+    .back-to-top:hover & {
+      color: #64A8FF;
+    }
+  }
+  
+  .progress-ring-bg {
+    stroke: rgba(100, 168, 255, 0.15);
+  }
+  
+  .progress-ring-fill {
+    stroke: rgba(100, 168, 255, 0.8);
+    
+    .back-to-top:hover & {
+      stroke: #64A8FF;
+    }
+  }
+  
+  .tooltip {
+    background: var(--el-bg-color);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    
+    &::after {
+      border-top-color: var(--el-bg-color);
     }
   }
 }
-</style> 
+</style>

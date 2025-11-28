@@ -29,7 +29,7 @@
         <!-- <Notification v-if="showNotification"></Notification> -->
         
         <!-- 返回顶部按钮 -->
-        <BackToTop :visibility-height="300" :duration="400" :offset="80" />
+        <BackToTop />
         
         <!-- AI 助理 - 暂时禁用 -->
         <!-- <AiAssistant /> -->
@@ -53,7 +53,7 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
 import Agreement from '@/components/Agreement.vue';
 import LoginModal from '@/components/LoginModalV2.vue';
 import Notification from '@/components/Notification.vue';
-import BackToTop from '@/components/BackToTop.vue';
+import BackToTop from '@/components/index/v2/interactive/BackToTop.vue';
 import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
 import AiAssistant from '@/components/AiAssistant.vue';
 import { checkUserLoginR } from '@/request/user';

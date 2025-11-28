@@ -52,7 +52,7 @@ interface BackToTopProps {
 }
 
 const props = withDefaults(defineProps<BackToTopProps>(), {
-  threshold: 300,
+  threshold: 100,
   showProgress: true,
   smooth: true,
   duration: 800
@@ -171,33 +171,41 @@ onUnmounted(() => {
     }
   }
   
-  &:hover {
-    transform: translateY(-4px) scale(1.05);
-    
-    .btn-container {
-      background: linear-gradient(135deg, 
-        rgba(22, 119, 255, 0.15) 0%,
-        rgba(105, 177, 255, 0.1) 100%
-      );
-      box-shadow: 
-        0 12px 32px rgba(22, 119, 255, 0.25),
-        0 4px 16px rgba(22, 119, 255, 0.15);
-      border-color: rgba(22, 119, 255, 0.3);
-    }
-    
-    .btn-icon {
-      color: var(--el-color-primary);
-      transform: translateY(-2px) scale(1.1);
-    }
-    
-    .progress-ring-fill {
-      stroke: var(--el-color-primary);
-    }
-    
-    .tooltip {
-      opacity: 1;
-      visibility: visible;
-      transform: translateX(-50%) translateY(-8px);
+  // 移动端点击效果
+  &:active {
+    transform: scale(0.95);
+  }
+  
+  // 只在支持 hover 的设备上启用 hover 效果（PC端）
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: translateY(-4px) scale(1.05);
+      
+      .btn-container {
+        background: linear-gradient(135deg, 
+          var(--theme-orange-bg-3),
+          var(--theme-orange-bg-2)
+        );
+        border-color: var(--theme-orange-border-3);
+      }
+      
+      .btn-icon {
+        color: var(--theme-purple-primary);
+        
+        i {
+          transform: translateY(-2px) scale(1.1);
+        }
+      }
+      
+      .progress-ring-fill {
+        stroke: var(--theme-purple-primary);
+      }
+      
+      .tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(-8px);
+      }
     }
   }
   
@@ -221,11 +229,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 0.5px solid rgba(22, 119, 255, 0.1);
-  box-shadow: 
-    0 8px 24px rgba(22, 119, 255, 0.12),
-    0 2px 8px rgba(22, 119, 255, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 0.5px solid var(--theme-orange-border-1);
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   overflow: hidden;
   
@@ -256,7 +260,7 @@ onUnmounted(() => {
   transform: translate(-50%, -50%);
   color: var(--el-text-color-regular);
   font-size: 16px;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease;
   z-index: 2;
   
   i {
@@ -279,12 +283,12 @@ onUnmounted(() => {
   }
   
   .progress-ring-bg {
-    stroke: rgba(22, 119, 255, 0.1);
+    stroke: var(--theme-orange-border-1);
     stroke-linecap: round;
   }
   
   .progress-ring-fill {
-    stroke: rgba(22, 119, 255, 0.6);
+    stroke: var(--theme-purple-primary);
     stroke-linecap: round;
     transition: all 0.3s ease;
   }
@@ -306,7 +310,6 @@ onUnmounted(() => {
   visibility: hidden;
   transition: all 0.3s ease;
   border: 0.5px solid var(--el-border-color-lighter);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-bottom: 8px;
   
   &::after {
@@ -348,10 +351,6 @@ html.dark & {
       rgba(44, 44, 46, 0.9) 100%
     );
     border-color: rgba(100, 168, 255, 0.15);
-    box-shadow: 
-      0 8px 24px rgba(0, 0, 0, 0.4),
-      0 2px 8px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
     
     &::before {
       background: linear-gradient(135deg,
@@ -366,9 +365,6 @@ html.dark & {
       rgba(100, 168, 255, 0.15) 0%,
       rgba(64, 168, 255, 0.1) 100%
     );
-    box-shadow: 
-      0 12px 32px rgba(100, 168, 255, 0.3),
-      0 4px 16px rgba(100, 168, 255, 0.2);
     border-color: rgba(100, 168, 255, 0.4);
   }
   
@@ -395,7 +391,6 @@ html.dark & {
   .tooltip {
     background: var(--el-bg-color);
     border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     
     &::after {
       border-top-color: var(--el-bg-color);
