@@ -21,7 +21,8 @@
                   @browse="handleBrowse" />
               </el-tab-pane>
 
-              <el-tab-pane label="账号设置" name="settings">
+              <!-- PC端显示账号设置标签页 -->
+              <el-tab-pane label="账号设置" name="settings" class="pc-only-tab">
                 <AccountSettings />
               </el-tab-pane>
             </el-tabs>
@@ -29,6 +30,23 @@
         </el-row>
       </div>
     </div>
+
+    <!-- 移动端浮动设置按钮 -->
+    <button class="mobile-settings-btn" @click="drawerVisible = true">
+      <i class="fas fa-cog"></i>
+      <span>设置</span>
+    </button>
+
+    <!-- 移动端抽屉 -->
+    <el-drawer
+      v-model="drawerVisible"
+      title="账号设置"
+      direction="ltr"
+      :size="320"
+      class="mobile-settings-drawer"
+    >
+      <AccountSettings />
+    </el-drawer>
   </div>
 </template>
 
@@ -54,6 +72,7 @@ import AccountSettings from '@/components/person/AccountSettings.vue'
 const router = useRouter()
 const store = useStore()
 const activeTab = ref('articles')
+const drawerVisible = ref(false)
 
 // 文章相关事件
 const handleViewArticle = (article: any) => {
@@ -236,6 +255,84 @@ const handleCheckIn = () => {
       line-height: 44px;
       font-size: 13px;
     }
+
+    // 移动端隐藏账号设置标签页
+    .pc-only-tab {
+      display: none;
+    }
+  }
+}
+
+// 移动端浮动设置按钮
+.mobile-settings-btn {
+  display: none;
+  position: fixed;
+  right: 20px;
+  bottom: 80px;
+  z-index: 100;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, var(--theme-purple-primary), var(--theme-purple-secondary));
+  color: white;
+  border: none;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px var(--theme-orange-shadow);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-items: center;
+  gap: 8px;
+  
+  i {
+    font-size: 16px;
+    animation: rotate 3s linear infinite;
+  }
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px var(--theme-orange-shadow);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  @media (max-width: 768px) {
+    display: flex;
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// 移动端抽屉样式
+.mobile-settings-drawer {
+  :deep(.el-drawer__header) {
+    margin-bottom: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--el-border-color-lighter);
+    
+    .el-drawer__title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--el-text-color-primary);
+    }
+  }
+  
+  :deep(.el-drawer__body) {
+    padding: 0;
+    overflow-y: auto;
+  }
+  
+  // PC端隐藏抽屉
+  @media (min-width: 769px) {
+    display: none;
   }
 }
 </style>
