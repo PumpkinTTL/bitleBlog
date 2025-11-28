@@ -173,6 +173,152 @@
       </div>
     </div>
 
+    <!-- 会员状态 -->
+    <div class="setting-card animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.24s">
+      <div class="card-main">
+        <div class="card-info">
+          <div class="section-header">
+            <div class="title-badge">
+              <span class="badge-dot premium"></span>
+              <h4 class="section-title">会员状态</h4>
+            </div>
+          </div>
+          <div v-if="loadingMembership" class="membership-loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>加载中...</span>
+          </div>
+          <div v-else-if="membershipInfo" class="membership-info">
+            <div class="membership-status" :class="{ active: membershipInfo.is_premium }">
+              <div class="status-icon">
+                <i v-if="membershipInfo.is_premium" class="fas fa-crown"></i>
+                <i v-else class="fas fa-user"></i>
+              </div>
+              <div class="status-content">
+                <div class="status-title">
+                  {{ membershipInfo.is_premium ? '高级会员' : '普通用户' }}
+                </div>
+                <div v-if="membershipInfo.is_premium" class="status-details">
+                  <div class="detail-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>到期时间：{{ membershipInfo.expiration_time }}</span>
+                  </div>
+                  <div class="detail-item">
+                    <i class="fas fa-clock"></i>
+                    <span>剩余天数：{{ membershipInfo.days_remaining }}天</span>
+                  </div>
+                  <div v-if="membershipInfo.remark" class="detail-item">
+                    <i class="fas fa-tag"></i>
+                    <span>{{ membershipInfo.remark }}</span>
+                  </div>
+                </div>
+                <div v-else class="status-details">
+                  <span>升级会员享受更多特权功能</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-else class="membership-error">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>无法获取会员状态</span>
+            <button class="retry-btn" @click="loadMembershipInfo">
+              <i class="fas fa-redo"></i>
+              重试
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 危险操作 -->
+    <div class="setting-card danger-card animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.32s">
+      <div class="card-main">
+        <div class="card-info">
+          <div class="section-header">
+            <div class="title-badge">
+              <span class="badge-dot danger"></span>
+              <h4 class="section-title">危险操作</h4>
+            </div>
+          </div>
+          <div class="danger-actions">
+            <div class="danger-item">
+              <div class="danger-info">
+                <div class="danger-title">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  注销账号
+                </div>
+                <div class="danger-desc">
+                  永久删除您的账号和所有相关数据，此操作不可恢复
+                </div>
+              </div>
+              <button class="danger-btn" @click="showDeleteConfirm = true">
+                <i class="fas fa-trash-alt"></i>
+                注销账号
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 注销确认对话框 -->
+    <div v-if="showDeleteConfirm" class="delete-confirm-overlay" @click="showDeleteConfirm = false">
+      <div class="delete-confirm-modal" @click.stop>
+        <div class="modal-header">
+          <h3>确认注销账号</h3>
+          <button class="close-btn" @click="showDeleteConfirm = false">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="warning-message">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>此操作将永久删除您的账号和所有相关数据，包括：</p>
+            <ul>
+              <li>个人资料信息</li>
+              <li>发布的文章和评论</li>
+              <li>收藏和关注记录</li>
+              <li>所有其他相关数据</li>
+            </ul>
+            <p><strong>数据将保留30天后永久删除，此操作不可恢复！</strong></p>
+          </div>
+          <div class="confirm-form">
+            <div class="form-group">
+              <label>请输入您的密码确认：</label>
+              <input 
+                v-model="deleteForm.password" 
+                type="password" 
+                placeholder="请输入密码"
+                class="confirm-input"
+              />
+            </div>
+            <div class="form-group">
+              <label>请输入 "我确认删除账号" 确认：</label>
+              <input 
+                v-model="deleteForm.confirmation" 
+                type="text" 
+                placeholder="我确认删除账号"
+                class="confirm-input"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="cancel-btn" @click="showDeleteConfirm = false">
+            取消
+          </button>
+          <button 
+            class="confirm-delete-btn" 
+            @click="handleDeleteAccount"
+            :disabled="!canDeleteAccount || deleting"
+          >
+            <i v-if="!deleting" class="fas fa-trash-alt"></i>
+            <i v-else class="fas fa-spinner fa-spin"></i>
+            {{ deleting ? '注销中...' : '确认注销' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -181,7 +327,7 @@ import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useStore } from '@/store'
 import { ElAvatar } from 'element-plus'
 import { uploadSingleFileR } from '@/request/upload'
-import { updateUserProfileR } from '@/request/user'
+import { updateUserProfileR, getUserMembershipR, deleteUserAccountR } from '@/request/user'
 import { smartMessage } from '@/components/modal'
 
 interface FormData {
@@ -245,6 +391,8 @@ watch(() => store.userInfo, () => {
 onMounted(() => {
   syncFormWithStore()
   originalData.value = initFormData()
+  // 加载会员状态信息
+  loadMembershipInfo()
 })
 
 // 头像相关方法
@@ -346,10 +494,33 @@ const saveAvatar = async () => {
                   smartMessage.success('头像上传并更新成功')
                 }
               } else {
-                // 头像上传成功但更新资料失败
+                // 头像上传成功但更新资料失败 - 使用V2 API错误码处理
                 form.avatar = uploadedFile.url
                 avatarPreviewUrl.value = ''
-                smartMessage.warning('头像上传成功，但更新用户信息失败：' + (updateResponse.msg || '未知错误'))
+                let errorMessage = '头像上传成功，但更新用户信息失败：'
+                switch (updateResponse.code) {
+                  case 400:
+                    errorMessage += '请求参数错误'
+                    break
+                  case 401:
+                    errorMessage += '未授权，请重新登录'
+                    break
+                  case 403:
+                    errorMessage += '账号被禁用'
+                    break
+                  case 404:
+                    errorMessage += '用户不存在'
+                    break
+                  case 500:
+                    errorMessage += '服务器内部错误'
+                    break
+                  case 501:
+                    errorMessage += '参数验证失败'
+                    break
+                  default:
+                    errorMessage += updateResponse.msg || '未知错误'
+                }
+                smartMessage.warning(errorMessage)
               }
             } catch (updateError: any) {
               // 头像上传成功但更新资料失败
@@ -395,6 +566,96 @@ const privacy = reactive({
   allowComment: true
 })
 
+// 会员状态
+const membershipInfo = ref<any>(null)
+const loadingMembership = ref(false)
+
+// 获取会员状态
+const loadMembershipInfo = async () => {
+  loadingMembership.value = true
+  try {
+    const response = await getUserMembershipR() as any
+    if (response.code === 200) {
+      membershipInfo.value = response.data
+    } else {
+      console.warn('获取会员状态失败:', response.msg)
+    }
+  } catch (error: any) {
+    console.error('获取会员状态失败:', error)
+  } finally {
+    loadingMembership.value = false
+  }
+}
+
+// 注销账号相关
+const showDeleteConfirm = ref(false)
+const deleting = ref(false)
+const deleteForm = reactive({
+  password: '',
+  confirmation: ''
+})
+
+// 检查是否可以注销账号
+const canDeleteAccount = computed(() => {
+  return deleteForm.password.length > 0 && deleteForm.confirmation === '我确认删除账号'
+})
+
+// 处理账号注销
+const handleDeleteAccount = async () => {
+  if (!canDeleteAccount.value) return
+  
+  deleting.value = true
+  try {
+    const response = await deleteUserAccountR({
+      password: deleteForm.password,
+      confirmation: deleteForm.confirmation
+    }) as any
+    
+    if (response.code === 200) {
+      smartMessage.success('账号注销成功，数据将在30天后永久删除')
+      // 清除本地用户信息并跳转到登录页
+      store.clearUserInfo()
+      // 这里可以添加路由跳转逻辑
+      window.location.href = '/login'
+    } else {
+      // 处理V2 API的错误码
+      let errorMessage = '账号注销失败：'
+      switch (response.code) {
+        case 400:
+          errorMessage += '请求参数错误'
+          break
+        case 401:
+          errorMessage += '密码验证失败'
+          break
+        case 403:
+          errorMessage += '账号被禁用'
+          break
+        case 404:
+          errorMessage += '用户不存在'
+          break
+        case 500:
+          errorMessage += '服务器内部错误'
+          break
+        case 501:
+          errorMessage += '参数验证失败'
+          break
+        default:
+          errorMessage += response.msg || '未知错误'
+      }
+      smartMessage.error(errorMessage)
+    }
+  } catch (error: any) {
+    console.error('账号注销失败:', error)
+    smartMessage.error('账号注销失败：' + (error.message || '网络错误'))
+  } finally {
+    deleting.value = false
+    showDeleteConfirm.value = false
+    // 重置表单
+    deleteForm.password = ''
+    deleteForm.confirmation = ''
+  }
+}
+
 const saving = ref(false)
 
 const handleSave = async () => {
@@ -432,6 +693,32 @@ const handleSave = async () => {
       smartMessage.success('个人资料保存成功')
       // 保存成功后更新原始数据
       originalData.value = { ...form }
+    } else {
+      // 处理V2 API的错误码
+      let errorMessage = '个人资料保存失败：'
+      switch (updateResponse.code) {
+        case 400:
+          errorMessage += '请求参数错误'
+          break
+        case 401:
+          errorMessage += '未授权，请重新登录'
+          break
+        case 403:
+          errorMessage += '账号被禁用'
+          break
+        case 404:
+          errorMessage += '用户不存在'
+          break
+        case 500:
+          errorMessage += '服务器内部错误'
+          break
+        case 501:
+          errorMessage += '参数验证失败'
+          break
+        default:
+          errorMessage += updateResponse.msg || '未知错误'
+      }
+      smartMessage.error(errorMessage)
     }
   }
   catch (error: any) {
@@ -547,6 +834,24 @@ const handleResetForm = () => {
 
     &::before {
       background: #f59e0b;
+    }
+  }
+
+  &.premium {
+    background: #fbbf24;
+    box-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
+
+    &::before {
+      background: #fbbf24;
+    }
+  }
+
+  &.danger {
+    background: #ef4444;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+
+    &::before {
+      background: #ef4444;
     }
   }
 
@@ -1086,6 +1391,459 @@ const handleResetForm = () => {
     color: #ef4444;
     transform: translateY(-1px);
     box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
+  }
+}
+
+// 会员状态样式
+.membership-loading,
+.membership-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px;
+  color: var(--el-text-color-secondary);
+  font-size: 14px;
+
+  i {
+    font-size: 16px;
+  }
+
+  .retry-btn {
+    margin-left: 12px;
+    padding: 4px 8px;
+    background: var(--theme-purple-primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--theme-purple-secondary);
+      transform: translateY(-1px);
+    }
+
+    i {
+      margin-right: 4px;
+      font-size: 10px;
+    }
+  }
+}
+
+.membership-info {
+  padding: 16px 0;
+}
+
+.membership-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  background: var(--el-fill-color-light);
+  border-radius: 8px;
+  border: 2px solid var(--el-border-color-lighter);
+  transition: all 0.3s ease;
+
+  &.active {
+    background: linear-gradient(135deg, #fef3c7, #fbbf24);
+    border-color: #fbbf24;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.2);
+
+    .status-icon {
+      background: #fbbf24;
+      color: white;
+      box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+    }
+
+    .status-title {
+      color: #92400e;
+      font-weight: 600;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+  }
+}
+
+.status-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--el-fill-color);
+  border-radius: 50%;
+  color: var(--el-text-color-secondary);
+  font-size: 20px;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+}
+
+.status-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.status-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--el-text-color-primary);
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+}
+
+.status-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  @media (max-width: 768px) {
+    gap: 4px;
+  }
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--el-text-color-regular);
+
+  i {
+    width: 14px;
+    font-size: 12px;
+    color: var(--el-text-color-secondary);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    gap: 6px;
+
+    i {
+      width: 12px;
+      font-size: 11px;
+    }
+  }
+}
+
+// 危险操作样式
+.danger-card {
+  border-color: rgba(239, 68, 68, 0.2);
+  background: linear-gradient(135deg, #fef2f2, #ffffff);
+}
+
+.danger-actions {
+  padding: 16px 0;
+}
+
+.danger-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  background: var(--el-fill-color-light);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: rgba(239, 68, 68, 0.4);
+    background: rgba(254, 242, 242, 0.5);
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+.danger-info {
+  flex: 1;
+}
+
+.danger-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #dc2626;
+  margin-bottom: 4px;
+
+  i {
+    font-size: 16px;
+  }
+}
+
+.danger-desc {
+  font-size: 12px;
+  color: var(--el-text-color-secondary);
+  line-height: 1.4;
+}
+
+.danger-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  }
+
+  i {
+    font-size: 11px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+// 注销确认对话框样式
+.delete-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.delete-confirm-modal {
+  background: var(--el-bg-color);
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease;
+
+  @media (max-width: 768px) {
+    width: 95%;
+    margin: 20px;
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--el-border-color-lighter);
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #dc2626;
+  }
+
+  .close-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--el-fill-color-light);
+    border: none;
+    border-radius: 50%;
+    color: var(--el-text-color-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--el-fill-color);
+      color: var(--el-text-color-primary);
+    }
+  }
+}
+
+.modal-body {
+  padding: 20px 24px;
+}
+
+.warning-message {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+
+  i {
+    color: #dc2626;
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin: 8px 0;
+    font-size: 14px;
+    color: var(--el-text-color-primary);
+    line-height: 1.5;
+  }
+
+  ul {
+    margin: 12px 0;
+    padding-left: 20px;
+    
+    li {
+      margin: 4px 0;
+      font-size: 13px;
+      color: var(--el-text-color-regular);
+    }
+  }
+
+  strong {
+    color: #dc2626;
+  }
+}
+
+.confirm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--el-text-color-primary);
+  }
+}
+
+.confirm-input {
+  padding: 10px 12px;
+  border: 1px solid var(--el-border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  background: var(--el-bg-color);
+  color: var(--el-text-color-primary);
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #dc2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
+  }
+
+  &::placeholder {
+    color: var(--el-text-color-placeholder);
+  }
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--el-border-color-lighter);
+}
+
+.cancel-btn {
+  padding: 8px 16px;
+  background: var(--el-fill-color-light);
+  color: var(--el-text-color-regular);
+  border: 1px solid var(--el-border-color);
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: var(--el-fill-color);
+    border-color: var(--el-border-color-dark);
+  }
+}
+
+.confirm-delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover:not(:disabled) {
+    background: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  i {
+    font-size: 11px;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { 
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 

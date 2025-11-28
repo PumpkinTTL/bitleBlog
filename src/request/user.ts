@@ -105,7 +105,7 @@ export const updateUserProfileR = (params: {
     avatar?: string;
 }) => {
     return Axios({
-        method: 'PUT',
+        method: 'POST',
         url: '/api/v2/user/update',
         data: params
     })
@@ -151,7 +151,7 @@ export const deleteUserAccountR = (params: {
     confirmation: string;
 }) => {
     return Axios({
-        method: 'DELETE',
+        method: 'POST',
         url: '/api/v2/user/delete',
         data: params
     })
