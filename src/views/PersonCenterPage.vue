@@ -272,7 +272,7 @@ const handleCheckIn = () => {
   display: none;
   position: fixed;
   right: 0;
-  top: 50%;
+  top: 50vh;
   transform: translateY(-50%);
   z-index: 100;
   width: 42px;
@@ -283,10 +283,14 @@ const handleCheckIn = () => {
   border-right: none;
   border-radius: 10px 0 0 10px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.3s ease,
+              border-color 0.3s ease,
+              background 0.3s ease;
   align-items: center;
   justify-content: center;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.05);
+  will-change: transform;
   
   &::before {
     content: '';
