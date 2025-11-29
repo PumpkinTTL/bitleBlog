@@ -108,6 +108,90 @@
                   </div>
                 </div>
 
+                <!-- 会员状态 -->
+                <div v-if="showMembershipStatus" class="input-wrapper-compact animate__animated animate__fadeInUp" style="animation-delay: 0.5s">
+                  <label class="input-label-compact">会员状态</label>
+                  <div class="membership-row-compact">
+                    <div v-if="loadingMembership" class="status-loading">
+                      <i class="fas fa-spinner fa-spin"></i>
+                      <span>加载中...</span>
+                    </div>
+                    <div v-else-if="membershipInfo" class="status-options">
+                      <div class="status-option" :class="{ active: membershipInfo.is_premium, premium: membershipInfo.is_premium }">
+                        <div class="status-icon-wrapper">
+                          <i v-if="membershipInfo.is_premium" class="fas fa-crown"></i>
+                          <i v-else class="fas fa-user"></i>
+                        </div>
+                        <div class="status-content">
+                          <div class="status-header">
+                            <span class="status-text">{{ membershipInfo.is_premium ? '高级会员' : '普通用户' }}</span>
+                            <div v-if="membershipInfo.is_premium" class="premium-badge">
+                              <i class="fas fa-star"></i>
+                              <span>VIP</span>
+                            </div>
+                          </div>
+                          <div v-if="membershipInfo.is_premium" class="status-details">
+                            <div class="detail-row">
+                              <div class="detail-item">
+                                <i class="fas fa-calendar-check"></i>
+                                <span class="detail-label">到期时间</span>
+                                <span class="detail-value">{{ membershipInfo.expiration_time }}</span>
+                              </div>
+                            </div>
+                            <div class="detail-row">
+                              <div class="detail-item">
+                                <i class="fas fa-hourglass-half"></i>
+                                <span class="detail-label">剩余时间</span>
+                                <span class="detail-value remaining">{{ membershipInfo.days_remaining }}天</span>
+                              </div>
+                            </div>
+                            <div v-if="membershipInfo.remark" class="detail-row">
+                              <div class="detail-item">
+                                <i class="fas fa-tag"></i>
+                                <span class="detail-label">特殊标记</span>
+                                <span class="detail-value special">{{ membershipInfo.remark }}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div v-else class="status-hint">
+                            <i class="fas fa-arrow-up"></i>
+                            升级会员享受更多特权功能
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-else class="status-error">
+                      <i class="fas fa-exclamation-triangle"></i>
+                      <span>获取失败</span>
+                      <button class="retry-btn" @click="loadMembershipInfo">
+                        <i class="fas fa-redo"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 危险操作 -->
+                <div class="input-wrapper-compact animate__animated animate__fadeInUp" style="animation-delay: 0.6s">
+                  <label class="input-label-compact danger-label">危险操作</label>
+                  <div class="danger-row-compact">
+                    <div class="danger-options">
+                      <div class="danger-option">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div class="danger-content">
+                          <span class="danger-text">注销账号</span>
+                          <div class="danger-hint">
+                            永久删除所有数据
+                          </div>
+                        </div>
+                        <button class="danger-action-btn" @click="showDeleteConfirm = true">
+                          <i class="fas fa-trash-alt"></i>
+                          <span>注销</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
@@ -173,141 +257,50 @@
       </div>
     </div>
 
-    <!-- 会员状态 -->
-    <div class="setting-card animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.24s">
-      <div class="card-main">
-        <div class="card-info">
-          <div class="section-header">
-            <div class="title-badge">
-              <span class="badge-dot premium"></span>
-              <h4 class="section-title">会员状态</h4>
-            </div>
-          </div>
-          <div v-if="loadingMembership" class="membership-loading">
-            <i class="fas fa-spinner fa-spin"></i>
-            <span>加载中...</span>
-          </div>
-          <div v-else-if="membershipInfo" class="membership-info">
-            <div class="membership-status" :class="{ active: membershipInfo.is_premium }">
-              <div class="status-icon">
-                <i v-if="membershipInfo.is_premium" class="fas fa-crown"></i>
-                <i v-else class="fas fa-user"></i>
-              </div>
-              <div class="status-content">
-                <div class="status-title">
-                  {{ membershipInfo.is_premium ? '高级会员' : '普通用户' }}
-                </div>
-                <div v-if="membershipInfo.is_premium" class="status-details">
-                  <div class="detail-item">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>到期时间：{{ membershipInfo.expiration_time }}</span>
-                  </div>
-                  <div class="detail-item">
-                    <i class="fas fa-clock"></i>
-                    <span>剩余天数：{{ membershipInfo.days_remaining }}天</span>
-                  </div>
-                  <div v-if="membershipInfo.remark" class="detail-item">
-                    <i class="fas fa-tag"></i>
-                    <span>{{ membershipInfo.remark }}</span>
-                  </div>
-                </div>
-                <div v-else class="status-details">
-                  <span>升级会员享受更多特权功能</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div v-else class="membership-error">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span>无法获取会员状态</span>
-            <button class="retry-btn" @click="loadMembershipInfo">
-              <i class="fas fa-redo"></i>
-              重试
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 危险操作 -->
-    <div class="setting-card danger-card animate__animated animate__fadeInUp animate__faster" style="animation-delay: 0.32s">
-      <div class="card-main">
-        <div class="card-info">
-          <div class="section-header">
-            <div class="title-badge">
-              <span class="badge-dot danger"></span>
-              <h4 class="section-title">危险操作</h4>
-            </div>
-          </div>
-          <div class="danger-actions">
-            <div class="danger-item">
-              <div class="danger-info">
-                <div class="danger-title">
-                  <i class="fas fa-exclamation-triangle"></i>
-                  注销账号
-                </div>
-                <div class="danger-desc">
-                  永久删除您的账号和所有相关数据，此操作不可恢复
-                </div>
-              </div>
-              <button class="danger-btn" @click="showDeleteConfirm = true">
-                <i class="fas fa-trash-alt"></i>
-                注销账号
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- 注销确认对话框 -->
-    <div v-if="showDeleteConfirm" class="delete-confirm-overlay" @click="showDeleteConfirm = false">
-      <div class="delete-confirm-modal" @click.stop>
-        <div class="modal-header">
-          <h3>确认注销账号</h3>
-          <button class="close-btn" @click="showDeleteConfirm = false">
+    <div v-if="showDeleteConfirm" class="delete-overlay-elegant" @click="showDeleteConfirm = false">
+      <div class="delete-modal-elegant" @click.stop>
+        <div class="modal-header-elegant">
+          <div class="modal-indicator">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <div class="modal-title-elegant">确认注销账号</div>
+          <button class="modal-close-elegant" @click="showDeleteConfirm = false">
             <i class="fas fa-times"></i>
           </button>
         </div>
-        <div class="modal-body">
-          <div class="warning-message">
-            <i class="fas fa-exclamation-triangle"></i>
-            <p>此操作将永久删除您的账号和所有相关数据，包括：</p>
-            <ul>
-              <li>个人资料信息</li>
-              <li>发布的文章和评论</li>
-              <li>收藏和关注记录</li>
-              <li>所有其他相关数据</li>
-            </ul>
-            <p><strong>数据将保留30天后永久删除，此操作不可恢复！</strong></p>
+        <div class="modal-body-elegant">
+          <div class="warning-elegant">
+            此操作将永久删除账号和所有数据，<strong>30天后不可恢复</strong>
           </div>
-          <div class="confirm-form">
-            <div class="form-group">
-              <label>请输入您的密码确认：</label>
+          <div class="inputs-elegant">
+            <div class="input-group-elegant">
+              <label class="input-label-elegant">密码确认</label>
               <input 
                 v-model="deleteForm.password" 
                 type="password" 
                 placeholder="请输入密码"
-                class="confirm-input"
+                class="input-elegant"
               />
             </div>
-            <div class="form-group">
-              <label>请输入 "我确认删除账号" 确认：</label>
+            <div class="input-group-elegant">
+              <label class="input-label-elegant">确认文本</label>
               <input 
                 v-model="deleteForm.confirmation" 
                 type="text" 
                 placeholder="我确认删除账号"
-                class="confirm-input"
+                class="input-elegant"
               />
             </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button class="cancel-btn" @click="showDeleteConfirm = false">
+        <div class="modal-actions-elegant">
+          <button class="btn-cancel-elegant" @click="showDeleteConfirm = false">
             取消
           </button>
           <button 
-            class="confirm-delete-btn" 
+            class="btn-delete-elegant" 
             @click="handleDeleteAccount"
             :disabled="!canDeleteAccount || deleting"
           >
@@ -342,6 +335,9 @@ const store = useStore()
 const avatarInput = ref<HTMLInputElement>()
 const uploading = ref(false)
 const avatarPreviewUrl = ref('')
+
+// 控制会员状态显示的变量
+const showMembershipStatus = ref(false) // 设置为false暂时隐藏会员状态
 
 // 初始化表单数据 - 从store中获取用户信息
 const initFormData = () => {
@@ -1394,99 +1390,139 @@ const handleResetForm = () => {
   }
 }
 
-// 会员状态样式
-.membership-loading,
-.membership-error {
+// 会员状态样式 - 与性别选择器风格一致
+.membership-row-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.status-loading,
+.status-error {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 20px;
+  gap: 6px;
+  padding: 8px 12px;
   color: var(--el-text-color-secondary);
-  font-size: 14px;
+  font-size: 11px;
+  background: var(--el-fill-color-extra-light);
+  border-radius: 6px;
 
   i {
-    font-size: 16px;
+    font-size: 10px;
   }
 
   .retry-btn {
-    margin-left: 12px;
-    padding: 4px 8px;
-    background: var(--theme-purple-primary);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 12px;
+    margin-left: 6px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--theme-purple-primary);
+    color: var(--theme-purple-primary);
+    background: transparent;
+    border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s ease;
 
     &:hover {
-      background: var(--theme-purple-secondary);
-      transform: translateY(-1px);
+      background: var(--theme-purple-primary);
+      color: white;
+      transform: scale(1.1);
     }
 
     i {
-      margin-right: 4px;
-      font-size: 10px;
+      font-size: 8px;
     }
   }
 }
 
-.membership-info {
-  padding: 16px 0;
+.status-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.membership-status {
+.status-option {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
-  padding: 16px;
-  background: var(--el-fill-color-light);
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--el-border-color-extra-light);
   border-radius: 8px;
-  border: 2px solid var(--el-border-color-lighter);
-  transition: all 0.3s ease;
+  background: var(--el-bg-color);
+  transition: all 0.2s ease;
+  cursor: default;
+  position: relative;
 
-  &.active {
-    background: linear-gradient(135deg, #fef3c7, #fbbf24);
-    border-color: #fbbf24;
-    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.2);
+  &:hover {
+    border-color: var(--el-border-color-lighter);
+    background: var(--el-fill-color-extra-light);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
 
-    .status-icon {
-      background: #fbbf24;
-      color: white;
-      box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+  &.premium {
+    border-color: var(--theme-orange-border-2);
+    background: var(--theme-orange-bg-1);
+
+    &:hover {
+      border-color: var(--theme-orange-border-3);
+      background: var(--theme-orange-bg-2);
+      box-shadow: 0 2px 12px var(--theme-orange-shadow);
     }
 
-    .status-title {
-      color: #92400e;
+    .status-text {
+      color: var(--theme-purple-primary);
       font-weight: 600;
+    }
+
+    .premium-badge {
+      background: var(--theme-orange-bg-2);
+      color: var(--theme-purple-primary);
+      border: 1px solid var(--theme-orange-border-2);
     }
   }
 
   @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 12px;
     padding: 12px;
+    gap: 10px;
   }
 }
 
-.status-icon {
-  width: 48px;
-  height: 48px;
+// 图标包装器 - 简洁版
+.status-icon-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--el-fill-color);
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  color: var(--el-text-color-secondary);
-  font-size: 20px;
+  background: var(--el-fill-color-extra-light);
   flex-shrink: 0;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+
+  i {
+    font-size: 14px;
+    color: var(--el-text-color-regular);
+  }
+
+  .status-option.premium & {
+    background: var(--theme-orange-bg-2);
+
+    i {
+      color: var(--theme-purple-primary);
+    }
+  }
 
   @media (max-width: 768px) {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
+    width: 28px;
+    height: 28px;
+
+    i {
+      font-size: 12px;
+    }
   }
 }
 
@@ -1497,14 +1533,47 @@ const handleResetForm = () => {
   gap: 8px;
 }
 
-.status-title {
-  font-size: 16px;
+.status-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.status-text {
+  font-size: 14px;
   font-weight: 600;
   color: var(--el-text-color-primary);
-  margin: 0;
+  line-height: 1.2;
 
   @media (max-width: 768px) {
-    font-size: 14px;
+    font-size: 13px;
+  }
+}
+
+.premium-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 4px;
+  background: var(--theme-orange-bg-2);
+  border-radius: 6px;
+  font-size: 8px;
+  font-weight: 500;
+  color: var(--theme-purple-primary);
+  transition: all 0.2s ease;
+
+  i {
+    font-size: 7px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 7px;
+    padding: 1px 3px;
+
+    i {
+      font-size: 6px;
+    }
   }
 }
 
@@ -1512,322 +1581,482 @@ const handleResetForm = () => {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  margin-top: 2px;
+}
 
-  @media (max-width: 768px) {
-    gap: 4px;
-  }
+.detail-row {
+  display: flex;
+  align-items: center;
 }
 
 .detail-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--el-text-color-regular);
+  gap: 6px;
+  flex: 1;
 
   i {
-    width: 14px;
-    font-size: 12px;
-    color: var(--el-text-color-secondary);
+    font-size: 10px;
+    color: var(--el-text-color-placeholder);
+    width: 12px;
     flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  .status-option.premium & i {
+    color: var(--theme-purple-primary);
+    opacity: 0.6;
+  }
+}
+
+.detail-label {
+  font-size: 10px;
+  color: var(--el-text-color-secondary);
+  min-width: 50px;
+  flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    font-size: 9px;
+    min-width: 45px;
+  }
+}
+
+.detail-value {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--el-text-color-regular);
+
+  &.remaining {
+    color: var(--theme-purple-primary);
+    font-weight: 500;
+  }
+
+  &.special {
+    color: var(--theme-purple-secondary);
+    font-weight: 500;
   }
 
   @media (max-width: 768px) {
-    font-size: 12px;
-    gap: 6px;
+    font-size: 9px;
+  }
+}
+
+.status-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--el-text-color-placeholder);
+  line-height: 1.3;
+  margin-top: 2px;
+
+  i {
+    font-size: 10px;
+    color: var(--el-text-color-placeholder);
+    opacity: 0.6;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 10px;
 
     i {
-      width: 12px;
-      font-size: 11px;
+      font-size: 9px;
     }
   }
 }
 
-// 危险操作样式
-.danger-card {
-  border-color: rgba(239, 68, 68, 0.2);
-  background: linear-gradient(135deg, #fef2f2, #ffffff);
+// 危险操作样式 - 与性别选择器风格一致
+.danger-label {
+  color: #dc2626 !important;
+
+  &::before {
+    background: #ef4444 !important;
+  }
 }
 
-.danger-actions {
-  padding: 16px 0;
-}
-
-.danger-item {
+.danger-row-compact {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px;
-  background: var(--el-fill-color-light);
+  flex-direction: column;
+  gap: 8px;
+}
+
+.danger-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.danger-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
   border: 1px solid rgba(239, 68, 68, 0.2);
   border-radius: 8px;
-  transition: all 0.3s ease;
+  background: var(--el-fill-color-light);
+  transition: all 0.2s ease;
 
   &:hover {
     border-color: rgba(239, 68, 68, 0.4);
-    background: rgba(254, 242, 242, 0.5);
+    background: rgba(254, 242, 242, 0.3);
   }
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-}
-
-.danger-info {
-  flex: 1;
-}
-
-.danger-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #dc2626;
-  margin-bottom: 4px;
 
   i {
     font-size: 16px;
+    color: rgba(239, 68, 68, 0.7);
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px;
+    gap: 10px;
+
+    i {
+      font-size: 14px;
+    }
   }
 }
 
-.danger-desc {
-  font-size: 12px;
-  color: var(--el-text-color-secondary);
-  line-height: 1.4;
+.danger-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.danger-btn {
-  display: flex;
+.danger-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #dc2626;
+  line-height: 1.2;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+}
+
+.danger-hint {
+  font-size: 11px;
+  color: var(--el-text-color-placeholder);
+  line-height: 1.3;
+
+  @media (max-width: 768px) {
+    font-size: 10px;
+  }
+}
+
+.danger-action-btn {
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  background: #ef4444;
-  color: white;
-  border: none;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1px solid #ef4444;
+  background: transparent;
+  color: #dc2626;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   flex-shrink: 0;
+  margin-top: 2px;
 
   &:hover {
-    background: #dc2626;
+    background: #ef4444;
+    color: white;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 
   i {
+    font-size: 9px;
+  }
+
+  span {
     font-size: 11px;
   }
 
   @media (max-width: 768px) {
-    width: 100%;
-    justify-content: center;
+    font-size: 10px;
+    padding: 5px 10px;
+
+    i {
+      font-size: 8px;
+    }
+
+    span {
+      font-size: 10px;
+    }
   }
 }
 
-// 注销确认对话框样式
-.delete-confirm-overlay {
+// 注销确认对话框优雅样式 - 专注装饰而非背景色
+.delete-overlay-elegant {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn 0.25s ease;
 }
 
-.delete-confirm-modal {
+.delete-modal-elegant {
   background: var(--el-bg-color);
+  border: 2px solid rgba(239, 68, 68, 0.2);
   border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  max-width: 500px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  max-width: 380px;
   width: 90%;
-  max-height: 80vh;
-  overflow-y: auto;
-  animation: slideIn 0.3s ease;
+  overflow: hidden;
+  animation: slideIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border-radius: 12px;
+    z-index: -1;
+    opacity: 0.05;
+  }
 
   @media (max-width: 768px) {
     width: 95%;
-    margin: 20px;
+    max-width: 340px;
   }
 }
 
-.modal-header {
+.modal-header-elegant {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 12px;
   padding: 20px 24px 16px;
-  border-bottom: 1px solid var(--el-border-color-lighter);
+  border-bottom: 1px solid var(--el-border-color-extra-light);
+}
 
-  h3 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: #dc2626;
-  }
+.modal-indicator {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ef4444;
+  border-radius: 50%;
+  color: #dc2626;
+  font-size: 16px;
+  flex-shrink: 0;
+  position: relative;
 
-  .close-btn {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--el-fill-color-light);
-    border: none;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 28px;
+    height: 28px;
+    background: #ef4444;
     border-radius: 50%;
-    color: var(--el-text-color-secondary);
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: var(--el-fill-color);
-      color: var(--el-text-color-primary);
-    }
+    opacity: 0.1;
+    z-index: -1;
   }
 }
 
-.modal-body {
-  padding: 20px 24px;
+.modal-title-elegant {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 600;
+  color: #dc2626;
+  line-height: 1.2;
 }
 
-.warning-message {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 20px;
+.modal-close-elegant {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--el-border-color);
+  background: transparent;
+  border-radius: 50%;
+  color: var(--el-text-color-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--el-border-color-dark);
+    color: var(--el-text-color-primary);
+    transform: scale(1.1);
+  }
 
   i {
-    color: #dc2626;
-    font-size: 18px;
-    margin-bottom: 8px;
+    font-size: 11px;
   }
+}
 
-  p {
-    margin: 8px 0;
-    font-size: 14px;
-    color: var(--el-text-color-primary);
-    line-height: 1.5;
-  }
+.modal-body-elegant {
+  padding: 16px 24px 20px;
+}
 
-  ul {
-    margin: 12px 0;
-    padding-left: 20px;
-    
-    li {
-      margin: 4px 0;
-      font-size: 13px;
-      color: var(--el-text-color-regular);
-    }
+.warning-elegant {
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: var(--el-text-color-primary);
+  line-height: 1.5;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    background: linear-gradient(135deg, #fef2f2, #fde8e8);
+    border-radius: 8px;
+    z-index: -1;
+    opacity: 0.5;
   }
 
   strong {
     color: #dc2626;
+    font-weight: 600;
   }
 }
 
-.confirm-form {
+.inputs-elegant {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.form-group {
+.input-group-elegant {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
 
-  label {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--el-text-color-primary);
+.input-label-elegant {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--el-text-color-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &::before {
+    content: '';
+    width: 3px;
+    height: 3px;
+    background: #dc2626;
+    border-radius: 50%;
+    flex-shrink: 0;
   }
 }
 
-.confirm-input {
+.input-elegant {
+  width: 100%;
   padding: 10px 12px;
-  border: 1px solid var(--el-border-color);
+  background: transparent;
+  border: 1px solid var(--el-border-color-lighter);
   border-radius: 6px;
-  font-size: 14px;
-  background: var(--el-bg-color);
+  font-size: 13px;
   color: var(--el-text-color-primary);
-  transition: all 0.3s ease;
-
-  &:focus {
-    outline: none;
-    border-color: #dc2626;
-    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
-  }
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
 
   &::placeholder {
     color: var(--el-text-color-placeholder);
   }
+
+  &:focus {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
+    transform: translateY(-1px);
+  }
 }
 
-.modal-footer {
+.modal-actions-elegant {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 12px;
   padding: 16px 24px 20px;
-  border-top: 1px solid var(--el-border-color-lighter);
+  border-top: 1px solid var(--el-border-color-extra-light);
 }
 
-.cancel-btn {
+.btn-cancel-elegant {
   padding: 8px 16px;
-  background: var(--el-fill-color-light);
+  background: transparent;
   color: var(--el-text-color-regular);
   border: 1px solid var(--el-border-color);
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover {
-    background: var(--el-fill-color);
     border-color: var(--el-border-color-dark);
+    color: var(--el-text-color-primary);
+    transform: translateY(-1px);
   }
 }
 
-.confirm-delete-btn {
+.btn-delete-elegant {
   display: flex;
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  background: #ef4444;
-  color: white;
-  border: none;
+  background: transparent;
+  color: #dc2626;
+  border: 2px solid #ef4444;
   border-radius: 6px;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover:not(:disabled) {
-    background: #dc2626;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    background: #ef4444;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
   }
 
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: not-allowed;
     transform: none !important;
     box-shadow: none !important;
   }
 
   i {
-    font-size: 11px;
+    font-size: 10px;
   }
 }
 
