@@ -82,7 +82,7 @@ const PROFILE_UPDATE_FIELDS = [
   'signature',
   'email',
   'gender'
-] as const
+] 
 
 /**
  * 初始化/刷新个人资料

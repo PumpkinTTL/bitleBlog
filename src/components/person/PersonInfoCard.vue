@@ -93,9 +93,11 @@
 
       <!-- 等级展示区域 -->
       <div class="level-display-section animate__animated animate__fadeIn" style="animation-delay: 1.2s">
-        <div class="level-header animate__animated animate__fadeInUp" style="animation-delay: 1.25s">
-          <i class="fas fa-trophy animate__animated animate__pulse animate__infinite"></i>
-          <span class="level-title animate__animated animate__fadeIn" style="animation-delay: 1.3s">等级</span>
+        <div class="section-header">
+          <div class="header-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <span class="header-title">等级</span>
         </div>
         <div class="level-cards">
           <div v-for="(level, index) in levelData" :key="level.target_type"
@@ -129,67 +131,89 @@
 
       <!-- 荣誉徽章 -->
       <div class="badges-section animate__animated animate__fadeIn" style="animation-delay: 1.0s">
-        <div class="badges-header animate__animated animate__fadeInUp" style="animation-delay: 1.05s">
-          <i class="fas fa-award animate__animated animate__pulse animate__infinite"></i>
-          <span class="badges-title animate__animated animate__fadeIn" style="animation-delay: 1.1s">荣誉徽章</span>
+        <div class="section-header">
+          <div class="header-icon">
+            <i class="fas fa-award"></i>
+          </div>
+          <span class="header-title">荣誉徽章</span>
         </div>
         <div class="badge-items">
-          <div class="badge-item animate__animated animate__fadeIn" style="animation-delay: 1.15s">
-            <div class="badge-icon trophy animate__animated animate__fadeIn" style="animation-delay: 1.2s">
+          <!-- 未获得的徽章占位 - 4个 -->
+          <div class="badge-item placeholder">
+            <div class="badge-icon trophy">
               <i class="fas fa-trophy"></i>
             </div>
-            <span class="animate__animated animate__fadeIn" style="animation-delay: 1.25s">原创作者</span>
+            <span>原创作者</span>
           </div>
-          <div class="badge-item animate__animated animate__fadeIn" style="animation-delay: 1.3s">
-            <div class="badge-icon star animate__animated animate__fadeIn" style="animation-delay: 1.35s">
+          <div class="badge-item placeholder">
+            <div class="badge-icon star">
               <i class="fas fa-star"></i>
             </div>
-            <span class="animate__animated animate__fadeIn" style="animation-delay: 1.4s">优秀博主</span>
+            <span>优秀博主</span>
           </div>
-          <div class="badge-item animate__animated animate__fadeIn" style="animation-delay: 1.45s">
-            <div class="badge-icon fire animate__animated animate__fadeIn" style="animation-delay: 1.5s">
+          <div class="badge-item placeholder">
+            <div class="badge-icon fire">
               <i class="fas fa-fire"></i>
             </div>
-            <span class="animate__animated animate__fadeIn" style="animation-delay: 1.55s">活跃用户</span>
+            <span>活跃用户</span>
+          </div>
+          <div class="badge-item placeholder">
+            <div class="badge-icon trophy">
+              <i class="fas fa-crown"></i>
+            </div>
+            <span>荣耀勋章</span>
           </div>
         </div>
       </div>
 
       <!-- 社交媒体 -->
       <div class="social-links animate__animated animate__fadeIn" style="animation-delay: 1.6s">
-        <div class="social-header animate__animated animate__fadeInUp" style="animation-delay: 1.65s">
-          <i class="fas fa-share-alt animate__animated animate__pulse animate__infinite"></i>
-          <span class="social-title animate__animated animate__fadeIn" style="animation-delay: 1.7s">社交方式</span>
+        <div class="section-header">
+          <div class="header-icon">
+            <i class="fas fa-link"></i>
+          </div>
+          <span class="header-title">社交方式</span>
         </div>
         <div class="social-icons">
-          <a v-if="userInfo.github" :href="userInfo.github" class="social-icon github animate__animated animate__bounceIn" title="GitHub" target="_blank" style="animation-delay: 1.75s">
+          <a v-if="userInfo.github" :href="userInfo.github" class="social-icon github" title="GitHub" target="_blank">
             <i class="fab fa-github"></i>
           </a>
-          <a v-else href="#" class="social-icon github animate__animated animate__bounceIn" title="GitHub" onclick="return false;" style="animation-delay: 1.75s">
+          <a v-else class="social-icon github disabled" title="未绑定 GitHub">
             <i class="fab fa-github"></i>
           </a>
-          <a v-if="userInfo.twitter" :href="userInfo.twitter" class="social-icon twitter animate__animated animate__bounceIn" title="Twitter" target="_blank" style="animation-delay: 1.8s">
+          
+          <a v-if="userInfo.twitter" :href="userInfo.twitter" class="social-icon twitter" title="Twitter" target="_blank">
             <i class="fab fa-twitter"></i>
           </a>
-          <a v-else href="#" class="social-icon twitter animate__animated animate__bounceIn" title="Twitter" onclick="return false;" style="animation-delay: 1.8s">
+          <a v-else class="social-icon twitter disabled" title="未绑定 Twitter">
             <i class="fab fa-twitter"></i>
           </a>
-          <a v-if="userInfo.wechat" class="social-icon weixin animate__animated animate__bounceIn" title="微信" style="animation-delay: 1.85s">
+          
+          <a v-if="userInfo.telegram" :href="userInfo.telegram" class="social-icon telegram" title="Telegram" target="_blank">
+            <i class="fab fa-telegram"></i>
+          </a>
+          <a v-else class="social-icon telegram disabled" title="未绑定 Telegram">
+            <i class="fab fa-telegram"></i>
+          </a>
+          
+          <a v-if="userInfo.wechat" class="social-icon wechat" title="微信">
             <i class="fab fa-weixin"></i>
           </a>
-          <a v-else href="#" class="social-icon weixin animate__animated animate__bounceIn" title="微信" onclick="return false;" style="animation-delay: 1.85s">
+          <a v-else class="social-icon wechat disabled" title="未绑定微信">
             <i class="fab fa-weixin"></i>
           </a>
-          <a v-if="userInfo.weibo" :href="userInfo.weibo" class="social-icon weibo animate__animated animate__bounceIn" title="微博" target="_blank" style="animation-delay: 1.9s">
+          
+          <a v-if="userInfo.weibo" :href="userInfo.weibo" class="social-icon weibo" title="微博" target="_blank">
             <i class="fab fa-weibo"></i>
           </a>
-          <a v-else href="#" class="social-icon weibo" title="微博" onclick="return false;">
+          <a v-else class="social-icon weibo disabled" title="未绑定微博">
             <i class="fab fa-weibo"></i>
           </a>
+          
           <a v-if="userInfo.email" :href="`mailto:${userInfo.email}`" class="social-icon email" title="邮箱">
             <i class="fas fa-envelope"></i>
           </a>
-          <a v-else href="#" class="social-icon email" title="邮箱" onclick="return false;">
+          <a v-else class="social-icon email disabled" title="未绑定邮箱">
             <i class="fas fa-envelope"></i>
           </a>
         </div>
@@ -232,6 +256,7 @@ const userInfo = computed(() => {
       joinDays: 365,
       github: '',
       twitter: '',
+      telegram: '',
       wechat: '',
       weibo: ''
     }
@@ -259,6 +284,7 @@ const userInfo = computed(() => {
     joinDays: 1,
     github: '',
     twitter: '',
+    telegram: '',
     wechat: '',
     weibo: ''
   }
@@ -557,6 +583,141 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
   }
 }
 
+// fieldset 风格标题 - 精致线条
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    position: relative;
+
+    i {
+      font-size: 10px;
+      color: white;
+      filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
+    }
+  }
+
+  .header-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--el-text-color-primary);
+    white-space: nowrap;
+    flex-shrink: 0;
+    letter-spacing: 0.3px;
+  }
+}
+
+// 等级标题 - 紫色
+.level-display-section .section-header {
+  &::before {
+    background: linear-gradient(90deg, transparent 0%, rgba(139, 92, 246, 0.1) 30%, rgba(139, 92, 246, 0.3) 100%);
+  }
+
+  &::after {
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.3) 0%, rgba(139, 92, 246, 0.1) 70%, transparent 100%);
+  }
+
+  .header-icon {
+    background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+    box-shadow: 0 2px 6px rgba(139, 92, 246, 0.25);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.15), transparent 70%);
+      z-index: -1;
+    }
+  }
+
+  &:hover .header-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 3px 8px rgba(139, 92, 246, 0.35);
+  }
+}
+
+// 荣誉徽章标题 - 金色
+.badges-section .section-header {
+  &::before {
+    background: linear-gradient(90deg, transparent 0%, rgba(245, 158, 11, 0.1) 30%, rgba(245, 158, 11, 0.3) 100%);
+  }
+
+  &::after {
+    background: linear-gradient(90deg, rgba(245, 158, 11, 0.3) 0%, rgba(245, 158, 11, 0.1) 70%, transparent 100%);
+  }
+
+  .header-icon {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.25);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.15), transparent 70%);
+      z-index: -1;
+    }
+  }
+
+  &:hover .header-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 3px 8px rgba(245, 158, 11, 0.35);
+  }
+}
+
+// 社交方式标题 - 蓝色
+.social-links .section-header {
+  &::before {
+    background: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.1) 30%, rgba(59, 130, 246, 0.3) 100%);
+  }
+
+  &::after {
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.3) 0%, rgba(59, 130, 246, 0.1) 70%, transparent 100%);
+  }
+
+  .header-icon {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 70%);
+      z-index: -1;
+    }
+  }
+
+  &:hover .header-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 3px 8px rgba(59, 130, 246, 0.35);
+  }
+}
+
 // 用户信息
 .user-info {
   text-align: center;
@@ -642,8 +803,8 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
 
   .badge-items {
     display: flex;
-    justify-content: center;
-    gap: 10px;
+    justify-content: space-between;
+    gap: 6px;
   }
 
   .badge-item {
@@ -651,12 +812,14 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    padding: 8px 10px;
+    padding: 8px 6px;
     background: var(--el-bg-color);
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
     border: 1px solid var(--el-border-color-extra-light);
+    flex: 1;
+    position: relative;
 
     .badge-icon {
       width: 28px;
@@ -667,6 +830,12 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
       justify-content: center;
       font-size: 13px;
       transition: all 0.3s ease;
+      position: relative;
+
+      i {
+        position: relative;
+        z-index: 2;
+      }
 
       &.trophy {
         background: linear-gradient(135deg, #fef8f8, #fbc02d);
@@ -688,6 +857,8 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
       font-size: 10px;
       color: var(--el-text-color-regular);
       font-weight: 500;
+      position: relative;
+      z-index: 2;
     }
 
     &:hover {
@@ -698,8 +869,39 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
         transform: scale(1.1);
       }
     }
+
+    // 占位徽章样式 - 保留原色彩，添加简单蒙版
+    &.placeholder {
+      cursor: default;
+
+      // 简单的半透明蒙版，z-index 在内容下方
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 10px;
+        pointer-events: none;
+        z-index: 1;
+        
+        [data-theme='dark'] & {
+          background: rgba(0, 0, 0, 0.5);
+        }
+      }
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+        .badge-icon {
+          transform: scale(1.1);
+        }
+      }
+    }
   }
 }
+
+
 
 // 信息栏
 .info-bar {
@@ -1244,6 +1446,12 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
     transition: all 0.3s ease;
     text-decoration: none;
     cursor: pointer;
+    position: relative;
+
+    i {
+      position: relative;
+      z-index: 2;
+    }
 
     &.github {
       background: #f6f8fa;
@@ -1271,7 +1479,7 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
       }
     }
 
-    &.weixin {
+    &.wechat {
       background: #e7f7e7;
       color: #07c160;
       border: 1px solid #95d9a5;
@@ -1297,6 +1505,19 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
       }
     }
 
+    &.telegram {
+      background: #e3f2fd;
+      color: #0088cc;
+      border: 1px solid #90caf9;
+
+      &:hover {
+        background: #0088cc;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3);
+      }
+    }
+
     &.email {
       background: #fef9e7;
       color: #f59e0b;
@@ -1307,6 +1528,16 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
         color: white;
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+      }
+    }
+
+    // 禁用状态 - 保留原色彩
+    &.disabled {
+      cursor: not-allowed;
+      
+      &:hover {
+        transform: none;
+        box-shadow: none;
       }
     }
   }
