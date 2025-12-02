@@ -36,23 +36,18 @@
     </button>
 
     <!-- 移动端抽屉 -->
-    <el-drawer
-      v-model="drawerVisible"
-      title="账号设置"
-      direction="rtl"
-      size="85%"
-      class="mobile-settings-drawer"
-    >
+    <el-drawer v-model="drawerVisible" title="账号设置" direction="rtl" size="85%" class="mobile-settings-drawer">
       <AccountSettings />
     </el-drawer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, getCurrentInstance } from 'vue' 
+import { ref, getCurrentInstance, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from '@/store'
 import { smartMessage } from '@/components/modal'
+import { getUserProfileR } from '@/request/user'
 
 // 获取smartMessage，优先使用全局属性，fallback到导入的函数
 const getSmartMessage = () => {
@@ -76,6 +71,51 @@ const drawerVisible = ref(false)
 const isMobile = ref(window.innerWidth <= 768)
 window.addEventListener('resize', () => {
   isMobile.value = window.innerWidth <= 768
+})
+
+// 定义个人中心需要更新的字段（白名单）
+const PROFILE_UPDATE_FIELDS = [
+  'id',
+  'avatar',
+  'nickname',
+  'username',
+  'signature',
+  'email',
+  'gender'
+] as const
+
+/**
+ * 初始化/刷新个人资料
+ * 只更新白名单字段，保护等级、会员等数据不被覆盖
+ */
+const initProfile = async () => {
+  try {
+    const response = await getUserProfileR() as any
+    if (response.code === 200 && response.data) {
+      const profileData = response.data
+
+      // 使用 $patch 批量更新白名单字段
+      store.$patch((state: any) => {
+        if (state.userInfo) {
+          PROFILE_UPDATE_FIELDS.forEach(field => {
+            if (profileData[field] !== undefined) {
+              state.userInfo[field] = profileData[field]
+            }
+          })
+        }
+      })
+
+      console.log('✅ 个人资料已刷新')
+    }
+  } catch (error) {
+    console.error('❌ 刷新个人资料失败:', error)
+    // 失败不影响页面显示，继续使用缓存数据
+  }
+}
+
+// 页面挂载时静默刷新用户数据
+onMounted(() => {
+  initProfile()
 })
 
 // 文章相关事件
@@ -272,7 +312,7 @@ const handleCheckIn = () => {
   display: none;
   position: fixed;
   right: 0;
-  top: 50vh;
+  top: 50%;
   transform: translateY(-50%);
   z-index: 100;
   width: 42px;
@@ -283,15 +323,11 @@ const handleCheckIn = () => {
   border-right: none;
   border-radius: 10px 0 0 10px;
   cursor: pointer;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
-              box-shadow 0.3s ease,
-              border-color 0.3s ease,
-              background 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   align-items: center;
   justify-content: center;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.05);
-  will-change: transform;
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -303,31 +339,31 @@ const handleCheckIn = () => {
     background: linear-gradient(180deg, var(--theme-purple-primary), var(--theme-purple-secondary));
     border-radius: 0 2px 2px 0;
   }
-  
+
   i {
     font-size: 18px;
     color: var(--theme-purple-primary);
     animation: rotate-slow 4s linear infinite;
     transition: all 0.3s ease;
   }
-  
+
   // 移动端点击效果
   &:active {
     transform: translateY(-50%) scale(0.92);
     box-shadow: -1px 0 4px rgba(0, 0, 0, 0.08);
   }
-  
+
   // 只在支持 hover 的设备显示 hover 效果
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       transform: translateY(-50%) translateX(-6px);
       box-shadow: -4px 0 12px rgba(0, 0, 0, 0.12);
       border-color: rgba(0, 0, 0, 0.12);
-      
+
       &::before {
         height: 30px;
       }
-      
+
       i {
         animation: rotate-fast 1s linear infinite;
         transform: scale(1.1);
@@ -335,7 +371,7 @@ const handleCheckIn = () => {
       }
     }
   }
-  
+
   @media (max-width: 768px) {
     display: flex !important;
   }
@@ -347,12 +383,12 @@ html.dark {
     background: rgba(30, 30, 30, 0.98);
     border-color: rgba(255, 255, 255, 0.1);
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.3);
-    
+
     &:hover {
       box-shadow: -4px 0 12px rgba(0, 0, 0, 0.5);
       border-color: rgba(255, 255, 255, 0.15);
     }
-    
+
     &:active {
       box-shadow: -1px 0 4px rgba(0, 0, 0, 0.4);
     }
@@ -363,6 +399,7 @@ html.dark {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -372,6 +409,7 @@ html.dark {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -384,14 +422,14 @@ html.dark {
     margin-bottom: 16px;
     padding: 16px 20px;
     border-bottom: 1px solid var(--el-border-color-lighter);
-    
+
     .el-drawer__title {
       font-size: 16px;
       font-weight: 600;
       color: var(--el-text-color-primary);
     }
   }
-  
+
   .el-drawer__body {
     padding: 0 !important;
     overflow-y: auto;
