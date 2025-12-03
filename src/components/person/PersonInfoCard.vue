@@ -130,7 +130,7 @@
       </div>
 
       <!-- 荣誉徽章 -->
-      <div class="badges-section animate__animated animate__fadeIn" style="animation-delay: 1.0s">
+      <div class="badges-section animate__animated animate__fadeIn" style="animation-delay: 1.0s;">
         <div class="section-header">
           <div class="header-icon">
             <i class="fas fa-award"></i>
@@ -167,55 +167,147 @@
       </div>
 
       <!-- 社交媒体 -->
-      <div class="social-links animate__animated animate__fadeIn" style="animation-delay: 1.6s">
+      <div class="social-links animate__animated animate__fadeIn" style="animation-delay: 1.6s;">
         <div class="section-header">
           <div class="header-icon">
             <i class="fas fa-link"></i>
           </div>
           <span class="header-title">社交方式</span>
         </div>
-        <div class="social-icons">
-          <a v-if="userInfo.github" :href="userInfo.github" class="social-icon github" title="GitHub" target="_blank">
+        <div class="social-icons" @mouseleave="hideSocialPopover">
+          <!-- GitHub -->
+          <a 
+            v-if="userInfo.github" 
+            :href="userInfo.github" 
+            class="social-icon github" 
+            target="_blank" 
+            @mouseenter="showSocialPopover($event, 'github', userInfo.github, 'GitHub', 'fab fa-github', 'fa-external-link-alt', '点击访问主页')"
+            @click.stop
+          >
             <i class="fab fa-github"></i>
           </a>
-          <a v-else class="social-icon github disabled" title="未绑定 GitHub">
+          <a 
+            v-else 
+            class="social-icon github disabled"
+            @mouseenter="showSocialPopover($event, 'github', '', 'GitHub', 'fab fa-github', 'fa-unlink', '暂未绑定', true)"
+          >
             <i class="fab fa-github"></i>
           </a>
           
-          <a v-if="userInfo.twitter" :href="userInfo.twitter" class="social-icon twitter" title="Twitter" target="_blank">
+          <!-- Twitter -->
+          <a 
+            v-if="userInfo.twitter" 
+            :href="userInfo.twitter" 
+            class="social-icon twitter" 
+            target="_blank" 
+            @mouseenter="showSocialPopover($event, 'twitter', userInfo.twitter, 'Twitter', 'fab fa-twitter', 'fa-external-link-alt', '点击访问主页')"
+            @click.stop
+          >
             <i class="fab fa-twitter"></i>
           </a>
-          <a v-else class="social-icon twitter disabled" title="未绑定 Twitter">
+          <a 
+            v-else 
+            class="social-icon twitter disabled"
+            @mouseenter="showSocialPopover($event, 'twitter', '', 'Twitter', 'fab fa-twitter', 'fa-unlink', '暂未绑定', true)"
+          >
             <i class="fab fa-twitter"></i>
           </a>
           
-          <a v-if="userInfo.telegram" :href="userInfo.telegram" class="social-icon telegram" title="Telegram" target="_blank">
+          <!-- Telegram -->
+          <a 
+            v-if="userInfo.telegram" 
+            :href="userInfo.telegram" 
+            class="social-icon telegram" 
+            target="_blank" 
+            @mouseenter="showSocialPopover($event, 'telegram', userInfo.telegram, 'Telegram', 'fab fa-telegram', 'fa-external-link-alt', '点击访问主页')"
+            @click.stop
+          >
             <i class="fab fa-telegram"></i>
           </a>
-          <a v-else class="social-icon telegram disabled" title="未绑定 Telegram">
+          <a 
+            v-else 
+            class="social-icon telegram disabled"
+            @mouseenter="showSocialPopover($event, 'telegram', '', 'Telegram', 'fab fa-telegram', 'fa-unlink', '暂未绑定', true)"
+          >
             <i class="fab fa-telegram"></i>
           </a>
           
-          <a v-if="userInfo.wechat" class="social-icon wechat" title="微信">
-            <i class="fab fa-weixin"></i>
-          </a>
-          <a v-else class="social-icon wechat disabled" title="未绑定微信">
+          <!-- 微信 -->
+          <a 
+            class="social-icon wechat" 
+            :class="{ disabled: !userInfo.wechat }"
+            @mouseenter="showSocialPopover($event, 'wechat', userInfo.wechat || '', '微信', 'fab fa-weixin', userInfo.wechat ? 'fa-copy' : 'fa-unlink', userInfo.wechat ? '点击复制微信号' : '暂未绑定', !userInfo.wechat)"
+          >
             <i class="fab fa-weixin"></i>
           </a>
           
-          <a v-if="userInfo.weibo" :href="userInfo.weibo" class="social-icon weibo" title="微博" target="_blank">
+          <!-- 微博 -->
+          <a 
+            v-if="userInfo.weibo" 
+            :href="userInfo.weibo" 
+            class="social-icon weibo" 
+            target="_blank" 
+            @mouseenter="showSocialPopover($event, 'weibo', userInfo.weibo, '微博', 'fab fa-weibo', 'fa-external-link-alt', '点击访问主页')"
+            @click.stop
+          >
             <i class="fab fa-weibo"></i>
           </a>
-          <a v-else class="social-icon weibo disabled" title="未绑定微博">
+          <a 
+            v-else 
+            class="social-icon weibo disabled"
+            @mouseenter="showSocialPopover($event, 'weibo', '', '微博', 'fab fa-weibo', 'fa-unlink', '暂未绑定', true)"
+          >
             <i class="fab fa-weibo"></i>
           </a>
           
-          <a v-if="userInfo.email" :href="`mailto:${userInfo.email}`" class="social-icon email" title="邮箱">
+          <!-- 邮箱 -->
+          <a 
+            v-if="userInfo.email" 
+            :href="`mailto:${userInfo.email}`" 
+            class="social-icon email" 
+            @mouseenter="showSocialPopover($event, 'email', userInfo.email, '邮箱', 'fas fa-envelope', 'fa-paper-plane', '点击发送邮件')"
+            @click.stop
+          >
             <i class="fas fa-envelope"></i>
           </a>
-          <a v-else class="social-icon email disabled" title="未绑定邮箱">
+          <a 
+            v-else 
+            class="social-icon email disabled"
+            @mouseenter="showSocialPopover($event, 'email', '', '邮箱', 'fas fa-envelope', 'fa-unlink', '暂未绑定', true)"
+          >
             <i class="fas fa-envelope"></i>
           </a>
+          
+          <!-- 共享气泡 -->
+          <transition name="social-fade">
+            <div 
+              v-if="socialPopover.visible" 
+              class="social-popover-shared"
+              :class="{ 'is-disabled': socialPopover.isDisabled }"
+              :style="socialPopover.style"
+              @mouseenter="keepPopoverVisible"
+              @mouseleave="hideSocialPopover"
+            >
+              <div class="popover-arrow"></div>
+              <div class="popover-content">
+                <div class="popover-header">
+                  <i :class="socialPopover.icon"></i>
+                  <span>{{ socialPopover.title }}</span>
+                </div>
+                <div v-if="!socialPopover.isDisabled" class="popover-body">
+                  <div class="popover-text">{{ socialPopover.content }}</div>
+                </div>
+                <div v-else class="popover-empty">
+                  <i class="fas fa-unlink"></i>
+                  <span>{{ socialPopover.tip }}</span>
+                </div>
+                <div v-if="!socialPopover.isDisabled" class="popover-footer">
+                  <i :class="'fas ' + socialPopover.tipIcon"></i>
+                  <span>{{ socialPopover.tip }}</span>
+                </div>
+              </div>
+            </div>
+          </transition>
         </div>
       </div>
 
@@ -224,7 +316,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useStore } from '@/store'
 
 // 获取store中的用户信息
@@ -433,6 +525,71 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
   return currentLevel * 100
 }
 
+// 社交气泡状态
+const socialPopover = reactive({
+  visible: false,
+  icon: '',
+  title: '',
+  content: '',
+  tip: '',
+  tipIcon: '',
+  isDisabled: false,
+  style: {
+    left: '0px',
+    top: '0px',
+    transform: 'translate(-50%, -100%)'
+  }
+})
+
+let hideTimer: any = null
+
+// 显示社交气泡
+function showSocialPopover(
+  event: MouseEvent, 
+  _type: string, 
+  content: string,
+  title: string,
+  icon: string, 
+  tipIcon: string, 
+  tip: string, 
+  isDisabled = false
+) {
+  clearTimeout(hideTimer)
+  
+  const target = event.currentTarget as HTMLElement
+  const rect = target.getBoundingClientRect()
+  
+  // 计算气泡位置（使用 fixed 定位，相对于视口）
+  const left = rect.left + rect.width / 2
+  const top = rect.top - 10
+  
+  socialPopover.icon = icon
+  socialPopover.title = title
+  socialPopover.content = content
+  socialPopover.tip = tip
+  socialPopover.tipIcon = tipIcon
+  socialPopover.isDisabled = isDisabled
+  socialPopover.style = {
+    left: `${left}px`,
+    top: `${top}px`,
+    transform: 'translate(-50%, -100%)'
+  }
+  socialPopover.visible = true
+}
+
+// 保持气泡可见
+function keepPopoverVisible() {
+  clearTimeout(hideTimer)
+}
+
+// 隐藏社交气泡
+function hideSocialPopover() {
+  clearTimeout(hideTimer)
+  hideTimer = setTimeout(() => {
+    socialPopover.visible = false
+  }, 200)
+}
+
 </script>
 
 <style lang="less" scoped>
@@ -440,8 +597,10 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
   background: var(--el-bg-color);
   border: 1px solid var(--el-border-color-lighter);
   border-radius: 8px;
-  overflow: hidden;
+  overflow: visible;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
 
   &:hover {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
@@ -474,6 +633,8 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
 
 .card-body {
   padding: 14px;
+  overflow: visible;
+  position: relative;
 }
 
 // 头像区域
@@ -1409,6 +1570,9 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
 // 社交媒体
 .social-links {
   margin-bottom: 0;
+  overflow: visible;
+  position: relative;
+  z-index: 1;
 
   .social-header {
     display: flex;
@@ -1433,6 +1597,7 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
     display: flex;
     justify-content: center;
     gap: 10px;
+    overflow: visible;
   }
 
   .social-icon {
@@ -1674,6 +1839,269 @@ function getNextLevelExp(_totalExp: number, currentLevel: number) {
   }
   to {
     transform: rotate(360deg);
+  }
+}
+</style>
+
+<style lang="less">
+// 社交图标容器
+.social-icons {
+  position: relative;
+}
+
+// 共享气泡样式 - 精致简约
+.social-popover-shared {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: auto;
+  
+  .popover-arrow {
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    background: var(--el-bg-color-overlay);
+    border: 1px solid var(--el-border-color-light);
+    border-top: none;
+    border-left: none;
+    transform: translateX(-50%) rotate(45deg);
+    
+    [data-theme='dark'] & {
+      background: var(--el-bg-color-overlay);
+    }
+  }
+  
+  .popover-content {
+    background: var(--el-bg-color-overlay);
+    border: 1px solid var(--el-border-color-light);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    padding: 12px 14px;
+    min-width: 200px;
+    max-width: 280px;
+    backdrop-filter: blur(8px);
+    
+    [data-theme='dark'] & {
+      background: var(--el-bg-color-overlay);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+  }
+  
+  .popover-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    
+    i {
+      font-size: 16px;
+      color: var(--el-color-primary);
+      flex-shrink: 0;
+    }
+    
+    span {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--el-text-color-primary);
+    }
+  }
+  
+  .popover-body {
+    margin-bottom: 10px;
+    
+    .popover-text {
+      font-size: 12px;
+      color: var(--el-text-color-regular);
+      word-break: break-all;
+      line-height: 1.6;
+      padding: 8px 10px;
+      background: var(--el-fill-color-light);
+      border-radius: 6px;
+    }
+  }
+  
+  .popover-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--el-text-color-secondary);
+    padding-top: 8px;
+    border-top: 1px solid var(--el-border-color-lighter);
+    
+    i {
+      font-size: 10px;
+      color: var(--el-color-primary);
+    }
+  }
+  
+  .popover-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 0;
+    
+    i {
+      font-size: 28px;
+      color: var(--el-text-color-placeholder);
+      opacity: 0.5;
+    }
+    
+    span {
+      font-size: 12px;
+      color: var(--el-text-color-secondary);
+    }
+  }
+  
+  // 未绑定状态
+  &.is-disabled {
+    .popover-header i {
+      color: var(--el-text-color-placeholder);
+    }
+  }
+  
+  // 移动端适配
+  @media (max-width: 768px) {
+    .popover-content {
+      min-width: 160px;
+      max-width: 220px;
+      padding: 8px 10px;
+    }
+    
+    .popover-arrow {
+      width: 10px;
+      height: 10px;
+      bottom: -5px;
+    }
+    
+    .popover-header {
+      margin-bottom: 8px;
+      
+      i {
+        font-size: 13px;
+      }
+      
+      span {
+        font-size: 11px;
+      }
+    }
+    
+    .popover-body {
+      margin-bottom: 8px;
+      
+      .popover-text {
+        font-size: 10px;
+        padding: 6px 8px;
+        line-height: 1.5;
+      }
+    }
+    
+    .popover-footer {
+      font-size: 9px;
+      padding-top: 6px;
+      
+      i {
+        font-size: 9px;
+      }
+    }
+    
+    .popover-empty {
+      padding: 10px 0;
+      gap: 6px;
+      
+      i {
+        font-size: 22px;
+      }
+      
+      span {
+        font-size: 10px;
+      }
+    }
+  }
+  
+  // 小屏幕进一步优化
+  @media (max-width: 480px) {
+    .popover-content {
+      min-width: 140px;
+      max-width: 200px;
+      padding: 7px 9px;
+    }
+    
+    .popover-header {
+      margin-bottom: 6px;
+      
+      i {
+        font-size: 12px;
+      }
+      
+      span {
+        font-size: 10px;
+      }
+    }
+    
+    .popover-body {
+      margin-bottom: 6px;
+      
+      .popover-text {
+        font-size: 9px;
+        padding: 5px 7px;
+      }
+    }
+    
+    .popover-footer {
+      font-size: 8px;
+      padding-top: 5px;
+      
+      i {
+        font-size: 8px;
+      }
+    }
+    
+    .popover-empty {
+      padding: 8px 0;
+      
+      i {
+        font-size: 20px;
+      }
+      
+      span {
+        font-size: 9px;
+      }
+    }
+  }
+}
+
+// 气泡过渡动画
+.social-fade-enter-active {
+  animation: socialFadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.social-fade-leave-active {
+  animation: socialFadeOut 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes socialFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -100%) scale(0.95) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1) translateY(0);
+  }
+}
+
+@keyframes socialFadeOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -100%) scale(0.98) translateY(3px);
   }
 }
 </style>
