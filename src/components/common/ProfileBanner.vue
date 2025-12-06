@@ -14,7 +14,9 @@
     </div>
     <div class="wave-divider">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
-        <path fill="rgba(255, 255, 255, 0.95)" d="M0,32L60,37.3C120,43,240,53,360,58.7C480,64,600,64,720,58.7C840,53,960,43,1080,42.7C1200,43,1320,53,1380,58.7L1440,64L1440,100L1380,100C1320,100,1200,100,1080,100C960,100,840,100,720,100C600,100,480,100,360,100C240,100,120,100,60,100L0,100Z"></path>
+        <path fill="rgba(255, 255, 255, 0.95)"
+          d="M0,32L60,37.3C120,43,240,53,360,58.7C480,64,600,64,720,58.7C840,53,960,43,1080,42.7C1200,43,1320,53,1380,58.7L1440,64L1440,100L1380,100C1320,100,1200,100,1080,100C960,100,840,100,720,100C600,100,480,100,360,100C240,100,120,100,60,100L0,100Z">
+        </path>
       </svg>
     </div>
   </div>
@@ -49,7 +51,7 @@ defineProps({
   height: 160px;
   overflow: hidden;
   color: white;
-  
+
   .banner-background {
     position: absolute;
     top: 0;
@@ -57,7 +59,7 @@ defineProps({
     width: 100%;
     height: 100%;
     background: linear-gradient(135deg, #40a9ff, #096dd9);
-    
+
     &::before {
       content: '';
       position: absolute;
@@ -69,7 +71,7 @@ defineProps({
       opacity: 0.8;
     }
   }
-  
+
   .banner-gradient {
     position: absolute;
     bottom: 0;
@@ -78,7 +80,7 @@ defineProps({
     height: 80px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.3) 100%);
   }
-  
+
   .banner-particles {
     position: absolute;
     top: 0;
@@ -86,13 +88,13 @@ defineProps({
     width: 100%;
     height: 100%;
     overflow: hidden;
-    
+
     &::after {
       content: '';
       position: absolute;
       width: 100%;
       height: 100%;
-      background-image: 
+      background-image:
         radial-gradient(circle at 20% 35%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 5%),
         radial-gradient(circle at 75% 44%, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 6%),
         radial-gradient(circle at 46% 52%, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 4%),
@@ -100,7 +102,7 @@ defineProps({
         radial-gradient(circle at 10% 75%, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 6%);
     }
   }
-  
+
   .banner-content {
     position: relative;
     z-index: 1;
@@ -109,11 +111,11 @@ defineProps({
     justify-content: center;
     height: 100%;
     padding: 0 20px;
-    
+
     .banner-title {
       display: flex;
       align-items: center;
-      
+
       .icon-container {
         display: flex;
         align-items: center;
@@ -125,13 +127,13 @@ defineProps({
         margin-right: 16px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         backdrop-filter: blur(4px);
-        
+
         i {
           font-size: 24px;
           color: white;
         }
       }
-      
+
       h1 {
         font-size: 24px;
         font-weight: 600;
@@ -141,7 +143,7 @@ defineProps({
       }
     }
   }
-  
+
   .wave-divider {
     position: absolute;
     bottom: 0;
@@ -149,7 +151,7 @@ defineProps({
     width: 100%;
     overflow: hidden;
     line-height: 0;
-    
+
     svg {
       width: 100%;
       height: 40px;
@@ -162,18 +164,18 @@ defineProps({
 @media (max-width: 768px) {
   .profile-banner {
     height: 140px;
-    
+
     .banner-content .banner-title {
       .icon-container {
         width: 40px;
         height: 40px;
         margin-right: 12px;
-        
+
         i {
           font-size: 20px;
         }
       }
-      
+
       h1 {
         font-size: 20px;
       }
@@ -184,10 +186,10 @@ defineProps({
 @media (max-width: 576px) {
   .profile-banner {
     height: 120px;
-    
+
     .wave-divider svg {
       height: 30px;
     }
   }
 }
-</style> 
+</style>
