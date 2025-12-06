@@ -3,16 +3,6 @@ import { KeepAlive, ref } from 'vue';
 // const loadingTitle = ref('加载中...')
 const routes: RouteRecordRaw[] = [
   {
-    path: '/dual-token-test',
-    name: 'DualTokenTest',
-    component: () => import('@/components/DualTokenTest.vue'),
-    meta: {
-      title: '双Token登录测试',
-      header: false,
-      footer: false
-    }
-  },
-  {
     path: '/api-test',
     name: 'ApiTest',
     component: () => import('@/components/ApiTest.vue'),

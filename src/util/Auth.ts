@@ -140,22 +140,14 @@ export const clearLocalStorage = () => {
   localStorage.clear();
 }
 
-// 清除清除用户登录信息（旧方式，兼容保留）
+// 清除用户登录信息（统一使用新的removeToken）
 export const clearUserInfo = () => {
-  // 调用新的removeToken函数（会清除 Authorization 和 authorized-token）
+  // 调用新的removeToken函数
   removeToken()
 
-  // 清除旧的localStorage字段
-  localStorage.removeItem('refreshToken')
-  localStorage.removeItem('accessToken')
-  localStorage.removeItem('Authorization')
-  localStorage.removeItem('token')
+  // 清除旧的localStorage字段（兼容性）
   localStorage.removeItem('isLogin')
   localStorage.removeItem('loginCredentials')
-
-  // 清除旧的cookie（兼容旧代码）
-  removeCookie('Authorization')
-  removeCookie('authorized-token')
 
   console.log('已清除所有登录信息（localStorage + cookie）')
 }
