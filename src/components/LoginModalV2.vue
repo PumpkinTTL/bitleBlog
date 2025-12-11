@@ -35,13 +35,13 @@
             <!-- 账号密码登录说明 -->
             <div v-if="!isEmailLogin" class="security-notice">
               <i class="fas fa-info-circle"></i>
-              <span>如果您还没有账号，请使用验证码登录，系统将自动为您注册</span>
+              <span>如果您未拥有账号请使用验证码登录自动注册</span>
             </div>
 
             <!-- 验证码登录说明 -->
             <div v-if="isEmailLogin" class="security-notice">
               <i class="fas fa-info-circle"></i>
-              <span>如果邮箱不存在，系统将自动注册，但需要您提供邀请码</span>
+              <span>若您的邮箱不存在将会自动注册但您需要填写注册邀请码</span>
             </div>
 
             <!-- 账号密码登录 -->
