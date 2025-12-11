@@ -1,13 +1,7 @@
 <template>
   <div>
-    <el-dialog
-      v-model="dialogVisible"
-      :width="dialogWidth"
-      center
-      destroy-on-close
-      :show-close="true"
-      class="login-dialog-v2"
-    >
+    <el-dialog v-model="dialogVisible" :width="dialogWidth" center destroy-on-close :show-close="true"
+      class="login-dialog-v2">
       <div class="login-container-v2">
         <!-- 登录头部 -->
         <div class="login-header">
@@ -21,36 +15,23 @@
             </div>
           </div>
         </div>
-        
+
         <!-- 登录方式标签 -->
         <div class="login-tabs">
-          <div 
-            class="tab-item"
-            :class="{ active: !isEmailLogin }"
-            @click="isEmailLogin = false"
-          >
+          <div class="tab-item" :class="{ active: !isEmailLogin }" @click="isEmailLogin = false">
             <i class="fas fa-user"></i>
             <span>账号登录</span>
           </div>
-          <div
-            class="tab-item"
-            :class="{ active: isEmailLogin }"
-            @click="isEmailLogin = true"
-          >
+          <div class="tab-item" :class="{ active: isEmailLogin }" @click="isEmailLogin = true">
             <i class="fas fa-envelope"></i>
             <span>验证码登录</span>
           </div>
           <div class="tab-indicator" :class="{ 'move-right': isEmailLogin }"></div>
         </div>
-        
+
         <!-- 登录表单 -->
         <div class="login-form-wrapper">
-          <el-form 
-            ref="formRef" 
-            :model="formState" 
-            :rules="formRules"
-            class="modern-form"
-          >
+          <el-form ref="formRef" :model="formState" :rules="formRules" class="modern-form">
             <!-- 账号密码登录说明 -->
             <div v-if="!isEmailLogin" class="security-notice">
               <i class="fas fa-info-circle"></i>
@@ -62,7 +43,7 @@
               <i class="fas fa-info-circle"></i>
               <span>若您的邮箱不存在将会自动注册但您需要填写注册邀请码</span>
             </div>
-            
+
             <!-- 账号密码登录 -->
             <template v-if="!isEmailLogin">
               <el-form-item prop="username" class="form-item-modern">
@@ -70,32 +51,21 @@
                   <div class="input-icon">
                     <i class="fas fa-user"></i>
                   </div>
-                  <el-input
-                    v-model="formState.username"
-                    placeholder="请输入用户名"
-                    clearable
-                    class="modern-input"
-                  />
+                  <el-input v-model="formState.username" placeholder="请输入用户名" clearable class="modern-input" />
                 </div>
               </el-form-item>
-              
+
               <el-form-item prop="password" class="form-item-modern">
                 <div class="input-wrapper">
                   <div class="input-icon">
                     <i class="fas fa-lock"></i>
                   </div>
-                  <el-input
-                    v-model="formState.password"
-                    type="password"
-                    placeholder="请输入密码"
-                    show-password
-                    clearable
-                    class="modern-input"
-                  />
+                  <el-input v-model="formState.password" type="password" placeholder="请输入密码" show-password clearable
+                    class="modern-input" />
                 </div>
               </el-form-item>
             </template>
-            
+
             <!-- 邮箱验证码登录 -->
             <template v-else>
               <el-form-item prop="email" class="form-item-modern">
@@ -103,33 +73,19 @@
                   <div class="input-icon">
                     <i class="fas fa-envelope"></i>
                   </div>
-                  <el-input
-                    v-model="formState.email"
-                    placeholder="请输入邮箱"
-                    clearable
-                    class="modern-input"
-                  />
+                  <el-input v-model="formState.email" placeholder="请输入邮箱" clearable class="modern-input" />
                 </div>
               </el-form-item>
-              
+
               <el-form-item prop="verificationCode" class="form-item-modern">
                 <div class="input-wrapper code-wrapper">
                   <div class="input-icon">
                     <i class="fas fa-key"></i>
                   </div>
-                  <el-input
-                    v-model="formState.verification_code"
-                    placeholder="请输入验证码"
-                    clearable
-                    class="modern-input"
-                  >
+                  <el-input v-model="formState.verification_code" placeholder="请输入验证码" clearable class="modern-input">
                     <template #append>
-                      <button
-                        class="code-btn"
-                        :disabled="codeButtonDisabled"
-                        :class="{ loading: codeButtonLoading }"
-                        @click.prevent="sendVerificationCode"
-                      >
+                      <button class="code-btn" :disabled="codeButtonDisabled" :class="{ loading: codeButtonLoading }"
+                        @click.prevent="sendVerificationCode">
                         <i v-if="codeButtonLoading" class="fas fa-spinner fa-spin"></i>
                         <span v-else>{{ codeButtonText }}</span>
                       </button>
@@ -144,16 +100,11 @@
                   <div class="input-icon">
                     <i class="fas fa-ticket-alt"></i>
                   </div>
-                  <el-input
-                    v-model="formState.invite_code"
-                    placeholder="邀请码（可选）"
-                    clearable
-                    class="modern-input"
-                  />
+                  <el-input v-model="formState.invite_code" placeholder="邀请码（可选）" clearable class="modern-input" />
                 </div>
               </el-form-item>
             </template>
-              
+
             <!-- 记住我和忘记密码 -->
             <div class="form-options">
               <el-checkbox v-if="!isEmailLogin" v-model="formState.remember" class="remember-checkbox">
@@ -161,15 +112,11 @@
               </el-checkbox>
               <a href="javascript:;" class="forgot-link" @click="handleForgotPassword">忘记密码？</a>
             </div>
-            
+
             <!-- 提交按钮 -->
             <div class="form-actions">
-              <button 
-                class="submit-btn modern-btn"
-                :class="{ loading: loading }"
-                @click.prevent="handleSubmit"
-                :disabled="loading"
-              >
+              <button class="submit-btn modern-btn" :class="{ loading: loading }" @click.prevent="handleSubmit"
+                :disabled="loading">
                 <span class="btn-content">
                   <i v-if="loading" class="fas fa-spinner fa-spin"></i>
                   <i v-else class="fas fa-arrow-right"></i>
@@ -179,8 +126,8 @@
               </button>
             </div>
           </el-form>
-          
-            
+
+
           <!-- 协议提示 -->
           <div class="agreement-text">
             <span>登录即表示同意</span>
@@ -188,31 +135,21 @@
             <span>和</span>
             <a href="javascript:;" @click="openPrivacyPolicy">《隐私政策》</a>
           </div>
-          
-          </div>
+
+        </div>
       </div>
     </el-dialog>
-    
+
     <!-- 用户协议弹窗 -->
-    <el-dialog
-      v-model="showUserAgreement"
-      title="用户协议"
-      width="60%"
-      append-to-body
-    >
+    <el-dialog v-model="showUserAgreement" title="用户协议" width="60%" append-to-body>
       <UserAgreement />
       <template #footer>
         <el-button @click="showUserAgreement = false">关闭</el-button>
       </template>
     </el-dialog>
-    
+
     <!-- 隐私政策弹窗 -->
-    <el-dialog
-      v-model="showPrivacyPolicy"
-      title="隐私政策"
-      width="60%"
-      append-to-body
-    >
+    <el-dialog v-model="showPrivacyPolicy" title="隐私政策" width="60%" append-to-body>
       <PrivacyPolicy />
       <template #footer>
         <el-button @click="showPrivacyPolicy = false">关闭</el-button>
@@ -406,7 +343,7 @@ const resetForm = () => {
 // 提交表单
 const handleSubmit = async () => {
   if (!formRef.value) return
-  
+
   try {
     await (formRef.value as any).validate()
     loading.value = true
@@ -518,14 +455,14 @@ const openPrivacyPolicy = () => {
 const handleForgotPassword = async () => {
   // 获取当前输入的邮箱或用户名，并去除前后空格
   const currentInput = (isEmailLogin.value ? formState.email : formState.username).trim()
-  
+
   if (!currentInput) {
     smartMessage.error('请先输入邮箱或用户名')
     return
   }
-  
+
   let emailToSend = currentInput
-  
+
   // 如果是用户名模式，检查输入的是否是邮箱格式
   if (!isEmailLogin.value) {
     // 如果输入的不是邮箱格式，提示用户
@@ -541,7 +478,7 @@ const handleForgotPassword = async () => {
       return
     }
   }
-  
+
   // 弹出确认对话框
   Modal.confirm({
     title: '发送密码重置邮件',
@@ -561,7 +498,7 @@ const sendResetEmail = async (email: string) => {
     const response = await requestPasswordResetR({
       email: email
     });
-    
+
     if (response.code === 200) {
       // 成功提示
       Modal.success({
@@ -599,7 +536,7 @@ const sendResetEmail = async (email: string) => {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
     padding: 0;
   }
-  
+
   :deep(.el-dialog__header) {
     display: flex;
     align-items: center;
@@ -608,28 +545,28 @@ const sendResetEmail = async (email: string) => {
     margin: 0;
     border-bottom: 1px solid var(--el-border-color-lighter);
   }
-  
+
   :deep(.el-dialog__title) {
     font-size: 0;
   }
-  
+
   :deep(.el-dialog__headerbtn) {
     top: 24px;
     right: 24px;
     width: 32px;
     height: 32px;
-    
+
     .el-dialog__close {
       color: var(--el-text-color-regular);
       font-size: 16px;
       transition: all 0.3s ease;
-      
+
       &:hover {
         color: @primary-color;
       }
     }
   }
-  
+
   :deep(.el-dialog__body) {
     padding: 24px;
   }
@@ -646,12 +583,12 @@ const sendResetEmail = async (email: string) => {
 // 登录头部
 .login-header {
   margin-bottom: 24px;
-  
+
   .logo-section {
     display: flex;
     align-items: center;
     gap: 12px;
-    
+
     .logo-icon {
       width: 44px;
       height: 44px;
@@ -665,10 +602,10 @@ const sendResetEmail = async (email: string) => {
       box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
       flex-shrink: 0;
     }
-    
+
     .logo-text {
       flex: 1;
-      
+
       h2 {
         margin: 0 0 2px 0;
         font-size: 20px;
@@ -678,7 +615,7 @@ const sendResetEmail = async (email: string) => {
         -webkit-text-fill-color: transparent;
         background-clip: text;
       }
-      
+
       p {
         margin: 0;
         font-size: 13px;
@@ -697,7 +634,7 @@ const sendResetEmail = async (email: string) => {
   background: var(--el-fill-color-extra-light);
   padding: 4px;
   border-radius: 10px;
-  
+
   .tab-item {
     flex: 1;
     display: flex;
@@ -712,20 +649,20 @@ const sendResetEmail = async (email: string) => {
     color: var(--el-text-color-regular);
     transition: all 0.3s ease;
     z-index: 2;
-    
+
     i {
       font-size: 14px;
     }
-    
+
     &.active {
       color: @primary-color;
     }
-    
+
     &:hover {
       color: @primary-color;
     }
   }
-  
+
   .tab-indicator {
     position: absolute;
     top: 4px;
@@ -737,7 +674,7 @@ const sendResetEmail = async (email: string) => {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1;
-    
+
     &.move-right {
       transform: translateX(calc(100% + 8px));
     }
@@ -750,7 +687,7 @@ const sendResetEmail = async (email: string) => {
     :deep(.el-form-item) {
       margin-bottom: 16px;
     }
-    
+
     :deep(.el-form-item__error) {
       padding-left: 44px;
       font-size: 12px;
@@ -769,7 +706,7 @@ const sendResetEmail = async (email: string) => {
   margin-bottom: 16px;
   font-size: 12px;
   color: var(--el-text-color-regular);
-  
+
   i {
     color: var(--theme-purple-primary);
     font-size: 13px;
@@ -783,7 +720,7 @@ const sendResetEmail = async (email: string) => {
     display: flex;
     align-items: center;
     width: 100%;
-    
+
     .input-icon {
       position: absolute;
       left: 14px;
@@ -800,14 +737,14 @@ const sendResetEmail = async (email: string) => {
       transition: color 0.3s ease;
       pointer-events: none;
     }
-    
+
     &:focus-within .input-icon {
       color: @primary-color;
     }
-    
+
     :deep(.modern-input) {
       width: 100%;
-      
+
       .el-input__wrapper {
         padding-left: 42px;
         padding-right: 14px;
@@ -817,25 +754,25 @@ const sendResetEmail = async (email: string) => {
         border-radius: 10px;
         box-shadow: none;
         transition: all 0.3s ease;
-        
+
         &:hover {
           background: var(--el-fill-color);
         }
-        
+
         &.is-focus {
           background: white;
           border-color: @primary-color;
           box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
         }
       }
-      
+
       .el-input__inner {
         height: 100%;
         line-height: 44px;
         font-size: 14px;
       }
     }
-    
+
     &.code-wrapper {
       border: 2px solid transparent;
       border-radius: 10px;
@@ -843,17 +780,17 @@ const sendResetEmail = async (email: string) => {
       transition: all 0.3s ease;
       overflow: hidden;
       display: flex;
-      
+
       &:hover {
         background: var(--el-fill-color);
       }
-      
+
       &:focus-within {
         background: white;
         border-color: @primary-color;
         box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
       }
-      
+
       :deep(.el-input-group__append) {
         background: transparent;
         border: none;
@@ -861,7 +798,7 @@ const sendResetEmail = async (email: string) => {
         margin: 0;
         box-shadow: none;
         align-self: stretch;
-        
+
         .code-btn {
           height: 100%;
           padding: 0 16px;
@@ -874,11 +811,11 @@ const sendResetEmail = async (email: string) => {
           cursor: pointer;
           transition: all 0.3s ease;
           white-space: nowrap;
-          
+
           &:hover:not(:disabled) {
             opacity: 0.9;
           }
-          
+
           &:disabled {
             opacity: 0.6;
             cursor: not-allowed;
@@ -893,7 +830,7 @@ const sendResetEmail = async (email: string) => {
           }
         }
       }
-      
+
       :deep(.el-input__wrapper) {
         background: transparent !important;
         border: none !important;
@@ -903,7 +840,7 @@ const sendResetEmail = async (email: string) => {
         padding-right: 8px;
         height: 40px;
       }
-      
+
       :deep(.el-input-group) {
         display: flex;
         align-items: stretch;
@@ -919,21 +856,21 @@ const sendResetEmail = async (email: string) => {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 18px;
-  
+
   .remember-checkbox {
     :deep(.el-checkbox__label) {
       font-size: 13px;
       color: var(--el-text-color-regular);
     }
   }
-  
+
   .forgot-link {
     font-size: 13px;
     color: @primary-color;
     text-decoration: none;
     font-weight: 500;
     transition: all 0.3s ease;
-    
+
     &:hover {
       opacity: 0.8;
       text-decoration: underline;
@@ -944,7 +881,7 @@ const sendResetEmail = async (email: string) => {
 // 提交按钮
 .form-actions {
   margin-bottom: 16px;
-  
+
   .modern-btn {
     width: 100%;
     height: 46px;
@@ -958,7 +895,7 @@ const sendResetEmail = async (email: string) => {
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
-    
+
     .btn-content {
       position: relative;
       z-index: 2;
@@ -966,44 +903,43 @@ const sendResetEmail = async (email: string) => {
       align-items: center;
       justify-content: center;
       gap: 10px;
-      
+
       i {
         font-size: 18px;
       }
     }
-    
+
     .btn-effect {
       position: absolute;
       top: 0;
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, 
-        transparent 0%, 
-        rgba(255, 255, 255, 0.3) 50%, 
-        transparent 100%
-      );
+      background: linear-gradient(90deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.3) 50%,
+          transparent 100%);
       transition: left 0.5s ease;
     }
-    
+
     &:hover:not(:disabled) {
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(139, 92, 246, 0.35);
-      
+
       .btn-effect {
         left: 100%;
       }
     }
-    
+
     &:active:not(:disabled) {
       transform: translateY(0);
     }
-    
+
     &:disabled {
       opacity: 0.7;
       cursor: not-allowed;
     }
-    
+
     &.loading {
       pointer-events: none;
     }
@@ -1016,14 +952,14 @@ const sendResetEmail = async (email: string) => {
   margin-bottom: 12px;
   font-size: 13px;
   color: var(--el-text-color-secondary);
-  
+
   a {
     color: @primary-color;
     text-decoration: none;
     font-weight: 500;
     margin-left: 4px;
     transition: all 0.3s ease;
-    
+
     &:hover {
       opacity: 0.8;
       text-decoration: underline;
@@ -1038,13 +974,13 @@ const sendResetEmail = async (email: string) => {
   font-size: 12px;
   color: var(--el-text-color-placeholder);
   line-height: 1.6;
-  
+
   a {
     color: @primary-color;
     text-decoration: none;
     margin: 0 2px;
     transition: all 0.3s ease;
-    
+
     &:hover {
       text-decoration: underline;
     }
@@ -1057,36 +993,36 @@ html.dark {
   .login-container-v2 {
     .close-btn {
       background: var(--el-fill-color-dark);
-      
+
       &:hover {
         background: @primary-color;
       }
     }
-    
+
     .login-tabs {
       background: var(--el-fill-color-dark);
-      
+
       .tab-indicator {
         background: var(--el-fill-color-light);
       }
     }
-    
+
     .form-item-modern {
       .input-wrapper {
         :deep(.modern-input .el-input__wrapper) {
           background: var(--el-fill-color-dark);
-          
+
           &:hover {
             background: var(--el-fill-color);
           }
-          
+
           &.is-focus {
             background: var(--el-fill-color-light);
           }
         }
       }
     }
-    }
+  }
 }
 
 // 响应式设计
@@ -1095,57 +1031,56 @@ html.dark {
     :deep(.el-dialog__body) {
       padding: 20px;
     }
-    
+
     :deep(.el-dialog__header) {
       padding: 16px 20px;
     }
-    
+
     :deep(.el-dialog__headerbtn) {
       top: 20px;
       right: 20px;
     }
   }
-  
+
   .login-header .logo-section {
     .logo-icon {
       width: 40px;
       height: 40px;
       font-size: 20px;
     }
-    
+
     .logo-text h2 {
       font-size: 18px;
     }
-    
+
     .logo-text p {
       font-size: 12px;
     }
   }
-  
+
   .login-tabs .tab-item {
     padding: 9px 10px;
     font-size: 12px;
-    
+
     span {
       display: none;
     }
-    
+
     i {
       font-size: 16px;
     }
   }
-  
+
   .form-item-modern .input-wrapper {
     :deep(.modern-input .el-input__wrapper) {
       height: 42px;
       padding-left: 40px;
     }
   }
-  
+
   .form-actions .modern-btn {
     height: 44px;
     font-size: 14px;
   }
-  }
+}
 </style>
-
